@@ -56,101 +56,101 @@ class Queue
      */
     private $status;
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getAport(): ?string
+    public function getAport()
     {
         return $this->aport;
     }
 
-    public function setAport(string $aport): self
+    public function setAport(string $aport)
     {
         $this->aport = $aport;
 
         return $this;
     }
 
-    public function getPkgver(): ?string
+    public function getPkgver()
     {
         return $this->pkgver;
     }
 
-    public function setPkgver(string $pkgver): self
+    public function setPkgver(string $pkgver)
     {
         $this->pkgver = $pkgver;
 
         return $this;
     }
 
-    public function getPkgrel(): ?int
+    public function getPkgrel()
     {
         return $this->pkgrel;
     }
 
-    public function setPkgrel(int $pkgrel): self
+    public function setPkgrel(int $pkgrel)
     {
         $this->pkgrel = $pkgrel;
 
         return $this;
     }
 
-    public function getBranch(): ?string
+    public function getBranch()
     {
         return $this->branch;
     }
 
-    public function setBranch(string $branch): self
+    public function setBranch(string $branch)
     {
         $this->branch = $branch;
 
         return $this;
     }
 
-    public function getArch(): ?string
+    public function getArch()
     {
         return $this->arch;
     }
 
-    public function setArch(string $arch): self
+    public function setArch(string $arch)
     {
         $this->arch = $arch;
 
         return $this;
     }
 
-    public function getCommit(): ?string
+    public function getCommit()
     {
         return $this->commit;
     }
 
-    public function setCommit(string $commit): self
+    public function setCommit(string $commit)
     {
         $this->commit = $commit;
 
         return $this;
     }
 
-    public function getSrhtId(): ?int
+    public function getSrhtId()
     {
         return $this->SrhtId;
     }
 
-    public function setSrhtId(int $SrhtId): self
+    public function setSrhtId(int $SrhtId)
     {
         $this->SrhtId = $SrhtId;
 
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus()
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(string $status)
     {
         $this->status = $status;
 

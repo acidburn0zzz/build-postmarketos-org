@@ -31,12 +31,12 @@ class Log
      */
     private $details;
 
-    public function getId(): ?int
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getDatetime(): ?\DateTimeInterface
+    public function getDatetime()
     {
         return $this->datetime;
     }
@@ -48,7 +48,7 @@ class Log
         return $this;
     }
 
-    public function getAction(): ?string
+    public function getAction()
     {
         return $this->action;
     }
@@ -60,12 +60,12 @@ class Log
         return $this;
     }
 
-    public function getDetails(): ?string
+    public function getDetails()
     {
         return $this->details;
     }
 
-    public function setDetails(?string $details): self
+    public function setDetails($details): self
     {
         $this->details = $details;
 
