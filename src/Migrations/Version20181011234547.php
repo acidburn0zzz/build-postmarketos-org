@@ -1,15 +1,18 @@
-<?php declare(strict_types=1);
+<?php
 
 namespace DoctrineMigrations;
 
+use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20181011225436 extends AbstractMigration
+class Version20181011234547 extends AbstractMigration
 {
+    /**
+     * @param Schema $schema
+     */
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
@@ -19,6 +22,9 @@ final class Version20181011225436 extends AbstractMigration
         $this->addSql('CREATE TABLE queue (id INT AUTO_INCREMENT NOT NULL, aport VARCHAR(100) NOT NULL, pkgver VARCHAR(100) NOT NULL, pkgrel INT NOT NULL, branch VARCHAR(100) NOT NULL, arch VARCHAR(10) NOT NULL, commit VARCHAR(64) NOT NULL, srht_id INT NOT NULL, status VARCHAR(10) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
     }
 
+    /**
+     * @param Schema $schema
+     */
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
