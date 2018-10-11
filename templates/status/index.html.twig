@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Queue{% endblock %}
+
+{% block body %}
+    <h2>Pending builds</h2>
+    <table class="collapse ba b--black-10 table">
+        <tr class="striped--near-white">
+            <th>#</th>
+            <th>aport</th>
+            <th>pkgver</th>
+            <th>pkgrel</th>
+            <th>branch</th>
+            <th>arch</th>
+            <th>commit</th>
+            <th>sr.ht id</th>
+            <th>status</th>
+        </tr>
+        {% for job in queued %}
+            <tr class="striped--near-white">
+                <td>{{ job.id }}</td>
+                <td>{{ job.aport }}</td>
+                <td>{{ job.pkgver }}</td>
+                <td>{{ job.pkgrel }}</td>
+                <td>{{ job.branch }}</td>
+                <td>{{ job.arch }}</td>
+                <td>
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit }}">
+                        {{ job.commit | slice(0, 8) }}
+                    </a>
+                </td>
+                <td>{{ job.srhtId }}</td>
+                <td>{{ job.status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Completed builds</h2>
+    <table class="collapse ba b--black-10 table">
+        <tr class="striped--near-white">
+            <th>#</th>
+            <th>aport</th>
+            <th>pkgver</th>
+            <th>pkgrel</th>
+            <th>branch</th>
+            <th>arch</th>
+            <th>commit</th>
+            <th>sr.ht id</th>
+            <th>status</th>
+        </tr>
+        {% for job in done %}
+            <tr class="striped--near-white">
+                <td>{{ job.id }}</td>
+                <td>{{ job.aport }}</td>
+                <td>{{ job.pkgver }}</td>
+                <td>{{ job.pkgrel }}</td>
+                <td>{{ job.branch }}</td>
+                <td>{{ job.arch }}</td>
+                <td>
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit }}">
+                        {{ job.commit | slice(0, 8) }}
+                    </a>
+                </td>
+                <td>{{ job.srhtId }}</td>
+                <td>{{ job.status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
