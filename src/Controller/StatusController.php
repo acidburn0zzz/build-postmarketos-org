@@ -14,7 +14,7 @@ class StatusController extends AbstractController
     {
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $queued = $queue->findBy(['status' => ['WAITING', 'BUILDING']], ['id' => 'DESC']);
-        $done = $queue->findBy(['status' => ['DONE', 'FAILED']], ['id' => 'DESC'], 50);
+        $done = $queue->findBy(['status' => ['DONE', 'FAILED', 'SUPERSEDED']], ['id' => 'DESC'], 50);
         return $this->render('status/index.html.twig', [
             'queued' => $queued,
             'done' => $done
