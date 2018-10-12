@@ -77,14 +77,14 @@ class ApiController extends Controller
             'aport' => $package,
             'branch' => $branch,
             'arch' => $arch,
-            'status' => ['WAITING', 'RUNNING']
+            'status' => ['WAITING', 'BUILDING']
         ]);
         $foundExisting = false;
         foreach ($existing as $existingTask) {
             if ($existingTask->getPkgver() != $pkgver || $existingTask->getPkgrel() != $pkgrel) {
-                // Not the same version
-
-                // TODO: Kill existing task at sr.ht with id $existingTask->getSrhtId()
+                if ($existingTask->getStatus() == 'BUILDING') {
+                    // TODO: Kill existing task at sr.ht with id $existingTask->getSrhtId()
+                }
                 $existingTask->setStatus('SUPERSEDED');
                 $manager->persist($existingTask);
             } else {
