@@ -51,7 +51,11 @@
         {% for job in done %}
             <tr class="striped--near-white">
                 <td>{{ job.id }}</td>
-                <td>{{ job.aport }}</td>
+                <td>
+                    <a href="http://postmarketos.brixit.nl/{{ job.arch }}/{{ job.aport }}-{{ job.pkgver }}-{{ job.pkgrel }}.apk">
+                        {{ job.aport }}
+                    </a>
+                </td>
                 <td>{{ job.pkgver }}</td>
                 <td>{{ job.pkgrel }}</td>
                 <td>{{ job.branch }}</td>
