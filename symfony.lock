@@ -119,6 +119,9 @@
     "psr/simple-cache": {
         "version": "1.0.1"
     },
+    "rmccue/requests": {
+        "version": "v1.7.0"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {

@@ -64,6 +64,8 @@ class ApiController extends Controller
 
     private function onNewPush($branch)
     {
+        $srht = $this->get('srht_api');
+        $srht->SubmitIndexJob();
         // TODO: Submit task to build server for package diff
     }
 
