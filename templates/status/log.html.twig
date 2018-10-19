@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log{% endblock %}
+
+{% block body %}
+    <h2>Log messages</h2>
+    <table class="collapse ba b--black-10 table">
+        <tr class="striped--near-white">
+            <th>time</th>
+            <th>action</th>
+            <th>detail</th>
+        </tr>
+        {% for message in log %}
+            <tr class="striped--near-white">
+                <td>{{ message.datetime | date }}</td>
+                <td>{{ message.action }}</td>
+                <td>
+                    {% if message.details is not none %}
+                        <pre>
+{{ message.details }}
+</pre>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

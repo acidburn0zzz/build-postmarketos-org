@@ -20,4 +20,15 @@ class StatusController extends AbstractController
             'done' => $done
         ]);
     }
+
+    /**
+     * @Route("/log", name="log")
+     */
+    public function log()
+    {
+        $log = $this->getDoctrine()->getRepository('App:Log')->findBy([], ['datetime' => 'DESC']);
+        return $this->render('status/log.html.twig', [
+            'log' => $log,
+        ]);
+    }
 }

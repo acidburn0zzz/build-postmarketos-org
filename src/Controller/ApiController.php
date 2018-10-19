@@ -17,15 +17,20 @@ class ApiController extends Controller
     {
         $token = $request->headers->get('X-Gitlab-Token');
         if (!$token) {
+            $this->get('web_log')->write('gitlab-pull received without secret', null, true);
             return new JsonResponse(['error' => 'Gitlab secret missing'], 401);
         }
 
+
         if (!hash_equals(sha1($this->getParameter('kernel.secret')), $token)) {
+            $this->get('web_log')->write('gitlab-pull received with incorrect secret', null, true);
             return new JsonResponse(['error' => 'Secret not correct'], 403);
         }
 
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
+
+        $this->get('web_log')->write('gitlab-pull received', $payload, true);
 
         $event = $request->headers->get('X-Gitlab-Event');
 
@@ -46,15 +51,19 @@ class ApiController extends Controller
     {
         $token = $request->headers->get('X-Secret');
         if (!$token) {
+            $this->get('web_log')->write('task-submit received without secret', null, true);
             return new JsonResponse(['error' => 'Secret missing'], 401);
         }
 
         if (!hash_equals(sha1($this->getParameter('kernel.secret')), $token)) {
+            $this->get('web_log')->write('task-submit received with incorrect secret', null, true);
             return new JsonResponse(['error' => 'Secret not correct'], 403);
         }
 
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
+
+        $this->get('web_log')->write('task-submit received', $payload);
 
         $this->onNewTask($payload['package'], $payload['pkgver'], $payload['pkgrel'], $payload['commit'], $payload['arch'], $payload['branch']);
 
@@ -64,6 +73,10 @@ class ApiController extends Controller
 
     private function onNewPush($branch, $commit)
     {
+        if ($branch != 'master') {
+            $this->get('web_log')->write('Gitlab push is not for master', null, true);
+            return;
+        }
         $srht = $this->get('srht_api');
         $srht->SubmitIndexJob($commit);
     }

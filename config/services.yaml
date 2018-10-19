@@ -32,4 +32,10 @@ services:
 
     srht_api:
         class: App\Helper\SrHtApi
+        public: true
         arguments: ["%env(SRHT_TOKEN)%"]
+
+    web_log:
+        class: App\Helper\LogHelper
+        public: true
+        arguments: ["@doctrine.orm.entity_manager"]
