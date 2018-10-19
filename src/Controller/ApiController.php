@@ -32,7 +32,7 @@ class ApiController extends Controller
         switch ($event) {
             case 'Push Hook':
                 $branch = str_replace('refs/heads/', '', $payload['ref']);
-                $this->onNewPush($branch);
+                $this->onNewPush($branch, $payload['checkout_sha']);
                 return new JsonResponse(['status' => 'ok']);
                 break;
         }
@@ -62,11 +62,10 @@ class ApiController extends Controller
     }
 
 
-    private function onNewPush($branch)
+    private function onNewPush($branch, $commit)
     {
         $srht = $this->get('srht_api');
-        $srht->SubmitIndexJob();
-        // TODO: Submit task to build server for package diff
+        $srht->SubmitIndexJob($commit);
     }
 
     private function onNewTask($package, $pkgver, $pkgrel, $commit, $arch, $branch)

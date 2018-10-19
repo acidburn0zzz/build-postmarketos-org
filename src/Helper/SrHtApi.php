@@ -13,7 +13,7 @@ class SrHtApi
         $this->authorizationToken = $authorizationToken;
     }
 
-    public function SubmitIndexJob()
+    public function SubmitIndexJob($commitSha)
     {
         $manifest = [
             'image' => 'alpine',
@@ -22,16 +22,19 @@ class SrHtApi
                 'https://gitlab.com/postmarketOS/pmbootstrap.git'
             ],
             'tasks' => [
-                'cd pmbootstrap; pmbootstrap dosomething'
+                'cd pmbootstrap; pmbootstrap dosomething ' . $commitSha //TODO: Add implementation inside pmbootstrap
             ]
         ];
         $manifest = Yaml::dump($manifest);
 
+        $url = 'https://gitlab.com/postmarketOS/pmaports/commit/' . $commitSha;
+
         $job = [
             "manifest" => $manifest,
-            "note" => ""
+            "note" => "Dependency check job for [" . $commitSha . "](" . $url . ")"
         ];
 
         $response = \Requests::post('', ['Authorization' => $this->authorizationToken], json_encode($job));
+        //TODO: Error checking
     }
 }
