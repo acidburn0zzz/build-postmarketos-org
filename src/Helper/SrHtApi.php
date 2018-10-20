@@ -25,7 +25,7 @@ class SrHtApi
                 'https://gitlab.com/postmarketOS/pmbootstrap.git'
             ],
             'tasks' => [
-                'cd pmbootstrap; pmbootstrap dosomething ' . $commitSha //TODO: Add implementation inside pmbootstrap
+                ['Build' => 'cd pmbootstrap; pmbootstrap dosomething ' . $commitSha]
             ]
         ];
         $manifest = Yaml::dump($manifest);
