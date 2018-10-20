@@ -20,7 +20,7 @@ class SrHtApi
     {
         $manifest = [
             'image' => 'alpine',
-            'packages' => 'python3',
+            'packages' => ['python3'],
             'sources' => [
                 'https://gitlab.com/postmarketOS/pmbootstrap.git'
             ],
