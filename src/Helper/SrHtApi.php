@@ -2,15 +2,18 @@
 
 namespace App\Helper;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class SrHtApi
 {
     private $authorizationToken;
+    private $logger;
 
-    public function __construct($authorizationToken)
+    public function __construct($authorizationToken, LoggerInterface $logger)
     {
         $this->authorizationToken = $authorizationToken;
+        $this->logger = $logger;
     }
 
     public function SubmitIndexJob($commitSha)
@@ -35,10 +38,14 @@ class SrHtApi
         ];
 
         $apiUrl = 'http://builds.sr.ht/api/jobs';
+
+        $this->logger->info('Sending POST request to "' . $apiUrl . '"');
+        $this->logger->info('Using token ' . $this->authorizationToken);
+
         $response = \Requests::post($apiUrl, ['Authorization' => $this->authorizationToken], json_encode($job));
         if ($response->status_code >= 400) {
-            $body = $response->status_code . '\n' . $response->body;
-            throw new \Exception($body);
+            $this->logger->error('Response status code: ' . $response->status_code);
+            throw new \Exception($response->body);
         }
     }
 }

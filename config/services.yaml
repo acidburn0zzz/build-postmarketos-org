@@ -33,7 +33,7 @@ services:
     srht_api:
         class: App\Helper\SrHtApi
         public: true
-        arguments: ["%env(SRHT_TOKEN)%"]
+        arguments: ["%env(SRHT_TOKEN)%","@logger"]
 
     web_log:
         class: App\Helper\LogHelper
