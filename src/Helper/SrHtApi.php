@@ -42,7 +42,11 @@ class SrHtApi
         $this->logger->info('Sending POST request to "' . $apiUrl . '"');
         $this->logger->info('Using token ' . $this->authorizationToken);
 
-        $response = \Requests::post($apiUrl, ['Authorization' => 'token ' . $this->authorizationToken], json_encode($job));
+        $response = \Requests::post($apiUrl, [
+            'Authorization' => 'token ' . $this->authorizationToken,
+            'Content-Type' => 'application/json'
+        ], json_encode($job));
+
         if ($response->status_code >= 400) {
             $this->logger->error('Response status code: ' . $response->status_code);
             throw new \Exception($response->body);
