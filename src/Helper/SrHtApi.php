@@ -7,12 +7,10 @@ use Symfony\Component\Yaml\Yaml;
 class SrHtApi
 {
     private $authorizationToken;
-    private $log;
 
-    public function __construct($authorizationToken, LogHelper $log)
+    public function __construct($authorizationToken)
     {
         $this->authorizationToken = $authorizationToken;
-        $this->log = $log;
     }
 
     public function SubmitIndexJob($commitSha)
@@ -38,12 +36,8 @@ class SrHtApi
 
         $apiUrl = 'http://builds.sr.ht/api/jobs';
         $response = \Requests::post($apiUrl, ['Authorization' => $this->authorizationToken], json_encode($job));
-
-        $this->log->write('sent index task to sr.ht', [
-            'headers' => $response->headers,
-            'code' => $response->status_code,
-            'body' => $response->body
-        ], true);
-        //TODO: Error checking
+        if ($response->status_code >= 400) {
+            throw new \Exception(json_encode($response));
+        }
     }
 }
