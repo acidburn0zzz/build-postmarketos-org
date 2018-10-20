@@ -34,7 +34,8 @@ class SrHtApi
             "note" => "Dependency check job for [" . $commitSha . "](" . $url . ")"
         ];
 
-        $response = \Requests::post('', ['Authorization' => $this->authorizationToken], json_encode($job));
+        $apiUrl = 'http://builds.sr.ht/api/jobs';
+        $response = \Requests::post($apiUrl, ['Authorization' => $this->authorizationToken], json_encode($job));
         //TODO: Error checking
     }
 }
