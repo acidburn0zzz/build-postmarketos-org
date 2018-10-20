@@ -19,7 +19,7 @@ class SrHtApi
     public function SubmitIndexJob($commitSha)
     {
         $manifest = [
-            'image' => 'alpine',
+            'image' => 'alpine/edge',
             'packages' => ['python3'],
             'sources' => [
                 'https://gitlab.com/postmarketOS/pmbootstrap.git'
