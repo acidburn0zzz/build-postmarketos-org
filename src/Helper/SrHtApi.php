@@ -37,7 +37,8 @@ class SrHtApi
         $apiUrl = 'http://builds.sr.ht/api/jobs';
         $response = \Requests::post($apiUrl, ['Authorization' => $this->authorizationToken], json_encode($job));
         if ($response->status_code >= 400) {
-            throw new \Exception(json_encode($response));
+            $body = $response->status_code . '\n' . $response->body;
+            throw new \Exception($body);
         }
     }
 }
