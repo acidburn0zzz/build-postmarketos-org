@@ -20,12 +20,12 @@ class SrHtApi
     {
         $manifest = [
             'image' => 'alpine/edge',
-            'packages' => ['python3'],
+            'packages' => [],
             'sources' => [
                 'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
             ],
             'tasks' => [
-                ['setup-pmbootstrap' => 'cd pmaports/.gitlab-ci; ./install_pmbootstrap.sh'],
+                ['setup-pmbootstrap' => 'cd pmaports/.gitlab-ci; sudo ./install_pmbootstrap.sh'],
                 ['check-changes' => 'pmbootstrap is awesome']
             ]
         ];
@@ -52,7 +52,11 @@ class SrHtApi
             $this->logger->error('Response status code: ' . $response->status_code);
             throw new \Exception($response->body);
         }
+
+        $response = json_decode($response->body, true);
+        $job_id = $response['id'];
+
         $this->logger->critical($response->body);
-        return $manifest;
+        return 'Submitted job #' . $job_id . ' to sr.ht' . PHP_EOL . PHP_EOL . $manifest;
     }
 }
