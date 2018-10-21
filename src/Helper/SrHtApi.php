@@ -52,5 +52,7 @@ class SrHtApi
             $this->logger->error('Response status code: ' . $response->status_code);
             throw new \Exception($response->body);
         }
+
+        return $manifest;
     }
 }

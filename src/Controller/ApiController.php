@@ -6,6 +6,7 @@ use App\Entity\Queue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends Controller
@@ -37,8 +38,8 @@ class ApiController extends Controller
         switch ($event) {
             case 'Push Hook':
                 $branch = str_replace('refs/heads/', '', $payload['ref']);
-                $this->onNewPush($branch, $payload['checkout_sha']);
-                return new JsonResponse(['status' => 'ok']);
+                $manifest = $this->onNewPush($branch, $payload['checkout_sha']);
+                return new Response($manifest);
                 break;
         }
         return new JsonResponse(['error' => 'Unknown event "' . $event . '"'], 400);
@@ -78,7 +79,8 @@ class ApiController extends Controller
             return;
         }
         $srht = $this->get('srht_api');
-        $srht->SubmitIndexJob($commit);
+        $manifest = $srht->SubmitIndexJob($commit);
+        return $manifest;
     }
 
     private function onNewTask($package, $pkgver, $pkgrel, $commit, $arch, $branch)
