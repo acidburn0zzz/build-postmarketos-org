@@ -18,9 +18,10 @@ class SrHtApi
 
     public function SubmitIndexJob($commitSha)
     {
+        $commitSha = '169cd37702ad8e15706a92679c97aa1adf33d36d';
         $manifest = [
             'image' => 'alpine/edge',
-            'packages' => [],
+            'packages' => ['python3', 'coreutils', 'openssl', 'sudo'],
             'sources' => [
                 'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
             ],
