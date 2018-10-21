@@ -76,7 +76,7 @@ class ApiController extends Controller
     {
         if ($branch != 'master') {
             $this->get('web_log')->write('Gitlab push is not for master', null, true);
-            return;
+            return 'WRONG BRANCH';
         }
         $srht = $this->get('srht_api');
         $manifest = $srht->SubmitIndexJob($commit);

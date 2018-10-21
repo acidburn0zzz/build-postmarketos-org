@@ -25,7 +25,7 @@ class SrHtApi
                 'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
             ],
             'tasks' => [
-                ['setup-pmbootstrap' => 'cd .gitlab-ci; ./install_pmbootstrap.sh'],
+                ['setup-pmbootstrap' => 'cd pmaports/.gitlab-ci; ./install_pmbootstrap.sh'],
                 ['check-changes' => 'pmbootstrap is awesome']
             ]
         ];
