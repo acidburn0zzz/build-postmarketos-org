@@ -22,10 +22,11 @@ class SrHtApi
             'image' => 'alpine/edge',
             'packages' => ['python3'],
             'sources' => [
-                'https://gitlab.com/postmarketOS/pmbootstrap.git'
+                'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
             ],
             'tasks' => [
-                ['build' => 'cd pmbootstrap; pmbootstrap dosomething ' . $commitSha]
+                ['setup_pmbootstrap' => 'cd .gitlab-ci; ./install_pmbootstrap.sh'],
+                ['check_changes' => 'pmbootstrap is awesome']
             ]
         ];
         $manifest = Yaml::dump($manifest);
