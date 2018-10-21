@@ -25,8 +25,8 @@ class SrHtApi
                 'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
             ],
             'tasks' => [
-                ['setup_pmbootstrap' => 'cd .gitlab-ci; ./install_pmbootstrap.sh'],
-                ['check_changes' => 'pmbootstrap is awesome']
+                ['setup-pmbootstrap' => 'cd .gitlab-ci; ./install_pmbootstrap.sh'],
+                ['check-changes' => 'pmbootstrap is awesome']
             ]
         ];
         $manifest = Yaml::dump($manifest);
