@@ -18,7 +18,7 @@ class SrHtApi
 
     public function SubmitIndexJob($commitSha)
     {
-        $commitSha = '169cd37702ad8e15706a92679c97aa1adf33d36d';
+        $commitSha = 'f43f6503a0497c658b00198e0ab668c643018a29';
         $manifest = [
             'image' => 'alpine/edge',
             'packages' => ['python3', 'coreutils', 'openssl', 'sudo'],
