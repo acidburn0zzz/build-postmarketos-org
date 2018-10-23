@@ -9,11 +9,13 @@ class SrHtApi
 {
     private $authorizationToken;
     private $logger;
+    private $secretId;
 
-    public function __construct($authorizationToken, LoggerInterface $logger)
+    public function __construct($authorizationToken, LoggerInterface $logger, $secretId)
     {
         $this->authorizationToken = $authorizationToken;
         $this->logger = $logger;
+        $this->secretId = $secretId;
     }
 
     public function SubmitIndexJob($commitSha)
@@ -28,7 +30,8 @@ class SrHtApi
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; sudo ./install_pmbootstrap.sh'],
                 ['check-changes' => 'pmbootstrap is awesome']
-            ]
+            ],
+            'secrets' => [$this->secretId]
         ];
         $manifest = Yaml::dump($manifest);
 
