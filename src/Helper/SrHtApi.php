@@ -29,9 +29,9 @@ class SrHtApi
             ],
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; sudo ./install_pmbootstrap.sh'],
-                ['check-changes' => 'echo \'{ "x86_64": [{"pkgname": "hello-world", "version": "1-r4"}, {"pkgname": "devicepkg-dev", "version": "0.5-r0"}]}
+                ['check-changes' => 'cd pmaports/.sr.ht; echo \'{ "x86_64": [{"pkgname": "hello-world", "version": "1-r4"}, {"pkgname": "devicepkg-dev", "version": "0.5-r0"}]}
 \' > changes.json'],
-                ['submit-to-build' => 'python3 submit.py task-submit changes.json']
+                ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py task-submit changes.json']
             ],
             'secrets' => [$this->secretId]
         ];
