@@ -20,16 +20,18 @@ class SrHtApi
 
     public function SubmitIndexJob($commitSha)
     {
-        $commitSha = 'f43f6503a0497c658b00198e0ab668c643018a29';
+        $commitSha = '70f8342ce08fbb9501cd7e618d6aa275f7217c90';
         $manifest = [
             'image' => 'alpine/edge',
-            'packages' => ['python3', 'coreutils', 'openssl', 'sudo'],
+            'packages' => ['python3', 'coreutils', 'openssl', 'sudo', 'py3-requests'],
             'sources' => [
                 'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
             ],
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; sudo ./install_pmbootstrap.sh'],
-                ['check-changes' => 'pmbootstrap is awesome']
+                ['check-changes' => 'echo \'{ "x86_64": [{"pkgname": "hello-world", "version": "1-r4"}, {"pkgname": "devicepkg-dev", "version": "0.5-r0"}]}
+\' > changes.json'],
+                ['submit-to-build' => 'python3 submit.py task-submit changes.json']
             ],
             'secrets' => [$this->secretId]
         ];
