@@ -18,7 +18,7 @@ class SrHtApi
         $this->secretId = $secretId;
     }
 
-    public function SubmitIndexJob($commitSha)
+    public function SubmitIndexJob($commitSha, $branch)
     {
         $commitSha = '80a3cb54ae5649cfd61382deb3c88a13645fee02';
         $manifest = [
@@ -32,6 +32,10 @@ class SrHtApi
                 ['check-changes' => 'cd pmaports/.sr.ht; echo \'{ "x86_64": [{"pkgname": "hello-world", "version": "1-r4"}, {"pkgname": "devicepkg-dev", "version": "0.5-r0"}]}
 \' > ~/changes.json'],
                 ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py task-submit ~/changes.json']
+            ],
+            'environment' => [
+                'COMMIT' => $commitSha,
+                'BRANCH' => $branch
             ],
             'secrets' => [$this->secretId]
         ];

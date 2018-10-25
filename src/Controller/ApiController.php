@@ -87,7 +87,7 @@ class ApiController extends Controller
             return 'WRONG BRANCH';
         }
         $srht = $this->get('srht_api');
-        $manifest = $srht->SubmitIndexJob($commit);
+        $manifest = $srht->SubmitIndexJob($commit, $branch);
         return $manifest;
     }
 
