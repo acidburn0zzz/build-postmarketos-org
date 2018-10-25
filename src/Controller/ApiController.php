@@ -51,6 +51,8 @@ class ApiController extends Controller
     public function task_submit(Request $request)
     {
         $token = $request->headers->get('X-Secret');
+        $commit = $request->headers->get('X-Commit');
+        $branch = $request->headers->get('X-Branch');
         if (!$token) {
             $this->get('web_log')->write('task-submit received without secret', null, true);
             return new JsonResponse(['error' => 'Secret missing'], 401);
@@ -66,7 +68,13 @@ class ApiController extends Controller
 
         $this->get('web_log')->write('task-submit received', $payload);
 
-        $this->onNewTask($payload['package'], $payload['pkgver'], $payload['pkgrel'], $payload['commit'], $payload['arch'], $payload['branch']);
+        foreach ($payload as $architecture => $packages) {
+            foreach ($packages as $package) {
+                list($pkgver, $pkgrel) = explode('-', $package['pkgver'], 2);
+                $pkgrel = (int)str_replace('r', '', $pkgrel);
+                $this->onNewTask($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $branch);
+            }
+        }
 
         return new JsonResponse(['status' => 'ok']);
     }
