@@ -133,4 +133,18 @@ class SrHtApi
         $this->logger->critical($response->body);
         return $job_id;
     }
+
+    public function StartJob($id)
+    {
+        $apiUrl = 'http://builds.sr.ht/api/jobs/' . $id . '/start';
+        $response = \Requests::post($apiUrl, [
+            'Authorization' => 'token ' . $this->authorizationToken,
+            'Content-Type' => 'application/json'
+        ], '{}');
+
+        if ($response->status_code >= 400) {
+            $this->logger->error('Response status code: ' . $response->status_code);
+            throw new \Exception($response->body);
+        }
+    }
 }

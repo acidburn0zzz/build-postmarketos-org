@@ -76,6 +76,8 @@ class ApiController extends Controller
             }
         }
 
+        $this->startNextBuild();
+
         return new JsonResponse(['status' => 'ok']);
     }
 
@@ -133,5 +135,27 @@ class ApiController extends Controller
             $manager->persist($task);
         }
         $manager->flush();
+    }
+
+    private function startNextBuild()
+    {
+        $manager = $this->getDoctrine()->getManager();
+        $queue = $this->getDoctrine()->getRepository('App:Queue');
+
+        $running = $queue->findOneBy(['status' => 'BUILDING']);
+
+        if ($running) {
+            return;
+        }
+
+        $next = $queue->findOneBy(['status' => 'WAITING'], ['id' => 'ASC']);
+
+        if ($next) {
+            $srht = $this->get('srht_api');
+            $srht->StartJob($next->getSrhtId());
+            $next->setStatus('BUILDING');
+            $manager->persist($next);
+            $manager->flush();
+        }
     }
 }
