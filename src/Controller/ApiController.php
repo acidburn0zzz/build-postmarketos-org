@@ -116,7 +116,11 @@ class ApiController extends Controller
             }
         }
 
-        if ($foundExisting) {
+        if (!$foundExisting) {
+
+            $srht = $this->get('srht_api');
+            $id = $srht->SubmitBuildJob($commit, $branch, $package, $arch);
+
             $task = new Queue();
             $task->setAport($package);
             $task->setPkgver($pkgver);
@@ -125,9 +129,8 @@ class ApiController extends Controller
             $task->setArch($arch);
             $task->setCommit($commit);
             $task->setStatus('WAITING');
-            $task->setSrhtId(0);
+            $task->setSrhtId($id);
             $manager->persist($task);
-            // TODO: Submit task to sr.ht and write correct ID back
         }
         $manager->flush();
     }
