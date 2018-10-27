@@ -29,7 +29,11 @@
                         {{ job.commit | slice(0, 8) }}
                     </a>
                 </td>
-                <td>{{ job.srhtId }}</td>
+                <td>
+                    <a href="https://builds.sr.ht/~pmos/job/{{ job.srhtId }}">
+                        {{ job.srhtId }}
+                    </a>
+                </td>
                 <td>{{ job.status }}</td>
             </tr>
         {% endfor %}
@@ -65,7 +69,11 @@
                         {{ job.commit | slice(0, 8) }}
                     </a>
                 </td>
-                <td>{{ job.srhtId }}</td>
+                <td>
+                    <a href="https://builds.sr.ht/~pmos/job/{{ job.srhtId }}">
+                        {{ job.srhtId }}
+                    </a>
+                </td>
                 <td>{{ job.status }}</td>
             </tr>
         {% endfor %}
