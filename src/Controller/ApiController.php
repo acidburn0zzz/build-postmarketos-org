@@ -137,6 +137,27 @@ class ApiController extends Controller
         $manager->flush();
     }
 
+    /**
+     * @Route("/api/failure-hook", name="failure_hook")
+     */
+    public function failure_hook(Request $request)
+    {
+        $payload = $request->getContent();
+        $payload = json_decode($payload, true);
+        $this->get('web_log')->write('failure-hook received', $payload, true);
+
+        $manager = $this->getDoctrine()->getManager();
+        $queue = $this->getDoctrine()->getRepository('App:Queue');
+        $task = $queue->findOneBy(['SrhtId' => (int)$payload['id']]);
+        if ($task) {
+            $task->setStatus('FAILED');
+            $manager->persist($task);
+            $manager->flush();
+        }
+        $this->startNextBuild();
+        return new JsonResponse([]);
+    }
+
     private function startNextBuild()
     {
         $manager = $this->getDoctrine()->getManager();
