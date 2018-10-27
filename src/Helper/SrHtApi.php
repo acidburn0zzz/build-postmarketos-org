@@ -20,7 +20,7 @@ class SrHtApi
 
     public function SubmitIndexJob($commitSha, $branch)
     {
-        $commitSha = '4284d761e64e7723e5f16e1bea698602f817526f';
+        $commitSha = 'd6bdb3738af31097d892068036aa975c75b54790';
         $manifest = [
             'image' => 'alpine/edge',
             'packages' => ['python3', 'coreutils', 'openssl', 'sudo', 'py3-requests'],
@@ -28,7 +28,7 @@ class SrHtApi
                 'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
             ],
             'tasks' => [
-                ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; sudo ./install_pmbootstrap.sh'],
+                ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
                 ['check-changes' => 'cd pmaports/.sr.ht; echo \'{ "x86_64": [{"pkgname": "hello-world", "version": "1-r4"}, {"pkgname": "devicepkg-dev", "version": "0.5-r0"}]}
 \' > ~/changes.json'],
                 ['submit-to-build' => 'cd pmaports/.sr.ht;COMMIT=' . $commitSha . ' BRANCH=' . $branch . ' python3 submit.py task-submit ~/changes.json']
@@ -73,7 +73,7 @@ class SrHtApi
     public function SubmitBuildJob($commitSha, $branch, $package, $arch)
     {
 
-        $command = 'pmbootstrap --details-to-stdout build --force --strict --arch=' . $arch . ' ' . $package;
+        $command = 'pmbootstrap --details-to-stdout --pmaports /home/build/pmaports build --force --strict --arch=' . $arch . ' ' . $package;
 
         $manifest = [
             'image' => 'alpine/edge',
@@ -82,7 +82,7 @@ class SrHtApi
                 'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
             ],
             'tasks' => [
-                ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; sudo ./install_pmbootstrap.sh'],
+                ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
                 ['build' => 'cd pmaports/.sr.ht; ' . $command],
                 ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py task-submit ~/changes.json']
             ],
