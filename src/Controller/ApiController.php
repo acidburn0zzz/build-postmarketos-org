@@ -64,6 +64,9 @@ class ApiController extends Controller
             return new JsonResponse(['error' => 'Secret not correct'], 403);
         }
 
+        $commit = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
+
+
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
 
@@ -73,7 +76,7 @@ class ApiController extends Controller
             foreach ($packages as $package) {
                 list($pkgver, $pkgrel) = explode('-', $package['pkgver'], 2);
                 $pkgrel = (int)str_replace('r', '', $pkgrel);
-                $this->onNewTask($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $branch);
+                $this->onNewTask($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture);
             }
         }
 
@@ -106,7 +109,7 @@ class ApiController extends Controller
         return $manifest;
     }
 
-    private function onNewTask($package, $pkgver, $pkgrel, $commit, $arch, $branch)
+    private function onNewTask($package, $pkgver, $pkgrel, Commit $commit, $arch)
     {
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $manager = $this->getDoctrine()->getManager();
@@ -114,7 +117,7 @@ class ApiController extends Controller
         // Check if there is a running or queued task for this package already
         $existing = $queue->findBy([
             'aport' => $package,
-            'branch' => $branch,
+            'branch' => $commit->getBranch(),
             'arch' => $arch,
             'status' => ['WAITING', 'BUILDING']
         ]);
@@ -134,13 +137,12 @@ class ApiController extends Controller
         if (!$foundExisting) {
 
             $srht = $this->get('srht_api');
-            $id = $srht->SubmitBuildJob($commit, $branch, $package, $arch);
+            $id = $srht->SubmitBuildJob($commit, $package, $arch);
 
             $task = new Queue();
             $task->setAport($package);
             $task->setPkgver($pkgver);
             $task->setPkgrel($pkgrel);
-            $task->setBranch($branch);
             $task->setArch($arch);
             $task->setCommit($commit);
             $task->setStatus('WAITING');

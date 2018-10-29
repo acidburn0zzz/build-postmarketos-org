@@ -73,7 +73,7 @@ class SrHtApi
         return 'Submitted job #' . $job_id . ' to sr.ht' . PHP_EOL . PHP_EOL . $manifest;
     }
 
-    public function SubmitBuildJob($commitSha, $branch, $package, $arch)
+    public function SubmitBuildJob(Commit $commit, $package, $arch)
     {
 
         $command = 'pmbootstrap --details-to-stdout --pmaports /home/build/pmaports build --force --strict --arch=' . $arch . ' ' . $package;
@@ -82,7 +82,7 @@ class SrHtApi
             'image' => 'alpine/edge',
             'packages' => ['python3', 'coreutils', 'openssl', 'sudo', 'py3-requests'],
             'sources' => [
-                'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
+                'https://gitlab.com/postmarketOS/pmaports.git#' . $commit->getRef()
             ],
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
@@ -90,8 +90,8 @@ class SrHtApi
                 ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py task-submit ~/changes.json']
             ],
             'environment' => [
-                'COMMIT' => $commitSha,
-                'BRANCH' => $branch
+                'COMMIT' => $commit->getRef(),
+                'BRANCH' => $commit->getBranch()
             ],
             'secrets' => [$this->secretId],
             'triggers' => [
@@ -105,9 +105,9 @@ class SrHtApi
 
         $manifest = Yaml::dump($manifest);
 
-        $url = 'https://gitlab.com/postmarketOS/pmaports/commit/' . $commitSha;
+        $url = 'https://gitlab.com/postmarketOS/pmaports/commit/' . $commit->getRef();
 
-        $note = 'Building ' . $package . '[' . $arch . '] from commit [' . $commitSha . '](' . $url . ')';
+        $note = 'Building ' . $package . '[' . $arch . '] from commit [' . $commit->getRef() . '](' . $url . ')';
 
         $job = [
             "manifest" => $manifest,
