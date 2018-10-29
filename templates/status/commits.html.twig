@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commits{% endblock %}
+
+{% block body %}
+    <a href="{{ path('packages') }}">Packages</a> | Commits
+
+    <h2>Pending commits</h2>
+    <table class="collapse ba b--black-10 table">
+        <tr class="striped--near-white">
+            <th>#</th>
+            <th>branch</th>
+            <th>commit</th>
+            <th>status</th>
+        </tr>
+        {% for commit in queued %}
+            <tr class="striped--near-white">
+                <td>{{ commit.id }}</td>
+                <td>{{ commit.branch }}</td>
+                <td>
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ commit.ref }}">
+                        {{ commit.ref | slice(0, 8) }}
+                    </a>
+                </td>
+                <td>{{ job.status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Completed commits</h2>
+    <table class="collapse ba b--black-10 table">
+        <tr class="striped--near-white">
+            <th>#</th>
+            <th>branch</th>
+            <th>commit</th>
+            <th>status</th>
+        </tr>
+        {% for commit in done %}
+            <tr class="striped--near-white">
+                <td>{{ commit.id }}</td>
+                <td>{{ commit.branch }}</td>
+                <td>
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ commit.ref }}">
+                        {{ commit.ref | slice(0, 8) }}
+                    </a>
+                </td>
+                <td>{{ job.status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

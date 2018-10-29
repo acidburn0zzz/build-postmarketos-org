@@ -9,6 +9,35 @@ class StatusController extends AbstractController
 {
     /**
      * @Route("/", name="status")
+     * @Route("/packages", name="packages")
+     */
+    public function packages()
+    {
+        $queue = $this->getDoctrine()->getRepository('App:Queue');
+        $queued = $queue->findBy(['status' => ['WAITING', 'BUILDING']], ['id' => 'DESC']);
+        $done = $queue->findBy(['status' => ['DONE', 'FAILED', 'SUPERSEDED']], ['id' => 'DESC'], 50);
+        return $this->render('status/packages.html.twig', [
+            'queued' => $queued,
+            'done' => $done
+        ]);
+    }
+
+    /**
+     * @Route("/commits", name="commits")
+     */
+    public function commits()
+    {
+        $queue = $this->getDoctrine()->getRepository('App:Commit');
+        $queued = $queue->findBy(['status' => ['INDEXING', 'WAITING', 'BUILDING']], ['id' => 'DESC']);
+        $done = $queue->findBy(['status' => ['DONE', 'FAILED', 'SUPERSEDED']], ['id' => 'DESC'], 50);
+        return $this->render('status/commits.html.twig', [
+            'queued' => $queued,
+            'done' => $done
+        ]);
+    }
+
+    /**
+     * @Route("/", name="status")
      */
     public function index()
     {

@@ -1,8 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Queue{% endblock %}
+{% block title %}Packages{% endblock %}
 
 {% block body %}
+    Packages | <a href="{{ path('commits') }}">Commits</a>
+
     <h2>Pending builds</h2>
     <table class="collapse ba b--black-10 table">
         <tr class="striped--near-white">
