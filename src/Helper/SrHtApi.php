@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use App\Entity\Commit;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -18,34 +19,36 @@ class SrHtApi
         $this->secretId = $secretId;
     }
 
-    public function SubmitIndexJob($commitSha, $branch)
+    public function SubmitIndexJob(Commit $commit)
     {
-        $commitSha = 'd6bdb3738af31097d892068036aa975c75b54790';
+        //TODO: Remove, testing code
+        $commit->setRef('d6bdb3738af31097d892068036aa975c75b54790');
+
         $manifest = [
             'image' => 'alpine/edge',
             'packages' => ['python3', 'coreutils', 'openssl', 'sudo', 'py3-requests'],
             'sources' => [
-                'https://gitlab.com/postmarketOS/pmaports.git#' . $commitSha
+                'https://gitlab.com/postmarketOS/pmaports.git#' . $commit->getRef()
             ],
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
                 ['check-changes' => 'cd pmaports/.sr.ht; echo \'{ "x86_64": [{"pkgname": "hello-world", "version": "1-r4"}, {"pkgname": "devicepkg-dev", "version": "0.5-r0"}]}
 \' > ~/changes.json'],
-                ['submit-to-build' => 'cd pmaports/.sr.ht;COMMIT=' . $commitSha . ' BRANCH=' . $branch . ' python3 submit.py task-submit ~/changes.json']
+                ['submit-to-build' => 'cd pmaports/.sr.ht;COMMIT=' . $commit->getRef() . ' BRANCH=' . $commit->getBranch() . ' python3 submit.py task-submit ~/changes.json']
             ],
             'environment' => [
-                'COMMIT' => $commitSha,
-                'BRANCH' => $branch
+                'COMMIT' => $commit->getRef(),
+                'BRANCH' => $commit->getBranch()
             ],
             'secrets' => [$this->secretId]
         ];
         $manifest = Yaml::dump($manifest);
 
-        $url = 'https://gitlab.com/postmarketOS/pmaports/commit/' . $commitSha;
+        $url = 'https://gitlab.com/postmarketOS/pmaports/commit/' . $commit->getRef();
 
         $job = [
             "manifest" => $manifest,
-            "note" => "Dependency check job for [" . $commitSha . "](" . $url . ")"
+            "note" => "Dependency check job for [" . $commit->getRef() . "](" . $url . ")"
         ];
 
         $apiUrl = 'http://builds.sr.ht/api/jobs';

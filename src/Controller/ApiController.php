@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Commit;
 use App\Entity\Queue;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -89,7 +90,19 @@ class ApiController extends Controller
             return 'WRONG BRANCH';
         }
         $srht = $this->get('srht_api');
-        $manifest = $srht->SubmitIndexJob($commit, $branch);
+
+        $manager = $this->getDoctrine()->getManager();
+        $commitObj = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
+        if (!$commitObj) {
+            $commitObj = new Commit();
+            $commitObj->setRef($commit);
+            $commitObj->setBranch($branch);
+            $commitObj->setMessage('HAI');
+            $commitObj->setStatus('INDEXING');
+            $manager->persist($commitObj);
+        }
+
+        $manifest = $srht->SubmitIndexJob($commitObj);
         return $manifest;
     }
 
