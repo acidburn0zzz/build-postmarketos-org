@@ -23,6 +23,21 @@ class SrHtApi
     {
         //TODO: Remove, testing code
         $commit->setRef('d6bdb3738af31097d892068036aa975c75b54790');
+        $fakeData = [
+            [
+                "pkgname" => "hello-world",
+                "repo" => "main",
+                "version" => "1-r5",
+                "depends" => []
+            ],
+            [
+                "pkgname" => "hello-world-wrapper",
+                "repo" => "main",
+                "version" => "1-r2",
+                "depends" => ["hello-world"]
+            ]
+        ];
+        $fakeData = json_encode($fakeData);
 
         $manifest = [
             'image' => 'alpine/edge',
@@ -32,8 +47,7 @@ class SrHtApi
             ],
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
-                ['check-changes' => 'cd pmaports/.sr.ht; echo \'{ "x86_64": [{"pkgname": "hello-world", "version": "1-r4"}, {"pkgname": "devicepkg-dev", "version": "0.5-r0"}]}
-\' > ~/changes.json'],
+                ['check-changes' => 'cd pmaports/.sr.ht; echo \'' . $fakeData . '\' > ~/changes.json'],
                 ['submit-to-build' => 'cd pmaports/.sr.ht;COMMIT=' . $commit->getRef() . ' BRANCH=' . $commit->getBranch() . ' python3 submit.py task-submit ~/changes.json']
             ],
             'environment' => [
