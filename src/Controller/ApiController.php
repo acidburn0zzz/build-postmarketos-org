@@ -53,7 +53,8 @@ class ApiController extends Controller
     {
         $token = $request->headers->get('X-Secret');
         $commit = $request->headers->get('X-Commit');
-        $branch = $request->headers->get('X-Branch');
+        $architecture = $request->headers->get('X-Arch');
+
         if (!$token) {
             $this->get('web_log')->write('task-submit received without secret', null, true);
             return new JsonResponse(['error' => 'Secret missing'], 401);
@@ -66,18 +67,18 @@ class ApiController extends Controller
 
         $commit = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
 
-
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
 
         $this->get('web_log')->write('task-submit received', $payload);
 
-        foreach ($payload as $architecture => $packages) {
-            foreach ($packages as $package) {
-                list($pkgver, $pkgrel) = explode('-', $package['pkgver'], 2);
-                $pkgrel = (int)str_replace('r', '', $pkgrel);
-                $this->onNewTask($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture);
-            }
+        // Order packages to build order
+
+
+        foreach ($payload as $package) {
+            list($pkgver, $pkgrel) = explode('-', $package['pkgver'], 2);
+            $pkgrel = (int)str_replace('r', '', $pkgrel);
+            $this->onNewTask($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $package['depends']);
         }
 
         $this->startNextBuild();
