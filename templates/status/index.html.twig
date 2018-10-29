@@ -25,8 +25,8 @@
                 <td>{{ job.branch }}</td>
                 <td>{{ job.arch }}</td>
                 <td>
-                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit }}">
-                        {{ job.commit | slice(0, 8) }}
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}">
+                        {{ job.commit.ref | slice(0, 8) }}
                     </a>
                 </td>
                 <td>
