@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,29 +34,35 @@ class Queue
     private $pkgrel;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $branch;
-
-    /**
      * @ORM\Column(type="string", length=10)
      */
     private $arch;
 
     /**
-     * @ORM\Column(type="string", length=64)
-     */
-    private $commit;
-
-    /**
      * @ORM\Column(type="integer")
      */
-    private $SrhtId;
+    private $srhtId;
 
     /**
      * @ORM\Column(type="string", length=10)
      */
     private $status;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\QueueDependency", mappedBy="queueItem", orphanRemoval=true)
+     */
+    private $queueDependencies;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Commit", inversedBy="packages")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $commit;
+
+    public function __construct()
+    {
+        $this->queueDependencies = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -97,18 +105,6 @@ class Queue
         return $this;
     }
 
-    public function getBranch()
-    {
-        return $this->branch;
-    }
-
-    public function setBranch(string $branch)
-    {
-        $this->branch = $branch;
-
-        return $this;
-    }
-
     public function getArch()
     {
         return $this->arch;
@@ -126,7 +122,7 @@ class Queue
         return $this->commit;
     }
 
-    public function setCommit(string $commit)
+    public function setCommit(Commit $commit)
     {
         $this->commit = $commit;
 
@@ -135,12 +131,12 @@ class Queue
 
     public function getSrhtId()
     {
-        return $this->SrhtId;
+        return $this->srhtId;
     }
 
-    public function setSrhtId(int $SrhtId)
+    public function setSrhtId(int $srhtId)
     {
-        $this->SrhtId = $SrhtId;
+        $this->srhtId = $srhtId;
 
         return $this;
     }
@@ -153,6 +149,37 @@ class Queue
     public function setStatus(string $status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|QueueDependency[]
+     */
+    public function getQueueDependencies()
+    {
+        return $this->queueDependencies;
+    }
+
+    public function addQueueDependency(QueueDependency $queueDependency): self
+    {
+        if (!$this->queueDependencies->contains($queueDependency)) {
+            $this->queueDependencies[] = $queueDependency;
+            $queueDependency->setQueueItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQueueDependency(QueueDependency $queueDependency): self
+    {
+        if ($this->queueDependencies->contains($queueDependency)) {
+            $this->queueDependencies->removeElement($queueDependency);
+            // set the owning side to null (unless already changed)
+            if ($queueDependency->getQueueItem() === $this) {
+                $queueDependency->setQueueItem(null);
+            }
+        }
 
         return $this;
     }
