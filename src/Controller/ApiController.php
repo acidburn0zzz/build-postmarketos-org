@@ -128,7 +128,7 @@ class ApiController extends Controller
             $commitObj->setStatus('INDEXING');
             $manager->persist($commitObj);
         }
-
+        $manager->flush();
         $manifest = $srht->SubmitIndexJob($commitObj);
         return $manifest;
     }
