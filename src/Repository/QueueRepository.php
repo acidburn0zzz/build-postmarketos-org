@@ -19,6 +19,29 @@ class QueueRepository extends ServiceEntityRepository
         parent::__construct($registry, Queue::class);
     }
 
+    public function getStartable()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $stmt = $conn->prepare('
+            SELECT queue.id, GROUP_CONCAT(DISTINCT depend.status) as dependencies
+            FROM queue
+                        LEFT JOIN queue_depends ON queue_depends.queue_id = queue.id
+                        LEFT JOIN queue AS depend ON depend.id = queue_depends.requires_id
+            WHERE queue.status = "WAITING"
+            GROUP BY queue.aport
+        ');
+
+        $stmt->execute();
+
+        $result = [];
+        foreach ($stmt->fetchAll() as $row) {
+            if ($row['dependencies'] === null || $row['dependencies'] == 'DONE') {
+                $result[] = $row['id'];
+            }
+        }
+        return $this->findBy(['id' => $result]);
+    }
+
 //    /**
 //     * @return Queue[] Returns an array of Queue objects
 //     */

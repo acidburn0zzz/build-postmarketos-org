@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Commit;
 use App\Entity\Queue;
+use App\Entity\QueueDependency;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,6 +66,8 @@ class ApiController extends Controller
             return new JsonResponse(['error' => 'Secret not correct'], 403);
         }
 
+        $manager = $this->getDoctrine()->getManager();
+
         $commit = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
 
         $payload = $request->getContent();
@@ -72,20 +75,34 @@ class ApiController extends Controller
 
         $this->get('web_log')->write('task-submit received', $payload);
 
-        // Order packages to build order
-
+        $row = [];
 
         foreach ($payload as $package) {
             list($pkgver, $pkgrel) = explode('-', $package['pkgver'], 2);
             $pkgrel = (int)str_replace('r', '', $pkgrel);
-            $this->onNewTask($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $package['depends']);
+            $row[$package['pkgname']] = $this->createOrUpdatePackage($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture);
         }
+
+        foreach ($payload as $package) {
+            $queueItem = $row[$package['pkgname']];
+            foreach ($package['depends'] as $dependency) {
+                $queueItemDepend = $row[$dependency];
+                $existing = $this->getDoctrine()->getRepository('App:QueueDependency')->findOneBy(['queueItem' => $queueItem, 'requirement' => $queueItemDepend]);
+                if (!$existing) {
+                    $queueDependency = new QueueDependency();
+                    $queueDependency->setQueueItem($queueItem);
+                    $queueDependency->setRequirement($queueItemDepend);
+                    $manager->persist($queueDependency);
+                }
+            }
+        }
+
+        $manager->flush();
 
         $this->startNextBuild();
 
         return new JsonResponse(['status' => 'ok']);
     }
-
 
     private function onNewPush($branch, $commit)
     {
@@ -110,7 +127,7 @@ class ApiController extends Controller
         return $manifest;
     }
 
-    private function onNewTask($package, $pkgver, $pkgrel, Commit $commit, $arch)
+    private function createOrUpdatePackage($package, $pkgver, $pkgrel, Commit $commit, $arch)
     {
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $manager = $this->getDoctrine()->getManager();
@@ -149,8 +166,10 @@ class ApiController extends Controller
             $task->setStatus('WAITING');
             $task->setSrhtId($id);
             $manager->persist($task);
+            return $task;
+        } else {
+            return $existingTask[0];
         }
-        $manager->flush();
     }
 
     /**
@@ -185,13 +204,13 @@ class ApiController extends Controller
             return;
         }
 
-        $next = $queue->findOneBy(['status' => 'WAITING'], ['id' => 'ASC']);
+        $next = $queue->getStartable();
 
-        if ($next) {
+        if (count($next) > 0) {
             $srht = $this->get('srht_api');
-            $srht->StartJob($next->getSrhtId());
+            $srht->StartJob($next[0]->getSrhtId());
             $next->setStatus('BUILDING');
-            $manager->persist($next);
+            $manager->persist($next[0]);
             $manager->flush();
         }
     }
