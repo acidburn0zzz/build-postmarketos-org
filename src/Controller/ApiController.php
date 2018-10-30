@@ -149,7 +149,6 @@ class ApiController extends Controller
         // Check if there is a running or queued task for this package already
         $existing = $queue->findBy([
             'aport' => $package,
-            'branch' => $commit->getBranch(),
             'arch' => $arch,
             'status' => ['WAITING', 'BUILDING']
         ]);

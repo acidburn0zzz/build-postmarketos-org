@@ -82,7 +82,7 @@ class SrHtApi
         $response = json_decode($response->body, true);
         $job_id = $response['id'];
 
-        $this->logger->critical($response->body);
+        $this->logger->critical($response);
         return 'Submitted job #' . $job_id . ' to sr.ht' . PHP_EOL . PHP_EOL . $manifest;
     }
 
