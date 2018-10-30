@@ -22,7 +22,6 @@ class SrHtApi
     public function SubmitIndexJob(Commit $commit)
     {
         //TODO: Remove, testing code
-        $commit->setRef('d6bdb3738af31097d892068036aa975c75b54790');
         $fakeData = [
             [
                 "pkgname" => "hello-world",

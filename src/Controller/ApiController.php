@@ -123,6 +123,10 @@ class ApiController extends Controller
         $srht = $this->get('srht_api');
 
         $manager = $this->getDoctrine()->getManager();
+
+        // TODO: Remove testing code
+        $commit = 'd6bdb3738af31097d892068036aa975c75b54790';
+
         $commitObj = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
         if (!$commitObj) {
             $commitObj = new Commit();
