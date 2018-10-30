@@ -42,7 +42,7 @@ class ApiController extends Controller
                 $branch = str_replace('refs/heads/', '', $payload['ref']);
 
                 $message = '';
-                if(isset($payload['commits'][0]['message'])){
+                if (isset($payload['commits'][0]['message'])) {
                     $message = $payload['commits'][0]['message'];
                 }
 
@@ -75,6 +75,10 @@ class ApiController extends Controller
         $manager = $this->getDoctrine()->getManager();
 
         $commit = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
+
+        if (!$commit) {
+            throw new \Exception('Commit "' . $commit . '" not found in the database');
+        }
 
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
