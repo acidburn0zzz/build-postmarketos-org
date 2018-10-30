@@ -40,7 +40,13 @@ class ApiController extends Controller
         switch ($event) {
             case 'Push Hook':
                 $branch = str_replace('refs/heads/', '', $payload['ref']);
-                $manifest = $this->onNewPush($branch, $payload['checkout_sha']);
+
+                $message = '';
+                if(isset($payload['commits'][0]['message'])){
+                    $message = $payload['commits'][0]['message'];
+                }
+
+                $manifest = $this->onNewPush($branch, $payload['checkout_sha'], $message);
                 return new Response($manifest);
                 break;
         }
@@ -104,7 +110,7 @@ class ApiController extends Controller
         return new JsonResponse(['status' => 'ok']);
     }
 
-    private function onNewPush($branch, $commit)
+    private function onNewPush($branch, $commit, $message)
     {
         if ($branch != 'master') {
             $this->get('web_log')->write('Gitlab push is not for master', null, true);
@@ -118,7 +124,7 @@ class ApiController extends Controller
             $commitObj = new Commit();
             $commitObj->setRef($commit);
             $commitObj->setBranch($branch);
-            $commitObj->setMessage('HAI');
+            $commitObj->setMessage($message);
             $commitObj->setStatus('INDEXING');
             $manager->persist($commitObj);
         }
