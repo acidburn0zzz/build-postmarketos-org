@@ -24,10 +24,10 @@
                 <td>{{ job.aport }}</td>
                 <td>{{ job.pkgver }}</td>
                 <td>{{ job.pkgrel }}</td>
-                <td>{{ job.branch }}</td>
+                <td>{{ job.commit.branch }}</td>
                 <td>{{ job.arch }}</td>
                 <td>
-                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}">
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}" style="font-family: monospace;">
                         {{ job.commit.ref | slice(0, 8) }}
                     </a>
                 </td>
