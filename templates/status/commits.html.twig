@@ -12,17 +12,20 @@
             <th>branch</th>
             <th>commit</th>
             <th>status</th>
+            <th>message</th>
         </tr>
         {% for commit in queued %}
             <tr class="striped--near-white">
                 <td>{{ commit.id }}</td>
                 <td>{{ commit.branch }}</td>
                 <td>
-                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ commit.ref }}">
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ commit.ref }}"
+                       style="font-family: monospace;">
                         {{ commit.ref | slice(0, 8) }}
                     </a>
                 </td>
-                <td>{{ job.status }}</td>
+                <td>{{ commit.status }}</td>
+                <td>{{ commit.message }}</td>
             </tr>
         {% endfor %}
     </table>
@@ -34,6 +37,7 @@
             <th>branch</th>
             <th>commit</th>
             <th>status</th>
+            <th>message</th>
         </tr>
         {% for commit in done %}
             <tr class="striped--near-white">
@@ -44,7 +48,8 @@
                         {{ commit.ref | slice(0, 8) }}
                     </a>
                 </td>
-                <td>{{ job.status }}</td>
+                <td>{{ commit.status }}</td>
+                <td>{{ commit.message }}</td>
             </tr>
         {% endfor %}
     </table>
