@@ -146,7 +146,7 @@ class SrHtApi
         $response = json_decode($response->body, true);
         $job_id = $response['id'];
 
-        $this->logger->critical($response->body);
+        $this->logger->critical($response);
         return $job_id;
     }
 
