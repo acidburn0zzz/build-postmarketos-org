@@ -196,7 +196,7 @@ class ApiController extends Controller
 
         $manager = $this->getDoctrine()->getManager();
         $queue = $this->getDoctrine()->getRepository('App:Queue');
-        $task = $queue->findOneBy(['SrhtId' => (int)$payload['id']]);
+        $task = $queue->findOneBy(['srhtId' => (int)$payload['id']]);
         if ($task) {
             $task->setStatus('FAILED');
             $manager->persist($task);
