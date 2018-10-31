@@ -57,18 +57,14 @@
         {% for job in done %}
             <tr class="striped--near-white">
                 <td>{{ job.id }}</td>
-                <td>
-                    <a href="http://postmarketos.brixit.nl/{{ job.arch }}/{{ job.aport }}-{{ job.pkgver }}-r{{ job.pkgrel }}.apk">
-                        {{ job.aport }}
-                    </a>
-                </td>
+                <td>{{ job.aport }}</td>
                 <td>{{ job.pkgver }}</td>
                 <td>{{ job.pkgrel }}</td>
-                <td>{{ job.branch }}</td>
+                <td>{{ job.commit.branch }}</td>
                 <td>{{ job.arch }}</td>
                 <td>
-                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit }}">
-                        {{ job.commit | slice(0, 8) }}
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}" style="font-family: monospace;">
+                        {{ job.commit.ref | slice(0, 8) }}
                     </a>
                 </td>
                 <td>
