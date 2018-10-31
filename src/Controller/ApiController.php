@@ -162,27 +162,27 @@ class ApiController extends Controller
                 $manager->persist($existingTask);
             } else {
                 $foundExisting = true;
+                break;
             }
         }
 
-        if (!$foundExisting) {
-
-            $srht = $this->get('srht_api');
-            $id = $srht->SubmitBuildJob($commit, $package, $arch);
-
-            $task = new Queue();
-            $task->setAport($package);
-            $task->setPkgver($pkgver);
-            $task->setPkgrel($pkgrel);
-            $task->setArch($arch);
-            $task->setCommit($commit);
-            $task->setStatus('WAITING');
-            $task->setSrhtId($id);
-            $manager->persist($task);
-            return $task;
-        } else {
-            return $existingTask[0];
+        if ($foundExisting) {
+            return $existingTask;
         }
+
+        $srht = $this->get('srht_api');
+        $id = $srht->SubmitBuildJob($commit, $package, $arch);
+
+        $task = new Queue();
+        $task->setAport($package);
+        $task->setPkgver($pkgver);
+        $task->setPkgrel($pkgrel);
+        $task->setArch($arch);
+        $task->setCommit($commit);
+        $task->setStatus('WAITING');
+        $task->setSrhtId($id);
+        $manager->persist($task);
+        return $task;
     }
 
     /**
