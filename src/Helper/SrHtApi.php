@@ -89,7 +89,7 @@ class SrHtApi
     public function SubmitBuildJob(Commit $commit, $package, $arch)
     {
 
-        $command = 'pmbootstrap --details-to-stdout --pmaports /home/build/pmaports build --force --strict --arch=' . $arch . ' ' . $package;
+        $command = 'pmbootstrap --details-to-stdout --aports /home/build/pmaports build --force --strict --arch=' . $arch . ' ' . $package;
 
         $manifest = [
             'image' => 'alpine/edge',
