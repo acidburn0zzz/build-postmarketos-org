@@ -80,6 +80,10 @@ class ApiController extends Controller
             throw new \Exception('Commit "' . $commit . '" not found in the database');
         }
 
+        if($commit->getStatus() == 'INDEXING'){
+            $commit->setStatus('BUILDING');
+        }
+
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
 
