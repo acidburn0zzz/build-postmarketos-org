@@ -47,7 +47,7 @@ class SrHtApi
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
                 ['check-changes' => 'cd pmaports/.sr.ht; echo \'' . $fakeData . '\' > ~/changes.json'],
-                ['submit-to-build' => 'cd pmaports/.sr.ht;COMMIT=' . $commit->getRef() . ' BRANCH=' . $commit->getBranch() . ' python3 submit.py task-submit ~/changes.json']
+                ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py --json task-submit ~/changes.json']
             ],
             'environment' => [
                 'COMMIT' => $commit->getRef(),
@@ -86,7 +86,7 @@ class SrHtApi
         return 'Submitted job #' . $job_id . ' to sr.ht' . PHP_EOL . PHP_EOL . $manifest;
     }
 
-    public function SubmitBuildJob(Commit $commit, $package, $arch)
+    public function SubmitBuildJob(Commit $commit, $package, $arch, $id)
     {
 
         $command = 'pmbootstrap --details-to-stdout --aports /home/build/pmaports build --force --strict --arch=' . $arch . ' ' . $package;
@@ -100,11 +100,11 @@ class SrHtApi
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
                 ['build' => 'cd pmaports/.sr.ht; ' . $command],
-                ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py task-submit ~/changes.json']
+                ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py --id ' . $id . ' package-submit ~/.local/var/pmbootstrap/packages/' . $arch . '/' . $package . '-*-r*.apk']
             ],
             'environment' => [
                 'COMMIT' => $commit->getRef(),
-                'BRANCH' => $commit->getBranch()
+                'BRANCH' => $commit->getBranch(),
             ],
             'secrets' => [$this->secretId],
             'triggers' => [

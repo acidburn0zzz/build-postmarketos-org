@@ -80,7 +80,7 @@ class ApiController extends Controller
             throw new \Exception('Commit "' . $commit . '" not found in the database');
         }
 
-        if($commit->getStatus() == 'INDEXING'){
+        if ($commit->getStatus() == 'INDEXING') {
             $commit->setStatus('BUILDING');
         }
 
@@ -129,7 +129,7 @@ class ApiController extends Controller
         $manager = $this->getDoctrine()->getManager();
 
         // TODO: Remove testing code
-        $commit = 'a770ea03bfd54f773e4cf3b06d605ec1417e7ec0';
+        $commit = '9bd00f4f946a21f7a5ae26c2d2a035665bcccea1';
 
         $commitObj = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
         if (!$commitObj) {
@@ -175,7 +175,7 @@ class ApiController extends Controller
         }
 
         $srht = $this->get('srht_api');
-        $id = $srht->SubmitBuildJob($commit, $package, $arch);
+        $id = $srht->SubmitBuildJob($commit, $package, $arch, $package . '-' . $pkgver . '-' . $pkgrel);
 
         $task = new Queue();
         $task->setAport($package);
