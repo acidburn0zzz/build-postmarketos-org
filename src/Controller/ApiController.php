@@ -236,7 +236,7 @@ class ApiController extends Controller
         }
 
         $srht = $this->get('srht_api');
-        $id = $srht->SubmitBuildJob($commit, $package, $arch, $package . '-' . $pkgver . '-' . $pkgrel);
+        $id = $srht->SubmitBuildJob($commit, $package, $arch, $package . ':' . $pkgver . ':' . $pkgrel);
 
         $task = new Queue();
         $task->setAport($package);
