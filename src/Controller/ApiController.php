@@ -284,6 +284,8 @@ class ApiController extends Controller
 
         $next = $queue->getStartable();
 
+        $this->get('web_log')->write('next-build startables', $next);
+
         if (count($next) > 0) {
             $srht = $this->get('srht_api');
             $srht->StartJob($next[0]->getSrhtId());
