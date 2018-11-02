@@ -172,6 +172,23 @@ class ApiController extends Controller
             'id' => $id
         ]);
 
+        // Check if this completes a commit
+        $commitPackages = $package->getCommit()->getPackages;
+        $done = 0;
+        $total = count($commitPackages);
+        foreach ($commitPackages as $cp) {
+            if ($cp->getStatus() == 'DONE') {
+                $done++;
+            }
+        }
+        if ($done == $total) {
+            $commit->setStatus('DONE');
+            //TODO: Trigger sync to the pmos mirrors
+        } else {
+            $commit->setStatus('BUILDING [' . $done . '/' . $total . ']');
+        }
+        $manager->persist($commit);
+
         $manager->flush();
 
         $this->startNextBuild();

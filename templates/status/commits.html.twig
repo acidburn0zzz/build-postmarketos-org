@@ -24,13 +24,7 @@
                         {{ commit.ref | slice(0, 8) }}
                     </a>
                 </td>
-                <td>
-                    {% if commit.status == "INDEXING" %}
-                        Indexing
-                    {% elseif commit.status == "BUILDING" %}
-                        Building {{ commit.packages | length }}
-                    {% endif %}
-                </td>
+                <td>{{ commit.status }}</td>
                 <td>{{ commit.message }}</td>
             </tr>
         {% endfor %}
