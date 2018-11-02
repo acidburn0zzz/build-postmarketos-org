@@ -27,7 +27,8 @@
                 <td>{{ job.commit.branch }}</td>
                 <td>{{ job.arch }}</td>
                 <td>
-                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}" style="font-family: monospace;">
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}"
+                       style="font-family: monospace;">
                         {{ job.commit.ref | slice(0, 8) }}
                     </a>
                 </td>
@@ -63,7 +64,8 @@
                 <td>{{ job.commit.branch }}</td>
                 <td>{{ job.arch }}</td>
                 <td>
-                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}" style="font-family: monospace;">
+                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}"
+                       style="font-family: monospace;">
                         {{ job.commit.ref | slice(0, 8) }}
                     </a>
                 </td>
@@ -72,7 +74,15 @@
                         {{ job.srhtId }}
                     </a>
                 </td>
-                <td>{{ job.status }}</td>
+                <td>
+                    {% if job.status == 'DONE' %}
+                        <a href="/repository/{{ job.arch }}/{{ job.aport }}-{{ job.pkgver }}-r{{ job.pkgrel }}.apk">
+                            DONE
+                        </a>
+                    {% else %}
+                        {{ job.status }}
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>
