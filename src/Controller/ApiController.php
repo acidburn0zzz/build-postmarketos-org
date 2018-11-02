@@ -118,6 +118,67 @@ class ApiController extends Controller
         return new JsonResponse(['status' => 'ok']);
     }
 
+    /**
+     * @Route("/api/package-submit", name="package_submit")
+     */
+    public function package_submit(Request $request)
+    {
+        $token = $request->headers->get('X-Secret');
+        $commit = $request->headers->get('X-Commit');
+        $architecture = $request->headers->get('X-Arch');
+        $id = $request->headers->get('X-Id');
+
+        if (!$token) {
+            $this->get('web_log')->write('task-submit received without secret', null, true);
+            return new JsonResponse(['error' => 'Secret missing'], 401);
+        }
+
+        if (!hash_equals(sha1($this->getParameter('kernel.secret')), $token)) {
+            $this->get('web_log')->write('task-submit received with incorrect secret', null, true);
+            return new JsonResponse(['error' => 'Secret not correct'], 403);
+        }
+
+        $manager = $this->getDoctrine()->getManager();
+
+        list($pkgname, $pkgver, $pkgrel) = explode(':', $id, 3);
+        $package = $this->getDoctrine()->getRepository('App:Queue')->findOneBy([
+            'aport' => $pkgname,
+            'pkgver' => $pkgver,
+            'pkgrel' => $pkgrel,
+            'arch' => $architecture
+        ]);
+
+        if (!$package) {
+            throw new \Exception('Package "' . $id . '" not found in the database');
+        }
+
+        $apk = $request->files->get('file');
+
+        $repository = $this->getParameter('kernel.project_dir') . '/public/repository';
+        if (!is_dir($repository . '/' . $architecture)) {
+            mkdir($repository . '/' . $architecture);
+        }
+
+        $apk->move($repository . '/' . $architecture . '/' . $pkgname . '-' . $pkgver . '-r' . $pkgrel . '.apk');
+
+        //TODO: Generate index for the internal repository
+
+        $package->setStatus('DONE');
+        $manager->persist($package);
+
+        $this->get('web_log')->write('package-submit received', [
+            'commit' => $commit,
+            'architecture' => $architecture,
+            'id' => $id
+        ]);
+
+        $manager->flush();
+
+        $this->startNextBuild();
+
+        return new JsonResponse(['status' => 'ok']);
+    }
+
     private function onNewPush($branch, $commit, $message)
     {
         if ($branch != 'master') {
