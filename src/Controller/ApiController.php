@@ -159,7 +159,7 @@ class ApiController extends Controller
             mkdir($repository . '/' . $architecture);
         }
 
-        $apk->move($repository . '/' . $architecture . '/' . $pkgname . '-' . $pkgver . '-r' . $pkgrel . '.apk');
+        $apk->move($repository . '/' . $architecture . '/', $pkgname . '-' . $pkgver . '-r' . $pkgrel . '.apk');
 
         //TODO: Generate index for the internal repository
 
