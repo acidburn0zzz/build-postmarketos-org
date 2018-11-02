@@ -26,7 +26,7 @@ class SrHtApi
             [
                 "pkgname" => "hello-world",
                 "repo" => "main",
-                "version" => "1-r5",
+                "version" => "1-r4",
                 "depends" => []
             ],
             [
