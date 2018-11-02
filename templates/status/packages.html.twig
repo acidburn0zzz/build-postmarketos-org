@@ -76,7 +76,7 @@
                 </td>
                 <td>
                     {% if job.status == 'DONE' %}
-                        <a href="/repository/{{ job.arch }}/{{ job.aport }}-{{ job.pkgver }}-r{{ job.pkgrel }}.apk">
+                        <a href="/repository/{{ job.commit.branch }}/{{ job.arch }}/{{ job.aport }}-{{ job.pkgver }}-r{{ job.pkgrel }}.apk">
                             DONE
                         </a>
                     {% else %}

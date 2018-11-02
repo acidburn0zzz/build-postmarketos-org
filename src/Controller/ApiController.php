@@ -152,9 +152,16 @@ class ApiController extends Controller
             throw new \Exception('Package "' . $id . '" not found in the database');
         }
 
+        $branch = $package->getCommit()->getBranch();
+
         $apk = $request->files->get('file');
 
-        $repository = $this->getParameter('kernel.project_dir') . '/public/repository';
+        $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch;
+
+        if (!is_dir($repository)) {
+            mkdir($repository);
+        }
+
         if (!is_dir($repository . '/' . $architecture)) {
             mkdir($repository . '/' . $architecture);
         }
