@@ -129,7 +129,7 @@ class ApiController extends Controller
         $manager = $this->getDoctrine()->getManager();
 
         // TODO: Remove testing code
-        $commit = '9bd00f4f946a21f7a5ae26c2d2a035665bcccea1';
+        $commit = '2fd99b0929b129281526e7c907cf40134cceb53d';
 
         $commitObj = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
         if (!$commitObj) {
