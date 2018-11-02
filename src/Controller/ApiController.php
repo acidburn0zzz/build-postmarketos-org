@@ -226,7 +226,7 @@ class ApiController extends Controller
         if (count($next) > 0) {
             $srht = $this->get('srht_api');
             $srht->StartJob($next[0]->getSrhtId());
-            $next->setStatus('BUILDING');
+            $next[0]->setStatus('BUILDING');
             $manager->persist($next[0]);
             $manager->flush();
         }
