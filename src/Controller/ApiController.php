@@ -168,7 +168,7 @@ class ApiController extends Controller
 
         $apk->move($repository . '/' . $architecture . '/', $pkgname . '-' . $pkgver . '-r' . $pkgrel . '.apk');
 
-        //TODO: Generate index for the internal repository
+        $this->rebuildRepositoryIndex($branch);
 
         $package->setStatus('DONE');
         $manager->persist($package);
@@ -317,5 +317,38 @@ class ApiController extends Controller
             $manager->persist($next[0]);
             $manager->flush();
         }
+    }
+
+    private function rebuildRepositoryIndex($branch, $arch)
+    {
+        $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch;
+
+        $descriptors = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w']
+        ];
+        $command = 'apk.static -q index --output APKINDEX.tar.gz_ --rewrite-arch ' . $arch . ' *.apk';
+        $p = proc_open($command, $descriptors, $pipes, $repository);
+        if (is_resource($p)) {
+            // Close stdin
+            fclose($pipes[0]);
+
+            // Get output
+            $output = stream_get_contents($pipes[1]);
+            fclose($pipes[1]);
+
+            // Get stderr
+            $errors = stream_get_contents($pipes[2]);
+            fclose($pipes[2]);
+
+            $return_value = proc_close($p);
+        }
+
+        $this->get('web_log')->write('apk-index', [
+            'stdout' => $output,
+            'stderr' => $errors,
+            'return' => $return_value,
+        ]);
     }
 }
