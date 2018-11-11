@@ -53,7 +53,7 @@ class SrHtApi
                 'COMMIT' => $commit->getRef(),
                 'BRANCH' => $commit->getBranch()
             ],
-            'secrets' => [$this->secretId]
+            'secrets' => [$this->secretId, 'd25ac411-9bb7-4286-97b3-71ee8eae79d6']
         ];
         $manifest = Yaml::dump($manifest);
 
