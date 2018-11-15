@@ -180,7 +180,8 @@ class ApiController extends Controller
         ]);
 
         // Check if this completes a commit
-        $commitPackages = $package->getCommit()->getPackages;
+        $commitRow = $package->getCommit();
+        $commitPackages = $commitRow->getPackages();
         $done = 0;
         $total = count($commitPackages);
         foreach ($commitPackages as $cp) {
@@ -189,12 +190,12 @@ class ApiController extends Controller
             }
         }
         if ($done == $total) {
-            $commit->setStatus('DONE');
+            $commitRow->setStatus('DONE');
             //TODO: Trigger sync to the pmos mirrors
         } else {
-            $commit->setStatus('BUILDING [' . $done . '/' . $total . ']');
+            $commitRow->setStatus('BUILDING [' . $done . '/' . $total . ']');
         }
-        $manager->persist($commit);
+        $manager->persist($commitRow);
 
         $manager->flush();
 
