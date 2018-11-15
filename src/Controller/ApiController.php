@@ -94,7 +94,8 @@ class ApiController extends Controller
         foreach ($payload as $package) {
             list($pkgver, $pkgrel) = explode('-', $package['version'], 2);
             $pkgrel = (int)str_replace('r', '', $pkgrel);
-            $row[$package['pkgname']] = $this->createOrUpdatePackage($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture);
+            $component = $package['repo'];
+            $row[$package['pkgname']] = $this->createOrUpdatePackage($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $component);
         }
 
         foreach ($payload as $package) {
@@ -156,8 +157,15 @@ class ApiController extends Controller
 
         $apk = $request->files->get('file');
 
+        $component = $package->getComponent();
+
         $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch;
 
+        if (!is_dir($repository)) {
+            mkdir($repository);
+        }
+
+        $repository .= '/' . $component;
         if (!is_dir($repository)) {
             mkdir($repository);
         }
@@ -168,7 +176,7 @@ class ApiController extends Controller
 
         $apk->move($repository . '/' . $architecture . '/', $pkgname . '-' . $pkgver . '-r' . $pkgrel . '.apk');
 
-        $this->rebuildRepositoryIndex($branch);
+        $this->rebuildRepositoryIndex($branch, $architecture, $component);
 
         $package->setStatus('DONE');
         $manager->persist($package);
@@ -228,7 +236,7 @@ class ApiController extends Controller
         return $manifest;
     }
 
-    private function createOrUpdatePackage($package, $pkgver, $pkgrel, Commit $commit, $arch)
+    private function createOrUpdatePackage($package, $pkgver, $pkgrel, Commit $commit, $arch, $component)
     {
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $manager = $this->getDoctrine()->getManager();
@@ -266,6 +274,7 @@ class ApiController extends Controller
         $task->setPkgrel($pkgrel);
         $task->setArch($arch);
         $task->setCommit($commit);
+        $task->setComponent($component);
         $task->setStatus('WAITING');
         $task->setSrhtId($id);
         $manager->persist($task);
@@ -317,16 +326,17 @@ class ApiController extends Controller
         }
     }
 
-    private function rebuildRepositoryIndex($branch, $arch)
+    private function rebuildRepositoryIndex($branch, $arch, $component)
     {
-        $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch;
+        $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch . '/' . $component . '/' . $arch;
 
         $descriptors = [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
             2 => ['pipe', 'w']
         ];
-        $command = 'apk.static -q index --output APKINDEX.tar.gz_ --rewrite-arch ' . $arch . ' *.apk';
+        $binary = $this->getParameter('kernel.project_dir') . '/apk.static';
+        $command = $binary . ' -q index --output APKINDEX.tar.gz_ --rewrite-arch ' . $arch . ' *.apk';
         $p = proc_open($command, $descriptors, $pipes, $repository);
         if (is_resource($p)) {
             // Close stdin

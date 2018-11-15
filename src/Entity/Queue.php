@@ -39,6 +39,11 @@ class Queue
     private $arch;
 
     /**
+     * @ORM\Column(type="string", length=30)
+     */
+    private $component;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $srhtId;
@@ -182,5 +187,21 @@ class Queue
         }
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComponent()
+    {
+        return $this->component;
+    }
+
+    /**
+     * @param string $component
+     */
+    public function setComponent($component)
+    {
+        $this->component = $component;
     }
 }
