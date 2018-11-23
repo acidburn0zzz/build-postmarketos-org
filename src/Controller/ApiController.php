@@ -335,7 +335,7 @@ class ApiController extends Controller
             1 => ['pipe', 'w'],
             2 => ['pipe', 'w']
         ];
-        $binary = $this->getParameter('kernel.project_dir') . '/apk.static';
+        $binary = $this->getParameter('kernel.project_dir') . '/tools/apk.static';
         $command = $binary . ' -q index --output APKINDEX.tar.gz_ --rewrite-arch ' . $arch . ' *.apk';
         $p = proc_open($command, $descriptors, $pipes, $repository);
         if (is_resource($p)) {
@@ -358,5 +358,45 @@ class ApiController extends Controller
             'stderr' => $errors,
             'return' => $return_value,
         ]);
+        $this->signRepository($branch, $arch, $component);
+    }
+
+    private function signRepository($branch, $arch, $component)
+    {
+        $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch . '/' . $component . '/' . $arch;
+
+        $descriptors = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w']
+        ];
+        $binary = $this->getParameter('kernel.project_dir') . '/tools/abuild-sign.noinclude';
+        $privkey = $this->getParameter('kernel.project_dir') . '/private/build.rsa';
+        $index = $repository . '/APKINDEX.tar.gz_';
+        $command = $binary . ' -p pmos-5a23efca.rsa.pub -k "' . $privkey . '" "' . $index . '"';
+        $p = proc_open($command, $descriptors, $pipes, $repository);
+        if (is_resource($p)) {
+            // Close stdin
+            fclose($pipes[0]);
+
+            // Get output
+            $output = stream_get_contents($pipes[1]);
+            fclose($pipes[1]);
+
+            // Get stderr
+            $errors = stream_get_contents($pipes[2]);
+            fclose($pipes[2]);
+
+            $return_value = proc_close($p);
+        }
+
+        $this->get('web_log')->write('apk-index', [
+            'stdout' => $output,
+            'stderr' => $errors,
+            'return' => $return_value,
+        ]);
+
+        $finalIndex = str_replace('.tar.gz_', '.tar.gz', $index);
+        rename($index, $finalIndex);
     }
 }
