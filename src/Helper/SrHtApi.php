@@ -46,7 +46,7 @@ class SrHtApi
             ],
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
-                ['check-changes' => 'cd pmaports/.sr.ht; echo \'' . $fakeData . '\' > ~/changes.json'],
+                ['check-changes' => 'pmbootstrap -q repo_missing > ~/changes.json'],
                 ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py --json task-submit ~/changes.json']
             ],
             'environment' => [
