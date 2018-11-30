@@ -38,6 +38,8 @@ class SrHtApi
         ];
         $fakeData = json_encode($fakeData);
 
+        $command = 'pmbootstrap -q --aports /home/build/pmaports repo_missing > ~/changes.json';
+
         $manifest = [
             'image' => 'alpine/edge',
             'packages' => ['python3', 'coreutils', 'openssl', 'wget', 'sudo', 'py3-requests'],
@@ -46,14 +48,14 @@ class SrHtApi
             ],
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
-                ['check-changes' => 'pmbootstrap -q repo_missing > ~/changes.json'],
+                ['check-changes' => 'cd pmaports/.sr.ht; ' . $command],
                 ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py --json task-submit ~/changes.json']
             ],
             'environment' => [
                 'COMMIT' => $commit->getRef(),
                 'BRANCH' => $commit->getBranch()
             ],
-            'secrets' => [$this->secretId, 'd25ac411-9bb7-4286-97b3-71ee8eae79d6']
+            'secrets' => [$this->secretId]
         ];
         $manifest = Yaml::dump($manifest);
 
@@ -99,6 +101,7 @@ class SrHtApi
             ],
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
+                ['add-key' => 'cd ~/.local/var/pmbootstrap/config_apk_keys/ ; cp ~/.secrets/build@postmarketos.org.priv . ; openssl rsa -in build@postmarketos.org.priv -pubout build@postmarketos.org.pub'],
                 ['build' => 'cd pmaports/.sr.ht; ' . $command],
                 ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py --id ' . $id . ' package-submit ~/.local/var/pmbootstrap/packages/' . $arch . '/' . $package . '-*-r*.apk']
             ],
@@ -106,7 +109,7 @@ class SrHtApi
                 'COMMIT' => $commit->getRef(),
                 'BRANCH' => $commit->getBranch(),
             ],
-            'secrets' => [$this->secretId],
+            'secrets' => [$this->secretId, '6c3dd41b-f158-4a8b-b372-1da4daaeb4d2'],
             'triggers' => [
                 [
                     'action' => 'webhook',
