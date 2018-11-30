@@ -216,7 +216,7 @@ class ApiController extends Controller
     {
         //TODO: remove test code
         $branch = 'master';
-        $commit = 'e7c925dedafa4a4acff449fccd25ab93cbb239cb';
+        $commit = '8f0cae7db06ab03f50f9982a2995a657c8506511';
 
         if ($branch != 'master') {
             $this->get('web_log')->write('Gitlab push is not for master', null, true);
