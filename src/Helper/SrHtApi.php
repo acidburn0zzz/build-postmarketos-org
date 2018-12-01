@@ -140,7 +140,7 @@ class SrHtApi
                 'COMMIT' => $commit->getRef(),
                 'BRANCH' => $commit->getBranch(),
             ],
-            'secrets' => [$this->secretId] + $secrets,
+            'secrets' => array_merge([$this->secretId], $secrets),
             'triggers' => [
                 [
                     'action' => 'webhook',
