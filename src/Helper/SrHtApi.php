@@ -25,16 +25,19 @@ class SrHtApi
     public function SubmitIndexJob(Commit $commit)
     {
         $tasks = [
-            'setup-pmbootstrap' => [
+            [
+                'setup-pmbootstrap',
                 'cd pmaports/.sr.ht',
                 './install_pmbootstrap.sh'
             ],
-            'check-changes' => [
+            [
+                'check-changes',
                 'cd pmaports/.sr.ht',
                 'pmbootstrap --aports /home/build/pmaports repo_missing > ~/changes.json',
                 'cat ~/changes.json'
             ],
-            'submit' => [
+            [
+                'submit',
                 'cd pmaports/.sr.ht',
                 'python3 submit.py --json task-submit ~/changes.json'
             ]
@@ -49,22 +52,26 @@ class SrHtApi
     public function SubmitBuildJob(Commit $commit, $package, $arch, $id)
     {
         $tasks = [
-            'setup-pmbootstrap' => [
+            [
+                'setup-pmbootstrap',
                 'cd pmaports/.sr.ht',
                 './install_pmbootstrap.sh'
             ],
-            'add-key' => [
+            [
+                'add-key',
                 'mkdir ~/.local/var/pmbootstrap/config_abuild',
                 'cd ~/.local/var/pmbootstrap/config_abuild/',
                 'cp ~/.secrets/build@postmarketos.org.priv .',
                 'openssl rsa -in build@postmarketos.org.priv -pubout -out build@postmarketos.org.pub',
                 'echo PACKAGER_PRIVKEY="/home/pmos/.abuild/build@postmarketos.org.priv" > abuild.conf'
             ],
-            'build' => [
+            [
+                'build',
                 'cd pmaports/.sr.ht',
                 'pmbootstrap --details-to-stdout --aports /home/build/pmaports build --force --strict --arch=' . $arch . ' ' . $package
             ],
-            'submit' => [
+            [
+                'submit',
                 'cd pmaports/.sr.ht',
                 'python3 submit.py --id ' . $id . ' package-submit ~/.local/var/pmbootstrap/packages/' . $arch . '/' . $package . '-*-r*.apk'
             ]
@@ -76,23 +83,29 @@ class SrHtApi
         return $this->submitJob($commit, $tasks, [$this->secretBuildKey], $note);
     }
 
-    public function SubmitSignJob(Commit $commit, $apkindexPath)
+    public function SubmitSignJob(Commit $commit, $architectures, $components)
     {
         $tasks = [
-            'add-key' => [
+            [
+                'add-key',
                 'cd /etc/apk/keys',
                 'cp ~/.secrets/repository@postmarketos.org.rsa .',
                 'openssl rsa -in repository@postmarketos.org.rsa -pubout -out repository@postmarketos.org.pub',
-            ],
-            'sign' => [
-                'wget https://build.postmarketos.org/repository/' . $apkindexPath,
-                'abuild-sign -k /etc/apk/keys/repository@postmarketos.org.rsa -p repository@postmarketos.org.pub APKINDEX.tar.gz',
-            ],
-            'submit' => [
-                'cd pmaports/.sr.ht',
-                'python3 submit.py signed-submit ~/APKINDEX.tar.gz'
             ]
         ];
+
+        foreach ($architectures as $arch) {
+            foreach ($components as $component) {
+                $tasks[] = [
+                    'sign-' . $component . '-' . $arch,
+                    'wget https://build.postmarketos.org/repository/' . $commit->getBranch() . '/' . $component . '/' . $arch . '/APKINDEX.tar.gz',
+                    'abuild-sign -k /etc/apk/keys/repository@postmarketos.org.rsa -p repository@postmarketos.org.pub APKINDEX.tar.gz',
+                    'cd pmaports/.sr.ht',
+                    'python3 submit.py --id ' . $component . '-' . $arch . ' signed-submit ~/APKINDEX.tar.gz',
+                    'rm -rf ~/APKINDEX.tar.gz'
+                ];
+            }
+        }
 
         $url = 'https://gitlab.com/postmarketOS/pmaports/commit/' . $commit->getRef();
         $note = "Signing job for [" . $commit->getRef() . "](" . $url . ")";

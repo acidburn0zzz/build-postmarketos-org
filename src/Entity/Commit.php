@@ -101,7 +101,7 @@ class Commit
     }
 
     /**
-     * @return mixed
+     * @return Queue[]
      */
     public function getPackages()
     {

@@ -6,6 +6,7 @@ use App\Entity\Commit;
 use App\Entity\Queue;
 use App\Entity\QueueDependency;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -201,7 +202,7 @@ class ApiController extends Controller
         }
         if ($done == $total) {
             $commitRow->setStatus('SIGNING');
-            $this->onCommitFinished($commitRow, $branch, $component, $architecture);
+            $this->onCommitFinished($commitRow, $branch, $architecture);
         } else {
             $commitRow->setStatus('BUILDING [' . $done . '/' . $total . ']');
         }
@@ -214,11 +215,63 @@ class ApiController extends Controller
         return new JsonResponse(['status' => 'ok']);
     }
 
-    private function onCommitFinished(Commit $commit, $branch, $component, $arch)
+    /**
+     * @Route("/api/signed-submit", name="signed_submit")
+     */
+    public function signed_submit(Request $request)
     {
-        $indexFile = $branch . '/' . $component . '/' . $arch . '/APKINDEX.tar.gz';
+        $token = $request->headers->get('X-Secret');
+        $commit = $request->headers->get('X-Commit');
+        list($component, $arch) = explode('-', $request->headers->get('X-Id'));
+
+        if (!$token) {
+            $this->get('web_log')->write('task-submit received without secret', null, true);
+            return new JsonResponse(['error' => 'Secret missing'], 401);
+        }
+
+        if (!hash_equals(sha1($this->getParameter('kernel.secret')), $token)) {
+            $this->get('web_log')->write('task-submit received with incorrect secret', null, true);
+            return new JsonResponse(['error' => 'Secret not correct'], 403);
+        }
+
+        $commit = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
+
+        $offlineRepository = $this->getParameter('kernel.project_dir') . '/public/offlinerepository/' . $commit->getBranch() . '/' . $component . '/' . $arch;
+
+        $apkindex = $request->files->get('file');
+        $apkindex->move($offlineRepository . '/APKINDEX.tar.gz');
+
+        $manager = $this->getDoctrine()->getManager();
+        $commit->setStatus('DONE');
+        $manager->persist($commit);
+
+        return new JsonResponse(['status' => 'ok']);
+    }
+
+
+    private function onCommitFinished(Commit $commit, $branch, $arch)
+    {
+        $components = [];
+        foreach ($commit->getPackages() as $package) {
+            $components[] = $package->getComponent();
+        }
+        $components = array_unique($components);
+
+        foreach ($components as $component) {
+            $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch . '/' . $component . '/' . $arch;
+            $offlineRepository = $this->getParameter('kernel.project_dir') . '/public/offlinerepository/' . $branch . '/' . $component . '/' . $arch;
+
+            // Create offline copy of WIP repo
+            $filesystem = new Filesystem();
+            $filesystem->remove($offlineRepository);
+            $filesystem->mkdir($offlineRepository);
+            $filesystem->mirror($repository, $offlineRepository);
+            $filesystem->remove($offlineRepository . '/APKINDEX.tar.gz');
+        }
+
         $srht = $this->get('srht_api');
-        $srht->SubmitSignJob($commit, $indexFile);
+        $srht->SubmitSignJob($commit, [$arch], $components);
+
         //TODO: Prevent concurrent sign jobs
     }
 
