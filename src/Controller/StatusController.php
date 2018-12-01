@@ -28,7 +28,7 @@ class StatusController extends AbstractController
     public function commits()
     {
         $queue = $this->getDoctrine()->getRepository('App:Commit');
-        $queued = $queue->findBy(['status' => ['INDEXING', 'BUILDING']], ['id' => 'DESC']);
+        $queued = $queue->findBy(['status' => ['INDEXING', 'BUILDING', 'SIGNING']], ['id' => 'DESC']);
         $done = $queue->findBy(['status' => ['DONE', 'FAILED', 'SUPERSEDED']], ['id' => 'DESC'], 50);
         return $this->render('status/commits.html.twig', [
             'queued' => $queued,
