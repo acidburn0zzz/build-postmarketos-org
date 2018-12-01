@@ -21,24 +21,7 @@ class SrHtApi
 
     public function SubmitIndexJob(Commit $commit)
     {
-        //TODO: Remove, testing code
-        $fakeData = [
-            [
-                "pkgname" => "hello-world",
-                "repo" => "main",
-                "version" => "1-r4",
-                "depends" => []
-            ],
-            [
-                "pkgname" => "hello-world-wrapper",
-                "repo" => "main",
-                "version" => "1-r2",
-                "depends" => ["hello-world"]
-            ]
-        ];
-        $fakeData = json_encode($fakeData);
-
-        $command = 'pmbootstrap -q --aports /home/build/pmaports repo_missing > ~/changes.json';
+        $command = 'pmbootstrap --aports /home/build/pmaports repo_missing > ~/changes.json';
 
         $manifest = [
             'image' => 'alpine/edge',
