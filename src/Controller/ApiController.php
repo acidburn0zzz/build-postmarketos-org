@@ -282,8 +282,8 @@ class ApiController extends Controller
     private function onNewPush($branch, $commit, $message)
     {
         //TODO: remove test code
-        $branch = 'master';
-        $commit = 'f93302d7c8328726c5db959341f42af1b930c78c';
+        //$branch = 'master';
+        //$commit = 'f93302d7c8328726c5db959341f42af1b930c78c';
 
         if ($branch != 'master') {
             $this->get('web_log')->write('Gitlab push is not for master', null, true);
