@@ -247,6 +247,7 @@ class ApiController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $commit->setStatus('DONE');
         $manager->persist($commit);
+        $manager->flush();
 
         return new JsonResponse(['status' => 'ok']);
     }
