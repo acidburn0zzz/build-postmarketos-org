@@ -101,13 +101,15 @@ class ApiController extends Controller
         foreach ($payload as $package) {
             $queueItem = $row[$package['pkgname']];
             foreach ($package['depends'] as $dependency) {
-                $queueItemDepend = $row[$dependency];
-                $existing = $this->getDoctrine()->getRepository('App:QueueDependency')->findOneBy(['queueItem' => $queueItem, 'requirement' => $queueItemDepend]);
-                if (!$existing) {
-                    $queueDependency = new QueueDependency();
-                    $queueDependency->setQueueItem($queueItem);
-                    $queueDependency->setRequirement($queueItemDepend);
-                    $manager->persist($queueDependency);
+                if(isset($row[$dependency])) {
+                    $queueItemDepend = $row[$dependency];
+                    $existing = $this->getDoctrine()->getRepository('App:QueueDependency')->findOneBy(['queueItem' => $queueItem, 'requirement' => $queueItemDepend]);
+                    if (!$existing) {
+                        $queueDependency = new QueueDependency();
+                        $queueDependency->setQueueItem($queueItem);
+                        $queueDependency->setRequirement($queueItemDepend);
+                        $manager->persist($queueDependency);
+                    }
                 }
             }
         }
