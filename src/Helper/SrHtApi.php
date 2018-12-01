@@ -150,7 +150,8 @@ class SrHtApi
             ]
         ];
 
-        foreach ($tasks as $commands) {
+        foreach ($tasks as $label_commands) {
+            $commands = $label_commands;
             $label = array_shift($commands);
             $manifest['tasks'][$label] = implode(' ; ', $commands);
         }
