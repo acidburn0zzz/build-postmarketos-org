@@ -42,7 +42,7 @@ class SrHtApi
         $url = 'https://gitlab.com/postmarketOS/pmaports/commit/' . $commit->getRef();
         $note = "Dependency check job for [" . $commit->getRef() . "](" . $url . ")";
 
-        return $this->submitJob($commit, $tasks, [$this->secretBuildKey], $note);
+        return $this->submitJob($commit, $tasks, [], $note);
     }
 
     public function SubmitBuildJob(Commit $commit, $package, $arch, $id)
