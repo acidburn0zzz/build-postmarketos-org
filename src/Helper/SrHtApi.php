@@ -80,7 +80,7 @@ class SrHtApi
         $url = 'https://gitlab.com/postmarketOS/pmaports/commit/' . $commit->getRef();
         $note = 'Building ' . $package . '[' . $arch . '] from commit [' . $commit->getRef() . '](' . $url . ')';
 
-        return $this->submitJob($commit, $tasks, [$this->secretBuildKey], $note);
+        return $this->submitJob($commit, $tasks, [$this->secretBuildKey], $note, false);
     }
 
     public function SubmitSignJob(Commit $commit, $architectures, $components)
@@ -127,7 +127,7 @@ class SrHtApi
         }
     }
 
-    private function submitJob(Commit $commit, $tasks, $secrets, $note)
+    private function submitJob(Commit $commit, $tasks, $secrets, $note, $execute = True)
     {
         $manifest = [
             'image' => 'alpine/edge',
@@ -160,7 +160,7 @@ class SrHtApi
         $job = [
             "manifest" => $manifest,
             "note" => $note,
-            "execute" => false
+            "execute" => $execute
         ];
 
         $apiUrl = 'http://builds.sr.ht/api/jobs';
