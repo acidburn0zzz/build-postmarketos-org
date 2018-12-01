@@ -382,9 +382,9 @@ class ApiController extends Controller
             2 => ['pipe', 'w']
         ];
         $binary = $this->getParameter('kernel.project_dir') . '/tools/abuild-sign.noinclude';
-        $privkey = $this->getParameter('kernel.project_dir') . '/private/build.rsa';
+        $privkey = $this->getParameter('kernel.project_dir') . '/private/build@postmarketos.org.rsa';
         $index = $repository . '/APKINDEX.tar.gz_';
-        $command = $binary . ' -p pmos-5a23efca.rsa.pub -k "' . $privkey . '" "' . $index . '"';
+        $command = $binary . ' -p build@postmarketos.org.pub -k "' . $privkey . '" "' . $index . '"';
         $p = proc_open($command, $descriptors, $pipes, $repository);
         if (is_resource($p)) {
             // Close stdin
