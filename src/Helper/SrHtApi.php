@@ -13,6 +13,7 @@ class SrHtApi
     private $secretId;
 
     private $secretBuildKey = '27bee529-aeb8-4241-b57b-db7e7b8c581d';
+    private $secretRepositoryKey = '0d142563-7cb0-4396-b70c-aacc5a89cac1';
 
     public function __construct($authorizationToken, LoggerInterface $logger, $secretId)
     {
@@ -73,6 +74,30 @@ class SrHtApi
         $note = 'Building ' . $package . '[' . $arch . '] from commit [' . $commit->getRef() . '](' . $url . ')';
 
         return $this->submitJob($commit, $tasks, [$this->secretBuildKey], $note);
+    }
+
+    public function SubmitSignJob(Commit $commit, $apkindexPath)
+    {
+        $tasks = [
+            'add-key' => [
+                'cd /etc/apk/keys',
+                'cp ~/.secrets/repository@postmarketos.org.rsa .',
+                'openssl rsa -in repository@postmarketos.org.rsa -pubout -out repository@postmarketos.org.pub',
+            ],
+            'sign' => [
+                'wget https://build.postmarketos.org/repository/' . $apkindexPath,
+                'abuild-sign -k /etc/apk/keys/repository@postmarketos.org.rsa -p repository@postmarketos.org.pub APKINDEX.tar.gz',
+            ],
+            'submit' => [
+                'cd pmaports/.sr.ht',
+                'python3 submit.py signed-submit ~/APKINDEX.tar.gz'
+            ]
+        ];
+
+        $url = 'https://gitlab.com/postmarketOS/pmaports/commit/' . $commit->getRef();
+        $note = "Signing job for [" . $commit->getRef() . "](" . $url . ")";
+
+        return $this->submitJob($commit, $tasks, [$this->secretRepositoryKey], $note);
     }
 
     public function StartJob($id)

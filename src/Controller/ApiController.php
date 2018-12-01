@@ -200,8 +200,8 @@ class ApiController extends Controller
             }
         }
         if ($done == $total) {
-            $commitRow->setStatus('DONE');
-            $this->onCommitFinished($commitRow);
+            $commitRow->setStatus('SIGNING');
+            $this->onCommitFinished($commitRow, $branch, $component, $architecture);
         } else {
             $commitRow->setStatus('BUILDING [' . $done . '/' . $total . ']');
         }
@@ -214,9 +214,12 @@ class ApiController extends Controller
         return new JsonResponse(['status' => 'ok']);
     }
 
-    private function onCommitFinished(Commit $commit)
+    private function onCommitFinished(Commit $commit, $branch, $component, $arch)
     {
-        // TODO: Implement signing and syncing the repository
+        $indexFile = $branch . '/' . $component . '/' . $arch . '/APKINDEX.tar.gz';
+        $srht = $this->get('srht_api');
+        $srht->SubmitSignJob($commit, $indexFile);
+        //TODO: Prevent concurrent sign jobs
     }
 
     private function onNewPush($branch, $commit, $message)
