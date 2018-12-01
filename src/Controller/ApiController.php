@@ -92,6 +92,8 @@ class ApiController extends Controller
 
         $row = [];
 
+        $result = [];
+
         foreach ($payload as $package) {
             list($pkgver, $pkgrel) = explode('-', $package['version'], 2);
             $pkgrel = (int)str_replace('r', '', $pkgrel);
@@ -101,6 +103,7 @@ class ApiController extends Controller
 
         foreach ($payload as $package) {
             $queueItem = $row[$package['pkgname']];
+            $result[] = $package['pkgname'];
             foreach ($package['depends'] as $dependency) {
                 if (isset($row[$dependency])) {
                     $queueItemDepend = $row[$dependency];
@@ -119,7 +122,7 @@ class ApiController extends Controller
 
         $this->startNextBuild();
 
-        return new JsonResponse(['status' => 'ok']);
+        return new JsonResponse($result);
     }
 
     /**
