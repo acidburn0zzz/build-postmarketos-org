@@ -12,7 +12,7 @@ class SrHtApi
     private $logger;
     private $secretId;
 
-    private $secretBuildKey = '6c3dd41b-f158-4a8b-b372-1da4daaeb4d2';
+    private $secretBuildKey = '27bee529-aeb8-4241-b57b-db7e7b8c581d';
 
     public function __construct($authorizationToken, LoggerInterface $logger, $secretId)
     {
