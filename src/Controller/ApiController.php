@@ -101,7 +101,7 @@ class ApiController extends Controller
         foreach ($payload as $package) {
             $queueItem = $row[$package['pkgname']];
             foreach ($package['depends'] as $dependency) {
-                if(isset($row[$dependency])) {
+                if (isset($row[$dependency])) {
                     $queueItemDepend = $row[$dependency];
                     $existing = $this->getDoctrine()->getRepository('App:QueueDependency')->findOneBy(['queueItem' => $queueItem, 'requirement' => $queueItemDepend]);
                     if (!$existing) {
@@ -201,7 +201,7 @@ class ApiController extends Controller
         }
         if ($done == $total) {
             $commitRow->setStatus('DONE');
-            //TODO: Trigger sync to the pmos mirrors
+            $this->onCommitFinished($commitRow);
         } else {
             $commitRow->setStatus('BUILDING [' . $done . '/' . $total . ']');
         }
@@ -212,6 +212,11 @@ class ApiController extends Controller
         $this->startNextBuild();
 
         return new JsonResponse(['status' => 'ok']);
+    }
+
+    private function onCommitFinished(Commit $commit)
+    {
+        // TODO: Implement signing and syncing the repository
     }
 
     private function onNewPush($branch, $commit, $message)
