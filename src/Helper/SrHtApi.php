@@ -84,7 +84,7 @@ class SrHtApi
             ],
             'tasks' => [
                 ['setup-pmbootstrap' => 'cd pmaports/.sr.ht; ./install_pmbootstrap.sh'],
-                ['add-key' => 'cd ~/.local/var/pmbootstrap/config_apk_keys/ ; cp ~/.secrets/build@postmarketos.org.priv . ; openssl rsa -in build@postmarketos.org.priv -pubout build@postmarketos.org.pub'],
+                ['add-key' => 'mkdir ~/.local/var/pmbootstrap/config_apk_keys ; cd ~/.local/var/pmbootstrap/config_apk_keys/ ; cp ~/.secrets/build@postmarketos.org.priv . ; openssl rsa -in build@postmarketos.org.priv -pubout -out build@postmarketos.org.pub'],
                 ['build' => 'cd pmaports/.sr.ht; ' . $command],
                 ['submit-to-build' => 'cd pmaports/.sr.ht; python3 submit.py --id ' . $id . ' package-submit ~/.local/var/pmbootstrap/packages/' . $arch . '/' . $package . '-*-r*.apk']
             ],
