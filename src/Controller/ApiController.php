@@ -88,6 +88,13 @@ class ApiController extends Controller
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
 
+        if (count($payload) == 0) {
+            $commit->setStatus('DONE');
+            $manager->flush();
+            $this->startNextBuild();
+            return new JsonResponse(['status' => 'nothing to be done']);
+        }
+
         $this->get('web_log')->write('task-submit received', $payload);
 
         $row = [];
