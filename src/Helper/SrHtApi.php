@@ -89,8 +89,8 @@ class SrHtApi
             [
                 'add-key',
                 'cd /etc/apk/keys',
-                'cp ~/.secrets/repository@postmarketos.org.rsa .',
-                'openssl rsa -in repository@postmarketos.org.rsa -pubout -out repository@postmarketos.org.pub',
+                'sudo cp ~/.secrets/repository@postmarketos.org.rsa .',
+                'sudo openssl rsa -in repository@postmarketos.org.rsa -pubout -out repository@postmarketos.org.pub',
             ]
         ];
 
