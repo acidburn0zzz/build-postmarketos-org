@@ -48,7 +48,6 @@
             <th>#</th>
             <th>aport</th>
             <th>pkgver</th>
-            <th>pkgrel</th>
             <th>branch</th>
             <th>arch</th>
             <th>commit</th>
@@ -59,8 +58,7 @@
             <tr class="striped--near-white">
                 <td>{{ job.id }}</td>
                 <td>{{ job.aport }}</td>
-                <td>{{ job.pkgver }}</td>
-                <td>{{ job.pkgrel }}</td>
+                <td>{{ job.pkgver }}-{{ job.pkgrel }}</td>
                 <td>{{ job.commit.branch }}</td>
                 <td>{{ job.arch }}</td>
                 <td>
