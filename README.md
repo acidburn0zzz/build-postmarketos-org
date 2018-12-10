@@ -1,12 +1,22 @@
 # Build queue manager
 
-statuses:
+## Installation
 
-* WAITING not running yet
-* BUILDING currently building on sr.ht
-* FAILED build failed on sr.ht
-* SUPERSEDED a job for a newer version of the package has been submitted
-* DONE everything build successfully
+```shell-session
+$ sudo apt install composer mysql-server mysql-client php libapache2-mod-php php-mysql
+$ git clone https://gitlab.com/postmarketOS/build.postmarketos.org
+$ cd build.postmarketos.org
+$ composer install
+(now place your mysql credentials in .env)
+$ bin/console doctrine:database:create
+$ bin/console doctrine:migrations:migrate
+```
+
+## Running
+
+```shell-session
+$ bin/console server:start
+```
 
 ## API
 
@@ -35,3 +45,11 @@ Content-Type: application/json
     "status": "ok"
 }
 ```
+
+## Database status values
+
+* WAITING not running yet
+* BUILDING currently building on sr.ht
+* FAILED build failed on sr.ht
+* SUPERSEDED a job for a newer version of the package has been submitted
+* DONE everything build successfully
