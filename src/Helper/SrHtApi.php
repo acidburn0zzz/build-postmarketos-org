@@ -35,7 +35,7 @@ class SrHtApi
             $repositories[] = "";
         }
 
-        $repositories = '-mp="' . implode(' -mp="', $repositories) . '"';
+        $repositories = '-mp="' . implode('" -mp="', $repositories) . '"';
 
         $tasks = [
             [
@@ -72,7 +72,7 @@ class SrHtApi
             $repositories[] = 'https://build.postmarketos.org/repository/master/' . $component;
         }
 
-        $repositories = '-mp="' . implode(' -mp="', $repositories) . '"';
+        $repositories = '-mp="' . implode('" -mp="', $repositories) . '"';
 
         $tasks = [
             [
