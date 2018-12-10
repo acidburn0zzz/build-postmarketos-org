@@ -24,6 +24,19 @@ class SrHtApi
 
     public function SubmitIndexJob(Commit $commit)
     {
+        $repoRoot = __DIR__ . '/../../public/master/';
+        $repositories = [];
+        foreach (glob($repoRoot . '*') as $component) {
+            $c = str_replace($repoRoot, '', $component);
+            $repositories[] = 'https://build.postmarketos.org/repository/master/' . $c;
+        }
+
+        if (count($repositories) == 0) {
+            $repositories[] = "";
+        }
+
+        $repositories = '-mp="' . implode(' -mp="', $repositories) . '"';
+
         $tasks = [
             [
                 'setup-pmbootstrap',
@@ -33,7 +46,7 @@ class SrHtApi
             [
                 'check-changes',
                 'cd pmaports/.sr.ht',
-                'pmbootstrap --aports /home/build/pmaports repo_missing > ~/changes.json',
+                'pmbootstrap --aports /home/build/pmaports ' . $repositories . ' repo_missing > ~/changes.json',
                 'cat ~/changes.json'
             ],
             [
@@ -51,6 +64,16 @@ class SrHtApi
 
     public function SubmitBuildJob(Commit $commit, $package, $arch, $id)
     {
+        // TODO: This will break
+        $components = ['cross', 'device', 'firmware', 'hybris', 'kde', 'maemo', 'main', 'matchbox', 'modem', 'temp'];
+
+        $repositories = [];
+        foreach ($components as $component) {
+            $repositories[] = 'https://build.postmarketos.org/repository/master/' . $component;
+        }
+
+        $repositories = '-mp="' . implode(' -mp="', $repositories) . '"';
+
         $tasks = [
             [
                 'setup-pmbootstrap',
@@ -68,7 +91,7 @@ class SrHtApi
             [
                 'build',
                 'cd pmaports/.sr.ht',
-                'pmbootstrap --details-to-stdout --aports /home/build/pmaports build --force --strict --arch=' . $arch . ' ' . $package
+                'pmbootstrap --details-to-stdout --aports /home/build/pmaports ' . $repositories . ' build --force --strict --arch=' . $arch . ' ' . $package
             ],
             [
                 'submit',
