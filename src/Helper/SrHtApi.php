@@ -70,6 +70,7 @@ class SrHtApi
         $repositories = [];
         foreach ($components as $component) {
             $repositories[] = 'https://build.postmarketos.org/repository/master/' . $component;
+            $repositories[] = 'https://build.postmarketos.org/offlinerepository/master/' . $component;
         }
 
         $repositories = '-mp="' . implode('" -mp="', $repositories) . '"';
