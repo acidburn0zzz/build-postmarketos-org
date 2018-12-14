@@ -167,7 +167,7 @@ class SrHtApi
             'triggers' => [
                 [
                     'action' => 'webhook',
-                    'condition' => 'failure',
+                    'condition' => 'always',
                     'url' => 'https://build.postmarketos.org/api/failure-hook'
                 ]
             ]

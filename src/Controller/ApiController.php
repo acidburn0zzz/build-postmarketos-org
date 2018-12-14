@@ -169,7 +169,7 @@ class ApiController extends Controller
         $branch = $package->getCommit()->getBranch();
 
         $apks = $request->files->get('file');
-        foreach($apks as $apk) {
+        foreach ($apks as $apk) {
             $component = $package->getComponent();
 
             $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch;
@@ -366,7 +366,12 @@ class ApiController extends Controller
     {
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
+
         $this->get('web_log')->write('failure-hook received', $payload, true);
+
+        if ($payload['state'] != 'failure') {
+            return new JsonResponse([]);
+        }
 
         $manager = $this->getDoctrine()->getManager();
         $queue = $this->getDoctrine()->getRepository('App:Queue');
