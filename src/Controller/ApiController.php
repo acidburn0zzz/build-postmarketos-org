@@ -168,27 +168,27 @@ class ApiController extends Controller
 
         $branch = $package->getCommit()->getBranch();
 
-        $apk = $request->files->get('file');
+        $apks = $request->files->get('file');
+        foreach($apks as $apk) {
+            $component = $package->getComponent();
 
-        $component = $package->getComponent();
+            $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch;
 
-        $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch;
+            if (!is_dir($repository)) {
+                mkdir($repository);
+            }
 
-        if (!is_dir($repository)) {
-            mkdir($repository);
+            $repository .= '/' . $component;
+            if (!is_dir($repository)) {
+                mkdir($repository);
+            }
+
+            if (!is_dir($repository . '/' . $architecture)) {
+                mkdir($repository . '/' . $architecture);
+            }
+
+            $apk->move($repository . '/' . $architecture . '/', $pkgname . '-' . $pkgver . '-r' . $pkgrel . '.apk');
         }
-
-        $repository .= '/' . $component;
-        if (!is_dir($repository)) {
-            mkdir($repository);
-        }
-
-        if (!is_dir($repository . '/' . $architecture)) {
-            mkdir($repository . '/' . $architecture);
-        }
-
-        $apk->move($repository . '/' . $architecture . '/', $pkgname . '-' . $pkgver . '-r' . $pkgrel . '.apk');
-
         $this->rebuildRepositoryIndex($branch, $architecture, $component);
 
         $package->setStatus('DONE');
