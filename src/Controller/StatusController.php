@@ -71,7 +71,7 @@ class StatusController extends Controller
         $graph .= PHP_EOL . PHP_EOL;
         foreach ($packages as $package) {
             foreach ($package->getQueueDependencies() as $dependency) {
-                $graph .= '    "' . $dependency->getQueueItem()->getAport() . '" -> "' . $package->getAport() . '"' . PHP_EOL;
+                $graph .= '    "' . $dependency->getRequirement()->getAport() . '" -> "' . $package->getAport() . '"' . PHP_EOL;
             }
         }
         $graph .= ' }';
