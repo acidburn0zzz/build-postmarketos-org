@@ -66,7 +66,7 @@ class StatusController extends Controller
                     $color = 'blanchedalmond'; //because why not
                     break;
             }
-            $graph .= '    "' . $package->getAport() . '"[label="' . $label . '" fillcolor=' . $color . ']' . PHP_EOL;
+            $graph .= '    "' . $package->getAport() . '"[label="' . $label . '" fillcolor=' . $color . ' style=filled]' . PHP_EOL;
         }
         $graph .= PHP_EOL . PHP_EOL;
         foreach ($packages as $package) {
