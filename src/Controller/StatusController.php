@@ -76,10 +76,10 @@ class StatusController extends Controller
         }
         $graph .= ' }';
 
-        $tempFile = tempnam('/tmp', 'pmosbld-');
+        $inFile = $this->getParameter('kernel.project_dir') . '/public/commit/' . $ref . '.dot';
         $outFile = $this->getParameter('kernel.project_dir') . '/public/commit/' . $ref . '.png';
-        file_put_contents($tempFile, $graph);
-        exec('dot "' . $tempFile . '" -o "' . $outFile . '" -Tpng');
+        file_put_contents($inFile, $graph);
+        exec('dot "' . $inFile . '" -o "' . $outFile . '" -Tpng');
 
         return $this->render('status/commit.html.twig', ['ref' => $ref]);
     }
