@@ -66,16 +66,22 @@ class StatusController extends AbstractController
                     $color = 'blanchedalmond'; //because why not
                     break;
             }
-            $graph .= '    ' . $package->getAport() . '[label="' . $label . '" fillcolor=' . $color . ']' . PHP_EOL;
+            $graph .= '    pkg' . $package->getAport() . '[label="' . $label . '" fillcolor=' . $color . ']' . PHP_EOL;
         }
         $graph .= PHP_EOL . PHP_EOL;
         foreach ($packages as $package) {
             foreach ($package->getQueueDependencies() as $dependency) {
-                $graph .= '    ' . $dependency->getQueueItem()->getAport() . ' -> ' . $package->getAport() . PHP_EOL;
+                $graph .= '    pkg' . $dependency->getQueueItem()->getAport() . ' -> pkg' . $package->getAport() . PHP_EOL;
             }
         }
         $graph .= ' }';
-        return new Response($graph);
+
+        $tempFile = tempnam('/tmp', 'pmosbld-');
+        $outFile = $this->getParameter('kernel.project_dir') . '/public/commit/' . $ref . '.png';
+        file_put_contents($tempFile, $graph);
+        exec('dot "' . $tempFile . '" -o "' . $outFile . '" -Tpng');
+
+        return $this->render('status/commit.html.twig', ['ref' => $ref]);
     }
 
     /**

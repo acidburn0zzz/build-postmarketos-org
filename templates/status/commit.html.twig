@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commit detail{% endblock %}
+
+{% block body %}
+    <a href="{{ path('packages') }}">Packages</a> | <a href="{{ path('commits') }}">Commits</a>
+
+    <h2>Commit detail</h2>
+    <img src="/commit/{{ ref }}.png" class="img-responsive">
+{% endblock %}
