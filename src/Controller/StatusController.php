@@ -66,12 +66,12 @@ class StatusController extends Controller
                     $color = 'blanchedalmond'; //because why not
                     break;
             }
-            $graph .= '    pkg' . $package->getAport() . '[label="' . $label . '" fillcolor=' . $color . ']' . PHP_EOL;
+            $graph .= '    "' . $package->getAport() . '"[label="' . $label . '" fillcolor=' . $color . ']' . PHP_EOL;
         }
         $graph .= PHP_EOL . PHP_EOL;
         foreach ($packages as $package) {
             foreach ($package->getQueueDependencies() as $dependency) {
-                $graph .= '    pkg' . $dependency->getQueueItem()->getAport() . ' -> pkg' . $package->getAport() . PHP_EOL;
+                $graph .= '    "' . $dependency->getQueueItem()->getAport() . '" -> "' . $package->getAport() . '"' . PHP_EOL;
             }
         }
         $graph .= ' }';
