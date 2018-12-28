@@ -16,7 +16,11 @@
         </tr>
         {% for commit in queued %}
             <tr class="striped--near-white">
-                <td>{{ commit.id }}</td>
+                <td>
+                    <a href="{{ path('commit_details', {'ref': commit.ref}) }}">
+                        {{ commit.id }}
+                    </a>
+                </td>
                 <td>{{ commit.branch }}</td>
                 <td>
                     <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ commit.ref }}"
