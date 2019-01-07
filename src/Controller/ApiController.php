@@ -332,6 +332,7 @@ class ApiController extends Controller
                     // TODO: Kill existing task at sr.ht with id $existingTask->getSrhtId()
                 }
                 $existingTask->setStatus('SUPERSEDED');
+                // TODO: Re-link all queue dependencies to new task
                 $manager->persist($existingTask);
             } else {
                 $foundExisting = true;
