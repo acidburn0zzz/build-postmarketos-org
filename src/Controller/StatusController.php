@@ -29,8 +29,18 @@ class StatusController extends Controller
     public function commits()
     {
         $queue = $this->getDoctrine()->getRepository('App:Commit');
-        $queued = $queue->findBy(['status' => ['INDEXING', 'BUILDING', 'SIGNING']], ['id' => 'DESC']);
-        $done = $queue->findBy(['status' => ['DONE', 'FAILED', 'SUPERSEDED']], ['id' => 'DESC'], 50);
+
+        $raw = $queue->findBy([], ['id' => 'DESC'], 75);
+        $queued = [];
+        $done = [];
+
+        foreach ($raw as $r) {
+            if (in_array($r->getStatus(), ['DONE', 'FAILED', 'SUPERSEDED'])) {
+                $done[] = $r;
+            } else {
+                $queued[] = $r;
+            }
+        }
         return $this->render('status/commits.html.twig', [
             'queued' => $queued,
             'done' => $done
