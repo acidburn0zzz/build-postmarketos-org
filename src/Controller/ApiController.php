@@ -370,7 +370,7 @@ class ApiController extends Controller
 
         $this->get('web_log')->write('failure-hook received', $payload, true);
 
-        if ($payload['state'] != 'failed' && $payload['state'] != 'cancelled' ) {
+        if ($payload['state'] != 'failed' && $payload['state'] != 'cancelled') {
             return new JsonResponse([]);
         }
 
@@ -378,9 +378,12 @@ class ApiController extends Controller
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $task = $queue->findOneBy(['srhtId' => (int)$payload['id']]);
         if ($task) {
+            $this->get('web_log')->write('failure-hook done', 'marking ' . $task->getAport() . ' as failed');
             $task->setStatus('FAILED');
             $manager->persist($task);
             $manager->flush();
+        }else{
+            $this->get('web_log')->write('failure-hook failure', 'No queue task found for this job');
         }
         $this->startNextBuild();
         return new JsonResponse([]);
