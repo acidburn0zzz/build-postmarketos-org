@@ -332,7 +332,7 @@ class ApiController extends Controller
                     // TODO: Kill existing task at sr.ht with id $existingTask->getSrhtId()
                 }
                 $existingTask->setStatus('SUPERSEDED');
-                // TODO: Re-link all queue dependencies to new task
+                // TODO: Re-link all queue dependencies to new queue item
                 $manager->persist($existingTask);
             } else {
                 $foundExisting = true;
@@ -370,7 +370,7 @@ class ApiController extends Controller
 
         $this->get('web_log')->write('failure-hook received', $payload, true);
 
-        if ($payload['state'] != 'failure') {
+        if ($payload['state'] != 'failed') {
             return new JsonResponse([]);
         }
 
