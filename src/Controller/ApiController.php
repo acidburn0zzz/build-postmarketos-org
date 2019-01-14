@@ -368,7 +368,7 @@ class ApiController extends Controller
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
 
-        $state = $payload['state'];
+        $state = $payload['status'];
 
         $this->get('web_log')->write('failure-hook ' . $state . ' received', $payload, true);
 
