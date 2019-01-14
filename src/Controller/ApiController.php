@@ -370,7 +370,7 @@ class ApiController extends Controller
 
         $this->get('web_log')->write('failure-hook received', $payload, true);
 
-        if ($payload['state'] != 'failed') {
+        if ($payload['state'] != 'failed' && $payload['state'] != 'cancelled' ) {
             return new JsonResponse([]);
         }
 
