@@ -7,7 +7,17 @@ $ sudo apt install composer mysql-server mysql-client php libapache2-mod-php php
 $ git clone https://gitlab.com/postmarketOS/build.postmarketos.org
 $ cd build.postmarketos.org
 $ composer install
-(now place your mysql credentials in .env)
+```
+
+Now the configuration needs to be set in the `.env` file.
+
+* Set `DATABASE_URL` to your mysql server
+* Set `SRHT_TOKEN` to to a personal access token from meta.sr.ht
+* Set `SRHT_SECRET_ID` to the GUID of the secret containing `~/.pmos_token`
+
+Now you can let doctrine create and fill your database:
+
+```
 $ bin/console doctrine:database:create
 $ bin/console doctrine:migrations:migrate
 ```
