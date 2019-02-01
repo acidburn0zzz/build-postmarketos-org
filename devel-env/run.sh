@@ -8,9 +8,9 @@ gitdir="$(realpath $scriptdir/..)"
 # Use default config
 cd "$gitdir"
 if [ -e .env ]; then
-	if ! diff -s .env .env.dist; then
+	if ! diff -q .env .env.dist; then
 		echo "ERROR: .env is different from .env.dist!"
-		echo "Make a backup of the file if you had modified it:"
+		echo "Make a backup of the file if you have modified it:"
 		echo "  $gitdir/.env"
 		echo "Then remove it and try again."
 		exit 1
