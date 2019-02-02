@@ -21,6 +21,7 @@ fi
 
 # Build custom docker containers
 docker build -t bpo:latest "$scriptdir/bpo"
+docker build -t builds.sr.ht:latest "$scriptdir/builds.sr.ht"
 
 # use docker-compose to run everything
 cd "$scriptdir"
