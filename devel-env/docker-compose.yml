@@ -43,6 +43,8 @@ services:
     image: postgres
     environment:
       POSTGRES_PASSWORD: devsetup
+    expose:
+      - 5432
 
   # We heard you like docker...
   docker:
@@ -52,6 +54,7 @@ services:
      - 2375
     volumes:
      - /var/lib/docker
+    restart: on-failure
 
   builds.sr.ht:
     image: builds.sr.ht:latest
@@ -61,5 +64,9 @@ services:
      - postgres
     environment:
       DOCKER_HOST: tcp://docker:2375
+      PYTHONUNBUFFERED: 1
     ports:
-     - 8000:80
+     - 8000:8000 # meta.sr.ht
+     - 8002:8002 # builds.sr.ht
+    volumes:
+     - ./builds.sr.ht/patches:/patches:ro

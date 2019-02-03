@@ -31,8 +31,18 @@ RUN apk --no-cache add \
 
 # FIXME: merge with first one
 RUN apk --no-cache add \
+	curl \
 	postgresql-client \
 	nginx
+
+# FIXME: depends of builds.sr.ht
+RUN apk --no-cache add \
+	py3-vine
+
+# Need werkzeug>=0.14 to fix samesite set_cookie() error:
+# https://stackoverflow.com/a/52175403
+RUN apk --no-cache add py3-pip && \
+	pip3 install --no-cache-dir --disable-pip-version-check -U werkzeug
 
 COPY config.ini /etc/sr.ht/config.ini
 COPY nginx.conf /etc/nginx/conf.d/default.conf

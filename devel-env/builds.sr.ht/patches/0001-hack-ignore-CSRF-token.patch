@@ -1,0 +1,26 @@
+From 092b6d43c8cd5057cb6e8f47c42ca4ec11ff959d Mon Sep 17 00:00:00 2001
+From: Oliver Smith <ollieparanoid@bitmessage.ch>
+Date: Sat, 2 Feb 2019 10:50:32 +0100
+Subject: [PATCH] hack: ignore CSRF token
+
+Make it easy to register an account via CLI.
+---
+ srht/flask.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/srht/flask.py b/srht/flask.py
+index ec18ae6..3dc6e64 100644
+--- a/srht/flask.py
++++ b/srht/flask.py
+@@ -182,7 +182,7 @@ class SrhtFlask(Flask):
+             if request.method == 'POST':
+                 token = session.get('_csrf_token_v2', None)
+                 if not token or token != request.form.get('_csrf_token'):
+-                    abort(403)
++                    print("hack: ignoring missing csrf token")
+ 
+         @self.teardown_appcontext
+         def expire_db(err):
+-- 
+2.17.2
+
