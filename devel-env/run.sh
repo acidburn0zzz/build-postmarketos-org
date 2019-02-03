@@ -25,4 +25,5 @@ docker build -t builds.sr.ht:latest "$scriptdir/builds.sr.ht"
 
 # use docker-compose to run everything
 cd "$scriptdir"
+docker-compose rm -f builds.sr.ht postgres redis
 docker-compose up

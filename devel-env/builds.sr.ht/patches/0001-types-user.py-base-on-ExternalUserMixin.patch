@@ -1,0 +1,40 @@
+From 5513e3807bb8d03c11804df330ee693230ae7ddf Mon Sep 17 00:00:00 2001
+From: Oliver Smith <ollieparanoid@bitmessage.ch>
+Date: Sun, 3 Feb 2019 17:12:45 +0100
+Subject: [PATCH] types/user.py: base on ExternalUserMixin
+
+Always create external users, so the oauth_* columns get created
+properly (see core.sr.ht/srht/oauth/user.py:ExternalUserMixin).
+
+Without this patch, logging into builds.sr.ht fails with this SQL error:
+ERROR:  column user.oauth_token does not exist at character 274
+
+---
+ metasrht/types/user.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/metasrht/types/user.py b/metasrht/types/user.py
+index 37c897b..9a00482 100644
+--- a/metasrht/types/user.py
++++ b/metasrht/types/user.py
+@@ -1,7 +1,7 @@
+ import sqlalchemy as sa
+ import sqlalchemy_utils as sau
+ from srht.database import Base
+-from srht.oauth import UserMixin, UserType
++from srht.oauth import ExternalUserMixin, UserType
+ from enum import Enum
+ from datetime import datetime, timedelta
+ import base64
+@@ -11,7 +11,7 @@ class PaymentInterval(Enum):
+     monthly = "monthly"
+     yearly = "yearly"
+ 
+-class User(Base, UserMixin):
++class User(Base, ExternalUserMixin):
+     password = sa.Column(sa.String(256), nullable=False)
+     new_email = sa.Column(sa.String(256))
+     confirmation_hash = sa.Column(sa.String(128))
+-- 
+2.17.2
+

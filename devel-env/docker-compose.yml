@@ -70,3 +70,11 @@ services:
      - 8002:8002 # builds.sr.ht
     volumes:
      - ./builds.sr.ht/patches:/patches:ro
+
+  # Postgres frontend for debugging
+  #~ pgadmin:
+    #~ image: fenglc/pgadmin4
+    #~ depends_on:
+     #~ - postgres
+    #~ ports:
+     #~ - 5050:5050

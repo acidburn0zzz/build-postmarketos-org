@@ -1,6 +1,7 @@
 #!/bin/sh -e
 # Reference: https://man.sr.ht/builds.sr.ht/installation.md
 # All these '| sed "s/^/[prefix] /"' statements add a '[prefix] '.
+# FIXME: script doesn't abort when something piped into sed fails.
 
 #
 # *** Helper functions ***
@@ -75,7 +76,6 @@ export release=edge
 # Configure database
 echo "Configuring meta.sr.ht database..."
 export PGPASSWORD="devsetup"
-dropdb -h postgres -p 5432 -U postgres builds.sr.ht || true
 createdb -h postgres -p 5432 -U postgres builds.sr.ht
 python3 -c "from metasrht.app import db; db.create()" 2>&1 | \
 	sed "s/^/[meta.sr.ht db create] /"
@@ -136,4 +136,6 @@ wait_for localhost 5002
 # Start build.sr.ht
 # builds.sr.ht-worker 2>&1 | sed "s/^/[worker] /"
 
-sleep 999
+
+echo "*** builds.sr.ht is ready! ***"
+sleep 9999

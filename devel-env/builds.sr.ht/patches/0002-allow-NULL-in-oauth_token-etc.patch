@@ -1,0 +1,27 @@
+From 8e50e8d01d7eb2f15538a3970ec5fb044ee056a7 Mon Sep 17 00:00:00 2001
+From: Oliver Smith <ollieparanoid@bitmessage.ch>
+Date: Sun, 3 Feb 2019 17:18:38 +0100
+Subject: [PATCH 2/2] ExternalUserMixin: allow NULL in oauth_*
+
+---
+ srht/oauth/user.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/srht/oauth/user.py b/srht/oauth/user.py
+index f66e872..9d07736 100644
+--- a/srht/oauth/user.py
++++ b/srht/oauth/user.py
+@@ -53,7 +53,7 @@ class UserMixin:
+         return self.canonical_name
+ 
+ class ExternalUserMixin(UserMixin):
+-    oauth_token = sa.Column(sa.String(256), nullable=False)
+-    oauth_token_expires = sa.Column(sa.DateTime, nullable=False)
+-    oauth_token_scopes = sa.Column(sa.String, nullable=False, default="")
++    oauth_token = sa.Column(sa.String(256))
++    oauth_token_expires = sa.Column(sa.DateTime)
++    oauth_token_scopes = sa.Column(sa.String, default="")
+     oauth_revocation_token = sa.Column(sa.String(256))
+-- 
+2.17.2
+
