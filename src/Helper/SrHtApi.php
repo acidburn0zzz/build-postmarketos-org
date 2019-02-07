@@ -155,7 +155,7 @@ class SrHtApi
     {
         $manifest = [
             'image' => 'alpine/edge',
-            'packages' => ['python3', 'coreutils', 'openssl', 'wget', 'sudo', 'py3-requests'],
+            'packages' => ['python3', 'coreutils', 'procps', 'openssl', 'wget', 'sudo', 'py3-requests'],
             'sources' => [
                 'https://gitlab.com/postmarketOS/pmaports.git#' . $commit->getRef()
             ],
