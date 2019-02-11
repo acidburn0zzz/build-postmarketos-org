@@ -184,7 +184,7 @@ class ApiController extends Controller
 
         $apks = $request->files->get('file');
         foreach ($apks as $apk) {
-            $component = $task->getComponent();
+            $component = $task->getPackage()->getComponent();
 
             $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch;
 
