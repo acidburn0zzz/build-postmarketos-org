@@ -277,8 +277,8 @@ class ApiController extends Controller
     private function onCommitFinished(Commit $commit, $branch, $arch)
     {
         $components = [];
-        foreach ($commit->getPackages() as $package) {
-            $components[] = $package->getComponent();
+        foreach ($commit->getTasks() as $task) {
+            $components[] = $task->getPackage()->getComponent();
         }
         $components = array_unique($components);
 
