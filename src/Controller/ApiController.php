@@ -349,12 +349,12 @@ class ApiController extends Controller
 
                 // Don't do anything yet for other versions
                 /**
-                if ($task->getStatus() == 'BUILDING') {
-                    // TODO: Kill existing task at sr.ht with id $existingTask->getSrhtId()
-                }
-                $task->setStatus('SUPERSEDED');
-                // TODO: Re-link all queue dependencies to new queue item
-                $manager->persist($task);
+                 * if ($task->getStatus() == 'BUILDING') {
+                 * // TODO: Kill existing task at sr.ht with id $existingTask->getSrhtId()
+                 * }
+                 * $task->setStatus('SUPERSEDED');
+                 * // TODO: Re-link all queue dependencies to new queue item
+                 * $manager->persist($task);
                  */
             } else {
                 // Task for same package and version exists, nothing to be done
@@ -362,17 +362,12 @@ class ApiController extends Controller
             }
         }
 
-        // No task exists for this version of the pacakge, create a new task and submit to sr.ht
-        $srht = $this->get('srht_api');
-        $id = $srht->SubmitBuildJob($commit, $pkgname, $arch, $pkgname . ':' . $pkgver . ':' . $pkgrel);
-
         $task = new Queue();
         $task->setPackage($package);
         $task->setPkgver($pkgver);
         $task->setPkgrel($pkgrel);
         $task->setCommit($commit);
         $task->setStatus('WAITING');
-        $task->setSrhtId($id);
         $manager->persist($task);
         return $task;
     }
@@ -425,9 +420,16 @@ class ApiController extends Controller
 
         if (count($next) > 0) {
             $srht = $this->get('srht_api');
-            $srht->StartJob($next[0]->getSrhtId());
-            $next[0]->setStatus('BUILDING');
-            $manager->persist($next[0]);
+            $next = $next[0];
+            $commit = $next->getCommit();
+            $package = $next->getPackage();
+
+            $jobToken = $package->getAport() . ':' . $next->getPkgver() . ':' . $next->getPkgrel();
+
+            $id = $srht->SubmitBuildJob($commit, $package->getAport(), $package->getArch(), $jobToken);
+            $srht->StartJob($id);
+            $next->setStatus('BUILDING');
+            $manager->persist($next);
             $manager->flush();
         }
     }
