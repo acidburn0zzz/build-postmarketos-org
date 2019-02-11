@@ -35,7 +35,7 @@ class Queue
     private $pkgrel;
 
     /**
-     * @ORM\Column(type="integer", nullable="true")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $srhtId;
 
