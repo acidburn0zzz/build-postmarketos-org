@@ -364,7 +364,7 @@ class ApiController extends Controller
 
         // No task exists for this version of the pacakge, create a new task and submit to sr.ht
         $srht = $this->get('srht_api');
-        $id = $srht->SubmitBuildJob($commit, $pkgname, $arch, $package . ':' . $pkgver . ':' . $pkgrel);
+        $id = $srht->SubmitBuildJob($commit, $pkgname, $arch, $pkgname . ':' . $pkgver . ':' . $pkgrel);
 
         $task = new Queue();
         $task->setPackage($package);
