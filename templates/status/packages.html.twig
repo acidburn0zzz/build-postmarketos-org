@@ -3,84 +3,21 @@
 {% block title %}Packages{% endblock %}
 
 {% block body %}
-    Packages | <a href="{{ path('commits') }}">Commits</a>
+    <a href="{{ path('queue') }}">Queue</a> | Packages | <a href="{{ path('commits') }}">Commits</a>
 
-    <h2>Pending builds</h2>
+    <h2>Packages</h2>
     <table class="collapse ba b--black-10 table">
         <tr class="striped--near-white">
             <th>#</th>
-            <th>aport</th>
-            <th>pkgver</th>
-            <th>branch</th>
+            <th>name</th>
             <th>arch</th>
-            <th>commit</th>
-            <th>sr.ht id</th>
-            <th>status</th>
         </tr>
-        {% for job in queued %}
+        {% for package in packages %}
             <tr class="striped--near-white">
-                <td>{{ job.id }}</td>
-                <td>{{ job.aport }}</td>
-                <td>{{ job.pkgver }}-{{ job.pkgrel }}</td>
-                <td>{{ job.commit.branch }}</td>
-                <td>{{ job.arch }}</td>
-                <td>
-                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}"
-                       style="font-family: monospace;">
-                        {{ job.commit.ref | slice(0, 8) }}
-                    </a>
-                </td>
-                <td>
-                    <a href="https://builds.sr.ht/~pmos/job/{{ job.srhtId }}">
-                        {{ job.srhtId }}
-                    </a>
-                </td>
-                <td>{{ job.status }}</td>
+                <td>{{ package.id }}</td>
+                <td>{{ package.aport }}</td>
+                <td>{{ package.arch }}</td>
             </tr>
         {% endfor %}
     </table>
-
-    <h2>Completed builds</h2>
-    <table class="collapse ba b--black-10 table">
-        <tr class="striped--near-white">
-            <th>#</th>
-            <th>aport</th>
-            <th>pkgver</th>
-            <th>branch</th>
-            <th>arch</th>
-            <th>commit</th>
-            <th>sr.ht id</th>
-            <th>status</th>
-        </tr>
-        {% for job in done %}
-            <tr class="striped--near-white">
-                <td>{{ job.id }}</td>
-                <td>{{ job.aport }}</td>
-                <td>{{ job.pkgver }}-{{ job.pkgrel }}</td>
-                <td>{{ job.commit.branch }}</td>
-                <td>{{ job.arch }}</td>
-                <td>
-                    <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}"
-                       style="font-family: monospace;">
-                        {{ job.commit.ref | slice(0, 8) }}
-                    </a>
-                </td>
-                <td>
-                    <a href="https://builds.sr.ht/~pmos/job/{{ job.srhtId }}">
-                        {{ job.srhtId }}
-                    </a>
-                </td>
-                <td>
-                    {% if job.status == 'DONE' %}
-                        <a href="/repository/{{ job.commit.branch }}/{{ job.component }}/{{ job.arch }}/{{ job.aport }}-{{ job.pkgver }}-r{{ job.pkgrel }}.apk">
-                            DONE
-                        </a>
-                    {% else %}
-                        {{ job.status }}
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-
 {% endblock %}

@@ -19,9 +19,10 @@ class Queue
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Package", inversedBy="versions")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $aport;
+    private $package;
 
     /**
      * @ORM\Column(type="string", length=100)
@@ -34,16 +35,6 @@ class Queue
     private $pkgrel;
 
     /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $arch;
-
-    /**
-     * @ORM\Column(type="string", length=30)
-     */
-    private $component;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private $srhtId;
@@ -54,36 +45,30 @@ class Queue
     private $status;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\QueueDependency", mappedBy="queueItem", orphanRemoval=true)
-     */
-    private $queueDependencies;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Commit", inversedBy="packages")
      * @ORM\JoinColumn(nullable=false)
      */
     private $commit;
-
-    public function __construct()
-    {
-        $this->queueDependencies = new ArrayCollection();
-    }
 
     public function getId()
     {
         return $this->id;
     }
 
-    public function getAport()
+    /**
+     * @return Package
+     */
+    public function getPackage()
     {
-        return $this->aport;
+        return $this->package;
     }
 
-    public function setAport(string $aport)
+    /**
+     * @param Package $package
+     */
+    public function setPackage($package)
     {
-        $this->aport = $aport;
-
-        return $this;
+        $this->package = $package;
     }
 
     public function getPkgver()
@@ -106,18 +91,6 @@ class Queue
     public function setPkgrel(int $pkgrel)
     {
         $this->pkgrel = $pkgrel;
-
-        return $this;
-    }
-
-    public function getArch()
-    {
-        return $this->arch;
-    }
-
-    public function setArch(string $arch)
-    {
-        $this->arch = $arch;
 
         return $this;
     }
@@ -156,52 +129,5 @@ class Queue
         $this->status = $status;
 
         return $this;
-    }
-
-    /**
-     * @return Collection|QueueDependency[]
-     */
-    public function getQueueDependencies()
-    {
-        return $this->queueDependencies;
-    }
-
-    public function addQueueDependency(QueueDependency $queueDependency): self
-    {
-        if (!$this->queueDependencies->contains($queueDependency)) {
-            $this->queueDependencies[] = $queueDependency;
-            $queueDependency->setQueueItem($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQueueDependency(QueueDependency $queueDependency): self
-    {
-        if ($this->queueDependencies->contains($queueDependency)) {
-            $this->queueDependencies->removeElement($queueDependency);
-            // set the owning side to null (unless already changed)
-            if ($queueDependency->getQueueItem() === $this) {
-                $queueDependency->setQueueItem(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getComponent()
-    {
-        return $this->component;
-    }
-
-    /**
-     * @param string $component
-     */
-    public function setComponent($component)
-    {
-        $this->component = $component;
     }
 }

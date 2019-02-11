@@ -2,21 +2,21 @@
 
 namespace App\Repository;
 
-use App\Entity\QueueDependency;
+use App\Entity\PackageDependency;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method QueueDependency|null find($id, $lockMode = null, $lockVersion = null)
- * @method QueueDependency|null findOneBy(array $criteria, array $orderBy = null)
- * @method QueueDependency[]    findAll()
- * @method QueueDependency[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PackageDependency|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PackageDependency|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PackageDependency[]    findAll()
+ * @method PackageDependency[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class QueueDependencyRepository extends ServiceEntityRepository
+class PackageDependencyRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, QueueDependency::class);
+        parent::__construct($registry, PackageDependency::class);
     }
 
 //    /**

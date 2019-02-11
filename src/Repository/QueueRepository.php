@@ -25,10 +25,11 @@ class QueueRepository extends ServiceEntityRepository
         $stmt = $conn->prepare('
             SELECT queue.id, GROUP_CONCAT(DISTINCT depend.status) as dependencies
             FROM queue
-                        LEFT JOIN queue_dependency ON queue_dependency.queue_item_id = queue.id
-                        LEFT JOIN queue AS depend ON depend.id = queue_dependency.requirement_id
+                        LEFT JOIN package ON queue.package_id = package.id
+                        LEFT JOIN package_dependency ON package.id = package_dependency.package_id
+                        LEFT JOIN queue AS depend ON depend.id = package_dependency.requirement_id
             WHERE queue.status = "WAITING"
-            GROUP BY queue.aport
+            GROUP BY queue.package_id
         ');
 
         $stmt->execute();

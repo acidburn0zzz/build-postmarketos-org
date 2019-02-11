@@ -3,8 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Commit;
+use App\Entity\Package;
 use App\Entity\Queue;
-use App\Entity\QueueDependency;
+use App\Entity\PackageDependency;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -55,6 +56,8 @@ class ApiController extends Controller
     }
 
     /**
+     * Add list of packages to the build queue as tasks
+     *
      * @Route("/api/task-submit", name="task_submit")
      */
     public function task_submit(Request $request)
@@ -88,6 +91,7 @@ class ApiController extends Controller
         $payload = $request->getContent();
         $payload = json_decode($payload, true);
 
+        // Handle commits that don't change any package
         if (count($payload) == 0) {
             $commit->setStatus('DONE');
             $manager->flush();
@@ -97,28 +101,29 @@ class ApiController extends Controller
 
         $this->get('web_log')->write('task-submit received', $payload);
 
-        $row = [];
-
+        $task = [];
         $result = [];
 
+        // Create all Package and Queue items
         foreach ($payload as $package) {
             list($pkgver, $pkgrel) = explode('-', $package['version'], 2);
             $pkgrel = (int)str_replace('r', '', $pkgrel);
             $component = $package['repo'];
-            $row[$package['pkgname']] = $this->createOrUpdatePackage($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $component);
+            $task[$package['pkgname']] = $this->createOrUpdatePackage($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $component);
         }
 
+        // Create PackageDependency rows for the packages if needed
         foreach ($payload as $package) {
-            $queueItem = $row[$package['pkgname']];
+            $task = $task[$package['pkgname']];
             $result[] = $package['pkgname'];
             foreach ($package['depends'] as $dependency) {
-                if (isset($row[$dependency])) {
-                    $queueItemDepend = $row[$dependency];
-                    $existing = $this->getDoctrine()->getRepository('App:QueueDependency')->findOneBy(['queueItem' => $queueItem, 'requirement' => $queueItemDepend]);
+                if (isset($task[$dependency])) {
+                    $dependendPackage = $task[$dependency];
+                    $existing = $this->getDoctrine()->getRepository('App:PackageDependency')->findOneBy(['package' => $task, 'requirement' => $dependendPackage]);
                     if (!$existing) {
-                        $queueDependency = new QueueDependency();
-                        $queueDependency->setQueueItem($queueItem);
-                        $queueDependency->setRequirement($queueItemDepend);
+                        $queueDependency = new PackageDependency();
+                        $queueDependency->setPackage($task);
+                        $queueDependency->setRequirement($dependendPackage);
                         $manager->persist($queueDependency);
                     }
                 }
@@ -314,46 +319,58 @@ class ApiController extends Controller
         return $manifest;
     }
 
-    private function createOrUpdatePackage($package, $pkgver, $pkgrel, Commit $commit, $arch, $component)
+    private function createOrUpdatePackage($pkgname, $pkgver, $pkgrel, Commit $commit, $arch, $component)
     {
+        $packages = $this->getDoctrine()->getRepository('App:Package');
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $manager = $this->getDoctrine()->getManager();
 
+        // Check if the package is known already
+        $package = $packages->findOneBy(['aport' => $pkgname, 'arch' => $arch]);
+
+        // Create Package if needed
+        if (!$package) {
+            $package = new Package();
+            $package->setArch($pkgname);
+            $package->setArch($arch);
+            $package->setComponent($component);
+            $manager->persist($package);
+        }
+
         // Check if there is a running or queued task for this package already
-        $existing = $queue->findBy([
-            'aport' => $package,
-            'arch' => $arch,
+        $packageTasks = $queue->findBy([
+            'package' => $package,
             'status' => ['WAITING', 'BUILDING']
         ]);
-        $foundExisting = false;
-        foreach ($existing as $existingTask) {
-            if ($existingTask->getPkgver() != $pkgver || $existingTask->getPkgrel() != $pkgrel) {
-                if ($existingTask->getStatus() == 'BUILDING') {
+
+        foreach ($packageTasks as $task) {
+            if ($task->getPkgver() != $pkgver || $task->getPkgrel() != $pkgrel) {
+                // Task for same package but different version exists
+
+                // Don't do anything yet for other versions
+                /**
+                if ($task->getStatus() == 'BUILDING') {
                     // TODO: Kill existing task at sr.ht with id $existingTask->getSrhtId()
                 }
-                $existingTask->setStatus('SUPERSEDED');
+                $task->setStatus('SUPERSEDED');
                 // TODO: Re-link all queue dependencies to new queue item
-                $manager->persist($existingTask);
+                $manager->persist($task);
+                 */
             } else {
-                $foundExisting = true;
-                break;
+                // Task for same package and version exists, nothing to be done
+                return $task;
             }
         }
 
-        if ($foundExisting) {
-            return $existingTask;
-        }
-
+        // No task exists for this version of the pacakge, create a new task and submit to sr.ht
         $srht = $this->get('srht_api');
-        $id = $srht->SubmitBuildJob($commit, $package, $arch, $package . ':' . $pkgver . ':' . $pkgrel);
+        $id = $srht->SubmitBuildJob($commit, $pkgname, $arch, $package . ':' . $pkgver . ':' . $pkgrel);
 
         $task = new Queue();
-        $task->setAport($package);
+        $task->setPackage($package);
         $task->setPkgver($pkgver);
         $task->setPkgrel($pkgrel);
-        $task->setArch($arch);
         $task->setCommit($commit);
-        $task->setComponent($component);
         $task->setStatus('WAITING');
         $task->setSrhtId($id);
         $manager->persist($task);
