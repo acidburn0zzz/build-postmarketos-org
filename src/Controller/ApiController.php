@@ -101,7 +101,7 @@ class ApiController extends Controller
 
         $this->get('web_log')->write('task-submit received', $payload);
 
-        $task = [];
+        $tasks = [];
         $result = [];
 
         // Create all Package and Queue items
@@ -109,16 +109,16 @@ class ApiController extends Controller
             list($pkgver, $pkgrel) = explode('-', $package['version'], 2);
             $pkgrel = (int)str_replace('r', '', $pkgrel);
             $component = $package['repo'];
-            $task[$package['pkgname']] = $this->createOrUpdatePackage($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $component);
+            $tasks[$package['pkgname']] = $this->createOrUpdatePackage($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $component);
         }
 
         // Create PackageDependency rows for the packages if needed
         foreach ($payload as $package) {
-            $task = $task[$package['pkgname']];
+            $task = $tasks[$package['pkgname']];
             $result[] = $package['pkgname'];
             foreach ($package['depends'] as $dependency) {
-                if (isset($task[$dependency])) {
-                    $dependendPackage = $task[$dependency];
+                if (isset($tasks[$dependency])) {
+                    $dependendPackage = $tasks[$dependency];
                     $existing = $this->getDoctrine()->getRepository('App:PackageDependency')->findOneBy(['package' => $task, 'requirement' => $dependendPackage]);
                     if (!$existing) {
                         $queueDependency = new PackageDependency();
