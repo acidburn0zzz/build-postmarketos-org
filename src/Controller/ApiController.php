@@ -160,22 +160,31 @@ class ApiController extends Controller
         $manager = $this->getDoctrine()->getManager();
 
         list($pkgname, $pkgver, $pkgrel) = explode(':', $id, 3);
-        $package = $this->getDoctrine()->getRepository('App:Queue')->findOneBy([
+
+        $package = $this->getDoctrine()->getRepository('App:Package')->findOneBy([
             'aport' => $pkgname,
-            'pkgver' => $pkgver,
-            'pkgrel' => $pkgrel,
             'arch' => $architecture
         ]);
 
         if (!$package) {
-            throw new \Exception('Package "' . $id . '" not found in the database');
+            throw new \Exception('Package "' . $pkgname . '" not found in the database');
         }
 
-        $branch = $package->getCommit()->getBranch();
+        $task = $this->getDoctrine()->getRepository('App:Queue')->findOneBy([
+            'package' => $package,
+            'pkgver' => $pkgver,
+            'pkgrel' => $pkgrel,
+        ]);
+
+        if (!$task) {
+            throw new \Exception('Package version "' . $id . '" not found in the database');
+        }
+
+        $branch = $task->getCommit()->getBranch();
 
         $apks = $request->files->get('file');
         foreach ($apks as $apk) {
-            $component = $package->getComponent();
+            $component = $task->getComponent();
 
             $repository = $this->getParameter('kernel.project_dir') . '/public/repository/' . $branch;
 
@@ -196,8 +205,8 @@ class ApiController extends Controller
         }
         $this->rebuildRepositoryIndex($branch, $architecture, $component);
 
-        $package->setStatus('DONE');
-        $manager->persist($package);
+        $task->setStatus('DONE');
+        $manager->persist($task);
 
         $this->get('web_log')->write('package-submit received', [
             'commit' => $commit,
@@ -206,12 +215,12 @@ class ApiController extends Controller
         ]);
 
         // Check if this completes a commit
-        $commitRow = $package->getCommit();
-        $commitPackages = $commitRow->getPackages();
+        $commitRow = $task->getCommit();
+        $commitTasks = $commitRow->getTasks();
         $done = 0;
-        $total = count($commitPackages);
-        foreach ($commitPackages as $cp) {
-            if ($cp->getStatus() == 'DONE') {
+        $total = count($commitTasks);
+        foreach ($commitTasks as $commitTask) {
+            if ($commitTask->getStatus() == 'DONE') {
                 $done++;
             }
         }

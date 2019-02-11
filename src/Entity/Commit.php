@@ -40,7 +40,7 @@ class Commit
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Queue", mappedBy="commit", orphanRemoval=true)
      */
-    private $packages;
+    private $tasks;
 
     public function __construct()
     {
@@ -103,16 +103,16 @@ class Commit
     /**
      * @return Queue[]
      */
-    public function getPackages()
+    public function getTasks()
     {
-        return $this->packages;
+        return $this->tasks;
     }
 
     /**
-     * @param mixed $packages
+     * @param mixed $tasks
      */
-    public function setPackages($packages)
+    public function setTasks($tasks)
     {
-        $this->packages = $packages;
+        $this->tasks = $tasks;
     }
 }

@@ -95,6 +95,9 @@ class Queue
         return $this;
     }
 
+    /**
+     * @return Commit
+     */
     public function getCommit()
     {
         return $this->commit;
