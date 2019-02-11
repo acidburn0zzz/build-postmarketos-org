@@ -123,7 +123,7 @@ class ApiController extends Controller
                     if (!$existing) {
                         $queueDependency = new PackageDependency();
                         $queueDependency->setPackage($task->getPackage());
-                        $queueDependency->setRequirement($dependendPackage);
+                        $queueDependency->setRequirement($dependendPackage->getPackage());
                         $manager->persist($queueDependency);
                     }
                 }
