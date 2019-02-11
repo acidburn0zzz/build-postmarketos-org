@@ -331,7 +331,7 @@ class ApiController extends Controller
         // Create Package if needed
         if (!$package) {
             $package = new Package();
-            $package->setArch($pkgname);
+            $package->setAport($pkgname);
             $package->setArch($arch);
             $package->setComponent($component);
             $manager->persist($package);
