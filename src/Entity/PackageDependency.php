@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\QueueDependencyRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PackageDependencyRepository")
  */
-class QueueDependency
+class PackageDependency
 {
     /**
      * @ORM\Id()
@@ -17,13 +17,13 @@ class QueueDependency
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Queue", inversedBy="queueDependencies")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Package", inversedBy="packageDependencies")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $queueItem;
+    private $package;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Queue")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Package")
      * @ORM\JoinColumn(nullable=false)
      */
     private $requirement;
@@ -33,14 +33,14 @@ class QueueDependency
         return $this->id;
     }
 
-    public function getQueueItem()
+    public function getPackage()
     {
-        return $this->queueItem;
+        return $this->package;
     }
 
-    public function setQueueItem(Queue $queueItem): self
+    public function setPackage(Package $package): self
     {
-        $this->queueItem = $queueItem;
+        $this->package = $package;
 
         return $this;
     }
@@ -50,7 +50,7 @@ class QueueDependency
         return $this->requirement;
     }
 
-    public function setRequirement(Queue $requirement)
+    public function setRequirement(Package $requirement)
     {
         $this->requirement = $requirement;
 

@@ -10,16 +10,27 @@ class StatusController extends Controller
 {
     /**
      * @Route("/", name="status")
-     * @Route("/packages", name="packages")
+     * @Route("/queue", name="queue")
      */
-    public function packages()
+    public function queue()
     {
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $queued = $queue->findBy(['status' => ['WAITING', 'BUILDING']], ['id' => 'DESC']);
         $done = $queue->findBy(['status' => ['DONE', 'FAILED', 'SUPERSEDED']], ['id' => 'DESC'], 50);
-        return $this->render('status/packages.html.twig', [
+        return $this->render('status/queue.html.twig', [
             'queued' => $queued,
             'done' => $done
+        ]);
+    }
+
+    /**
+     * @Route("/packages", name="packages")
+     */
+    public function packages()
+    {
+        $packages = $this->getDoctrine()->getRepository('App:Package')->findBy([], ['aport' => 'ASC']);
+        return $this->render('status/packages.html.twig', [
+            'packages' => $packages,
         ]);
     }
 
