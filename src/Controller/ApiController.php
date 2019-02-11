@@ -122,7 +122,7 @@ class ApiController extends Controller
                     $existing = $this->getDoctrine()->getRepository('App:PackageDependency')->findOneBy(['package' => $task, 'requirement' => $dependendPackage]);
                     if (!$existing) {
                         $queueDependency = new PackageDependency();
-                        $queueDependency->setPackage($task);
+                        $queueDependency->setPackage($task->getPackage());
                         $queueDependency->setRequirement($dependendPackage);
                         $manager->persist($queueDependency);
                     }
