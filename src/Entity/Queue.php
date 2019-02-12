@@ -153,7 +153,15 @@ class Queue
     public function getTimeSpent()
     {
         if ($this->timeSpent > 0) {
-            return DateInterval::createFromDateString($this->timeSpent . ' seconds');
+            $seconds = $this->timeSpent;
+            $result = DateInterval::createFromDateString($this->timeSpent . ' seconds');
+            $result->h = floor($seconds / 60 / 60);
+            $seconds -= $result->h * 3600;
+            $result->i = floor($seconds / 60);
+            $seconds -= $result->i * 60;
+            $result->s = $seconds;
+
+            return $result;
         } else {
             return DateInterval::createFromDateString('0 seconds');
         }
