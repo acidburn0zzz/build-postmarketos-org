@@ -206,7 +206,7 @@ class Package
 
     public function getAverageBuildTime()
     {
-        if ($this->timesBuilt > 1) {
+        if ($this->timesBuilt > 0) {
             $seconds = $this->timeSpent / $this->timesBuilt;
             $result = DateInterval::createFromDateString($this->timeSpent . ' seconds');
             $result->h = floor($seconds / 60 / 60);
