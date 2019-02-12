@@ -50,6 +50,12 @@ class Queue
      */
     private $commit;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $timeSpent;
+
+
     public function getId()
     {
         return $this->id;
@@ -132,5 +138,21 @@ class Queue
         $this->status = $status;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTimeSpent()
+    {
+        return $this->timeSpent;
+    }
+
+    /**
+     * @param mixed $timeSpent
+     */
+    public function setTimeSpent($timeSpent)
+    {
+        $this->timeSpent = $timeSpent;
     }
 }

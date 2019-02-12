@@ -43,6 +43,17 @@ class Package
      */
     private $versions;
 
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $timeSpent;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $timesBuilt;
+
+
     public function __construct()
     {
         $this->packageDependencies = new ArrayCollection();
@@ -95,7 +106,6 @@ class Package
     {
         $this->arch = $arch;
     }
-
 
 
     /**
@@ -159,5 +169,42 @@ class Package
     public function setVersions($versions)
     {
         $this->versions = $versions;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTimeSpent()
+    {
+        return $this->timeSpent;
+    }
+
+    /**
+     * @param mixed $timeSpent
+     */
+    public function setTimeSpent($timeSpent)
+    {
+        $this->timeSpent = $timeSpent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTimesBuilt()
+    {
+        return $this->timesBuilt;
+    }
+
+    /**
+     * @param mixed $timesBuilt
+     */
+    public function setTimesBuilt($timesBuilt)
+    {
+        $this->timesBuilt = $timesBuilt;
+    }
+
+    public function getAverageBuildTime()
+    {
+        return $this->timeSpent / $this->timesBuilt;
     }
 }
