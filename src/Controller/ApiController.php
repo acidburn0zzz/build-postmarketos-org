@@ -401,7 +401,7 @@ class ApiController extends Controller
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $task = $queue->findOneBy(['srhtId' => (int)$payload['id']]);
         if ($task) {
-            $this->get('web_log')->write('failure-hook done', 'marking ' . $task->getAport() . ' as failed');
+            $this->get('web_log')->write('failure-hook done', 'marking ' . $task->getPackage()->getAport() . ' as failed');
             $task->setStatus('FAILED');
             $manager->persist($task);
             $manager->flush();
