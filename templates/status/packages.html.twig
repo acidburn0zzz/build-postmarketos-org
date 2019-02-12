@@ -20,7 +20,7 @@
                 <td>{{ package.arch }}</td>
                 <td>
                     {% if package.averageBuildTime is not null %}
-                        {{ package.averageBuildTime|date("%i'%s''") }}
+                        {{ package.averageBuildTime|date }}
                     {% else %}
                         -
                     {% endif %}
