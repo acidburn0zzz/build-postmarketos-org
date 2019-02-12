@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -54,6 +55,12 @@ class Queue
      * @ORM\Column(type="integer", nullable=true)
      */
     private $timeSpent;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $timeStarted;
+
 
 
     public function getId()
@@ -154,5 +161,21 @@ class Queue
     public function setTimeSpent($timeSpent)
     {
         $this->timeSpent = $timeSpent;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getTimeStarted()
+    {
+        return $this->timeStarted;
+    }
+
+    /**
+     * @param datetime $timeStarted
+     */
+    public function setTimeStarted($timeStarted)
+    {
+        $this->timeStarted = $timeStarted;
     }
 }
