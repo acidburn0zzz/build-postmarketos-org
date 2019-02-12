@@ -180,6 +180,19 @@ class ApiController extends Controller
             throw new \Exception('Package version "' . $id . '" not found in the database');
         }
 
+        // Update time spent
+        $started = $task->getTimeStarted();
+        $diff = new \DateTime() - $started;
+        $secs = ((($diff->format("%a") * 24) + $diff->format("%H")) * 60 +
+                $diff->format("%i")) * 60 + $diff->format("%s");
+        $task->setTimeSpent($secs);
+        $manager->persist($task);
+
+        // Update package average
+        $package->setTimeSpent($package->getTimeSpent() + $secs);
+        $package->setTimesBuilt($package->getTimesBuilt() + 1);
+        $manager->persist($package);
+
         $branch = $task->getCommit()->getBranch();
 
         $apks = $request->files->get('file');
