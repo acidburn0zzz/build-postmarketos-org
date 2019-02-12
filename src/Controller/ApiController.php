@@ -437,6 +437,7 @@ class ApiController extends Controller
 
             $id = $srht->SubmitBuildJob($commit, $package->getAport(), $package->getArch(), $jobToken);
             $srht->StartJob($id);
+            $next->setTimeStarted(new \DateTime());
             $next->setStatus('BUILDING');
             $next->setSrhtId($id);
             $manager->persist($next);
