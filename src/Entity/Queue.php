@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateInterval;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -152,9 +153,9 @@ class Queue
     public function getTimeSpent()
     {
         if ($this->timeSpent > 0) {
-            return new \DateInterval($this->timeSpent . ' seconds');
+            return DateInterval::createFromDateString($this->timeSpent . ' seconds');
         } else {
-            return new \DateInterval('0 seconds');
+            return DateInterval::createFromDateString('0 seconds');
         }
     }
 
