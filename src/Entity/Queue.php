@@ -151,7 +151,11 @@ class Queue
      */
     public function getTimeSpent()
     {
-        return new \DateInterval($this->timeSpent . ' seconds');
+        if ($this->timeSpent > 0) {
+            return new \DateInterval($this->timeSpent . ' seconds');
+        } else {
+            return new \DateInterval('0 seconds');
+        }
     }
 
     /**
