@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateInterval;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -205,6 +206,16 @@ class Package
 
     public function getAverageBuildTime()
     {
-        return new \DateInterval(($this->timeSpent / $this->timesBuilt) . ' seconds');
+        if ($this->timesBuilt > 1) {
+            $seconds = $this->timeSpent / $this->timesBuilt;
+            $result = DateInterval::createFromDateString($this->timeSpent . ' seconds');
+            $result->h = floor($seconds / 60 / 60);
+            $seconds -= $result->h * 3600;
+            $result->i = floor($seconds / 60);
+            $seconds -= $result->i * 60;
+            $result->s = $seconds;
+            return $result;
+        }
+        return null;
     }
 }

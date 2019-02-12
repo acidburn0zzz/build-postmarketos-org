@@ -64,7 +64,7 @@
                 <td>{{ job.pkgver }}-{{ job.pkgrel }}</td>
                 <td>{{ job.commit.branch }}</td>
                 <td>{{ job.package.arch }}</td>
-                <td>{{ job.timeSpent.format('%h:%i:%s') }}</td>
+                <td>{{ job.timeSpent | date('%hh %Im %Ss') }}</td>
                 <td>
                     <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}"
                        style="font-family: monospace;">
