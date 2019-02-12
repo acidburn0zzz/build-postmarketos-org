@@ -11,12 +11,14 @@
             <th>#</th>
             <th>name</th>
             <th>arch</th>
+            <th>Average build time</th>
         </tr>
         {% for package in packages %}
             <tr class="striped--near-white">
                 <td>{{ package.id }}</td>
                 <td>{{ package.aport }}</td>
                 <td>{{ package.arch }}</td>
+                <td>{{ package.averageBuildTime }}sec</td>
             </tr>
         {% endfor %}
     </table>

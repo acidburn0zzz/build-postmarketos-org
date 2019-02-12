@@ -52,6 +52,7 @@
             <th>pkgver</th>
             <th>branch</th>
             <th>arch</th>
+            <th>time</th>
             <th>commit</th>
             <th>sr.ht id</th>
             <th>status</th>
@@ -63,6 +64,7 @@
                 <td>{{ job.pkgver }}-{{ job.pkgrel }}</td>
                 <td>{{ job.commit.branch }}</td>
                 <td>{{ job.package.arch }}</td>
+                <td>{{ job.timeSpent }}sec</td>
                 <td>
                     <a href="https://gitlab.com/postmarketOS/pmaports/commit/{{ job.commit.ref }}"
                        style="font-family: monospace;">
