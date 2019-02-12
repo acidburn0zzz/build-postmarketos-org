@@ -181,10 +181,9 @@ class ApiController extends Controller
         }
 
         // Update time spent
-        $started = $task->getTimeStarted();
-        $diff = new \DateTime() - $started;
-        $secs = ((($diff->format("%a") * 24) + $diff->format("%H")) * 60 +
-                $diff->format("%i")) * 60 + $diff->format("%s");
+        $started = $task->getTimeStarted()->getTimestamp();
+        $finished = new \DateTime();
+        $secs = $finished->getTimestamp() - $started;
         $task->setTimeSpent($secs);
         $manager->persist($task);
 
