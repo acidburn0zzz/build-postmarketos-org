@@ -18,7 +18,13 @@
                 <td>{{ package.id }}</td>
                 <td>{{ package.aport }}</td>
                 <td>{{ package.arch }}</td>
-                <td>{{ package.averageBuildTime }}sec</td>
+                <td>
+                    {% if package.averageBuildTime is not null %}
+                        {{ package.averageBuildTime|date("%i'%s''") }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>

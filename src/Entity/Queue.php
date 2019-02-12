@@ -62,7 +62,6 @@ class Queue
     private $timeStarted;
 
 
-
     public function getId()
     {
         return $this->id;
@@ -152,7 +151,7 @@ class Queue
      */
     public function getTimeSpent()
     {
-        return $this->timeSpent;
+        return new \DateInterval($this->timeSpent . ' seconds');
     }
 
     /**

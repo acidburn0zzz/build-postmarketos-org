@@ -205,6 +205,6 @@ class Package
 
     public function getAverageBuildTime()
     {
-        return $this->timeSpent / $this->timesBuilt;
+        return new \DateInterval(($this->timeSpent / $this->timesBuilt) . ' seconds');
     }
 }
