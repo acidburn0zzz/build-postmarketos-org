@@ -147,7 +147,7 @@ class Queue
     }
 
     /**
-     * @return mixed
+     * @return \DateInterval
      */
     public function getTimeSpent()
     {
