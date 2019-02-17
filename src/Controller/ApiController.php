@@ -232,7 +232,7 @@ class ApiController extends Controller
         $done = 0;
         $total = count($commitTasks);
         foreach ($commitTasks as $commitTask) {
-            if ($commitTask->getStatus() == 'DONE') {
+            if ($commitTask->getStatus() == 'DONE' || $commitTask->getStatus() == 'FAILED') {
                 $done++;
             }
         }
