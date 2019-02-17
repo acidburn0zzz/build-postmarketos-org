@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Commit;
+use App\Entity\Package;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -65,12 +67,14 @@ class StatusController extends Controller
     {
         $commits = $this->getDoctrine()->getRepository('App:Commit');
         $commit = $commits->findOneBy(['ref' => $ref]);
-        $packages = $commit->getPackages();
+        /** @var Commit $commit */
+        $tasks = $commit->getTasks();
 
         $graph = 'digraph g {' . PHP_EOL . '    rankdir=LR;' . PHP_EOL;
-        foreach ($packages as $package) {
-            $label = $package->getAport() . ' ' . $package->getPkgver() . '-r' . $package->getPkgrel();
-            switch ($package->getStatus()) {
+        foreach ($tasks as $task) {
+            $package = $task->getPackage();
+            $label = $package->getAport() . ' ' . $task->getPkgver() . '-r' . $task->getPkgrel();
+            switch ($task->getStatus()) {
                 case "WAITING":
                     $color = 'azure1';
                     break;
@@ -90,7 +94,8 @@ class StatusController extends Controller
             $graph .= '    "' . $package->getAport() . '"[label="' . $label . '" fillcolor=' . $color . ' style=filled]' . PHP_EOL;
         }
         $graph .= PHP_EOL . PHP_EOL;
-        foreach ($packages as $package) {
+        foreach ($tasks as $task) {
+            $package = $task->getPackage();
             foreach ($package->getQueueDependencies() as $dependency) {
                 $graph .= '    "' . $dependency->getRequirement()->getAport() . '" -> "' . $package->getAport() . '"' . PHP_EOL;
             }

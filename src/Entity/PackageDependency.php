@@ -45,6 +45,9 @@ class PackageDependency
         return $this;
     }
 
+    /**
+     * @return Package
+     */
     public function getRequirement()
     {
         return $this->requirement;
