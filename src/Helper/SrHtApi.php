@@ -87,6 +87,7 @@ class SrHtApi
                 'cd ~/.local/var/pmbootstrap/config_abuild/',
                 'cp ~/.secrets/build@postmarketos.org.priv .',
                 'openssl rsa -in build@postmarketos.org.priv -pubout -out build@postmarketos.org.pub',
+                'cp build@postmarketos.org.pub /tmp/pmbootstrap/pmb/data/keys/',
                 'echo PACKAGER_PRIVKEY="/home/pmos/.abuild/build@postmarketos.org.priv" > abuild.conf'
             ],
             [

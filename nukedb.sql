@@ -3,4 +3,4 @@ DROP TABLE package_dependency;
 DROP TABLE queue;
 DROP TABLE package;
 DROP TABLE `commit`;
-DROP TABLE migration_version;
+DROP TABLE migration_versions;
