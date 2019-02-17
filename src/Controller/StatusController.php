@@ -70,44 +70,56 @@ class StatusController extends Controller
         /** @var Commit $commit */
         $tasks = $commit->getTasks();
 
-        $graph = 'digraph g {' . PHP_EOL . '    rankdir=LR;' . PHP_EOL;
+        $cacheKey = $commit->getRef();
+        $hash = '';
         foreach ($tasks as $task) {
-            $package = $task->getPackage();
-            $label = $package->getAport() . ' ' . $task->getPkgver() . '-r' . $task->getPkgrel();
-            switch ($task->getStatus()) {
-                case "WAITING":
-                    $color = 'azure1';
-                    break;
-                case "BUILDING":
-                    $color = 'azure3';
-                    break;
-                case "FAILED":
-                    $color = 'tomato';
-                    break;
-                case "DONE":
-                    $color = 'darkolivegreen1';
-                    break;
-                case "SUPERSEDED":
-                    $color = 'blanchedalmond'; //because why not
-                    break;
-            }
-            $graph .= '    "' . $package->getAport() . '"[label="' . $label . '" fillcolor=' . $color . ' style=filled]' . PHP_EOL;
+            $hash .= $task->getStatus();
         }
-        $graph .= PHP_EOL . PHP_EOL;
-        foreach ($tasks as $task) {
-            $package = $task->getPackage();
-            foreach ($package->getQueueDependencies() as $dependency) {
-                $graph .= '    "' . $dependency->getRequirement()->getAport() . '" -> "' . $package->getAport() . '"' . PHP_EOL;
+        $cacheKey .= '-' . md5($hash);
+
+        $outFile = $this->getParameter('kernel.project_dir') . '/public/commit/' . $cacheKey . '.png';
+
+        if (!file_exists($outFile)) {
+
+            $graph = 'digraph g {' . PHP_EOL . '    rankdir=LR;' . PHP_EOL;
+            foreach ($tasks as $task) {
+                $package = $task->getPackage();
+                $label = $package->getAport() . ' ' . $task->getPkgver() . '-r' . $task->getPkgrel();
+                switch ($task->getStatus()) {
+                    case "WAITING":
+                        $color = 'azure1';
+                        break;
+                    case "BUILDING":
+                        $color = 'azure3';
+                        break;
+                    case "FAILED":
+                        $color = 'tomato';
+                        break;
+                    case "DONE":
+                        $color = 'darkolivegreen1';
+                        break;
+                    case "SUPERSEDED":
+                        $color = 'blanchedalmond'; //because why not
+                        break;
+                }
+                $graph .= '    "' . $package->getAport() . '"[label="' . $label . '" fillcolor=' . $color . ' style=filled]' . PHP_EOL;
             }
+            $graph .= PHP_EOL . PHP_EOL;
+            foreach ($tasks as $task) {
+                $package = $task->getPackage();
+                foreach ($package->getQueueDependencies() as $dependency) {
+                    $graph .= '    "' . $dependency->getRequirement()->getAport() . '" -> "' . $package->getAport() . '"' . PHP_EOL;
+                }
+            }
+            $graph .= ' }';
+
+            $inFile = $this->getParameter('kernel.project_dir') . '/public/commit/' . $cacheKey . '.dot';
+            file_put_contents($inFile, $graph);
+            exec('dot "' . $inFile . '" -o "' . $outFile . '" -Tpng');
         }
-        $graph .= ' }';
 
-        $inFile = $this->getParameter('kernel.project_dir') . '/public/commit/' . $ref . '.dot';
-        $outFile = $this->getParameter('kernel.project_dir') . '/public/commit/' . $ref . '.png';
-        file_put_contents($inFile, $graph);
-        exec('dot "' . $inFile . '" -o "' . $outFile . '" -Tpng');
 
-        return $this->render('status/commit.html.twig', ['ref' => $ref]);
+        return $this->render('status/commit.html.twig', ['ref' => $ref, 'key' => $cacheKey]);
     }
 
     /**
