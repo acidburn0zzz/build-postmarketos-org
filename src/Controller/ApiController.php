@@ -405,13 +405,24 @@ class ApiController extends Controller
 
         $this->get('web_log')->write('failure-hook ' . $state . ' received', $payload, true);
 
-        if ($state == 'success') {
-            return new JsonResponse(['ok, no failure then']);
-        }
-
         $manager = $this->getDoctrine()->getManager();
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $task = $queue->findOneBy(['srhtId' => (int)$payload['id']]);
+
+        if ($state == 'success') {
+            // Check that build result has been uploaded, just to make sure...
+            if ($task->getStatus() != 'DONE') {
+                // sr.ht had a oopsie
+                $task->setStatus('WAITING');
+                $manager->persist($task);
+                $manager->flush();
+                $this->startNextBuild();
+                return new JsonResponse(['incorrect webhook received']);
+            }
+
+            return new JsonResponse(['ok, no failure then']);
+        }
+
         if ($task) {
             $this->get('web_log')->write('failure-hook done', 'marking ' . $task->getPackage()->getAport() . ' as failed');
             $task->setStatus('FAILED');
