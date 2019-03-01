@@ -203,10 +203,11 @@ class SrHtApi
             throw new \Exception($response->body);
         }
 
+        $this->logger->debug($response->body);
+
         $response = json_decode($response->body, true);
         $job_id = $response['id'];
 
-        $this->logger->debug($response);
         return $job_id;
     }
 }
