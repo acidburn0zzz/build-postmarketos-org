@@ -63,7 +63,7 @@ class ApiController extends Controller
     public function task_submit(Request $request)
     {
         $token = $request->headers->get('X-Secret');
-        $commit = $request->headers->get('X-Commit');
+        $commit_str = $request->headers->get('X-Commit');
         $architecture = $request->headers->get('X-Arch');
 
         if (!$token) {
@@ -78,10 +78,10 @@ class ApiController extends Controller
 
         $manager = $this->getDoctrine()->getManager();
 
-        $commit = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
+        $commit = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit_str]);
 
         if (!$commit) {
-            throw new \Exception('Commit "' . $commit . '" not found in the database');
+            throw new \Exception('Commit "' . $commit_str . '" not found in the database');
         }
 
         if ($commit->getStatus() == 'INDEXING') {
