@@ -1,0 +1,9 @@
+test:phpcs:
+  image: phpts:latest
+  stage: test
+  script:
+    - php -v
+    - rm -rf composer.json composer.lock
+    - mv composer.phpcs.json composer.json
+    - composer install
+    - vendor/bin/phpcs --error-severity=1 --warning-severity=8 --extensions=php
