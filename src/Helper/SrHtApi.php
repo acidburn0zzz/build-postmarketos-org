@@ -65,7 +65,7 @@ class SrHtApi
     public function SubmitBuildJob(Commit $commit, $package, $arch, $id)
     {
         // TODO: This will break
-        $components = ['cross', 'device', 'firmware', 'hybris', 'kde', 'maemo', 'main', 'matchbox', 'modem', 'temp', 'unity8'];
+        $components = ['main'];
 
         $repositories = [];
         foreach ($components as $component) {
