@@ -62,15 +62,25 @@ class SrHtApi
         return $this->submitJob($commit, $tasks, [], $note);
     }
 
+    private function repositoryExists($repo, $component, $arch)
+    {
+        $index = __DIR__ . '/../../public/' . $repo . '/master/' . $component . '/' . $arch . '/APKINDEX.tar.gz';
+        return file_exists($index);
+    }
+
     public function SubmitBuildJob(Commit $commit, $package, $arch, $id)
     {
         // TODO: This will break
-        $components = ['cross', 'device', 'firmware', 'hybris', 'kde', 'maemo', 'main', 'matchbox', 'modem', 'temp', 'unity8'];
+        $components = ['main'];
 
         $repositories = [];
         foreach ($components as $component) {
-            $repositories[] = 'https://build.postmarketos.org/repository/master/' . $component;
-            $repositories[] = 'https://build.postmarketos.org/offlinerepository/master/' . $component;
+            if ($this->repositoryExists('repository', $component, $arch)) {
+                $repositories[] = 'https://build.postmarketos.org/repository/master/' . $component;
+            }
+            if ($this->repositoryExists('offlinerepository', $component, $arch)) {
+                $repositories[] = 'https://build.postmarketos.org/offlinerepository/master/' . $component;
+            }
         }
 
         $repositories = '-mp="' . implode('" -mp="', $repositories) . '"';
