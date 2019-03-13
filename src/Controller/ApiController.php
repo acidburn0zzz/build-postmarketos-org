@@ -108,7 +108,7 @@ class ApiController extends Controller
         foreach ($payload as $package) {
             list($pkgver, $pkgrel) = explode('-', $package['version'], 2);
             $pkgrel = (int)str_replace('r', '', $pkgrel);
-            $component = $package['repo'];
+            $component = 'main';
             $tasks[$package['pkgname']] = $this->createOrUpdatePackage($package['pkgname'], $pkgver, $pkgrel, $commit, $architecture, $component);
         }
 
