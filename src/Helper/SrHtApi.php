@@ -198,7 +198,7 @@ class SrHtApi
             "execute" => $execute
         ];
 
-        $apiUrl = 'http://builds.sr.ht/api/jobs';
+        $apiUrl = 'https://builds.sr.ht/api/jobs';
 
         $this->logger->info('Sending POST request to "' . $apiUrl . '"');
         $this->logger->info('Using token ' . $this->authorizationToken);
