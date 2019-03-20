@@ -103,7 +103,7 @@ class SrHtApi
             [
                 'build',
                 'cd pmaports/.sr.ht',
-                'pmbootstrap --details-to-stdout --aports /home/build/pmaports ' . $repositories . ' -t 900 build --force --strict --arch=' . $arch . ' ' . $package
+                'pmbootstrap --details-to-stdout --aports /home/build/pmaports ' . $repositories . ' -t 900 build --no-depends --force --strict --arch=' . $arch . ' ' . $package
             ],
             [
                 'submit',
