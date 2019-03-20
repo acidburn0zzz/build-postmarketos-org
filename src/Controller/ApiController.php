@@ -275,7 +275,7 @@ class ApiController extends Controller
         $offlineRepository = $this->getParameter('kernel.project_dir') . '/public/offlinerepository/' . $commit->getBranch() . '/' . $component . '/' . $arch;
 
         $apkindex = $request->files->get('file');
-        $apkindex->move($offlineRepository, '/APKINDEX.tar.gz');
+        $apkindex[0]->move($offlineRepository, '/APKINDEX.tar.gz');
 
         $manager = $this->getDoctrine()->getManager();
         $commit->setStatus('DONE');
