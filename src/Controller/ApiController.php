@@ -283,7 +283,8 @@ class ApiController extends Controller
 
 
         foreach (explode(',', $this->getParameter('rsync')) as $target) {
-            $this->rsync($offlineRepository, $target);
+            // TODO: Update repository format on mirrors for multiple components
+            $this->rsync($offlineRepository, $target . $arch . '/');
         }
 
         $manager = $this->getDoctrine()->getManager();
@@ -560,7 +561,6 @@ class ApiController extends Controller
         $command = [
             'rsync',
             '--links',
-            '--info=progress2',
             '--human-readable',
             '--recursive',
             '--size-only',
