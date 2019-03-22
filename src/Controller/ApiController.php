@@ -556,10 +556,12 @@ class ApiController extends Controller
             '--recursive',
             '--size-only',
             '--delete',
-            '-e "ssh -i ' . $this->getParameter('rsync_key') . '"',
-            $source . '/*',
-            $destination
         ];
+        if (strpos($destination, '@') !== false) {
+            $command[] = '-e "ssh -i ' . $this->getParameter('rsync_key') . '"';
+        }
+        $command[] = $source . '/*';
+        $command[] = $destination;
         $command = implode(" ", $command);
 
         $descriptors = [
