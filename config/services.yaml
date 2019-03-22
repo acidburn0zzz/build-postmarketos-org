@@ -5,7 +5,7 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    rsync: '%env(csv:RSYNC_TO)%'
+    rsync: '%env(RSYNC_TO)%'
     rsync_key: '%env(RSYNC_KEY)%'
 
 services:

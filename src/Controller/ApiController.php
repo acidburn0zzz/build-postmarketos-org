@@ -279,11 +279,10 @@ class ApiController extends Controller
 
         $this->get('web_log')->write('signed-submit', [
             'msg' => 'Received signed submit',
-            'rsync' => $this->getParameter('rsync')
         ], true);
 
 
-        foreach ($this->getParameter('rsync') as $target) {
+        foreach (explode(',', $this->getParameter('rsync')) as $target) {
             $this->rsync($offlineRepository, $target);
         }
 
@@ -418,6 +417,10 @@ class ApiController extends Controller
         $manager = $this->getDoctrine()->getManager();
         $queue = $this->getDoctrine()->getRepository('App:Queue');
         $task = $queue->findOneBy(['srhtId' => (int)$payload['id']]);
+
+        if (!$task) {
+            return;
+        }
 
         if ($state == 'success') {
             // Check that build result has been uploaded, just to make sure...
