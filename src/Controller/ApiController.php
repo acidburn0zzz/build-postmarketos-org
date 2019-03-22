@@ -596,10 +596,7 @@ class ApiController extends Controller
 
         }
 
-        $this->get('web_log')->write('rsync', [
-            'stdout' => $output,
-            'stderr' => $errors,
-            'return' => $return_value,
-        ]);
+        $log = $command . PHP_EOL . PHP_EOL . $output . PHP_EOL . $errors;
+        $this->get('web_log')->write('rsync', $log);
     }
 }
