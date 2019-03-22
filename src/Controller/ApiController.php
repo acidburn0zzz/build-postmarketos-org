@@ -564,6 +564,7 @@ class ApiController extends Controller
             '--human-readable',
             '--recursive',
             '--size-only',
+            '--info=DEL,NAME,SKIP,STATS',
             '--delete',
         ];
         if (strpos($destination, '@') !== false) {
