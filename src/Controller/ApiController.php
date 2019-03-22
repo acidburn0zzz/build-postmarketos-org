@@ -277,6 +277,10 @@ class ApiController extends Controller
         $apkindex = $request->files->get('file');
         $apkindex[0]->move($offlineRepository, '/APKINDEX.tar.gz');
 
+        foreach ($this->getParameter('rsync') as $target) {
+            $this->rsync($offlineRepository, $target);
+        }
+
         $manager = $this->getDoctrine()->getManager();
         $commit->setStatus('DONE');
         $manager->persist($commit);
@@ -540,5 +544,45 @@ class ApiController extends Controller
 
         $finalIndex = str_replace('.tar.gz_', '.tar.gz', $index);
         rename($index, $finalIndex);
+    }
+
+    private function rsync($source, $destination)
+    {
+        $command = [
+            'rsync',
+            '--links',
+            '--info=progress2',
+            '--human-readable',
+            '--recursive',
+            '--size-only',
+            '--delete',
+            '-e "ssh -i ' . $this->getParameter('rsync_key') . '"',
+            $source . '/*',
+            $destination
+        ];
+        $command = implode(" ", $command);
+
+        $descriptors = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w']
+        ];
+
+        $p = proc_open($command, $descriptors, $pipes);
+        if (is_resource($p)) {
+            // Close stdin
+            fclose($pipes[0]);
+
+            // Get output
+            $output = stream_get_contents($pipes[1]);
+            fclose($pipes[1]);
+
+            // Get stderr
+            $errors = stream_get_contents($pipes[2]);
+            fclose($pipes[2]);
+
+            $return_value = proc_close($p);
+        }
+
     }
 }
