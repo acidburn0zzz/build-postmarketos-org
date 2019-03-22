@@ -277,6 +277,12 @@ class ApiController extends Controller
         $apkindex = $request->files->get('file');
         $apkindex[0]->move($offlineRepository, '/APKINDEX.tar.gz');
 
+        $this->get('web_log')->write('signed-submit', [
+            'msg' => 'Received signed submit',
+            'rsync' => $this->getParameter('rsync')
+        ], true);
+
+
         foreach ($this->getParameter('rsync') as $target) {
             $this->rsync($offlineRepository, $target);
         }
