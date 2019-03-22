@@ -584,7 +584,13 @@ class ApiController extends Controller
             fclose($pipes[2]);
 
             $return_value = proc_close($p);
+
         }
 
+        $this->get('web_log')->write('rsync', [
+            'stdout' => $output,
+            'stderr' => $errors,
+            'return' => $return_value,
+        ]);
     }
 }
