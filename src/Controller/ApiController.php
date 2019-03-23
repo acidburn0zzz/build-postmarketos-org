@@ -284,7 +284,7 @@ class ApiController extends Controller
 
         foreach (explode(',', $this->getParameter('rsync')) as $target) {
             // TODO: Update repository format on mirrors for multiple components
-            $this->rsync($offlineRepository, $target . $arch . '/');
+            $this->rsync($offlineRepository, $target . 'postmarketos/' . $component . '/' . $arch . '/');
         }
 
         $manager = $this->getDoctrine()->getManager();
