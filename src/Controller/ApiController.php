@@ -417,10 +417,19 @@ class ApiController extends Controller
 
         $manager = $this->getDoctrine()->getManager();
         $queue = $this->getDoctrine()->getRepository('App:Queue');
-        $task = $queue->findOneBy(['srhtId' => (int)$payload['id']]);
+
+        // Allow resubmissions to be linked back to the original build by
+        // setting the note to "resubmission,[id]"
+        $task_id = (int)$payload['id'];
+        if (strpos($payload['note'], 'resubmission,') === 0) {
+            $part = explode(',', $payload['note'], 2);
+            $task_id = (int)$part[1];
+        }
+
+        $task = $queue->findOneBy(['srhtId' => $task_id]);
 
         if (!$task) {
-            return new Response('failure-hook: No task exists with ID "' . $payload['id'] . '"', 400);
+            return new Response('failure-hook: No task exists with ID "' . $task_id . '"', 400);
         }
 
         if ($state == 'success') {
