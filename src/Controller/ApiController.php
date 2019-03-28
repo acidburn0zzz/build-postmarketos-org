@@ -229,7 +229,7 @@ class ApiController extends Controller
 
         // Check if this completes a commit
         $commitRow = $task->getCommit();
-        if ($commit->getStatus() == "BUILDING") {
+        if ($commitRow->getStatus() == "BUILDING") {
             $commitTasks = $commitRow->getTasks();
             $done = 0;
             $total = count($commitTasks);
