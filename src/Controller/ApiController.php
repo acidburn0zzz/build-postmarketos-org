@@ -244,8 +244,8 @@ class ApiController extends Controller
             }
             $manager->persist($commitRow);
 
-            $manager->flush();
         }
+        $manager->flush();
 
         $this->startNextBuild();
 
