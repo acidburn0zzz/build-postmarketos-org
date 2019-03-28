@@ -440,10 +440,10 @@ class ApiController extends Controller
                 $manager->persist($task);
                 $manager->flush();
                 $this->startNextBuild();
-                return new JsonResponse(['incorrect webhook received']);
-            }
+                return new Response('failure-hook: Something impossible happened', 200);
 
-            return new JsonResponse(['ok, no failure then']);
+            }
+            return new Response('failure-hook: Actually sucess, carry on', 200);
         }
 
         if ($task) {
@@ -455,7 +455,7 @@ class ApiController extends Controller
             $this->get('web_log')->write('failure-hook failure', 'No queue task found for this job');
         }
         $this->startNextBuild();
-        return new JsonResponse(['Processed failure']);
+        return new Response('failure-hook: Marked "' . $task->getPackage()->getAport() . '" as failed.', 200);
     }
 
     private function startNextBuild()
