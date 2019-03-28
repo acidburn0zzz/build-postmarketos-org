@@ -224,7 +224,8 @@ class ApiController extends Controller
         $this->get('web_log')->write('package-submit received', [
             'commit' => $commit,
             'architecture' => $architecture,
-            'id' => $id
+            'id' => $id,
+            'task' => $task->getId()
         ]);
 
         // Check if this completes a commit
@@ -438,7 +439,7 @@ class ApiController extends Controller
             if ($task->getStatus() != 'DONE') {
                 // sr.ht had a oopsie
 
-                $message = 'Package ' . $task->getPackage()->getAport() . ' has been build but the status is ' . $task->getStatus();
+                $message = 'Package ' . $task->getPackage()->getAport() . ' has been build but the status for task ' . $task->getId() . ' is ' . $task->getStatus();
                 $this->get('web_log')->write('oopsie', $message);
 
                 $task->setStatus('WAITING');
