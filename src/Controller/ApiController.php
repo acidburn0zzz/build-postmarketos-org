@@ -437,6 +437,10 @@ class ApiController extends Controller
             // Check that build result has been uploaded, just to make sure...
             if ($task->getStatus() != 'DONE') {
                 // sr.ht had a oopsie
+
+                $message = 'Package ' . $task->getPackage()->getAport() . ' has been build but the status is ' . $task->getStatus();
+                $this->get('web_log')->write('oopsie', $message);
+
                 $task->setStatus('WAITING');
                 $manager->persist($task);
                 $manager->flush();
