@@ -420,7 +420,7 @@ class ApiController extends Controller
         $task = $queue->findOneBy(['srhtId' => (int)$payload['id']]);
 
         if (!$task) {
-            return;
+            return new Response('failure-hook: No task exists with ID "' . $payload['id'] . '"', 400);
         }
 
         if ($state == 'success') {
