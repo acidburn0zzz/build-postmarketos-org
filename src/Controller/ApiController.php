@@ -170,11 +170,14 @@ class ApiController extends Controller
             throw new \Exception('Package "' . $pkgname . '" not found in the database');
         }
 
+        $commitRow = $this->getDoctrine()->getRepository('App:Commit')->findOneBy(['ref' => $commit]);
+
         $task = $this->getDoctrine()->getRepository('App:Queue')->findOneBy([
             'package' => $package,
             'pkgver' => $pkgver,
             'pkgrel' => $pkgrel,
-        ]);
+            'commit' => $commitRow
+        ], ['id' => 'DESC']);
 
         if (!$task) {
             throw new \Exception('Package version "' . $id . '" not found in the database');
@@ -229,7 +232,6 @@ class ApiController extends Controller
         ]);
 
         // Check if this completes a commit
-        $commitRow = $task->getCommit();
         if ($commitRow->getStatus() == "BUILDING") {
             $commitTasks = $commitRow->getTasks();
             $done = 0;
