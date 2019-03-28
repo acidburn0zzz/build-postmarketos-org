@@ -219,6 +219,7 @@ class ApiController extends Controller
 
         $task->setStatus('DONE');
         $manager->persist($task);
+        $manager->flush();
 
         $this->get('web_log')->write('package-submit received', [
             'commit' => $commit,
@@ -228,23 +229,23 @@ class ApiController extends Controller
 
         // Check if this completes a commit
         $commitRow = $task->getCommit();
-        $commitTasks = $commitRow->getTasks();
-        $done = 0;
-        $total = count($commitTasks);
-        foreach ($commitTasks as $commitTask) {
-            if ($commitTask->getStatus() == 'DONE' || $commitTask->getStatus() == 'FAILED') {
-                $done++;
+        if ($commit->getStatus() == "BUILDING") {
+            $commitTasks = $commitRow->getTasks();
+            $done = 0;
+            $total = count($commitTasks);
+            foreach ($commitTasks as $commitTask) {
+                if ($commitTask->getStatus() == 'DONE' || $commitTask->getStatus() == 'FAILED') {
+                    $done++;
+                }
             }
-        }
-        if ($done == $total) {
-            $commitRow->setStatus('SIGNING');
-            $this->onCommitFinished($commitRow, $branch, $architecture);
-        } else {
-            $commitRow->setStatus('BUILDING [' . $done . '/' . $total . ']');
-        }
-        $manager->persist($commitRow);
+            if ($done == $total) {
+                $commitRow->setStatus('SIGNING');
+                $this->onCommitFinished($commitRow, $branch, $architecture);
+            }
+            $manager->persist($commitRow);
 
-        $manager->flush();
+            $manager->flush();
+        }
 
         $this->startNextBuild();
 
