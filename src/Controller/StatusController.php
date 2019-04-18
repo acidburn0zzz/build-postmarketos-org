@@ -21,7 +21,8 @@ class StatusController extends Controller
         $done = $queue->findBy(['status' => ['DONE', 'FAILED', 'SUPERSEDED']], ['id' => 'DESC'], 50);
         return $this->render('status/queue.html.twig', [
             'queued' => $queued,
-            'done' => $done
+            'done' => $done,
+            'srht_namespace' => $this->getParameter('srht_namespace'),
         ]);
     }
 

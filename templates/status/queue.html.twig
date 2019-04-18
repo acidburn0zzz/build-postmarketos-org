@@ -32,7 +32,7 @@
                 </td>
                 <td>
                     {% if job.srhtId is not null %}
-                        <a href="https://builds.sr.ht/~pmos/job/{{ job.srhtId }}">
+                        <a href="https://builds.sr.ht/{{srht_namespace}}/job/{{ job.srhtId }}">
                             {{ job.srhtId }}
                         </a>
                     {% else %}
