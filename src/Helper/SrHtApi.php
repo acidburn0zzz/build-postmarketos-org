@@ -24,7 +24,7 @@ class SrHtApi
 
     public function SubmitIndexJob(Commit $commit)
     {
-        $repoRoot = __DIR__ . '/../../public/master/';
+        $repoRoot = __DIR__ . '/../../public/repository/master/';
         $repositories = [];
         foreach (glob($repoRoot . '*') as $component) {
             $c = str_replace($repoRoot, '', $component);
