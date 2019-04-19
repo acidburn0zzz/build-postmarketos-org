@@ -3,9 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PackageDependencyRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PackageDependencyRepository",
+ *     uniqueConstraints={
+ *        @UniqueConstraint(name="edge_unique",
+ *            columns={"package", "requirement"})
+ *     }
+ * )
  */
 class PackageDependency
 {
