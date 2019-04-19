@@ -108,7 +108,7 @@ class SrHtApi
             [
                 'submit',
                 'cd pmaports/.sr.ht',
-                'python3 submit.py --id ' . $id . ' package-submit ~/.local/var/pmbootstrap/packages/' . $arch . '/' . $package . '-*-r*.apk'
+                'python3 submit.py --id ' . $id . ' package-submit ~/.local/var/pmbootstrap/packages/' . $arch . '/*.apk'
             ]
         ];
 
