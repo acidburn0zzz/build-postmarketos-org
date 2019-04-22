@@ -10,7 +10,8 @@ RUN apk --no-cache add \
 	php7-session \
 	php7-tokenizer \
 	php7-xml \
-	php7-xmlrpc
+	php7-xmlrpc \
+	php7-xmlwriter
 
 # Create user
 RUN adduser -D -s /bin/sh user users
