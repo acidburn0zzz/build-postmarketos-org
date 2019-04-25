@@ -4,11 +4,32 @@
 namespace App\Tests\Repository;
 
 use App\Repository\QueueRepository;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class QueueRepositoryTest extends TestCase
+class QueueRepositoryTest extends KernelTestCase
 {
-    public function testTestje(){
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
+    private $entityManager;
+
+    protected function setUp()
+    {
+        $kernel = self::bootKernel();
+        $this->entityManager = $kernel->getContainer()->get('doctrine')->getManager();
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        $this->entityManager->close();
+        $this->entityManager = null; // avoid memory leaks
+    }
+
+    public function testGetStartable()
+    {
         $this->assertEquals(1, 2);
     }
+
 }

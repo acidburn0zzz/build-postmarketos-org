@@ -33,6 +33,7 @@ test:phpunit:
     - cp .env.dist .env
     - composer install --dev
     - php bin/console doctrine:database:create --env=test --if-not-exists
-    - php bin/console doctrine:schema:create --env=test
+    - mysql -h mysql -ugitlab-ci -psecret your_db_name < tests/database.sql
+    - php bin/console doctrine:schema:update --force --env=test
     - composer global require "phpunit/phpunit=*"
     - ~/.composer/vendor/bin/phpunit --debug --coverage-text --colors=never
