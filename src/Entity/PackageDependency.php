@@ -6,10 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PackageDependencyRepository",
- *     uniqueConstraints={
+ * @ORM\Entity(repositoryClass="App\Repository\PackageDependencyRepository")
+ * @ORM\Table(uniqueConstraints={
  *        @UniqueConstraint(name="edge_unique",
- *            columns={"package", "requirement"})
+ *            columns={"package_id", "requirement_id"})
  *     }
  * )
  */

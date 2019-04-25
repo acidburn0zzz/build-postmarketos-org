@@ -1,0 +1,38 @@
+stages:
+  - test
+
+# Variables and root user used
+variables:
+  MYSQL_ROOT_PASSWORD: secret
+  MYSQL_USER: gitlab-ci
+  MYSQL_PASSWORD: secret
+  MYSQL_DATABASE: your_db_name
+  DATABASE_URL: mysql://gitlab-ci:secret@mysql/your_db_name
+  APP_ENV: test
+
+test:phpcs:
+  image: alpine:3.9
+  stage: test
+  when: manual
+  script:
+    - apk add php7 php7-ctype php7-pdo php7-pdo_mysql php7-xml php7-tokenizer php7-curl php7-dom php7-simplexml composer
+    - php -v
+    - composer install
+    - composer global require "squizlabs/php_codesniffer=*"
+    - ~/.composer/vendor/bin/phpcs src tests --error-severity=1 --warning-severity=8 --extensions=php
+
+test:phpunit:
+  image: alpine:3.9
+  stage: test
+  services:
+    - mysql:5
+  script:
+    - apk add php7 php7-ctype php7-pdo php7-pdo_mysql php7-xml php7-tokenizer php7-curl php7-dom php7-simplexml composer
+    - php -v
+    - ping -c 3 mysql
+    - cp .env.dist .env
+    - composer install --dev
+    - php bin/console doctrine:database:create --env=test --if-not-exists
+    - php bin/console doctrine:schema:create --env=test
+    - composer global require "phpunit/phpunit=*"
+    - ~/.composer/vendor/bin/phpunit --debug --coverage-text --colors=never
