@@ -27,7 +27,7 @@ test:phpunit:
   services:
     - mysql:5
   script:
-    - apk add php7 php7-ctype php7-pdo php7-pdo_mysql php7-xml php7-tokenizer php7-curl php7-dom php7-simplexml composer
+    - apk add php7 php7-ctype php7-pdo php7-pdo_mysql php7-xml php7-tokenizer php7-curl php7-dom php7-simplexml composer mariadb-client
     - php -v
     - ping -c 3 mysql
     - cp .env.dist .env

@@ -29,7 +29,10 @@ class QueueRepositoryTest extends KernelTestCase
 
     public function testGetStartable()
     {
-        $this->assertEquals(1, 2);
+        $queue = $this->entityManager->getRepository('App:Queue');
+        $startable = $queue->getStartable();
+
+        $this->assertEquals($startable, []);
     }
 
 }
