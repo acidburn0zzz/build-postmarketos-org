@@ -23,7 +23,7 @@ class QueueRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $stmt = $conn->prepare('
-            SELECT GROUP_CONCAT(queue.id), GROUP_CONCAT(DISTINCT depend.status) as dependencies
+            SELECT GROUP_CONCAT(queue.id) as id, GROUP_CONCAT(DISTINCT depend.status) as dependencies
             FROM queue
                         LEFT JOIN package ON queue.package_id = package.id
                         LEFT JOIN package_dependency ON package.id = package_dependency.package_id
