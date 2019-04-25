@@ -37,7 +37,12 @@ class QueueRepository extends ServiceEntityRepository
         $result = [];
         foreach ($stmt->fetchAll() as $row) {
             if ($row['dependencies'] === null || $row['dependencies'] == 'DONE') {
-                $result[] = $row['id'];
+                if (strpos($row['id'], ',') !== false) {
+                    // Something has gone wrong
+                    $result[] = explode(',', $row['id'])[0];
+                } else {
+                    $result[] = $row['id'];
+                }
             }
         }
         return $this->findBy(['id' => $result]);
