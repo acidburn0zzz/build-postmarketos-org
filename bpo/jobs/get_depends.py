@@ -3,8 +3,8 @@
 import bpo.helpers.job
 
 
-def run(args):
-    bpo.helpers.job.run(args, "get_depends", {
+def run():
+    bpo.helpers.job.run("get_depends", {
         "hello": """
             echo "hello world"
             """,

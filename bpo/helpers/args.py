@@ -60,8 +60,8 @@ def args_api_init(args):
 
 
 def args_job_service_init(args):
-    module = "bpo.job_services." + args.job_service
-    setattr(args, "job_service_module", importlib.import_module(module))
+
+    setattr(args, "job_service_module", )
 
 
 def init():

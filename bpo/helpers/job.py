@@ -1,7 +1,21 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
-
+import importlib
 import logging
+
+from bpo.helpers import config
+
+jobservice = None
+
+
+def get_job_service():
+    global jobservice
+    if jobservice is None:
+        module = "bpo.job_services." + config.job_service
+        jsmodule = importlib.import_module(module)
+        jsclass = getattr(jsmodule, '{}JobService'.format(config.job_service.capitalize()))
+        jobservice = jsclass()
+    return jobservice
 
 
 def remove_additional_indent(script, spaces=12):
@@ -24,14 +38,15 @@ def remove_additional_indent(script, spaces=12):
     return ret
 
 
-def run(args, name, tasks):
-    logging.info("[" + args.job_service + "] Run job: " + name)
+def run(name, tasks):
+    logging.info("[" + config.job_service + "] Run job: " + name)
+    js = get_job_service()
 
     # TODO: some database foo, kill existing job etc.
     # TODO: add timeout for the job, and retries?
 
     # Job service specific setup task
-    script_setup = args.job_service_module.script_setup(args)
+    script_setup = js.script_setup()
     tasks_formatted = {"setup": remove_additional_indent(script_setup, 8)}
 
     # Format input tasks

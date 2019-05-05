@@ -4,8 +4,8 @@ import logging
 import sys
 
 from flask import Flask
-import bpo.helpers.config as config
-from bpo.component.gitlab import gitlab
+from bpo.helpers import config
+from bpo.api.gitlab import gitlab
 
 
 def logging_init():
