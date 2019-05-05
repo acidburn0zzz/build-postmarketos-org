@@ -5,7 +5,7 @@ import sys
 
 from flask import Flask
 from bpo.helpers import config
-import bpo.db
+import bpo.db as db
 from bpo.api.gitlab import gitlab
 from bpo.api.callback import callbacks
 

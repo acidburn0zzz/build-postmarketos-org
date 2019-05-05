@@ -54,4 +54,4 @@ def run(name, tasks):
         tasks_formatted[task] = remove_additional_indent(script)
 
     # Pass to bpo.job_services.(...).run_job()
-    args.job_service_module.run_job(args, name, tasks_formatted)
+    js.run_job(name, tasks_formatted)

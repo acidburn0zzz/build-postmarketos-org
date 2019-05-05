@@ -1,3 +1,4 @@
+import logging
 import sys
 
 host = "0.0.0.0"
@@ -29,7 +30,10 @@ def init():
 
     # Create argparser
     parser = argparse.ArgumentParser(description="postmarketOS build coordinator")
+
     parser.add_argument('config', help='Config file')
+    parser.add_argument('--verbose', '-v', help='Show more debug info', action='store_true')
+
     for key in self.__dict__:
         if not '__' in key and not key == 'init':
             parser.add_argument('--{}'.format(key.replace('_', '-')))
@@ -44,13 +48,16 @@ def init():
             prefix = '{}_'.format(section)
 
         for key, value in configfile.items(section):
-            real_key = prefix + key
-            setattr(self, real_key, value)
+            real_key = prefix + key.replace('-', '_')
+            if hasattr(self, real_key):
+                setattr(self, real_key, value)
+            else:
+                logging.warning('Unknown key in config file: {}.{}'.format(section, key))
 
     # Apply overrides from argparse
     for key in self.__dict__:
         if not '__' in key and not key == 'init':
-            ap_value = getattr(args, key)
+            ap_value = getattr(args, key.replace('-', '_'))
             if ap_value is not None:
                 setattr(self, key, ap_value)
 
@@ -60,3 +67,9 @@ def init():
             setattr(self, key, int(getattr(self, key)))
         if key in floats:
             setattr(self, key, float(getattr(self, key)))
+
+    if args.verbose:
+        print('Loaded config:')
+        for key in self.__dict__:
+            if not '__' in key and not key == 'init':
+                print('  {} = {}'.format(key, self.__dict__[key]))

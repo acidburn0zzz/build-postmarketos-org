@@ -13,7 +13,7 @@ _db = None
 
 def get_version():
     """ Get the current version from the database if possible, or return 0. """
-    cur = _db.db.cursor()
+    cur = _db.cursor()
     ret = 0
     try:
         cur.execute("SELECT `version` FROM `db_version` WHERE 1")

@@ -9,7 +9,7 @@ import bpo.helpers.queue
 callbacks = Blueprint('callbacks', __name__)
 
 
-@callbacks.route('/api/job_callback/get_depends')
+@callbacks.route('/api/job-callback/get_depends')
 @header_auth('X-BPO-Token', config.gitlab_secret)
 def after_get_depends():
     # Insert all depends, start next build
@@ -19,7 +19,7 @@ def after_get_depends():
     return 'warming up build servers...'
 
 
-@callbacks.route('/api/job_callback/build_package')
+@callbacks.route('/api/job-callback/build_package')
 @header_auth('X-BPO-Token', config.gitlab_secret)
 def after_build_package():
     # TODO:
@@ -37,7 +37,7 @@ def after_build_package():
     return 'package received, kthxbye'
 
 
-@callbacks.route('/api/job_callback/sign_index')
+@callbacks.route('/api/job-callback/sign_index')
 @header_auth('X-BPO-Token', config.gitlab_secret)
 def after_sign_index():
     # TODO:
