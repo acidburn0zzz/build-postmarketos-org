@@ -6,14 +6,17 @@ import os
 import sqlite3
 
 import bpo.helpers.constants
+from bpo.helpers import config
+
+_db = None
 
 
-def get_version(args):
+def get_version():
     """ Get the current version from the database if possible, or return 0. """
-    cur = args.db.cursor()
+    cur = _db.db.cursor()
     ret = 0
     try:
-        cur.execute("SELECT `version` FROM `db_version` WHERE 1");
+        cur.execute("SELECT `version` FROM `db_version` WHERE 1")
         row = cur.fetchone()
         if row:
             ret = row[0]
@@ -27,14 +30,14 @@ def get_version_from_scheme(path):
     return int(os.path.basename(path).split("-", 2)[0])
 
 
-def update_version(args):
+def update_version():
     """ Create or update the database scheme to the current one. """
     scheme_dir = bpo.helpers.constants.bpo_src + "/data/schemes"
     schemes = sorted(glob.glob(scheme_dir + "/*-*.sql"))
 
     # Check if update is needed
     highest = get_version_from_scheme(schemes[-1])
-    current = get_version(args)
+    current = get_version()
     if current == highest:
         return
 
@@ -50,25 +53,25 @@ def update_version(args):
         # Apply scheme
         with open(scheme, "r", encoding="utf-8") as handle:
             sql = handle.read()
-        args.db.cursor().executescript(sql)
-        args.db.commit()
+        _db.cursor().executescript(sql)
+        _db.commit()
 
         # Sanity check
-        current = get_version(args)
+        current = get_version()
         if current != scheme_version:
             raise RuntimeError("Failed to upgrade database to {}, current"
                                " version is {}, this file is probably broken:"
                                " {}".format(scheme_version, current, scheme))
 
 
-def insert_depends(args):
+def insert_depends():
     logging.info("STUB: db: insert_depends")
 
 
-def init(args):
-    """ Initialize db and add it to args (db.args). """
-    ret = sqlite3.connect(args.db_path)
-    setattr(args, "db", ret)
+def init():
+    """ Initialize db """
+    global _db
+    _db = sqlite3.connect(config.database)
 
     # Iteratively build up database layout
-    update_version(args)
+    update_version()

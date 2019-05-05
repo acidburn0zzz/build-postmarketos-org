@@ -2,7 +2,7 @@ import sys
 
 host = "0.0.0.0"
 port = 5000
-database = "database.sql"
+database = "bpo.db"
 gitlab_secret = None
 job_service = "local"
 

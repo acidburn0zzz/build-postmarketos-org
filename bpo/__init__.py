@@ -5,6 +5,7 @@ import sys
 
 from flask import Flask
 from bpo.helpers import config
+import bpo.db
 from bpo.api.gitlab import gitlab
 from bpo.api.callback import callbacks
 
@@ -18,6 +19,7 @@ def main():
     # Initialize logging, args, database
     logging_init()
     config.init()
+    db.init()
     app = Flask(__name__)
     app.register_blueprint(gitlab)
     app.register_blueprint(callbacks)
