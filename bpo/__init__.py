@@ -6,6 +6,7 @@ import sys
 from flask import Flask
 from bpo.helpers import config
 from bpo.api.gitlab import gitlab
+from bpo.api.callback import callbacks
 
 
 def logging_init():
@@ -19,6 +20,7 @@ def main():
     config.init()
     app = Flask(__name__)
     app.register_blueprint(gitlab)
+    app.register_blueprint(callbacks)
     app.run(host=config.host, port=config.port)
 
 
