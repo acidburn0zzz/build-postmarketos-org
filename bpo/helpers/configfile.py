@@ -7,7 +7,7 @@ import os
 import secrets
 import string
 
-import bpo.helpers.config
+import bpo.helpers.constants
 
 def load(args):
     """ Load existing config file into ConfigParser() or prepare new one. """
@@ -50,7 +50,7 @@ def token_hash_generate(args, config_key):
 def init(args):
     """ Load config file, and extend args. """
     cfg = load(args)
-    for key in bpo.helpers.config.configfile_keys:
+    for key in bpo.helpers.constants.configfile_keys:
         # Try to load from config file
         value = None
         if key in cfg["bpo"]:

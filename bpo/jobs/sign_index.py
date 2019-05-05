@@ -3,8 +3,8 @@
 import bpo.helpers.job
 
 
-def run(args, arch):
-    bpo.helpers.job.run(args, "sign_index", {
+def run(arch):
+    bpo.helpers.job.run("sign_index", {
         "sign": """
             echo "stub: sign stuff"
         """,

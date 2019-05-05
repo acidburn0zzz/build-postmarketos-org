@@ -4,9 +4,9 @@ import bpo.helpers.queue
 import bpo.helpers.job
 
 
-def run(args, queue_entry):
-    bpo.helpers.queue.set_status(args, queue_entry, "BUILDING")
-    bpo.helpers.job.run(args, "build_package", {
+def run(queue_entry):
+    bpo.helpers.queue.set_status(queue_entry, "BUILDING")
+    bpo.helpers.job.run("build_package", {
         "build": """
             echo "stub: build package"
         """,
