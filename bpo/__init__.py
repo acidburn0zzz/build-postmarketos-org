@@ -4,6 +4,7 @@ import logging
 import sys
 
 from flask import Flask
+import bpo.helpers.config as config
 from bpo.component.gitlab import gitlab
 
 
@@ -15,6 +16,7 @@ def logging_init():
 def main():
     # Initialize logging, args, database
     logging_init()
+    config.init()
     app = Flask(__name__)
     app.register_blueprint(gitlab)
 
