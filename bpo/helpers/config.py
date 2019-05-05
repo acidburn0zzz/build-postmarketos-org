@@ -18,4 +18,4 @@ def init():
     args = parser.parse_args()
     for key in self.__dict__:
         if not '__' in key and not key == 'init':
-            self[key] = args[key.replace('_', '-')]
+            setattr(self, key, getattr(args, key))
