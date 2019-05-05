@@ -6,14 +6,14 @@ import importlib
 import logging
 import os
 
-import bpo.helpers.config
+import bpo.helpers.constants
 import bpo.helpers.configfile
 import bpo.db
 
 
 def parse():
     """ Parse commandline arguments, sorted alphabetically. """
-    default_config_path = os.path.realpath(bpo.helpers.config.bpo_src +
+    default_config_path = os.path.realpath(bpo.helpers.constants.bpo_src +
                                            "/../.bpo.cfg")
 
     parser = argparse.ArgumentParser(prog="bpo")
@@ -30,7 +30,7 @@ def parse():
     # Job services (import each .py and add their parser)
     sub = parser.add_subparsers(title="job service", dest="job_service")
     sub.required = True
-    for path in glob.glob(bpo.helpers.config.bpo_src + "/job_services/*.py"):
+    for path in glob.glob(bpo.helpers.constants.bpo_src + "/job_services/*.py"):
         name = os.path.splitext(os.path.basename(path))[0]
         module = "bpo.job_services." + name
         importlib.import_module(module).add_args_parser(sub)
@@ -47,7 +47,7 @@ def args_api_init(args):
         of possible api-calls (not going the other way around of opening a file
         from the user-supplied path). """
     setattr(args, "api", {})
-    for path in glob.glob(bpo.helpers.config.bpo_src + "/api/*/*.py"):
+    for path in glob.glob(bpo.helpers.constants.bpo_src + "/api/*/*.py"):
         # Get dirname and filename without extension
         dirname = os.path.basename(os.path.dirname(path))
         name = os.path.splitext(os.path.basename(path))[0]

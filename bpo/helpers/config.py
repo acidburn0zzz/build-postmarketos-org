@@ -1,13 +1,20 @@
-# Copyright 2019 Oliver Smith
-# SPDX-License-Identifier: GPL-3.0-or-later
+import sys
 
-# Various configuration options, that the user shouldn't need to change (just
-# like pmb/config/__init__.py).
-import os
+host = "0.0.0.0"
+port = 1338
+database = "database.sql"
 
-bpo_src = os.path.normpath(os.path.realpath(__file__) + "/../..")
 
-build_device_architectures = ["x86_64"]
+def init():
+    import argparse
+    import configparser
 
-# Keys saved in config file (.bpo.cfg)
-configfile_keys = ["token_hash_push_hook_gitlab"]
+    parser = argparse.ArgumentParser(description="postmarketOS build coordinator")
+    self = sys.modules[__name__]
+    for key in self.__dict__:
+        if not '__' in key and not key == 'init':
+            parser.add_argument('--{}'.format(key), default=globals()[key])
+    args = parser.parse_args()
+    for key in self.__dict__:
+        if not '__' in key and not key == 'init':
+            self[key] = args[key]

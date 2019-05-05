@@ -5,7 +5,7 @@ import logging
 import os
 import sqlite3
 
-import bpo.helpers.config
+import bpo.helpers.constants
 
 
 def get_version(args):
@@ -29,7 +29,7 @@ def get_version_from_scheme(path):
 
 def update_version(args):
     """ Create or update the database scheme to the current one. """
-    scheme_dir = bpo.helpers.config.bpo_src + "/data/schemes"
+    scheme_dir = bpo.helpers.constants.bpo_src + "/data/schemes"
     schemes = sorted(glob.glob(scheme_dir + "/*-*.sql"))
 
     # Check if update is needed

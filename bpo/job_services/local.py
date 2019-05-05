@@ -5,12 +5,12 @@ import os
 import shlex
 import subprocess
 
-import bpo.helpers.config
+import bpo.helpers.constants
 
 
 def add_args_parser(parser):
     sub = parser.add_parser("local", help="run all jobs locally (debug)")
-    parent_dir = os.path.realpath(bpo.helpers.config.bpo_src + "/../..")
+    parent_dir = os.path.realpath(bpo.helpers.constants.bpo_src + "/../..")
 
     # --pmaports
     pma_default = parent_dir + "/pmaports"
@@ -26,7 +26,7 @@ def add_args_parser(parser):
                           " (default: " + pmb_default + ")")
 
     # --tempdir
-    tmp_default = os.path.realpath(bpo.helpers.config.bpo_src + "/../_job_tmp")
+    tmp_default = os.path.realpath(bpo.helpers.constants.bpo_src + "/../_job_tmp")
     sub.add_argument("--tempdir", default=tmp_default, dest="local_tempdir",
                      help="path to local temp dir for running jobs (will get"
                           " wiped; default: " + tmp_default + ")")

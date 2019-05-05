@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import logging
 import sys
-from .helpers import args as helpers_args
-from .helpers import httpd as helpers_httpd
+
+from flask import Flask
+from bpo.component.gitlab import gitlab
 
 
 def logging_init():
@@ -14,10 +15,8 @@ def logging_init():
 def main():
     # Initialize logging, args, database
     logging_init()
-    args = helpers_args.init()
-
-    # Run the webserver
-    helpers_httpd.run(args)
+    app = Flask(__name__)
+    app.register_blueprint(gitlab)
 
 
 if __name__ == "__main__":
