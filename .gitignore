@@ -1,6 +1,5 @@
 bpo.db
-.bpo.cfg
-bpo/bpo.db
+.tokens.cfg
 _job_tmp
 
 # The rest below is more or less from a default Python .gitignore

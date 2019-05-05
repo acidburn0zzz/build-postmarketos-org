@@ -3,7 +3,7 @@
 import importlib
 import logging
 
-from bpo.helpers import config
+import bpo.config.args
 
 jobservice = None
 
@@ -11,9 +11,10 @@ jobservice = None
 def get_job_service():
     global jobservice
     if jobservice is None:
-        module = "bpo.job_services." + config.job_service
+        name = bpo.config.args.job_service
+        module = "bpo.job_services." + name
         jsmodule = importlib.import_module(module)
-        jsclass = getattr(jsmodule, '{}JobService'.format(config.job_service.capitalize()))
+        jsclass = getattr(jsmodule, '{}JobService'.format(name.capitalize()))
         jobservice = jsclass()
     return jobservice
 
@@ -39,7 +40,7 @@ def remove_additional_indent(script, spaces=12):
 
 
 def run(name, tasks):
-    logging.info("[" + config.job_service + "] Run job: " + name)
+    logging.info("[" + bpo.config.args.job_service + "] Run job: " + name)
     js = get_job_service()
 
     # TODO: some database foo, kill existing job etc.
