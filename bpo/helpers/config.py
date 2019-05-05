@@ -1,24 +1,35 @@
 import sys
 
 host = "0.0.0.0"
-port = 1338
+port = 5000
 database = "database.sql"
 gitlab_secret = None
 job_service = "local"
 
-local_pmaports = a
-local_pmbootstrap = b
-local_tempdir = a
+local_pmaports = "pmaports"
+local_pmbootstrap = "pmbootstrap"
+local_tempdir = "temp"
 
 
 def init():
     import argparse
     import configparser
 
+    self = sys.modules[__name__]
+
+    # Save type info
+    ints = []
+    floats = []
+    for key in self.__dict__:
+        if not '__' in key and not key == 'init':
+            if isinstance(getattr(self, key), int):
+                ints.append(key)
+            elif isinstance(getattr(self, key), float):
+                floats.append(key)
+
     # Create argparser
     parser = argparse.ArgumentParser(description="postmarketOS build coordinator")
     parser.add_argument('config', help='Config file')
-    self = sys.modules[__name__]
     for key in self.__dict__:
         if not '__' in key and not key == 'init':
             parser.add_argument('--{}'.format(key.replace('_', '-')))
@@ -42,3 +53,10 @@ def init():
             ap_value = getattr(args, key)
             if ap_value is not None:
                 setattr(self, key, ap_value)
+
+    # Correct types
+    for key in self.__dict__:
+        if key in ints:
+            setattr(self, key, int(getattr(self, key)))
+        if key in floats:
+            setattr(self, key, float(getattr(self, key)))

@@ -19,7 +19,7 @@ def main():
     config.init()
     app = Flask(__name__)
     app.register_blueprint(gitlab)
-    app.run()
+    app.run(host=config.host, port=config.port)
 
 
 if __name__ == "__main__":
