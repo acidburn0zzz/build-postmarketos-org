@@ -6,7 +6,7 @@ gitlab = Blueprint('gitlab', __name__)
 
 
 @gitlab.route('/api/push-hook/gitlab', methods=['POST'])
-@header_auth('X-Gitlab-Token', 'gitlab_secret')
+@header_auth('X-Gitlab-Token', 'push_hook_gitlab')
 def gitlab_pull():
     payload = request.get_json()
     if payload["object_kind"] != "push":

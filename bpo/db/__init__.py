@@ -6,7 +6,7 @@ import os
 import sqlite3
 
 import bpo.helpers.constants
-from bpo.helpers import config
+import bpo.config.args
 
 _db = None
 
@@ -71,7 +71,7 @@ def insert_depends():
 def init():
     """ Initialize db """
     global _db
-    _db = sqlite3.connect(config.database)
+    _db = sqlite3.connect(bpo.config.args.db_path)
 
     # Iteratively build up database layout
     update_version()

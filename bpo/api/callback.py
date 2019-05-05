@@ -1,6 +1,6 @@
 from flask import Blueprint, request, abort
 from bpo.helpers.headerauth import header_auth
-import bpo.helpers.config as config
+import bpo.config.args
 import bpo.jobs.get_depends
 import bpo.db
 import bpo.helpers.repo
@@ -10,7 +10,7 @@ callbacks = Blueprint('callbacks', __name__)
 
 
 @callbacks.route('/api/job-callback/get_depends')
-@header_auth('X-BPO-Token', config.gitlab_secret)
+@header_auth('X-BPO-Token', "job_callback")
 def after_get_depends():
     # Insert all depends, start next build
     bpo.db.insert_depends()
@@ -20,7 +20,7 @@ def after_get_depends():
 
 
 @callbacks.route('/api/job-callback/build_package')
-@header_auth('X-BPO-Token', config.gitlab_secret)
+@header_auth('X-BPO-Token', "job_callback")
 def after_build_package():
     # TODO:
     # * save file to disk
@@ -38,7 +38,7 @@ def after_build_package():
 
 
 @callbacks.route('/api/job-callback/sign_index')
-@header_auth('X-BPO-Token', config.gitlab_secret)
+@header_auth('X-BPO-Token', "job_callback")
 def after_sign_index():
     # TODO:
     # * save index on disks
