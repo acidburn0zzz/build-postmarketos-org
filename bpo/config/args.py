@@ -18,27 +18,49 @@ local_pmbootstrap = "../pmbootstrap/pmbootstrap.py"
 local_tempdir = "_job_tmp"
 
 
-def init():
-    self = sys.modules[__name__]
+def job_service_local(parser):
+    sub = parser.add_parser("local", help="run all jobs locally (debug)")
 
+    sub.add_argument("--pmaports", dest="local_pmaports",
+                     help="path to local pmaports.git checkout, the job will"
+                          " run on a copy")
+    sub.add_argument("--pmbootstrap", dest="local_pmbootstrap",
+                     help="path to local pmbootstrap script to run")
+    sub.add_argument("--tempdir", dest="local_tempdir",
+                     help="path to local temp dir for running jobs (will get"
+                          " wiped!)")
+    return sub
+
+
+def init():
+    # Common arguments
     parser = argparse.ArgumentParser(description="postmarketOS build"
                                                  "coordinator", prog="bpo")
-    parser.add_argument("-b", "--bind", default="127.0.0.1", dest="host",
-                        help="host to listen on (default: 127.0.0.1)")
-    parser.add_argument("-t", "--tokens", default=self.tokens,
+    parser.add_argument("-b", "--bind", dest="host",
+                        help="host to listen on")
+    parser.add_argument("-t", "--tokens",
                         help="path to tokens file, where hashes of generated"
-                             " auth tokens are stored (default: " +
-                             self.tokens + ")")
-    parser.add_argument("-d", "--db-path", default=self.db_path,
-                        help="path to sqlite3 database (default: " +
-                             self.db_path + ")")
-    parser.add_argument("-p", "--port", default=self.port, type=int,
-                        help="port to listen on (default: " + str(self.port) +
-                             ")")
+                             " auth tokens are stored")
+    parser.add_argument("-d", "--db-path", help="path to sqlite3 database")
+    parser.add_argument("-p", "--port", type=int, help="port to listen on")
 
+    # Job service subparsers
+    job_service = parser.add_subparsers(title="job service",
+                                        dest="job_service")
+    job_service.required = True
+    subparsers = [job_service_local(job_service)]
+
+    # Set defaults from module attributes
+    self = sys.modules[__name__]
+    for subparser in [parser] + subparsers:
+        for action in subparser._actions:
+            if action.dest == "help" or not action.help:
+                continue
+            default = getattr(self, action.dest)
+            action.default = default
+            action.help += " (default: {})".format(default)
+
+    # Overwrite module attributes with result
     args = parser.parse_args()
-
-    # FIXME: add job_service and job_service args again!
-
     for arg in vars(args):
         setattr(self, arg, getattr(args, arg))
