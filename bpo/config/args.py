@@ -4,17 +4,18 @@ import argparse
 import logging
 import sys
 import os
-import bpo.helpers.constants
+import bpo.config.const
 
-tokens = os.path.realpath(bpo.helpers.constants.bpo_src + "/../.tokens.cfg")
+tokens = bpo.config.const.top_dir + "/.tokens.cfg"
 host = "127.0.0.1"
 port = 5000
 db_path = "bpo.db"
 gitlab_secret = None
 job_service = "local"
 
-local_pmaports = "../pmaports"
-local_pmbootstrap = "../pmbootstrap/pmbootstrap.py"
+local_pmaports = os.path.realpath(bpo.config.const.top_dir + "/../pmaports")
+local_pmbootstrap = os.path.realpath(bpo.config.const.top_dir +
+                                     "/../pmbootstrap/pmbootstrap.py")
 local_tempdir = "_job_tmp"
 
 
