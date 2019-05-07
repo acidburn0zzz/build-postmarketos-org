@@ -8,7 +8,7 @@ import secrets
 import string
 import sys
 
-import bpo.helpers.constants
+import bpo.config.const
 import bpo.config.args
 
 

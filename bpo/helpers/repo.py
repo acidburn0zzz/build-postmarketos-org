@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 import logging
 
-import bpo.helpers.constants
+import bpo.config.const
 import bpo.helpers.queue
 import bpo.jobs.build_package
 import bpo.jobs.sign_index
 
 
 def build():
-    for arch in bpo.helpers.constants.build_device_architectures:
+    for arch in bpo.config.const.build_device_architectures:
         queue_entry = bpo.helpers.queue.get_entry_next(arch)
         if queue_entry:
             bpo.jobs.build_package.run(queue_entry)

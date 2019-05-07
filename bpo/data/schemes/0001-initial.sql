@@ -15,6 +15,13 @@ CREATE TABLE package
     times_built INT DEFAULT NULL
 );
 
+CREATE TABLE depends
+(
+    package_id NOT NULL,
+    depend_id NOT NULL
+    /* TODO: add index for package_id, depend_id */
+);
+
 CREATE TABLE log
 (
     datetime DATETIME NOT NULL,

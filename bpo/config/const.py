@@ -5,6 +5,7 @@
 # like pmb/config/__init__.py).
 import os
 
-bpo_src = os.path.normpath(os.path.realpath(__file__) + "/../..")
+# Directory containing bpo.py and the bpo module
+top_dir = os.path.normpath(os.path.realpath(__file__) + "/../../..")
 
 build_device_architectures = ["x86_64"]
