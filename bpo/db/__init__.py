@@ -3,75 +3,49 @@
 import glob
 import logging
 import os
-import sqlite3
+import sqlalchemy
+import sys
 
 import bpo.config.const
 import bpo.config.args
 
-_db = None
+_engine = None
+_metadata = None
+
+# Tables
+log = None
 
 
-def get_version():
-    """ Get the current version from the database if possible, or return 0. """
-    cur = _db.cursor()
-    ret = 0
-    try:
-        cur.execute("SELECT `version` FROM `db_version` WHERE 1")
-        row = cur.fetchone()
-        if row:
-            ret = row[0]
-    except sqlite3.OperationalError as e:
-        pass
-    return ret
+def init_tables():
+    from sqlalchemy import Table, Column, Integer, String, Text
 
+    self = sys.modules[__name__]
+    metadata = sqlalchemy.MetaData()
+    self.log = Table("log", metadata,
+                     Column("id", Integer, primary_key=True),
+                     Column("datetime", String),
+                     Column("action", String),
+                     Column("details", Text),
+                     Column("payload", Text))
+    self.package = Table("package", metadata,
+                         Column("aport", String(100)),
+                         Column("arch", String(10)),
+                         Column("component", String(30)),
+                         Column("time_spent", Integer),
+                         Column("times_built", Integer))
+    self.depends = Table("depends", metadata,
+                         Column("id", Integer, primary_key=True),
+                         Column("package_id", Integer),
+                         Column("depend_id", Integer))
 
-def get_version_from_scheme(path):
-    """ Get the version from a scheme file name (prefix digits). """
-    return int(os.path.basename(path).split("-", 2)[0])
-
-
-def update_version():
-    """ Create or update the database scheme to the current one. """
-    scheme_dir = bpo.config.const.top_dir + "/bpo/data/schemes"
-    schemes = sorted(glob.glob(scheme_dir + "/*-*.sql"))
-
-    # Check if update is needed
-    highest = get_version_from_scheme(schemes[-1])
-    current = get_version()
-    if current == highest:
-        return
-
-    # Iteratively update database
-    logging.debug("Updating database from version {} to {}".format(current,
-                                                                   highest))
-    for scheme in schemes:
-        # Skip already applied schemes
-        scheme_version = get_version_from_scheme(scheme)
-        if scheme_version < current:
-            continue
-
-        # Apply scheme
-        with open(scheme, "r", encoding="utf-8") as handle:
-            sql = handle.read()
-        _db.cursor().executescript(sql)
-        _db.commit()
-
-        # Sanity check
-        current = get_version()
-        if current != scheme_version:
-            raise RuntimeError("Failed to upgrade database to {}, current"
-                               " version is {}, this file is probably broken:"
-                               " {}".format(scheme_version, current, scheme))
-
-
-def insert_depends():
-    logging.info("STUB: db: insert_depends")
+    metadata.create_all(self._engine)
+    self._metadata = metadata
 
 
 def init():
     """ Initialize db """
-    global _db
-    _db = sqlite3.connect(bpo.config.args.db_path)
+    self = sys.modules[__name__]
+    url = "sqlite:///" + bpo.config.args.db_path
+    self._engine = sqlalchemy.create_engine(url)
 
-    # Iteratively build up database layout
-    update_version()
+    init_tables()

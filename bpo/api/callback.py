@@ -13,7 +13,7 @@ callbacks = Blueprint('callbacks', __name__)
 @header_auth('X-BPO-Token', "job_callback")
 def after_get_depends():
     # Insert all depends, start next build
-    bpo.db.insert_depends()
+    # TODO: something like bpo.db.insert_depends()
     bpo.helpers.repo.build()
 
     return 'warming up build servers...'
