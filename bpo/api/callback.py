@@ -12,8 +12,23 @@ callbacks = Blueprint('callbacks', __name__)
 @callbacks.route('/api/job-callback/get_depends')
 @header_auth('X-BPO-Token', "job_callback")
 def after_get_depends():
-    # Insert all depends, start next build
-    # TODO: something like bpo.db.insert_depends()
+    """
+    repo_missing = ... # FIXME: load from json payload somehow
+
+    # Insert all depends
+    for package in repo_missing:
+        # insert package into packages-table, unless there is an entry already
+        # with same (pkgname, repo, version)
+        package_id = ...
+
+        for depend in package["depends"]:
+            # insert package_id <> depends_id into depends-table, unless it
+            # exists already
+    """
+
+
+
+    # Start next build
     bpo.helpers.repo.build()
 
     return 'warming up build servers...'
