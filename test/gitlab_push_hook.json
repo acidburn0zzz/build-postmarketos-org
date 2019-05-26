@@ -1,0 +1,61 @@
+{
+    "object_kind": "push",
+    "event_name": "push",
+    "before": "10c1343cb222a7c6c86dc502b9d60af98c0c8a96",
+    "after": "5e9e102a00e58541ed91164de15fd209af628b42",
+    "ref": "refs\/heads\/feature\/phosh",
+    "checkout_sha": "5e9e102a00e58541ed91164de15fd209af628b42",
+    "message": null,
+    "user_id": 495560,
+    "user_name": "PureTryOut",
+    "user_username": "PureTryOut",
+    "user_email": "redacted@localhost",
+    "user_avatar": "https:\/\/assets.gitlab-static.net\/uploads\/-\/system\/user\/avatar\/495560\/avatar.png",
+    "project_id": 8065375,
+    "project": {
+        "id": 8065375,
+        "name": "pmaports",
+        "description": "postmarketOS package build recipes (used to be in the pmbootstrap repository)",
+        "web_url": "https:\/\/gitlab.com\/postmarketOS\/pmaports",
+        "avatar_url": "https:\/\/assets.gitlab-static.net\/uploads\/-\/system\/project\/avatar\/8065375\/icon_mobile.png",
+        "git_ssh_url": "git@gitlab.com:postmarketOS\/pmaports.git",
+        "git_http_url": "https:\/\/gitlab.com\/postmarketOS\/pmaports.git",
+        "namespace": "postmarketOS",
+        "visibility_level": 20,
+        "path_with_namespace": "postmarketOS\/pmaports",
+        "default_branch": "master",
+        "ci_config_path": null,
+        "homepage": "https:\/\/gitlab.com\/postmarketOS\/pmaports",
+        "url": "git@gitlab.com:postmarketOS\/pmaports.git",
+        "ssh_url": "git@gitlab.com:postmarketOS\/pmaports.git",
+        "http_url": "https:\/\/gitlab.com\/postmarketOS\/pmaports.git"
+    },
+    "commits": [
+        {
+            "id": "5e9e102a00e58541ed91164de15fd209af628b42",
+            "message": "main\/postmarketos-ui-phosh: clean-up\n",
+            "timestamp": "2019-05-25T16:23:30Z",
+            "url": "https:\/\/gitlab.com\/postmarketOS\/pmaports\/commit\/5e9e102a00e58541ed91164de15fd209af628b42",
+            "author": {
+                "name": "Bart Ribbers",
+                "email": "redacted@localhost"
+            },
+            "added": [],
+            "modified": [
+                "main\/postmarketos-ui-phosh\/APKBUILD"
+            ],
+            "removed": []
+        }
+    ],
+    "total_commits_count": 1,
+    "push_options": [],
+    "repository": {
+        "name": "pmaports",
+        "url": "git@gitlab.com:postmarketOS\/pmaports.git",
+        "description": "postmarketOS package build recipes (used to be in the pmbootstrap repository)",
+        "homepage": "https:\/\/gitlab.com\/postmarketOS\/pmaports",
+        "git_http_url": "https:\/\/gitlab.com\/postmarketOS\/pmaports.git",
+        "git_ssh_url": "git@gitlab.com:postmarketOS\/pmaports.git",
+        "visibility_level": 20
+    }
+}
