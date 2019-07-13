@@ -4,11 +4,11 @@ import logging
 import sys
 
 from flask import Flask
-import bpo.config.args as bpo_args
+import bpo.api.push_hook
+import bpo.api.job_callback
+import bpo.config.args
 import bpo.config.tokens
-import bpo.db as bpo_db
-from bpo.api.gitlab import gitlab as bpo_gitlab
-from bpo.api.callback import callbacks as bpo_callbacks
+import bpo.db
 
 
 def logging_init():
@@ -17,17 +17,17 @@ def logging_init():
 
 
 def main():
-    # Initialize logging, args, database
+    # Initialize logging, config, database
     logging_init()
-    bpo_args.init()
-    bpo_db.init()
+    bpo.config.args.init()
     bpo.config.tokens.init()
+    bpo.db.init()
 
     # Initialize flask server
     app = Flask(__name__)
-    app.register_blueprint(bpo_gitlab)
-    app.register_blueprint(bpo_callbacks)
-    app.run(host=bpo_args.host, port=bpo_args.port)
+    app.register_blueprint(bpo.api.push_hook.blueprint)
+    app.register_blueprint(bpo.api.job_callback.blueprint)
+    app.run(host=bpo.config.args.host, port=bpo.config.args.port)
 
 
 if __name__ == "__main__":
