@@ -9,7 +9,7 @@ import bpo.jobs.sign_index
 
 
 def build():
-    for arch in bpo.config.const.build_device_architectures:
+    for arch in bpo.config.const.architectures:
         queue_entry = bpo.helpers.queue.get_entry_next(arch)
         if queue_entry:
             bpo.jobs.build_package.run(queue_entry)

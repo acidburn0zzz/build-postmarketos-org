@@ -17,7 +17,7 @@ import sqlalchemy
 import sqlalchemy.orm
 import sqlalchemy.ext.declarative
 from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, \
-                       Table
+                       Table, Boolean, Index
 from sqlalchemy.orm import relationship
 
 import bpo.config.args
@@ -32,6 +32,7 @@ class Push(base):
     id = Column(Integer, primary_key=True)
     date = Column(DateTime)
 
+    # FIXME: set date to current date in __init__!
 
 class Commit(base):
     __tablename__ = "commit"
@@ -44,9 +45,17 @@ class Commit(base):
 class Package(base):
     __tablename__ = "package"
     id = Column(Integer, primary_key=True)
+    arch = Column(String)
     pkgname = Column(String)
+
+    # The following columns represent the latest state. We don't store the
+    # history in bpo (avoids complexity, we have the git history for that).
     version = Column(String)
     repo = Column(String)
+
+    Index("pkgname-arch", pkgname, arch, unique=True)
+
+    # Package.depends: see init_relationships() below.
 
 
 class Queue(base):
@@ -62,12 +71,14 @@ class Log(base):
     action = Column(Text)
     payload = Column(Text)
     push_id = Column(Integer, ForeignKey("push.id"))
+    arch = Column(Text)
 
 
-    def __init__(self, action, payload=None, push=None):
+    def __init__(self, action, payload=None, push=None, arch=None):
         self.action = action
         self.payload = json.dumps(payload, indent=4) if payload else None
         self.push = push
+        self.arch = arch
 
 
 def init_relationships():

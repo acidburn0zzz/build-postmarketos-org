@@ -1,14 +1,14 @@
 from flask import Blueprint, request, abort
 from bpo.helpers.headerauth import header_auth
-import bpo.jobs.get_depends
+import bpo.jobs.get_repo_missing
 import bpo.db
 
-gitlab = Blueprint('gitlab', __name__)
+blueprint = Blueprint("push_hook", __name__)
 
 
-@gitlab.route('/api/push-hook/gitlab', methods=['POST'])
-@header_auth('X-Gitlab-Token', 'push_hook_gitlab')
-def gitlab_pull():
+@blueprint.route("/api/push-hook/gitlab", methods=["POST"])
+@header_auth("X-Gitlab-Token", "push_hook_gitlab")
+def push_hook_gitlab():
     payload = request.get_json()
     if payload["object_kind"] != "push":
         abort(400, "Unknown object_kind")
@@ -28,5 +28,8 @@ def gitlab_pull():
     session.add(log)
     session.commit()
 
-    bpo.jobs.get_depends.run(push.id)
-    return 'Triggered!'
+    # Run repo_missing job for all arches
+    for arch in bpo.config.const.architectures:
+        bpo.jobs.get_repo_missing.run(push.id, arch)
+
+    return "Triggered!"

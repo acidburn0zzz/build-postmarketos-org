@@ -8,4 +8,4 @@ import os
 # Directory containing bpo.py and the bpo module
 top_dir = os.path.normpath(os.path.realpath(__file__) + "/../../..")
 
-build_device_architectures = ["x86_64"]
+architectures = ["x86_64"]

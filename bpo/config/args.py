@@ -13,7 +13,8 @@ db_path = "bpo.db"
 gitlab_secret = None
 job_service = "local"
 
-local_pmaports = os.path.realpath(bpo.config.const.top_dir + "/../pmaports")
+local_pmaports = os.path.realpath(bpo.config.const.top_dir +
+                                  "/../pmbootstrap/aports")
 local_pmbootstrap = os.path.realpath(bpo.config.const.top_dir +
                                      "/../pmbootstrap/pmbootstrap.py")
 local_tempdir = "_job_tmp"

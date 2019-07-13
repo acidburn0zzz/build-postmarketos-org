@@ -1,0 +1,1480 @@
+[
+    {
+        "pkgname": "0xffff",
+        "repo": "main",
+        "version": "0.7-r1",
+        "depends": [
+            "libusb-compat",
+            "libusb-compat-dev",
+            "libusb-dev",
+            "linux-headers"
+        ]
+    },
+    {
+        "pkgname": "abootimg",
+        "repo": "main",
+        "version": "0.6_git20150325-r0",
+        "depends": [
+            "linux-headers",
+            "util-linux-dev"
+        ]
+    },
+    {
+        "pkgname": "abuild-sign-noinclude",
+        "repo": "main",
+        "version": "3.3.0_pre1-r0",
+        "depends": [
+            "openssl-dev",
+            "pkgconf",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "accountsservice-ubuntu",
+        "repo": "unity8",
+        "version": "0.6.45-r0",
+        "depends": [
+            "glib-dev",
+            "gnome-doc-utils",
+            "gobject-introspection-dev",
+            "intltool",
+            "polkit-dev"
+        ]
+    },
+    {
+        "pkgname": "adsp-audio",
+        "repo": "main",
+        "version": "1-r1",
+        "depends": []
+    },
+    {
+        "pkgname": "android-headers-4.4",
+        "repo": "hybris",
+        "version": "4.4_git20171022-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "android-headers-7.1",
+        "repo": "hybris",
+        "version": "7.1_git20170630-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "android-mkdtimg",
+        "repo": "main",
+        "version": "1-r0",
+        "depends": [
+            "dtc-dev",
+            "libfdt"
+        ]
+    },
+    {
+        "pkgname": "arch-bin-masquerade",
+        "repo": "cross",
+        "version": "2-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "binutils-aarch64",
+        "repo": "cross",
+        "version": "2.31.1-r2",
+        "depends": [
+            "autoconf",
+            "automake",
+            "bison",
+            "gettext",
+            "libtool"
+        ]
+    },
+    {
+        "pkgname": "binutils-armhf",
+        "repo": "cross",
+        "version": "2.31.1-r2",
+        "depends": [
+            "autoconf",
+            "automake",
+            "bison",
+            "gettext",
+            "libtool"
+        ]
+    },
+    {
+        "pkgname": "binutils-armv7",
+        "repo": "cross",
+        "version": "2.31.1-r2",
+        "depends": [
+            "autoconf",
+            "automake",
+            "bison",
+            "gettext",
+            "libtool"
+        ]
+    },
+    {
+        "pkgname": "blobtools",
+        "repo": "main",
+        "version": "0.0_git20121024-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "busybox-static-aarch64",
+        "repo": "cross",
+        "version": "1.30.1-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "busybox-static-armhf",
+        "repo": "cross",
+        "version": "1.30.1-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "busybox-static-armv7",
+        "repo": "cross",
+        "version": "1.30.1-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "ccache-cross-symlinks",
+        "repo": "cross",
+        "version": "2-r0",
+        "depends": [
+            "ccache"
+        ]
+    },
+    {
+        "pkgname": "click",
+        "repo": "unity8",
+        "version": "0_git20190129-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "cmake",
+            "gobject-introspection",
+            "gobject-introspection-dev",
+            "intltool",
+            "json-glib-dev",
+            "libgee-dev",
+            "libtool",
+            "vala"
+        ]
+    },
+    {
+        "pkgname": "cmake-extras",
+        "repo": "unity8",
+        "version": "0_git20190219-r0",
+        "depends": [
+            "cmake"
+        ]
+    },
+    {
+        "pkgname": "crossdirect",
+        "repo": "cross",
+        "version": "3-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "dbus-cpp",
+        "repo": "main",
+        "version": "5.0.1-r1",
+        "depends": [
+            "boost",
+            "boost-dev",
+            "cmake",
+            "cmake-extras",
+            "dbus",
+            "dbus-dev",
+            "gmock",
+            "gtest-dev",
+            "libxml2",
+            "libxml2-dev",
+            "linux-headers",
+            "process-cpp",
+            "properties-cpp"
+        ]
+    },
+    {
+        "pkgname": "dbus-test-runner",
+        "repo": "main",
+        "version": "15.04.0-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "dbus",
+            "dbus-glib-dev",
+            "gnome-common",
+            "intltool",
+            "libtool"
+        ]
+    },
+    {
+        "pkgname": "devicepkg-dev",
+        "repo": "main",
+        "version": "0.9-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "dhcpcd",
+        "repo": "temp",
+        "version": "9999-r0",
+        "depends": [
+            "bsd-compat-headers",
+            "dbus-dev",
+            "linux-headers"
+        ]
+    },
+    {
+        "pkgname": "dmz-cursor-theme",
+        "repo": "main",
+        "version": "0.4.5-r0",
+        "depends": [
+            "xcursorgen"
+        ]
+    },
+    {
+        "pkgname": "drihybrisproto",
+        "repo": "hybris",
+        "version": "1.0_git20171130-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "dtbtool",
+        "repo": "main",
+        "version": "1.6.0-r1",
+        "depends": [
+            "dtc-dev",
+            "python2"
+        ]
+    },
+    {
+        "pkgname": "extra-cmake-modules",
+        "repo": "kde",
+        "version": "5.57.0-r0",
+        "depends": [
+            "cmake",
+            "py-sphinx"
+        ]
+    },
+    {
+        "pkgname": "extract-dtb",
+        "repo": "main",
+        "version": "1.1-r0",
+        "depends": [
+            "python3"
+        ]
+    },
+    {
+        "pkgname": "fbdebug",
+        "repo": "main",
+        "version": "0.3-r0",
+        "depends": [
+            "linux-headers"
+        ]
+    },
+    {
+        "pkgname": "firmware-asus-me176c",
+        "repo": "firmware",
+        "version": "12.10.1.36-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "firmware-google-crosshatch-mainline-dtbo",
+        "repo": "firmware",
+        "version": "1-r0",
+        "depends": [
+            "android-mkdtimg",
+            "dtc"
+        ]
+    },
+    {
+        "pkgname": "firmware-samsung-hero",
+        "repo": "firmware",
+        "version": "1-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "firmware-surftab-wintron7.0",
+        "repo": "firmware",
+        "version": "1-r1",
+        "depends": []
+    },
+    {
+        "pkgname": "gcc-aarch64",
+        "repo": "cross",
+        "version": "8.3.0-r0",
+        "depends": [
+            "binutils-aarch64",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "musl-aarch64",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc-armhf",
+        "repo": "cross",
+        "version": "8.3.0-r0",
+        "depends": [
+            "binutils-armhf",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "musl-armhf",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc-armv7",
+        "repo": "cross",
+        "version": "8.3.0-r0",
+        "depends": [
+            "binutils-armv7",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "musl-armv7",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc4",
+        "repo": "main",
+        "version": "9999-r0",
+        "depends": [
+            "binutils",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc4-aarch64",
+        "repo": "cross",
+        "version": "9999-r0",
+        "depends": [
+            "binutils-aarch64",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "musl-aarch64",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc4-armhf",
+        "repo": "cross",
+        "version": "9999-r0",
+        "depends": [
+            "binutils-armhf",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "musl-armhf",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc4-armv7",
+        "repo": "cross",
+        "version": "9999-r0",
+        "depends": [
+            "binutils-armv7",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "musl-armv7",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc6",
+        "repo": "main",
+        "version": "9999-r5",
+        "depends": [
+            "binutils",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc6-aarch64",
+        "repo": "cross",
+        "version": "9999-r5",
+        "depends": [
+            "binutils-aarch64",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "musl-aarch64",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc6-armhf",
+        "repo": "cross",
+        "version": "9999-r5",
+        "depends": [
+            "binutils-armhf",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "musl-armhf",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "gcc6-armv7",
+        "repo": "cross",
+        "version": "9999-r5",
+        "depends": [
+            "binutils-armv7",
+            "bison",
+            "flex",
+            "g++",
+            "gawk",
+            "gcc",
+            "gmp-dev",
+            "isl",
+            "isl-dev",
+            "linux-headers",
+            "mpc1-dev",
+            "mpfr-dev",
+            "musl-armv7",
+            "paxmark",
+            "texinfo",
+            "zip",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "geonames",
+        "repo": "unity8",
+        "version": "0_git20180310-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "gtk-doc",
+            "libtool"
+        ]
+    },
+    {
+        "pkgname": "gnome-menus",
+        "repo": "main",
+        "version": "3.13.3-r0",
+        "depends": [
+            "glib",
+            "glib-dev",
+            "gobject-introspection",
+            "intltool",
+            "python2-dev"
+        ]
+    },
+    {
+        "pkgname": "grub-efi-x86",
+        "repo": "cross",
+        "version": "2.02-r15",
+        "depends": []
+    },
+    {
+        "pkgname": "gsettings-ubuntu-touch-schemas",
+        "repo": "unity8",
+        "version": "0_git20181006-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "glib-dev",
+            "gnome-common",
+            "intltool"
+        ]
+    },
+    {
+        "pkgname": "gtk+2.0-maemo",
+        "repo": "maemo",
+        "version": "2.24.31-r4",
+        "depends": [
+            "atk-dev",
+            "autoconf",
+            "automake",
+            "cairo-dev",
+            "cups-dev",
+            "expat-dev",
+            "gdk-pixbuf-dev",
+            "gettext-dev",
+            "glib-dev",
+            "gnutls-dev",
+            "gobject-introspection-dev",
+            "gtk-doc",
+            "gtk-update-icon-cache",
+            "hicolor-icon-theme",
+            "intltool",
+            "libice-dev",
+            "libtool",
+            "libx11-dev",
+            "libxcomposite-dev",
+            "libxcursor-dev",
+            "libxdamage-dev",
+            "libxext-dev",
+            "libxfixes-dev",
+            "libxi-dev",
+            "libxrandr-dev",
+            "pango-dev",
+            "py-six",
+            "shared-mime-info",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "heimdall",
+        "repo": "main",
+        "version": "1.4.2-r3",
+        "depends": [
+            "cmake",
+            "libusb-dev"
+        ]
+    },
+    {
+        "pkgname": "hello-world",
+        "repo": "main",
+        "version": "1-r4",
+        "depends": []
+    },
+    {
+        "pkgname": "hello-world-wrapper",
+        "repo": "main",
+        "version": "1-r2",
+        "depends": [
+            "hello-world"
+        ]
+    },
+    {
+        "pkgname": "hildon-theme-alpha",
+        "repo": "maemo",
+        "version": "9.4-r3",
+        "depends": []
+    },
+    {
+        "pkgname": "iphbd",
+        "repo": "maemo",
+        "version": "0.0.18-r2",
+        "depends": [
+            "autoconf",
+            "automake",
+            "dbus",
+            "dbus-glib",
+            "dbus-glib-dev",
+            "libtool"
+        ]
+    },
+    {
+        "pkgname": "jemalloc",
+        "repo": "temp",
+        "version": "5.1.0-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "kernel-scripts",
+        "repo": "main",
+        "version": "4.15.0-r2",
+        "depends": [
+            "bash",
+            "bc",
+            "elfutils-dev",
+            "file",
+            "gmp-dev",
+            "linux-headers",
+            "openssl-dev",
+            "perl",
+            "sed"
+        ]
+    },
+    {
+        "pkgname": "ldpath",
+        "repo": "main",
+        "version": "0.1-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "libaccounts-glib",
+        "repo": "main",
+        "version": "1.24-r0",
+        "depends": [
+            "check-dev",
+            "glib-dev",
+            "gobject-introspection-dev",
+            "gtk-doc",
+            "libxml2-dev",
+            "meson",
+            "py3-gobject3",
+            "sqlite-dev",
+            "vala"
+        ]
+    },
+    {
+        "pkgname": "libdmtx",
+        "repo": "main",
+        "version": "0.7.5-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "libtool"
+        ]
+    },
+    {
+        "pkgname": "libdrm",
+        "repo": "temp",
+        "version": "9999-r0",
+        "depends": [
+            "eudev-dev",
+            "libpciaccess-dev",
+            "libpthread-stubs",
+            "linux-headers",
+            "xmlto"
+        ]
+    },
+    {
+        "pkgname": "libdsme",
+        "repo": "maemo",
+        "version": "0.60.30-r2",
+        "depends": [
+            "bash",
+            "dbus",
+            "glib",
+            "glib-dev"
+        ]
+    },
+    {
+        "pkgname": "libfakekey",
+        "repo": "main",
+        "version": "0.1-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "libtool",
+            "libxtst",
+            "libxtst-dev"
+        ]
+    },
+    {
+        "pkgname": "libhildonmime",
+        "repo": "maemo",
+        "version": "3.0.0-r1",
+        "depends": [
+            "autoconf",
+            "automake",
+            "dbus-glib-dev",
+            "glib-dev",
+            "gtk-doc",
+            "libtool",
+            "libxml2-dev",
+            "m4"
+        ]
+    },
+    {
+        "pkgname": "libical",
+        "repo": "temp",
+        "version": "3.0.4-r1",
+        "depends": [
+            "cmake",
+            "db-dev",
+            "glib-dev",
+            "icu-dev",
+            "libxml2-dev",
+            "perl",
+            "tzdata"
+        ]
+    },
+    {
+        "pkgname": "libmatchbox",
+        "repo": "matchbox",
+        "version": "1.12-r1",
+        "depends": [
+            "autoconf",
+            "automake",
+            "doxygen",
+            "glib",
+            "jpeg",
+            "libjpeg-turbo-dev",
+            "libpng",
+            "libtool",
+            "libx11",
+            "libx11-dev",
+            "libxext",
+            "libxext-dev",
+            "libxft",
+            "libxft-dev",
+            "libxsettings",
+            "libxsettings-client",
+            "pango",
+            "pango-dev"
+        ]
+    },
+    {
+        "pkgname": "libosso",
+        "repo": "maemo",
+        "version": "2.32-r1",
+        "depends": [
+            "autoconf",
+            "automake",
+            "dbus-glib",
+            "dbus-glib-dev",
+            "libtool",
+            "linux-headers",
+            "mce-headers"
+        ]
+    },
+    {
+        "pkgname": "libphonenumber",
+        "repo": "main",
+        "version": "8.9.6-r6",
+        "depends": [
+            "boost-dev",
+            "cmake",
+            "gtest-dev",
+            "icu-dev",
+            "protobuf-dev"
+        ]
+    },
+    {
+        "pkgname": "libsamsung-ipc",
+        "repo": "modem",
+        "version": "6.0.0003-r2",
+        "depends": [
+            "autoconf",
+            "automake",
+            "libtool",
+            "linux-headers",
+            "openssl-dev"
+        ]
+    },
+    {
+        "pkgname": "libsignon-glib",
+        "repo": "main",
+        "version": "2.1-r0",
+        "depends": [
+            "check-dev",
+            "glib-dev",
+            "gobject-introspection-dev",
+            "gtk-doc",
+            "meson",
+            "py3-gobject3",
+            "vala"
+        ]
+    },
+    {
+        "pkgname": "libsmdpkt_wrapper",
+        "repo": "modem",
+        "version": "0.1-r0",
+        "depends": [
+            "linux-headers"
+        ]
+    },
+    {
+        "pkgname": "libsparse",
+        "repo": "main",
+        "version": "1.0.0-r2",
+        "depends": [
+            "python3",
+            "zlib-dev"
+        ]
+    },
+    {
+        "pkgname": "libxsettings",
+        "repo": "matchbox",
+        "version": "0.11-r0",
+        "depends": [
+            "libx11",
+            "libx11-dev"
+        ]
+    },
+    {
+        "pkgname": "libxsettings-client",
+        "repo": "matchbox",
+        "version": "0.17-r0",
+        "depends": [
+            "gtk+2.0-dev",
+            "libx11",
+            "libx11-dev"
+        ]
+    },
+    {
+        "pkgname": "linux-asus-me176c",
+        "repo": "device",
+        "version": "4.19.9-r1",
+        "depends": [
+            "bash",
+            "bc",
+            "bison",
+            "devicepkg-dev",
+            "elfutils-dev",
+            "flex",
+            "gmp-dev",
+            "iasl",
+            "installkernel",
+            "libressl-dev",
+            "linux-headers",
+            "perl",
+            "sed",
+            "xz"
+        ]
+    },
+    {
+        "pkgname": "linux-postmarketos-mainline",
+        "repo": "main",
+        "version": "4.18-r2",
+        "depends": [
+            "bash",
+            "bc",
+            "bison",
+            "elfutils-dev",
+            "file",
+            "flex",
+            "gmp-dev",
+            "installkernel",
+            "linux-headers",
+            "openssl-dev",
+            "perl",
+            "sed"
+        ]
+    },
+    {
+        "pkgname": "linux-postmarketos-stable",
+        "repo": "main",
+        "version": "4.18.4-r2",
+        "depends": [
+            "bash",
+            "bc",
+            "bison",
+            "elfutils-dev",
+            "file",
+            "flex",
+            "gmp-dev",
+            "installkernel",
+            "linux-headers",
+            "openssl-dev",
+            "perl",
+            "sed"
+        ]
+    },
+    {
+        "pkgname": "linux-teclast-x80pro",
+        "repo": "device",
+        "version": "4.14.73-r3",
+        "depends": [
+            "bash",
+            "bc",
+            "elfutils-dev",
+            "gmp-dev",
+            "installkernel",
+            "linux-headers",
+            "openssl-dev",
+            "perl",
+            "sed"
+        ]
+    },
+    {
+        "pkgname": "lttng-tools",
+        "repo": "temp",
+        "version": "2.10.5-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "babeltrace",
+            "bash",
+            "coreutils",
+            "grep",
+            "kmod-dev",
+            "libxml2-dev",
+            "lttng-ust-dev",
+            "popt-dev",
+            "userspace-rcu-dev",
+            "util-linux-dev"
+        ]
+    },
+    {
+        "pkgname": "lxc-android",
+        "repo": "hybris",
+        "version": "1.0_git20180311-r0",
+        "depends": [
+            "lxc"
+        ]
+    },
+    {
+        "pkgname": "maemo-l10n",
+        "repo": "maemo",
+        "version": "210-r2",
+        "depends": []
+    },
+    {
+        "pkgname": "matchbox-common",
+        "repo": "matchbox",
+        "version": "0_git20070606-r2",
+        "depends": [
+            "autoconf",
+            "automake",
+            "libmatchbox",
+            "libtool"
+        ]
+    },
+    {
+        "pkgname": "matchbox-desktop",
+        "repo": "matchbox",
+        "version": "2.0-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "gdk-pixbuf",
+            "glib",
+            "gtk+2.0-maemo",
+            "gtk+2.0-dev",
+            "libjpeg-turbo",
+            "libjpeg-turbo-dev",
+            "libmatchbox",
+            "libtool",
+            "libx11",
+            "matchbox-common",
+            "pango",
+            "startup-notification",
+            "startup-notification-dev"
+        ]
+    },
+    {
+        "pkgname": "matchbox-window-manager",
+        "repo": "matchbox",
+        "version": "2.0_git20171119-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "expat",
+            "expat-dev",
+            "gtk+2.0-maemo",
+            "gtk+2.0-dev",
+            "libmatchbox",
+            "libpng",
+            "libpng-dev",
+            "libtool",
+            "pango",
+            "pango-dev"
+        ]
+    },
+    {
+        "pkgname": "mce-headers",
+        "repo": "maemo",
+        "version": "1.8.19-r2",
+        "depends": [
+            "coreutils",
+            "doxygen"
+        ]
+    },
+    {
+        "pkgname": "mdss-fb-init-hack",
+        "repo": "main",
+        "version": "0.1-r0",
+        "depends": [
+            "msm-fb-refresher"
+        ]
+    },
+    {
+        "pkgname": "mkbootimg-osm0sis",
+        "repo": "main",
+        "version": "2018.10.27-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "msm-fb-refresher",
+        "repo": "main",
+        "version": "0.2-r0",
+        "depends": [
+            "linux-headers"
+        ]
+    },
+    {
+        "pkgname": "msmipc-dev",
+        "repo": "modem",
+        "version": "0.1-r0",
+        "depends": [
+            "linux-headers"
+        ]
+    },
+    {
+        "pkgname": "mtk-mkimage",
+        "repo": "main",
+        "version": "1-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "musl-aarch64",
+        "repo": "cross",
+        "version": "1.1.22-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "musl-armhf",
+        "repo": "cross",
+        "version": "1.1.22-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "musl-armv7",
+        "repo": "cross",
+        "version": "1.1.22-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "net-cpp",
+        "repo": "main",
+        "version": "2.2.1-r0",
+        "depends": [
+            "boost-dev",
+            "cmake",
+            "cmake-extras",
+            "curl-dev",
+            "gmock",
+            "gtest-dev",
+            "jsoncpp-dev",
+            "process-cpp",
+            "properties-cpp",
+            "py3-httpbin"
+        ]
+    },
+    {
+        "pkgname": "pmbootstrap",
+        "repo": "main",
+        "version": "1.5.1-r0",
+        "depends": [
+            "coreutils",
+            "procps",
+            "python3",
+            "python3-dev"
+        ]
+    },
+    {
+        "pkgname": "postmarketos-android-recovery-installer",
+        "repo": "main",
+        "version": "0.1.10-r1",
+        "depends": [
+            "busybox-extras",
+            "cryptsetup",
+            "device-mapper",
+            "e2fsprogs",
+            "lddtree",
+            "multipath-tools",
+            "parted",
+            "tar",
+            "util-linux",
+            "zip"
+        ]
+    },
+    {
+        "pkgname": "postmarketos-artwork",
+        "repo": "main",
+        "version": "1-r0",
+        "depends": [
+            "postmarketos-artwork-wallpapers"
+        ]
+    },
+    {
+        "pkgname": "postmarketos-artwork-wallpapers",
+        "repo": "main",
+        "version": "1-r5",
+        "depends": []
+    },
+    {
+        "pkgname": "postmarketos-splash",
+        "repo": "main",
+        "version": "2-r0",
+        "depends": [
+            "py3-pillow",
+            "ttf-dejavu",
+            "ttf-droid"
+        ]
+    },
+    {
+        "pkgname": "postmarketos-update-kernel",
+        "repo": "main",
+        "version": "0.0.3-r0",
+        "depends": [
+            "util-linux"
+        ]
+    },
+    {
+        "pkgname": "process-cpp",
+        "repo": "main",
+        "version": "2.0.1-r1",
+        "depends": [
+            "boost",
+            "boost-dev",
+            "cmake",
+            "cmake-extras",
+            "doxygen",
+            "gmock",
+            "gtest-dev",
+            "libexecinfo-dev",
+            "musl-dev",
+            "properties-cpp"
+        ]
+    },
+    {
+        "pkgname": "profiled",
+        "repo": "maemo",
+        "version": "1.0.6-r0",
+        "depends": [
+            "dbus",
+            "dbus-dev",
+            "dbus-glib",
+            "dbus-glib-dev",
+            "doxygen"
+        ]
+    },
+    {
+        "pkgname": "properties-cpp",
+        "repo": "main",
+        "version": "0.0.1-r0",
+        "depends": [
+            "cmake",
+            "cmake-extras",
+            "gtest",
+            "gtest-dev"
+        ]
+    },
+    {
+        "pkgname": "py-isodate",
+        "repo": "main",
+        "version": "0.6.0-r0",
+        "depends": [
+            "py-setuptools",
+            "py3-setuptools"
+        ]
+    },
+    {
+        "pkgname": "py-rdflib",
+        "repo": "main",
+        "version": "4.2.2-r0",
+        "depends": [
+            "py-isodate",
+            "py-setuptools",
+            "py2-six",
+            "py3-setuptools"
+        ]
+    },
+    {
+        "pkgname": "py3-brotlipy",
+        "repo": "main",
+        "version": "0.7.0-r1",
+        "depends": [
+            "py3-cffi",
+            "python3",
+            "python3-dev"
+        ]
+    },
+    {
+        "pkgname": "py3-dbusmock",
+        "repo": "main",
+        "version": "0.18-r0",
+        "depends": [
+            "py3-dbus",
+            "py3-gobject3",
+            "python3",
+            "python3-dev"
+        ]
+    },
+    {
+        "pkgname": "py3-httpbin",
+        "repo": "main",
+        "version": "0.7.0-r0",
+        "depends": [
+            "py3-blinker",
+            "py3-brotlipy",
+            "py3-decorator",
+            "py3-flask",
+            "py3-raven",
+            "py3-six",
+            "python3",
+            "python3-dev"
+        ]
+    },
+    {
+        "pkgname": "qcom_rmtfs",
+        "repo": "modem",
+        "version": "0.0_git20180131-r3",
+        "depends": [
+            "eudev-dev",
+            "msmipc-dev",
+            "qrtr"
+        ]
+    },
+    {
+        "pkgname": "qrtr",
+        "repo": "modem",
+        "version": "1.0_git20180131-r1",
+        "depends": [
+            "msmipc-dev"
+        ]
+    },
+    {
+        "pkgname": "rpmsgexport",
+        "repo": "modem",
+        "version": "0.0_git20180228-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "sapwood",
+        "repo": "maemo",
+        "version": "3.1.1-r1",
+        "depends": [
+            "autoconf",
+            "automake",
+            "gtk+2.0-maemo",
+            "libtool",
+            "m4"
+        ]
+    },
+    {
+        "pkgname": "sdl_net",
+        "repo": "main",
+        "version": "1.2.8-r0",
+        "depends": [
+            "sdl",
+            "sdl-dev"
+        ]
+    },
+    {
+        "pkgname": "telepathy-glib",
+        "repo": "main",
+        "version": "0.24.1-r1",
+        "depends": [
+            "dbus-glib",
+            "dbus-glib-dev",
+            "diffutils",
+            "gobject-introspection-dev",
+            "libxslt",
+            "python2",
+            "vala"
+        ]
+    },
+    {
+        "pkgname": "telepathy-mission-control",
+        "repo": "main",
+        "version": "5.16.4-r0",
+        "depends": [
+            "dbus",
+            "gstreamer-dev",
+            "libxslt-dev",
+            "python2",
+            "telepathy-glib"
+        ]
+    },
+    {
+        "pkgname": "triggerhappy",
+        "repo": "main",
+        "version": "0.5.0-r0",
+        "depends": [
+            "linux-headers",
+            "perl"
+        ]
+    },
+    {
+        "pkgname": "umockdev",
+        "repo": "main",
+        "version": "0.12.1-r0",
+        "depends": [
+            "autoconf",
+            "automake",
+            "bash",
+            "eudev-dev",
+            "gtk-doc",
+            "libgudev-dev",
+            "libtool",
+            "linux-headers",
+            "vala"
+        ]
+    },
+    {
+        "pkgname": "unicsy-demo",
+        "repo": "main",
+        "version": "0.4.6-r0",
+        "depends": [
+            "alsa-utils",
+            "bash",
+            "mate-terminal",
+            "pulseaudio",
+            "py-dbus",
+            "py-gtk-dev",
+            "python2",
+            "xmessage",
+            "xscreensaver"
+        ]
+    },
+    {
+        "pkgname": "unity7-schemas",
+        "repo": "unity8",
+        "version": "1-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "unixbench",
+        "repo": "main",
+        "version": "5.1.3_git20180129-r0",
+        "depends": [
+            "make",
+            "perl"
+        ]
+    },
+    {
+        "pkgname": "uuu",
+        "repo": "main",
+        "version": "1.2.91-r0",
+        "depends": [
+            "bzip2-dev",
+            "cmake",
+            "libusb-compat",
+            "libusb-compat-dev",
+            "libusb-dev",
+            "libzip-dev"
+        ]
+    },
+    {
+        "pkgname": "watchdog-kick",
+        "repo": "main",
+        "version": "0.1-r0",
+        "depends": []
+    },
+    {
+        "pkgname": "wcnss-wlan",
+        "repo": "main",
+        "version": "1-r1",
+        "depends": []
+    },
+    {
+        "pkgname": "xcursorgen",
+        "repo": "main",
+        "version": "1.0.6-r0",
+        "depends": [
+            "libpng-dev",
+            "libx11-dev",
+            "libxcursor-dev"
+        ]
+    },
+    {
+        "pkgname": "zmqpp",
+        "repo": "main",
+        "version": "4.2.0-r0",
+        "depends": [
+            "cmake",
+            "zeromq-dev"
+        ]
+    }
+]
