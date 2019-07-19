@@ -1,9 +1,10 @@
 from flask import Blueprint, request, abort
 from bpo.helpers.headerauth import header_auth
 import bpo.jobs.get_repo_missing
+import bpo.api
 import bpo.db
 
-blueprint = Blueprint("push_hook", __name__)
+blueprint = bpo.api.blueprint
 
 
 @blueprint.route("/api/push-hook/gitlab", methods=["POST"])

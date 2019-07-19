@@ -4,8 +4,11 @@ import logging
 import sys
 
 from flask import Flask
-import bpo.api.push_hook
-import bpo.api.job_callback
+import bpo.api
+import bpo.api.job_callback.build_package
+import bpo.api.job_callback.get_repo_missing
+import bpo.api.job_callback.sign_index
+import bpo.api.push_hook.gitlab
 import bpo.config.args
 import bpo.config.tokens
 import bpo.db
@@ -25,8 +28,7 @@ def main():
 
     # Initialize flask server
     app = Flask(__name__)
-    app.register_blueprint(bpo.api.push_hook.blueprint)
-    app.register_blueprint(bpo.api.job_callback.blueprint)
+    app.register_blueprint(bpo.api.blueprint)
     app.run(host=bpo.config.args.host, port=bpo.config.args.port)
 
 
