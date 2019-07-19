@@ -55,6 +55,18 @@ def job_callback_get_repo_missing():
         session.merge(package)
         packages[pkgname] = package
 
+    # So we wrote all packages, now load them again into the packages list.
+    # That is needed, so the packages have an ID assigned, and sqlalchemy won't
+    # try to create duplicates when inserting packages with proper depends.
+    # Ugly PoC, this really needs to be split up in multiple, reusable
+    # functions.
+    packages = {}
+    for package_payload in payload:
+        pkgname = package_payload["pkgname"]
+        result = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                         pkgname=pkgname).all()
+        packages[pkgname] = result[0]
+
     # Add dependencies
     for package_payload in payload:
         # Build list of dependencies (DB objects)
@@ -79,6 +91,7 @@ def job_callback_get_repo_missing():
         # Add dependencies to package
         pkgname = package_payload["pkgname"]
         packages[pkgname].depends = depends
+        session.merge(packages[pkgname])
 
     # Insert into database
     log = bpo.db.Log(action="job_callback_get_repo_missing", payload=payload,
