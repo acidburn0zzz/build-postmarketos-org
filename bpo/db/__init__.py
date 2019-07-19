@@ -58,6 +58,13 @@ class Package(base):
     # Package.depends: see init_relationships() below.
 
 
+    def __str__(self):
+        depends=[]
+        for depend in self.depends:
+            depends.append(depend.pkgname)
+        return (self.arch + "/" + self.repo + "/" + self.pkgname + "-" +
+                self.version + " (pmOS depends: " + str(depends) + ")")
+
 class Queue(base):
     __tablename__ = "queue"
     id = Column(Integer, primary_key=True)
