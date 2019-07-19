@@ -9,91 +9,104 @@ import bpo.helpers.queue
 blueprint = bpo.api.blueprint
 
 
-@blueprint.route("/api/job-callback/get-repo-missing", methods=["POST"])
-@header_auth("X-BPO-Token", "job_callback")
-def job_callback_get_repo_missing():
-    # FIXME: split up in multiple functions
-    payload = request.get_json()
-    session = bpo.db.session()
-
-    # Get and validate arch
+def get_arch(request):
+    """ Get architecture from X-BPO-Arch header and validate it. """
     if "X-BPO-Arch" not in request.headers:
         raise ValueError("missing X-BPO-Arch header!")
     arch = request.headers["X-BPO-Arch"]
     if arch not in bpo.config.const.architectures:
         raise ValueError("invalid X-BPO-Arch: " + arch)
 
-    # Get and validate push_id
+
+def get_push(session, request):
+    """ Get the push ID from X-BPO-Push-Id header and load the Push object from
+        the database. """
     if "X-BPO-Push-Id" not in request.headers:
         raise ValueError("missing X-BPO-Push-Id header!")
     push_id = request.headers["X-BPO-Push-Id"]
     result = session.query(bpo.db.Push).filter_by(id=int(push_id)).all()
     if not len(result):
         raise ValueError("invalid X-BPO-Push-Id: " + push_id)
-    push = result[0]
+    return result[0]
 
-    # Build dict of missing postmarketOS packages (DB objects)
-    packages = {}
-    for package_payload in payload:
-        pkgname = package_payload["pkgname"]
-        version = package_payload["version"]
-        repo = package_payload["repo"]
-        
-        if pkgname in packages:
-            raise ValueError("pkgname found twice in payload: " + pkgname)
+
+def get_payload(request):
+    """ Get the payload from the POST-data and verify it. """
+    ret = request.get_json()
+
+    # Check for duplicate pkgnames
+    found = {}
+    for package in ret:
+        pkgname = package["pkgname"]
+        if pkgname in found:
+            raise RuntimeError("pkgname found twice in payload: " + pkgname)
+        found[pkgname] = True
+
+    return ret
+
+
+def load_package_from_db(session, pkgname, arch):
+    result = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                     pkgname=pkgname).all()
+    return result[0] if len(result) else None
+
+
+def update_or_insert_packages(session, payload, arch):
+    """ Update/insert packages from payload into the database, with all
+        information except for the dependencies. These need to be set later,
+        because that needs to happen after each package has an ID assigned.
+        Otherwise we will get duplicates in the database (resulting in errors
+        from the unique pkgname-arch index). """
+    for package in payload:
+        pkgname = package["pkgname"]
+        version = package["version"]
+        repo = package["repo"]
 
         # Find existing db entry if possible (update or insert logic)
-        result = session.query(bpo.db.Package).filter_by(arch=arch,
-                                                         pkgname=pkgname).all()
-        if len(result):
-            package = result[0]
-            package.version = version
-            package.repo = repo
+        package_db = load_package_from_db(session, pkgname, arch)
+        if package_db:
+            package_db.version = version
+            package_db.repo = repo
         else:
-            package = bpo.db.Package(arch=arch, pkgname=pkgname,
+            package_db = bpo.db.Package(arch=arch, pkgname=pkgname,
                                      version=version, repo=repo)
-        session.merge(package)
-        packages[pkgname] = package
+        session.merge(package_db)
 
-    # So we wrote all packages, now load them again into the packages list.
-    # That is needed, so the packages have an ID assigned, and sqlalchemy won't
-    # try to create duplicates when inserting packages with proper depends.
-    # Ugly PoC, this really needs to be split up in multiple, reusable
-    # functions.
-    packages = {}
-    for package_payload in payload:
-        pkgname = package_payload["pkgname"]
-        result = session.query(bpo.db.Package).filter_by(arch=arch,
-                                                         pkgname=pkgname).all()
-        packages[pkgname] = result[0]
 
-    # Add dependencies
-    for package_payload in payload:
+def update_package_depends(session, payload, arch):
+    for package in payload:
+
         # Build list of dependencies (DB objects)
-        depends_payload = package_payload["depends"]
         depends = []
-        for pkgname in depends_payload:
-            depend = None
-            if pkgname in packages:
-                # Find dependency in payload
-                depend = packages[pkgname]
-            else:
-                # Find dependency in DB
-                result = session.query(bpo.db.Package).\
-                         filter_by(arch=arch,pkgname=pkgname).all()
-                if len(result):
-                    depend = result[0]
+        for pkgname in package["depends"]:
 
-            # Add dependency if we found it (otherwise it is in Alpine)
+            # Avoid complexity by only storing postmarketOS dependencies (which
+            # are all in the database at this point), and ignoring Alpine
+            # depends.
+            depend = load_package_from_db(session, pkgname, arch)
             if depend:
                 depends.append(depend)
-        
-        # Add dependencies to package
-        pkgname = package_payload["pkgname"]
-        packages[pkgname].depends = depends
-        session.merge(packages[pkgname])
 
-    # Insert into database
+        # Write changes
+        package_db = load_package_from_db(session, package["pkgname"], arch)
+        package_db.depends = depends
+        session.merge(package_db)
+
+
+@blueprint.route("/api/job-callback/get-repo-missing", methods=["POST"])
+@header_auth("X-BPO-Token", "job_callback")
+def job_callback_get_repo_missing():
+    # Parse input data
+    arch = get_arch(request)
+    payload = get_payload(request)
+    session = bpo.db.session()
+    push = get_push(session, request)
+
+    # Update packages in DB
+    update_or_insert_packages(session, payload, arch)
+    update_package_depends(session, payload, arch)
+
+    # Write log entry
     log = bpo.db.Log(action="job_callback_get_repo_missing", payload=payload,
                      push=push, arch=arch)
     session.add(log)
