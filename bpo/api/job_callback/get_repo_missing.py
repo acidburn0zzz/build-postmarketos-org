@@ -1,18 +1,18 @@
 from flask import Blueprint, request, abort
 from bpo.helpers.headerauth import header_auth
+import bpo.api
 import bpo.config.args
 import bpo.db
 import bpo.helpers.repo
 import bpo.helpers.queue
 
-blueprint = Blueprint("job_callback", __name__)
+blueprint = bpo.api.blueprint
 
 
 @blueprint.route("/api/job-callback/get-repo-missing", methods=["POST"])
 @header_auth("X-BPO-Token", "job_callback")
 def job_callback_get_repo_missing():
     # FIXME: split up in multiple functions
-    # FIXME: split up in multiple files, one file per callback
     payload = request.get_json()
     session = bpo.db.session()
 
@@ -90,33 +90,3 @@ def job_callback_get_repo_missing():
     # build the queue and start the next build
     
     return "warming up build servers..."
-
-
-@blueprint.route("/api/job-callback/build-package", methods=["POST"])
-@header_auth("X-BPO-Token", "job_callback")
-def job_callback_build_package():
-    # TODO:
-    # * save file to disk
-    # * get queue_id from handler
-    # * only mark as BUILT, if this was the last file (do we send multiple?)
-    queue_id = 1
-    queue_entry = bpo.helpers.queue.get_entry_by_id(queue_id)
-    if not queue_entry:
-        raise RuntimeError("invalid queue_id. FIXME: return error to user!")
-
-    bpo.helpers.queue.set_status(queue_entry, "BUILT")
-    bpo.helpers.repo.index(queue_entry["arch"])
-
-    return "package received, kthxbye"
-
-
-@blueprint.route("/api/job-callback/sign-index", methods=["POST"])
-@header_auth("X-BPO-Token", "job_callback")
-def job_callback_sign_index():
-    # TODO:
-    # * save index on disks
-    # * get arch from handler
-    arch = "x86_64"
-    bpo.helpers.repo.publish(arch)
-
-    return "alright, rollin' out the new repo"
