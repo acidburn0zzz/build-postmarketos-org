@@ -1,3 +1,6 @@
+# Copyright 2019 Oliver Smith
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 import hashlib
 from functools import wraps
 from hmac import compare_digest
