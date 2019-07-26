@@ -1,3 +1,6 @@
+# Copyright 2019 Oliver Smith
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 from flask import Blueprint, request, abort
 from bpo.helpers.headerauth import header_auth
 import bpo.jobs.get_repo_missing
