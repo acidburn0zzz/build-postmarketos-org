@@ -8,9 +8,6 @@ import bpo.helpers.job
 
 def run(push_id, arch):
     bpo.helpers.job.run("get_depends", {
-        "hello": """
-            echo "hello world"
-            """,
         "pmbootstrap repo_missing": """
             ./pmbootstrap.py repo_missing > repo_missing.json
             """,

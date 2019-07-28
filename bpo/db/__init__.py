@@ -8,6 +8,7 @@
         session.add(log)
         session.commit() """
 
+import enum
 import glob
 import logging
 import os
@@ -18,7 +19,7 @@ import sqlalchemy
 import sqlalchemy.orm
 import sqlalchemy.ext.declarative
 from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, \
-                       Table, Boolean, Index
+                       Table, Boolean, Index, Enum
 from sqlalchemy.orm import relationship
 
 import bpo.config.args
@@ -43,11 +44,20 @@ class Commit(base):
     push_id = Column(Integer, ForeignKey("push.id"))
 
 
+class PackageStatus(enum.Enum):
+    waiting = 0
+    building = 1
+    built = 2
+    published = 3
+
+
 class Package(base):
     __tablename__ = "package"
     id = Column(Integer, primary_key=True)
     arch = Column(String)
     pkgname = Column(String)
+    status = Column(Enum(PackageStatus))
+    build_id = Column(Integer, unique=True)
 
     # The following columns represent the latest state. We don't store the
     # history in bpo (avoids complexity, we have the git history for that).
@@ -65,6 +75,21 @@ class Package(base):
             depends.append(depend.pkgname)
         return (self.arch + "/" + self.repo + "/" + self.pkgname + "-" +
                 self.version + " (pmOS depends: " + str(depends) + ")")
+
+
+    def __init__(self, arch, pkgname, version):
+        self.arch = arch
+        self.pkgname = pkgname
+        self.version = version
+        self.status = PackageStatus.waiting
+
+
+    def depends_built(self):
+        for depend in self.depends:
+            if depend.status < PackageStatus.built:
+                return False
+        return True
+
 
 class Queue(base):
     __tablename__ = "queue"
@@ -132,3 +157,9 @@ def init():
     session = self.session()
     session.add(msg)
     session.commit()
+
+
+def get_package(session, pkgname, arch):
+    result = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                     pkgname=pkgname).all()
+    return result[0] if len(result) else None

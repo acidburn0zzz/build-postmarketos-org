@@ -6,8 +6,6 @@ from bpo.helpers.headerauth import header_auth
 import bpo.api
 import bpo.config.args
 import bpo.db
-import bpo.helpers.repo
-import bpo.helpers.queue
 
 blueprint = bpo.api.blueprint
 
@@ -15,6 +13,9 @@ blueprint = bpo.api.blueprint
 @blueprint.route("/api/job-callback/build-package", methods=["POST"])
 @header_auth("X-BPO-Token", "job_callback")
 def job_callback_build_package():
+    # FIXME
+    logging.info("STUB: job_callback_build_package")
+
     # TODO:
     # * save file to disk
     # * get queue_id from handler
@@ -24,7 +25,8 @@ def job_callback_build_package():
     if not queue_entry:
         raise RuntimeError("invalid queue_id. FIXME: return error to user!")
 
-    bpo.helpers.queue.set_status(queue_entry, "BUILT")
-    bpo.helpers.repo.index(queue_entry["arch"])
+    # FIXME: set package status: BUILT
+    # FIXME: update package index
+    bpo.repo.build(arch)
 
     return "package received, kthxbye"

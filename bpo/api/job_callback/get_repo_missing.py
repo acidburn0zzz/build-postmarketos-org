@@ -6,8 +6,7 @@ from bpo.helpers.headerauth import header_auth
 import bpo.api
 import bpo.config.args
 import bpo.db
-import bpo.helpers.repo
-import bpo.helpers.queue
+import bpo.repo
 
 blueprint = bpo.api.blueprint
 
@@ -48,12 +47,6 @@ def get_payload(request):
     return ret
 
 
-def load_package_from_db(session, pkgname, arch):
-    result = session.query(bpo.db.Package).filter_by(arch=arch,
-                                                     pkgname=pkgname).all()
-    return result[0] if len(result) else None
-
-
 def update_or_insert_packages(session, payload, arch):
     """ Update/insert packages from payload into the database, with all
         information except for the dependencies. These need to be set later,
@@ -66,13 +59,14 @@ def update_or_insert_packages(session, payload, arch):
         repo = package["repo"]
 
         # Find existing db entry if possible (update or insert logic)
-        package_db = load_package_from_db(session, pkgname, arch)
+        package_db = bpo.db.get_package(session, pkgname, arch)
         if package_db:
+            if package_db.version != version:
+                bpo.jobs.build_package.abort(arch, pkgname)
             package_db.version = version
             package_db.repo = repo
         else:
-            package_db = bpo.db.Package(arch=arch, pkgname=pkgname,
-                                     version=version, repo=repo)
+            package_db = bpo.db.Package(arch, pkgname, version)
         session.merge(package_db)
 
 
@@ -86,12 +80,12 @@ def update_package_depends(session, payload, arch):
             # Avoid complexity by only storing postmarketOS dependencies (which
             # are all in the database at this point), and ignoring Alpine
             # depends.
-            depend = load_package_from_db(session, pkgname, arch)
+            depend = bpo.db.get_package(session, pkgname, arch)
             if depend:
                 depends.append(depend)
 
         # Write changes
-        package_db = load_package_from_db(session, package["pkgname"], arch)
+        package_db = bpo.db.get_package(session, package["pkgname"], arch)
         package_db.depends = depends
         session.merge(package_db)
 
@@ -114,8 +108,6 @@ def job_callback_get_repo_missing():
                      push=push, arch=arch)
     session.add(log)
     session.commit()
-
-    # TODO:
-    # build the queue and start the next build
+    bpo.repo.build(arch)
     
     return "warming up build servers..."
