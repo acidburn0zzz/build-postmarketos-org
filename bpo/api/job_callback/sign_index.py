@@ -6,8 +6,6 @@ from bpo.helpers.headerauth import header_auth
 import bpo.api
 import bpo.config.args
 import bpo.db
-import bpo.helpers.repo
-import bpo.helpers.queue
 
 blueprint = bpo.api.blueprint
 
@@ -19,6 +17,6 @@ def job_callback_sign_index():
     # * save index on disks
     # * get arch from handler
     arch = "x86_64"
-    bpo.helpers.repo.publish(arch)
+    bpo.repo.publish(arch)
 
     return "alright, rollin' out the new repo"
