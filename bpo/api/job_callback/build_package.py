@@ -14,10 +14,11 @@ blueprint = bpo.api.blueprint
 @blueprint.route("/api/job-callback/build-package", methods=["POST"])
 @header_auth("X-BPO-Token", "job_callback")
 def job_callback_build_package():
-    arch = bpo.api.get_arch(request)
+    session = bpo.db.session()
+    package = bpo.api.get_package(session, request)
+    version = bpo.api.get_version(request, package)
 
     # TODO:
-    # * verify that we wanted to build this package
     # * save files to disk
     # * set package status: BUILT
     # * update package index
