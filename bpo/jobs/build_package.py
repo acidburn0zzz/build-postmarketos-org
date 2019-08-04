@@ -16,9 +16,6 @@ def run(arch, pkgname):
     session.merge(package)
     session.commit()
 
-    # FIXME: arch is None here for some reason
-    arch = "x86_64"
-
     # Start job
     bpo.helpers.job.run("build_package", {
         # FIXME: use proper --mirror-pmOS parameters etc.

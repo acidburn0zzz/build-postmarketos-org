@@ -18,6 +18,7 @@ def get_arch(request):
     arch = request.headers["X-BPO-Arch"]
     if arch not in bpo.config.const.architectures:
         raise ValueError("invalid X-BPO-Arch: " + arch)
+    return arch
 
 
 def get_push(session, request):
