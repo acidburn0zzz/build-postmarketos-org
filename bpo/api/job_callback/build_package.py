@@ -20,8 +20,13 @@ def job_callback_build_package():
 
     # TODO:
     # * save files to disk
-    # * set package status: BUILT
-    # * update package index
-    # * bpo.repo.build(arch)
 
+    # Change status to built
+    package.status = bpo.db.PackageStatus.built
+    session.merge(package)
+    session.commit()
+
+    # Build next package / update index
+    # FIXME: commented out, because it crashes at comparing status values
+    # bpo.repo.build(package.arch)
     return "package received, kthxbye"
