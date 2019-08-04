@@ -35,7 +35,7 @@ def run(arch, pkgname):
             export BPO_PUSH_ID=""
             export BPO_VERSION=""" + shlex.quote(package.version) + """
 
-            pmaports/.sr.ht/submit.py
+            pmaports/.build.postmarketos.org/submit.py
             """
     })
 
