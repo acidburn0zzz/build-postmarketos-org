@@ -16,7 +16,9 @@ def run(push_id, arch):
             export BPO_ARCH=""" + shlex.quote(arch) + """
             export BPO_PAYLOAD_FILES="repo_missing.json"
             export BPO_PAYLOAD_IS_JSON="1"
+            export BPO_PKGNAME=""
             export BPO_PUSH_ID=""" + shlex.quote(str(push_id)) + """
+            export BPO_VERSION=""
 
             pmaports/.sr.ht/submit.py
             """,
