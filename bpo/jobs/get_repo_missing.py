@@ -20,6 +20,6 @@ def run(push_id, arch):
             export BPO_PUSH_ID=""" + shlex.quote(str(push_id)) + """
             export BPO_VERSION=""
 
-            pmaports/.sr.ht/submit.py
+            pmaports/.build.postmarketos.org/submit.py
             """,
     })
