@@ -21,11 +21,22 @@ def run(arch, pkgname):
         # FIXME: use proper --mirror-pmOS parameters etc.
         "pmbootstrap build": """
             ./pmbootstrap.py build \
+                --no-depends \
                 --strict \
                 --arch """ + shlex.quote(arch) + """ \
                 """ + shlex.quote(pkgname) + """
             """,
-            # FIXME: submit
+        "submit": """
+            export BPO_API_ENDPOINT="build-package"
+            export BPO_ARCH=""" + shlex.quote(arch) + """
+            export BPO_PAYLOAD_FILES="$(ls -1 "$(./pmbootstrap.py -q config work)/packages/$BPO_ARCH/"*.apk)"
+            export BPO_PAYLOAD_IS_JSON="0"
+            export BPO_PKGNAME=""" + shlex.quote(pkgname) + """
+            export BPO_PUSH_ID=""
+            export BPO_VERSION=""" + shlex.quote(package.version) + """
+
+            pmaports/.sr.ht/submit.py
+            """
     })
 
     # FIXME: write job id back to Packages
