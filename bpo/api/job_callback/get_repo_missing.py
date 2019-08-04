@@ -11,30 +11,9 @@ import bpo.repo
 blueprint = bpo.api.blueprint
 
 
-def get_arch(request):
-    """ Get architecture from X-BPO-Arch header and validate it. """
-    if "X-BPO-Arch" not in request.headers:
-        raise ValueError("missing X-BPO-Arch header!")
-    arch = request.headers["X-BPO-Arch"]
-    if arch not in bpo.config.const.architectures:
-        raise ValueError("invalid X-BPO-Arch: " + arch)
-    return arch
-
-
-def get_push(session, request):
-    """ Get the push ID from X-BPO-Push-Id header and load the Push object from
-        the database. """
-    if "X-BPO-Push-Id" not in request.headers:
-        raise ValueError("missing X-BPO-Push-Id header!")
-    push_id = request.headers["X-BPO-Push-Id"]
-    result = session.query(bpo.db.Push).filter_by(id=int(push_id)).all()
-    if not len(result):
-        raise ValueError("invalid X-BPO-Push-Id: " + push_id)
-    return result[0]
-
-
 def get_payload(request):
-    """ Get the payload from the POST-data and verify it. """
+    """ Get the get_repo_missing callback specific payload from the POST-data
+        and verify it. """
     ret = request.get_json()
 
     # Check for duplicate pkgnames
@@ -95,10 +74,10 @@ def update_package_depends(session, payload, arch):
 @header_auth("X-BPO-Token", "job_callback")
 def job_callback_get_repo_missing():
     # Parse input data
-    arch = get_arch(request)
+    arch = bpo.api.get_arch(request)
     payload = get_payload(request)
     session = bpo.db.session()
-    push = get_push(session, request)
+    push = bpo.api.get_push(session, request)
 
     # Update packages in DB
     update_or_insert_packages(session, payload, arch)
