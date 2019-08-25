@@ -15,7 +15,7 @@ blueprint = bpo.api.blueprint
 
 def get_apks(request):
     """ Get all attached apks and verify the file names. """
-    pattern = re.compile("^[a-z0-9.-]+.apk$")
+    pattern = re.compile("^[a-z0-9._-]+.apk$")
     ret = request.files.getlist("file[]")
 
     for apk in ret:
