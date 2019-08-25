@@ -13,6 +13,8 @@ port = 5000
 db_path = "bpo.db"
 gitlab_secret = None
 job_service = "local"
+repo_path = bpo.config.const.top_dir + "/_repo"
+repo_staging_path = bpo.config.const.top_dir + "/_repo_staging"
 
 local_pmaports = os.path.realpath(bpo.config.const.top_dir +
                                   "/../pmbootstrap/aports")
@@ -46,6 +48,13 @@ def init():
                              " auth tokens are stored")
     parser.add_argument("-d", "--db-path", help="path to sqlite3 database")
     parser.add_argument("-p", "--port", type=int, help="port to listen on")
+    parser.add_argument("-r", "--repo-path",
+                        help="where to create the final binary repository")
+    parser.add_argument("-s", "--repo-staging-path",
+                        help="apks remain in this staging path, until a"
+                             " complete pmaports.git push (of one or more"
+                             " commits) is built, then all staging apks are"
+                             " moved to the final repo path")
 
     # Job service subparsers
     job_service = parser.add_subparsers(title="job service",

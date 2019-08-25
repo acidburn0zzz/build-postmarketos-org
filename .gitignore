@@ -1,6 +1,8 @@
 bpo.db
 .tokens.cfg
 _job_tmp
+_repo_staging
+_repo
 
 # The rest below is more or less from a default Python .gitignore
 .*.swp
