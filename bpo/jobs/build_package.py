@@ -7,11 +7,11 @@ import logging
 import shlex
 
 
-def run(arch, pkgname):
+def run(arch, pkgname, branch):
     """ Start a single package build job. """
     # Change status to building
     session = bpo.db.session()
-    package = bpo.db.get_package(session, pkgname, arch)
+    package = bpo.db.get_package(session, pkgname, arch, branch)
     package.status = bpo.db.PackageStatus.building
     session.merge(package)
     session.commit()
@@ -19,6 +19,7 @@ def run(arch, pkgname):
     # Start job
     bpo.helpers.job.run("build_package", {
         # FIXME: use proper --mirror-pmOS parameters etc.
+        # FIXME: checkout branch
         "pmbootstrap build": """
             ./pmbootstrap.py build \
                 --no-depends \
@@ -29,6 +30,7 @@ def run(arch, pkgname):
         "submit": """
             export BPO_API_ENDPOINT="build-package"
             export BPO_ARCH=""" + shlex.quote(arch) + """
+            export BPO_BRANCH=""" + shlex.quote(branch) + """
             export BPO_PAYLOAD_FILES="$(ls -1 "$(./pmbootstrap.py -q config work)/packages/$BPO_ARCH/"*.apk)"
             export BPO_PAYLOAD_IS_JSON="0"
             export BPO_PKGNAME=""" + shlex.quote(pkgname) + """
@@ -42,7 +44,8 @@ def run(arch, pkgname):
     # FIXME: write job id back to Packages
 
 
-def abort(arch, pkgname):
-    """ Stop a single package build job. """
+def abort(package):
+    """ Stop a single package build job.
+        :param package: bpo.db.Package object """
     # FIXME
     logging.info("STUB")

@@ -13,3 +13,5 @@ def run(arch):
             echo "stub: upload"
         """,
     })
+
+    # FIXME: try to start builds for all other arches/branches now

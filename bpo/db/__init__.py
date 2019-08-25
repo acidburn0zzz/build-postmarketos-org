@@ -32,9 +32,13 @@ session = None
 class Push(base):
     __tablename__ = "push"
     id = Column(Integer, primary_key=True)
+    branch = Column(String)
     date = Column(DateTime)
 
-    # FIXME: set date to current date in __init__!
+
+    def __init__(self, branch):
+        # FIXME: set date to current date!
+        self.branch = branch
 
 class Commit(base):
     __tablename__ = "commit"
@@ -55,6 +59,7 @@ class Package(base):
     __tablename__ = "package"
     id = Column(Integer, primary_key=True)
     arch = Column(String)
+    branch = Column(String)
     pkgname = Column(String)
     status = Column(Enum(PackageStatus))
     build_id = Column(Integer, unique=True)
@@ -64,7 +69,7 @@ class Package(base):
     version = Column(String)
     repo = Column(String)
 
-    Index("pkgname-arch", pkgname, arch, unique=True)
+    Index("pkgname-arch-branch", pkgname, arch, branch, unique=True)
 
     # Package.depends: see init_relationships() below.
 
@@ -74,11 +79,13 @@ class Package(base):
         for depend in self.depends:
             depends.append(depend.pkgname)
         return (self.arch + "/" + self.repo + "/" + self.pkgname + "-" +
-                self.version + " (pmOS depends: " + str(depends) + ")")
+                self.version + "@" + self.branch + " (pmOS depends: " +
+                str(depends) + ")")
 
 
-    def __init__(self, arch, pkgname, version):
+    def __init__(self, arch, branch, pkgname, version):
         self.arch = arch
+        self.branch = branch
         self.pkgname = pkgname
         self.version = version
         self.status = PackageStatus.waiting
@@ -153,7 +160,8 @@ def init():
     session.commit()
 
 
-def get_package(session, pkgname, arch):
+def get_package(session, pkgname, arch, branch):
     result = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                     branch=branch,
                                                      pkgname=pkgname).all()
     return result[0] if len(result) else None

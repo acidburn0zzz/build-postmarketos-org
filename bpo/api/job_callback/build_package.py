@@ -33,8 +33,9 @@ def job_callback_build_package():
     version = bpo.api.get_version(request, package)
     apks = get_apks(request)
 
-    # Create staging dir (FIXME: support multiple branches)
-    staging = bpo.config.args.repo_staging_path + "/" + package.arch
+    # Create staging dir
+    staging = (bpo.config.args.repo_staging_path + "/" + package.branch + "/" +
+               package.arch)
     pathlib.Path(staging).mkdir(0o755, True, True)
 
     # Save files to disk
@@ -49,5 +50,5 @@ def job_callback_build_package():
     session.commit()
 
     # Build next package or publish repo after building all waiting packages
-    bpo.repo.build(package.arch)
+    bpo.repo.build(package.arch, package.branch)
     return "package received, kthxbye"
