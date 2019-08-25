@@ -43,22 +43,20 @@ def next_package_to_build(session, arch):
     raise RuntimeError("can't resolve remaining packages: " + result.join(","))
 
 
-def count_running_builds(session, arch):
+def count_running_builds(session):
     building = bpo.db.PackageStatus.building
-    result = session.query(bpo.db.Package).filter_by(arch=arch,
-                                                     status=building).all()
+    result = session.query(bpo.db.Package).filter_by(status=building).all()
     return len(result)
 
 
 def build(arch):
     """ Start as many parallel build package jobs, as configured. When all
         packages are built, publish the packages. """
-    max_parallel = 1  # FIXME: put in config
     session = bpo.db.session()
-    running = count_running_builds(session, arch)
+    running = count_running_builds(session)
 
     logging.info("Starting build jobs")
-    while running < max_parallel:
+    while running < bpo.config.const.max_parallel_build_jobs:
         pkgname = next_package_to_build(session, arch)
         if not pkgname:
             break
