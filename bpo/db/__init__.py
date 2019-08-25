@@ -91,12 +91,6 @@ class Package(base):
         return True
 
 
-class Queue(base):
-    __tablename__ = "queue"
-    id = Column(Integer, primary_key=True)
-    # TODO
-
-
 class Log(base):
     __tablename__ = "log"
     id = Column(Integer, primary_key=True)
