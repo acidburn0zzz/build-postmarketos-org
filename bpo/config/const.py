@@ -9,3 +9,6 @@ import os
 top_dir = os.path.normpath(os.path.realpath(__file__) + "/../../..")
 
 architectures = ["x86_64"]
+
+# How many build jobs can run in parallel (across all arches)
+max_parallel_build_jobs = 1
