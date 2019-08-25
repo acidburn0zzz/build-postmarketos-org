@@ -86,7 +86,7 @@ class Package(base):
 
     def depends_built(self):
         for depend in self.depends:
-            if depend.status < PackageStatus.built:
+            if depend.status.value < PackageStatus.built.value:
                 return False
         return True
 
