@@ -9,7 +9,7 @@ import bpo.jobs.build_package
 import bpo.jobs.sign_index
 
 
-def publish(arch):
+def publish(arch, branch):
     logging.info("STUB: bpo.helpers.repo.publish")
 
     # TODO:
@@ -18,7 +18,7 @@ def publish(arch):
     # * update database
 
 
-def index(arch):
+def index(arch, branch):
     logging.info("STUB: bpo.helpers.repo.index")
 
     # TODO:
@@ -27,12 +27,13 @@ def index(arch):
     # bpo.jobs.sign_index.run(arch)
 
 
-def next_package_to_build(session, arch):
+def next_package_to_build(session, arch, branch):
     """ :returns: pkgname """
 
     # Get all packages for arch where status = waiting
     waiting = bpo.db.PackageStatus.waiting
     result = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                     branch=branch,
                                                      status=waiting).all()
     if not len(result):
         return None
@@ -49,21 +50,29 @@ def count_running_builds(session):
     return len(result)
 
 
-def build(arch):
+def build(arch, branch):
     """ Start as many parallel build package jobs, as configured. When all
         packages are built, publish the packages. """
     session = bpo.db.session()
     running = count_running_builds(session)
 
-    logging.info("Starting build jobs")
+    if running >= bpo.config.const.max_parallel_build_jobs:
+        logging.info("Building " + arch + "@" + branch + ": max parallel build"
+                     " jobs already running, starting more jobs is delayed.")
+        # FIXME: add logic to retry building for all arches+branches when a
+        # package was built. maybe rewrite this function to always take all
+        # branches and arches into account?
+        return
+
+    logging.info("Building " + arch + "@" + branch + ": starting new job(s)")
     while running < bpo.config.const.max_parallel_build_jobs:
-        pkgname = next_package_to_build(session, arch)
+        pkgname = next_package_to_build(session, arch, branch)
         if not pkgname:
             break
 
-        bpo.jobs.build_package.run(arch, pkgname)
+        bpo.jobs.build_package.run(arch, pkgname, branch)
         running += 1
 
     if not running:
-        index(arch)
+        index(arch, branch)
     return

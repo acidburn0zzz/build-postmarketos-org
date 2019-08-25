@@ -22,6 +22,14 @@ def get_arch(request):
     return arch
 
 
+def get_branch(request):
+    """ Get branch from X-BPO-Branch header and validate it. """
+    branch = get_header(request, "Branch")
+    if branch not in bpo.config.const.branches:
+        raise ValueError("invalid X-BPO-Branch: " + branch)
+    return branch
+
+
 def get_push(session, request):
     """ Get the push ID from X-BPO-Push-Id header and load the Push object from
         the database. """
@@ -35,7 +43,8 @@ def get_push(session, request):
 def get_package(session, request):
     pkgname = get_header(request, "Pkgname")
     arch = get_arch(request)
-    ret = bpo.db.get_package(session, pkgname, arch)
+    branch = get_branch(request)
+    ret = bpo.db.get_package(session, pkgname, arch, branch)
     if not ret:
         raise ValueError("no package found with: pkgname=" + pkgname +
                          ", arch=" + arch)

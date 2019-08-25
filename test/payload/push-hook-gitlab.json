@@ -3,7 +3,7 @@
     "event_name": "push",
     "before": "10c1343cb222a7c6c86dc502b9d60af98c0c8a96",
     "after": "5e9e102a00e58541ed91164de15fd209af628b42",
-    "ref": "refs\/heads\/feature\/phosh",
+    "ref": "refs\/heads\/master",
     "checkout_sha": "5e9e102a00e58541ed91164de15fd209af628b42",
     "message": null,
     "user_id": 495560,

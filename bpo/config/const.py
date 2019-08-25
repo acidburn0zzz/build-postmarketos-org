@@ -10,5 +10,9 @@ top_dir = os.path.normpath(os.path.realpath(__file__) + "/../../..")
 
 architectures = ["x86_64"]
 
+# Which pmaports.git branches will be built. The idea is to add branches based
+# on Alpine's aports.git branches at some point (v3.10, v3.9, ...).
+branches = ["master"]
+
 # How many build jobs can run in parallel (across all arches)
 max_parallel_build_jobs = 1

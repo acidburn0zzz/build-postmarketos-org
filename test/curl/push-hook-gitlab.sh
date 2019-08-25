@@ -13,6 +13,7 @@ curl \
     -d '
 {
     "object_kind":"push",
+    "ref": "refs\/heads\/master",
     "checkout_sha": "deadbeef",
     "commits": [
         {
