@@ -48,7 +48,6 @@ def job_callback_build_package():
     session.merge(package)
     session.commit()
 
-    # Build next package / update index
-    # FIXME: commented out, because it crashes at comparing status values
-    # bpo.repo.build(package.arch)
+    # Build next package or publish repo after building all waiting packages
+    bpo.repo.build(package.arch)
     return "package received, kthxbye"
