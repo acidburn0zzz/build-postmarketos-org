@@ -13,6 +13,7 @@ port = 5000
 db_path = "bpo.db"
 gitlab_secret = None
 job_service = "local"
+temp_path = bpo.config.const.top_dir + "/_temp"
 repo_path = bpo.config.const.top_dir + "/_repo"
 repo_staging_path = bpo.config.const.top_dir + "/_repo_staging"
 
@@ -20,7 +21,6 @@ local_pmaports = os.path.realpath(bpo.config.const.top_dir +
                                   "/../pmbootstrap/aports")
 local_pmbootstrap = os.path.realpath(bpo.config.const.top_dir +
                                      "/../pmbootstrap/pmbootstrap.py")
-local_tempdir = "_job_tmp"
 
 
 def job_service_local(parser):
@@ -31,9 +31,6 @@ def job_service_local(parser):
                           " run on a copy")
     sub.add_argument("--pmbootstrap", dest="local_pmbootstrap",
                      help="path to local pmbootstrap script to run")
-    sub.add_argument("--tempdir", dest="local_tempdir",
-                     help="path to local temp dir for running jobs (will get"
-                          " wiped!)")
     return sub
 
 
@@ -55,6 +52,10 @@ def init():
                              " complete pmaports.git push (of one or more"
                              " commits) is built, then all staging apks are"
                              " moved to the final repo path")
+    parser.add_argument("--temp-path",
+                        help="used for various things, like extracting"
+                             " APKINDEX tools and for running local jobs (will"
+                             " wiped!)")
 
     # Job service subparsers
     job_service = parser.add_subparsers(title="job service",
