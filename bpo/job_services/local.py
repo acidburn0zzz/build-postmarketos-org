@@ -42,7 +42,7 @@ class LocalJobService(JobService):
         self.run_print(["mkdir", "-p", temp_path])
 
         # Write each task's script into a temp file and run it
-        temp_script = temp_path + "/.current_task.sh"
+        temp_script = temp_path + "/current_task.sh"
         for task, script in tasks.items():
             print("### Task: " + task + " ###")
 
