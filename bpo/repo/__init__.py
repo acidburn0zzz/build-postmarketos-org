@@ -7,6 +7,7 @@ import bpo.config.const
 import bpo.db
 import bpo.jobs.build_package
 import bpo.jobs.sign_index
+import bpo.repo.tools
 
 
 def publish(arch, branch):
@@ -19,11 +20,9 @@ def publish(arch, branch):
 
 
 def index(arch, branch):
-    logging.info("STUB: bpo.helpers.repo.index")
-
-    # TODO:
-    # * rebuild APKINDEX locally
-    # * update database
+    bpo.repo.tools.extract()
+    bpo.repo.tools.index_staging(arch, branch)
+    bpo.repo.tools.sign_staging(arch, branch)
     # bpo.jobs.sign_index.run(arch)
 
 
