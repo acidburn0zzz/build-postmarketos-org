@@ -13,6 +13,7 @@ port = 5000
 db_path = "bpo.db"
 gitlab_secret = None
 job_service = "local"
+mirror = "http://postmarketos.brixit.nl/postmarketos"
 temp_path = bpo.config.const.top_dir + "/_temp"
 repo_path = bpo.config.const.top_dir + "/_repo"
 repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
@@ -45,6 +46,9 @@ def init():
                         help="path to tokens file, where hashes of generated"
                              " auth tokens are stored")
     parser.add_argument("-d", "--db-path", help="path to sqlite3 database")
+    parser.add_argument("-m", "--mirror", help="the final repository location,"
+                        " where published and properly signed packages can be"
+                        " found")
     parser.add_argument("-p", "--port", type=int, help="port to listen on")
     parser.add_argument("-r", "--repo-path",
                         help="where to create the final binary repository")

@@ -23,9 +23,3 @@ max_parallel_build_jobs = 1
 # UID that is used for building packages with pmbootstrap (same as
 # chroot_user_id in pmb/config/__init__.py)
 pmbootstrap_chroot_uid_user = "12345"
-
-# The final repository location, where published and properly signed packages
-# can be found.
-# TODO: this becomes http://postmarketos.brixit.nl/postmarketos when running
-# productively!
-primary_mirror = "http://postmarketos.brixit.nl"
