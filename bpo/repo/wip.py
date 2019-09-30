@@ -32,22 +32,6 @@ def do_keygen():
                     "wip.rsa.pub"], check=True, cwd=path_dir)
 
 
-def get_apks(arch, branch):
-    apks = glob.glob(get_path(arch, branch) + "/*.apk")
-    ret = []
-    for apk in apks:
-        ret += [os.path.basename(apk)]
-    ret.sort()
-
-    return ret
-
-
-def index(arch, branch):
-    cmd = ["apk.static", "-q", "index", "--output", "APKINDEX.tar.gz",
-           "--rewrite-arch", arch] + get_apks(arch, branch)
-    bpo.repo.tools.run(arch, branch, "WIP", get_path(arch, branch), cmd)
-
-
 def sign(arch, branch):
     cmd = ["abuild-sign.noinclude",
            "-k", bpo.config.const.repo_wip_keys + "/wip.rsa",
@@ -59,5 +43,5 @@ def finish_upload_from_job(arch, branch):
     # TODO once we have multithreading: make sure that this does not run
     # multiple times in parallel!
 
-    index(arch, branch)
+    bpo.repo.tools.index(arch, branch, "WIP", get_path(arch, branch))
     sign(arch, branch)
