@@ -14,15 +14,6 @@ import bpo.repo.tools
 import bpo.repo.wip
 
 
-def publish(arch, branch):
-    logging.info("STUB: bpo.helpers.repo.publish")
-
-    # TODO:
-    # * run rsync to publish the repo
-    # * better do it in a retry-loop, in case it fails
-    # * update database
-
-
 def next_package_to_build(session, arch, branch):
     """ :returns: pkgname """
 

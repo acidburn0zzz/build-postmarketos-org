@@ -55,3 +55,7 @@ def update_from_symlink_repo(arch, branch):
     copy_new_apks(arch, branch)
     copy_new_apkindex(arch, branch)
     delete_outdated_apks(arch, branch)
+
+
+def publish(arch, branch):
+    logging.info("STUB: bpo.repo.final.publish")

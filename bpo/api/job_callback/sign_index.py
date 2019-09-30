@@ -8,6 +8,7 @@ import bpo.api
 import bpo.config.args
 import bpo.db
 import bpo.repo.symlink
+import bpo.repo.final
 
 blueprint = bpo.api.blueprint
 
@@ -40,6 +41,6 @@ def job_callback_sign_index():
 
     bpo.repo.final.update_from_symlink_repo(arch, branch)
     # FIXME: clean wip repo
-    bpo.repo.publish(arch, branch)
+    bpo.repo.final.publish(arch, branch)
 
     return "alright, rollin' out the new repo"
