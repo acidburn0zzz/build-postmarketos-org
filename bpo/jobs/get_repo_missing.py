@@ -26,6 +26,8 @@ def run(push, arch):
             export BPO_PUSH_ID=""" + shlex.quote(str(push.id)) + """
             export BPO_VERSION=""
 
-            pmaports/.build.postmarketos.org/submit.py
+            # Always run submit.py with exec, because when running locally, the
+            # current_task.sh script can change before submit.py completes!
+            exec pmaports/.build.postmarketos.org/submit.py
             """,
     })
