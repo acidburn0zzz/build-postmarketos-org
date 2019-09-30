@@ -8,6 +8,7 @@ import bpo.db
 import bpo.jobs.build_package
 import bpo.jobs.sign_index
 import bpo.repo.tools
+import bpo.repo.wip
 
 
 def publish(arch, branch):
@@ -20,8 +21,8 @@ def publish(arch, branch):
 
 
 def index(arch, branch):
-    bpo.repo.tools.index_wip(arch, branch)
-    bpo.repo.tools.sign_wip(arch, branch)
+    bpo.repo.wip.index(arch, branch)
+    bpo.repo.wip.sign(arch, branch)
     # bpo.jobs.sign_index.run(arch)
 
 

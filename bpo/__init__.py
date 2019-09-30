@@ -13,6 +13,8 @@ import bpo.api.push_hook.gitlab
 import bpo.config.args
 import bpo.config.tokens
 import bpo.db
+import bpo.repo.tools
+import bpo.repo.wip
 
 
 def logging_init():
@@ -21,12 +23,13 @@ def logging_init():
 
 
 def main():
-    # Initialize logging, config, database
+    # Initialize logging, config, database, repo tools/keys
     logging_init()
     bpo.config.args.init()
     bpo.config.tokens.init()
     bpo.db.init()
     bpo.repo.tools.init()
+    bpo.repo.wip.do_keygen()
 
     # Initialize flask server
     app = Flask(__name__)
