@@ -4,7 +4,7 @@
 import bpo.helpers.job
 
 
-def run(arch):
+def run(arch, branch):
     bpo.helpers.job.run("sign_index", {
         "sign": """
             echo "stub: sign stuff"
@@ -13,5 +13,3 @@ def run(arch):
             echo "stub: upload"
         """,
     })
-
-    # FIXME: try to start builds for all other arches/branches now
