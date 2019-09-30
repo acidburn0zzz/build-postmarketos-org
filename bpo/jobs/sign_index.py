@@ -32,6 +32,17 @@ def run(arch, branch):
             sudo mv "$chroot_target" APKINDEX.tar.gz
         """,
         "upload": """
-            echo "stub: upload"
+            export BPO_API_ENDPOINT="sign-index"
+            export BPO_ARCH=""" + shlex.quote(arch) + """
+            export BPO_BRANCH=""" + shlex.quote(branch) + """
+            export BPO_PAYLOAD_FILES="APKINDEX.tar.gz"
+            export BPO_PAYLOAD_IS_JSON="0"
+            export BPO_PKGNAME=""
+            export BPO_PUSH_ID=""
+            export BPO_VERSION=""
+
+            # Always run submit.py with exec, because when running locally, the
+            # current_task.sh script can change before submit.py completes!
+            exec pmaports/.build.postmarketos.org/submit.py
         """,
     })

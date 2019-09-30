@@ -17,6 +17,7 @@ def job_callback_sign_index():
     # * save index on disks
     # * get arch from handler
     arch = "x86_64"
-    bpo.repo.publish(arch)
+    branch = "master"
+    bpo.repo.publish(arch, branch)
 
     return "alright, rollin' out the new repo"
