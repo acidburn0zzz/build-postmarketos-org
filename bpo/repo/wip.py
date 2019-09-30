@@ -32,14 +32,6 @@ def do_keygen():
                     "wip.rsa.pub"], check=True, cwd=path_dir)
 
 
-def init():
-    temp_path_prepare()
-    extract_tool_apk("apk-tools-static", ["sbin/apk.static"])
-    extract_tool_apk("abuild-sign-noinclude", ["usr/bin/abuild-sign.noinclude",
-                                               "usr/bin/abuild-tar.static"])
-    generate_wip_repo_key()
-
-
 def get_apks(arch, branch):
     apks = glob.glob(get_path(arch, branch) + "/*.apk")
     ret = []
