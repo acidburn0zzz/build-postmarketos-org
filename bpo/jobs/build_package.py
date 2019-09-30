@@ -4,6 +4,7 @@
 import bpo.db
 import bpo.helpers.job
 import logging
+import os
 import shlex
 
 
@@ -20,16 +21,24 @@ def run(arch, pkgname, branch):
     with open(bpo.config.const.repo_wip_keys + "/wip.rsa.pub", "r") as handle:
         pubkey = handle.read()
 
+    # Set mirror args (either primary mirror, or WIP + primary)
+    wip_path = "{}/{}/{}/APKINDEX.tar.gz".format(bpo.config.args.repo_wip_path,
+                                                 branch, arch)
+    mirrors = "--mirror-pmOS " + shlex.quote(bpo.config.const.primary_mirror)
+    if os.path.exists(wip_path):
+        mirrors = '$BPO_WIP_REPO_ARG ' + mirrors
+
     # Start job
     bpo.helpers.job.run("build_package", {
         "install wip.rsa.pub": """
             echo -n '""" + pubkey + """' \
                 > pmbootstrap/pmb/data/keys/wip.rsa.pub
             """,
-        # FIXME: use proper --mirror-pmOS parameters etc.
         # FIXME: checkout branch
         "pmbootstrap build": """
-            ./pmbootstrap/pmbootstrap.py build \
+            ./pmbootstrap/pmbootstrap.py \
+                """ + mirrors + """ \
+                build \
                 --no-depends \
                 --strict \
                 --arch """ + shlex.quote(arch) + """ \

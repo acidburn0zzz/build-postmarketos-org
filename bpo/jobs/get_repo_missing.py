@@ -8,11 +8,15 @@ import bpo.helpers.job
 
 def run(push, arch):
     """ :param push: bpo.db.Push object """
+    primary_mirror = bpo.config.const.primary_mirror
+
     bpo.helpers.job.run("get_depends", {
         # FIXME: checkout right pmaports.git branch (and somehow deal with it
         # when running locally, we don't want to change the branch then)
         "pmbootstrap repo_missing": """
-            ./pmbootstrap/pmbootstrap.py repo_missing > repo_missing.json
+            ./pmbootstrap/pmbootstrap.py \
+                --mirror-pmOS """ + shlex.quote(primary_mirror) + """ \
+                repo_missing > repo_missing.json
             """,
         # NOTE: the branch is already defined through the push_id in the
         # database. But let's write it out explicitly to make debugging easier.

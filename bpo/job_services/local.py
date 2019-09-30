@@ -67,7 +67,7 @@ class LocalJobService(JobService):
         env_vars = """
             export BPO_TOKEN_FILE="./token"
             export BPO_API_HOST=""" + shlex.quote(host) + """
-            export BPO_WIP_REPO_URL="/mnt/pmbootstrap-packages"
+            export BPO_WIP_REPO_ARG="" # empty, because we copy it instead
         """
 
         # Write each task's script into a temp file and run it
