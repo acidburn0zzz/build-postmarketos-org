@@ -16,8 +16,16 @@ def run(arch, pkgname, branch):
     session.merge(package)
     session.commit()
 
+    # Read WIP repo pub key
+    with open(bpo.config.const.repo_wip_keys + "/wip.rsa.pub", "r") as handle:
+        pubkey = handle.read()
+
     # Start job
     bpo.helpers.job.run("build_package", {
+        "install wip.rsa.pub": """
+            echo -n '""" + pubkey + """' \
+                > pmbootstrap/pmb/data/keys/wip.rsa.pub
+            """,
         # FIXME: use proper --mirror-pmOS parameters etc.
         # FIXME: checkout branch
         "pmbootstrap build": """
