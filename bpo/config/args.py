@@ -15,7 +15,7 @@ gitlab_secret = None
 job_service = "local"
 temp_path = bpo.config.const.top_dir + "/_temp"
 repo_path = bpo.config.const.top_dir + "/_repo"
-repo_staging_path = bpo.config.const.top_dir + "/_repo_staging"
+repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
 
 local_pmaports = os.path.realpath(bpo.config.const.top_dir +
                                   "/../pmbootstrap/aports")
@@ -47,11 +47,11 @@ def init():
     parser.add_argument("-p", "--port", type=int, help="port to listen on")
     parser.add_argument("-r", "--repo-path",
                         help="where to create the final binary repository")
-    parser.add_argument("-s", "--repo-staging-path",
-                        help="apks remain in this staging path, until a"
-                             " complete pmaports.git push (of one or more"
-                             " commits) is built, then all staging apks are"
-                             " moved to the final repo path")
+    parser.add_argument("-w", "--repo-wip-path",
+                        help="apks remain in this WIP path, until a complete"
+                             " pmaports.git push (of one or more commits) is"
+                             " built, then all WIP apks are moved to the final"
+                             " repo path")
     parser.add_argument("--temp-path",
                         help="used for various things, like extracting"
                              " APKINDEX tools and for running local jobs (will"

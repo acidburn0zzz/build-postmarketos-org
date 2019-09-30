@@ -33,14 +33,14 @@ def job_callback_build_package():
     version = bpo.api.get_version(request, package)
     apks = get_apks(request)
 
-    # Create staging dir
-    staging = (bpo.config.args.repo_staging_path + "/" + package.branch + "/" +
+    # Create WIP dir
+    wip = (bpo.config.args.repo_wip_path + "/" + package.branch + "/" +
                package.arch)
-    pathlib.Path(staging).mkdir(0o755, True, True)
+    pathlib.Path(wip).mkdir(0o755, True, True)
 
     # Save files to disk
     for apk in apks:
-        path = staging + "/" + apk.filename
+        path = wip + "/" + apk.filename
         logging.info("Saving " + path)
         apk.save(path)
 

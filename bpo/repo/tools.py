@@ -42,9 +42,9 @@ def extract():
     extract_tool_apk("abuild-sign-noinclude", ["usr/bin/abuild-sign.noinclude",
                                                "usr/bin/abuild-tar.static"])
 
-def index_staging(arch, branch):
-    logging.info("STUB: bpo.repo.tools.index_staging")
+def index_wip(arch, branch):
+    logging.info("STUB: bpo.repo.tools.index_wip")
 
 
-def sign_staging(arch, branch):
-    logging.info("STUB: bpo.repo.tools.sign_staging")
+def sign_wip(arch, branch):
+    logging.info("STUB: bpo.repo.tools.sign_wip")

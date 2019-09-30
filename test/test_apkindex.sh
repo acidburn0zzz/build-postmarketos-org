@@ -11,7 +11,7 @@ tar -xf ../tools/apk-tools-static-*.apk
 export PATH="$PWD/usr/bin:$PWD/sbin:$PATH"
 
 # index
-cd ../_repo_staging/master/x86_64
+cd ../_repo_wip/master/x86_64
 apk.static -q index --output APKINDEX.tar.gz_ --rewrite-arch x86_64 *.apk
 
 abuild-sign.noinclude _APKINDEX.tar.gz APKINDEX.tar.gz
