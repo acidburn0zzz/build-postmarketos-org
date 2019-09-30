@@ -15,7 +15,7 @@ gitlab_secret = None
 job_service = "local"
 mirror = "http://postmarketos.brixit.nl/postmarketos"
 temp_path = bpo.config.const.top_dir + "/_temp"
-repo_path = bpo.config.const.top_dir + "/_repo"
+repo_final_path = bpo.config.const.top_dir + "/_repo"
 repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
 
 local_pmaports = os.path.realpath(bpo.config.const.top_dir +
@@ -50,7 +50,7 @@ def init():
                         " where published and properly signed packages can be"
                         " found")
     parser.add_argument("-p", "--port", type=int, help="port to listen on")
-    parser.add_argument("-r", "--repo-path",
+    parser.add_argument("-r", "--repo-final-path",
                         help="where to create the final binary repository")
     parser.add_argument("-w", "--repo-wip-path",
                         help="apks remain in this WIP path, until a complete"
