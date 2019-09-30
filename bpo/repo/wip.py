@@ -14,7 +14,7 @@ def do_keygen():
     # Skip if pub key exists
     path_dir = bpo.config.const.repo_wip_keys
     path_private = path_dir + "/wip.rsa"
-    path_public = path_dir + "/wip.pub"
+    path_public = path_dir + "/wip.rsa.pub"
     if os.path.exists(path_public):
         return
 
@@ -24,7 +24,7 @@ def do_keygen():
     subprocess.run(["openssl", "genrsa", "-out", "wip.rsa", "2048"],
                    check=True, cwd=path_dir)
     subprocess.run(["openssl", "rsa", "-in", "wip.rsa", "-pubout", "-out",
-                    "wip.pub"], check=True, cwd=path_dir)
+                    "wip.rsa.pub"], check=True, cwd=path_dir)
 
 
 def init():
