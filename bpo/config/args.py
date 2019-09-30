@@ -30,7 +30,8 @@ def job_service_local(parser):
                      help="path to local pmaports.git checkout, the job will"
                           " run on a copy")
     sub.add_argument("--pmbootstrap", dest="local_pmbootstrap",
-                     help="path to local pmbootstrap.git checkout")
+                     help="path to local pmbootstrap.git checkout, the job"
+                          " will run on a copy")
     return sub
 
 
