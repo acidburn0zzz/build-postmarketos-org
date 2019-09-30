@@ -9,6 +9,7 @@ import shutil
 import tarfile
 
 import bpo.config.const
+import bpo.repo
 
 
 def temp_path_prepare():
@@ -58,20 +59,9 @@ def run(arch, branch, repo_name, cwd, cmd):
     subprocess.run(cmd, cwd=cwd, env=env, check=True)
 
 
-def get_apks(arch, branch, cwd):
-    """ Get a sorted list of all apks in a repository.
-        :param cwd: path to the repository """
-    ret = []
-    for apk in glob.glob(cwd + "/*.apk"):
-        ret += [os.path.basename(apk)]
-    ret.sort()
-
-    return ret
-
-
 def index(arch, branch, repo_name, cwd):
     """ Sign a repository.
         :param cwd: path to the repository """
     cmd = ["apk.static", "-q", "index", "--output", "APKINDEX.tar.gz",
-           "--rewrite-arch", arch] + get_apks(arch, branch, cwd)
+           "--rewrite-arch", arch] + bpo.repo.get_apks(arch, branch, cwd)
     bpo.repo.tools.run(arch, branch, repo_name, cwd, cmd)

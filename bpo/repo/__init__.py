@@ -1,7 +1,9 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import glob
 import logging
+import os
 
 import bpo.config.const
 import bpo.db
@@ -70,3 +72,14 @@ def build(arch, branch):
     if not running:
         bpo.repo.symlink.create(arch, branch)
     return
+
+
+def get_apks(arch, branch, cwd):
+    """ Get a sorted list of all apks in a repository.
+        :param cwd: path to the repository """
+    ret = []
+    for apk in glob.glob(cwd + "/*.apk"):
+        ret += [os.path.basename(apk)]
+    ret.sort()
+
+    return ret
