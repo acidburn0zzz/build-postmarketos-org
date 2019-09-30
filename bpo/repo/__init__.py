@@ -7,6 +7,7 @@ import bpo.config.const
 import bpo.db
 import bpo.jobs.build_package
 import bpo.jobs.sign_index
+import bpo.repo.symlink
 import bpo.repo.tools
 import bpo.repo.wip
 
@@ -67,5 +68,5 @@ def build(arch, branch):
         running += 1
 
     if not running:
-        logging.info("STUB: do final repo indexing, sign that index, publish")
+        bpo.repo.symlink.create(arch, branch)
     return
