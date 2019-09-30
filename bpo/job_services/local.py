@@ -17,7 +17,7 @@ class LocalJobService(JobService):
         pmaports = shlex.quote(bpo.config.args.local_pmaports)
         pmbootstrap = shlex.quote(bpo.config.args.local_pmbootstrap)
         return """
-            cp -r """ + pmaports + """ .
+            cp -r """ + pmaports + """ ./pmaports
             ln -s """ + pmbootstrap + """ ./pmbootstrap
             echo "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2cO7i" > ./token
             ./pmbootstrap/pmbootstrap.py -q -y zap -p
