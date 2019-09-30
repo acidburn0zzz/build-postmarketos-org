@@ -15,7 +15,7 @@ gitlab_secret = None
 job_service = "local"
 mirror = "http://postmarketos.brixit.nl/postmarketos"
 temp_path = bpo.config.const.top_dir + "/_temp"
-repo_final_path = bpo.config.const.top_dir + "/_repo"
+repo_final_path = bpo.config.const.top_dir + "/_repo_final"
 repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
 
 local_pmaports = os.path.realpath(bpo.config.const.top_dir +
