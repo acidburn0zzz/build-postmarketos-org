@@ -64,9 +64,12 @@ class LocalJobService(JobService):
     def run_job(self, name, tasks):
         host = ("http://" + bpo.config.args.host + ":" +
                 str(bpo.config.args.port))
+        wip_repo_path = bpo.config.args.repo_wip_path
         env_vars = """
             export BPO_TOKEN_FILE="./token"
             export BPO_API_HOST=""" + shlex.quote(host) + """
+            export BPO_WIP_REPO_PATH=""" + shlex.quote(wip_repo_path) + """
+            export BPO_WIP_REPO_URL="" # empty, because we copy it instead
             export BPO_WIP_REPO_ARG="" # empty, because we copy it instead
         """
 
