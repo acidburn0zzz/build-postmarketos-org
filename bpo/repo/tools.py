@@ -85,10 +85,13 @@ def get_wip_repo_apks(arch, branch):
 
 
 def index_wip(arch, branch):
-    cmd = ["apk.static", "-q", "index", "--output", "APKINDEX.tar.gz_",
+    cmd = ["apk.static", "-q", "index", "--output", "APKINDEX.tar.gz",
            "--rewrite-arch", arch] + get_wip_repo_apks(arch, branch)
     run_in_wip_repo(arch, branch, cmd)
 
 
 def sign_wip(arch, branch):
-    logging.info("STUB: bpo.repo.tools.sign_wip")
+    cmd = ["abuild-sign.noinclude",
+           "-k", bpo.config.const.repo_wip_keys + "/wip.rsa",
+           "APKINDEX.tar.gz"]
+    run_in_wip_repo(arch, branch, cmd)
