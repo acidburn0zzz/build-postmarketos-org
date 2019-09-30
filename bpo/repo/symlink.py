@@ -4,9 +4,13 @@
 import glob
 import logging
 import os
+import shutil
 import subprocess
 
 import bpo.config.args
+import bpo.db
+import bpo.repo.final
+import bpo.repo.wip
 
 
 def get_path(arch, branch):
@@ -20,10 +24,36 @@ def clean(arch, branch):
     path = get_path(arch, branch)
     if os.path.exists(path):
         shutil.rmtree(path)
+    subprocess.run(["mkdir", "-p", path], check=True)
+
+
+def find_apk(wip, final, package):
+    """ :param wip: path to WIP repository
+        :param final: path to final repository
+        :param package: bpo.db.Package object """
+    apk_wip = "{}/{}-{}.apk".format(wip, package.pkgname, package.version)
+    if os.path.exists(apk_wip):
+        return apk_wip
+
+    apk_final = "{}/{}-{}.apk".format(final, package.pkgname, package.version)
+    if os.path.exists(apk_final):
+        return apk_final
+
+    raise RuntimeError("Found package in database, but not in WIP or final"
+                       " repository: " + Package)
 
 
 def link_to_all_packages(arch, branch):
-    logging.info("STUB: link to all packages in symlink repo")
+    repo_symlink = get_path(arch, branch)
+    repo_wip = bpo.repo.wip.get_path(arch, branch)
+    repo_final = bpo.repo.final.get_path(arch, branch)
+    session = bpo.db.session()
+    packages = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                       branch=branch)
+    for package in packages:
+        src = find_apk(repo_wip, repo_final, package)
+        logging.debug("new staging repo link: " + src)
+        os.symlink(src, repo_symlink + "/" + os.path.basename(src))
 
 
 def index(arch, branch):
@@ -38,6 +68,7 @@ def sign(arch, branch):
 
 def create(arch, branch):
     # TODO multithreading: make sure that this only runs once at a time
+    logging.info("{}@{}: creating symlink repo".format(arch, branch))
     clean(arch, branch)
     link_to_all_packages(arch, branch)
     index(arch, branch)
