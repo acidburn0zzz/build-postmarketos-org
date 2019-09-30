@@ -12,7 +12,7 @@ def run(push, arch):
         # FIXME: checkout right pmaports.git branch (and somehow deal with it
         # when running locally, we don't want to change the branch then)
         "pmbootstrap repo_missing": """
-            ./pmbootstrap.py repo_missing > repo_missing.json
+            ./pmbootstrap/pmbootstrap.py repo_missing > repo_missing.json
             """,
         # NOTE: the branch is already defined through the push_id in the
         # database. But let's write it out explicitly to make debugging easier.

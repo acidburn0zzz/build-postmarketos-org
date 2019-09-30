@@ -21,7 +21,7 @@ def run(arch, pkgname, branch):
         # FIXME: use proper --mirror-pmOS parameters etc.
         # FIXME: checkout branch
         "pmbootstrap build": """
-            ./pmbootstrap.py build \
+            ./pmbootstrap/pmbootstrap.py build \
                 --no-depends \
                 --strict \
                 --arch """ + shlex.quote(arch) + """ \
@@ -31,7 +31,8 @@ def run(arch, pkgname, branch):
             export BPO_API_ENDPOINT="build-package"
             export BPO_ARCH=""" + shlex.quote(arch) + """
             export BPO_BRANCH=""" + shlex.quote(branch) + """
-            export BPO_PAYLOAD_FILES="$(ls -1 "$(./pmbootstrap.py -q config work)/packages/$BPO_ARCH/"*.apk)"
+            export BPO_PAYLOAD_FILES="$(ls -1 "$(./pmbootstrap/pmbootstrap.py \
+                -q config work)/packages/$BPO_ARCH/"*.apk)"
             export BPO_PAYLOAD_IS_JSON="0"
             export BPO_PKGNAME=""" + shlex.quote(pkgname) + """
             export BPO_PUSH_ID=""

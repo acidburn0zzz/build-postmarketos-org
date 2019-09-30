@@ -20,7 +20,7 @@ repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
 local_pmaports = os.path.realpath(bpo.config.const.top_dir +
                                   "/../pmbootstrap/aports")
 local_pmbootstrap = os.path.realpath(bpo.config.const.top_dir +
-                                     "/../pmbootstrap/pmbootstrap.py")
+                                     "/../pmbootstrap")
 
 
 def job_service_local(parser):
@@ -30,7 +30,7 @@ def job_service_local(parser):
                      help="path to local pmaports.git checkout, the job will"
                           " run on a copy")
     sub.add_argument("--pmbootstrap", dest="local_pmbootstrap",
-                     help="path to local pmbootstrap script to run")
+                     help="path to local pmbootstrap.git checkout")
     return sub
 
 
