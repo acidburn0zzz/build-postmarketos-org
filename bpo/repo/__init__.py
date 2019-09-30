@@ -20,12 +20,6 @@ def publish(arch, branch):
     # * update database
 
 
-def index(arch, branch):
-    bpo.repo.wip.index(arch, branch)
-    bpo.repo.wip.sign(arch, branch)
-    # bpo.jobs.sign_index.run(arch)
-
-
 def next_package_to_build(session, arch, branch):
     """ :returns: pkgname """
 
@@ -73,5 +67,5 @@ def build(arch, branch):
         running += 1
 
     if not running:
-        index(arch, branch)
+        logging.info("STUB: do final repo indexing, sign that index, publish")
     return

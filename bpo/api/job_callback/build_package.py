@@ -44,6 +44,9 @@ def job_callback_build_package():
         logging.info("Saving " + path)
         apk.save(path)
 
+    # Index and sign WIP APKINDEX
+    bpo.repo.wip.finish_upload_from_job(package.arch, package.branch)
+
     # Change status to built
     package.status = bpo.db.PackageStatus.built
     session.merge(package)

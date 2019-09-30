@@ -68,3 +68,10 @@ def sign(arch, branch):
            "APKINDEX.tar.gz"]
     run_tool(arch, branch, cmd)
 
+
+def finish_upload_from_job(arch, branch):
+    # TODO once we have multithreading: make sure that this does not run
+    # multiple times in parallel!
+
+    index(arch, branch)
+    sign(arch, branch)
