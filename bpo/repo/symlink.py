@@ -56,10 +56,6 @@ def link_to_all_packages(arch, branch):
         os.symlink(src, repo_symlink + "/" + os.path.basename(src))
 
 
-def index(arch, branch):
-    logging.info("STUB: index symlink repo")
-
-
 def sign(arch, branch):
     # copy index to wip repo (just because that makes it easy to download it)
     # run sign job
@@ -71,5 +67,5 @@ def create(arch, branch):
     logging.info("{}@{}: creating symlink repo".format(arch, branch))
     clean(arch, branch)
     link_to_all_packages(arch, branch)
-    index(arch, branch)
+    bpo.repo.tools.index(arch, branch, "symlink", get_path(arch, branch))
     sign(arch, branch)
