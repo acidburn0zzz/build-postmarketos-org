@@ -21,6 +21,7 @@ def run(arch, branch):
                     -O APKINDEX.tar.gz
             fi
             """,
+        # FIXME: make sure to use real signing key on sourcehut!
         "sign": """
             ./pmbootstrap/pmbootstrap.py build_init
             work_dir="$(./pmbootstrap/pmbootstrap.py -q config work)"
