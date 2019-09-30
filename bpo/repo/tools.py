@@ -36,11 +36,31 @@ def extract_tool_apk(pkgname, paths):
                 os.chmod(extract_path, 0o755)
 
 
+def generate_wip_repo_key():
+    """ Generate key for signing the APKINDEX of the WIP repository locally."""
+
+    # Skip if pub key exists
+    path_dir = bpo.config.const.repo_wip_keys
+    path_private = path_dir + "/wip.rsa"
+    path_public = path_dir + "/wip.pub"
+    if os.path.exists(path_public):
+        return
+
+    # Generate keys (like do_keygen() in abuild-keygen)
+    logging.info("Generating RSA keypair for WIP repository")
+    subprocess.run(["mkdir", "-p", path_dir], check=True)
+    subprocess.run(["openssl", "genrsa", "-out", "wip.rsa", "2048"],
+                   check=True, cwd=path_dir)
+    subprocess.run(["openssl", "rsa", "-in", "wip.rsa", "-pubout", "-out",
+                    "wip.pub"], check=True, cwd=path_dir)
+
+
 def init():
     temp_path_prepare()
     extract_tool_apk("apk-tools-static", ["sbin/apk.static"])
     extract_tool_apk("abuild-sign-noinclude", ["usr/bin/abuild-sign.noinclude",
                                                "usr/bin/abuild-tar.static"])
+    generate_wip_repo_key()
 
 
 def run_in_wip_repo(arch, branch, cmd):

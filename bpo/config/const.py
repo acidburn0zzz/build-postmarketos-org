@@ -8,6 +8,9 @@ import os
 # Directory containing bpo.py and the bpo module
 top_dir = os.path.normpath(os.path.realpath(__file__) + "/../../..")
 
+# Keypair for signing the APKINDEX of the WIP repository will be stored here
+repo_wip_keys = top_dir + "/_repo_wip_keys"
+
 architectures = ["x86_64"]
 
 # Which pmaports.git branches will be built. The idea is to add branches based
