@@ -1,8 +1,6 @@
 bpo.db
 .tokens.cfg
-_repo_wip
-_repo_wip_keys
-_repo
+_repo*
 _temp
 
 # The rest below is more or less from a default Python .gitignore
