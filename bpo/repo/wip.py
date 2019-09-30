@@ -40,15 +40,6 @@ def init():
     generate_wip_repo_key()
 
 
-def run_tool(arch, branch, cmd):
-    cwd = get_path(arch, branch)
-    tools_bin = bpo.config.args.temp_path + "/repo_tools/bin"
-    env = {"PATH": tools_bin + ":" + os.getenv("PATH") }
-
-    logging.debug("{}@{}: running in WIP repo: {}".format(arch, branch, cmd))
-    subprocess.run(cmd, cwd=cwd, env=env, check=True)
-
-
 def get_apks(arch, branch):
     apks = glob.glob(get_path(arch, branch) + "/*.apk")
     ret = []
@@ -62,14 +53,14 @@ def get_apks(arch, branch):
 def index(arch, branch):
     cmd = ["apk.static", "-q", "index", "--output", "APKINDEX.tar.gz",
            "--rewrite-arch", arch] + get_apks(arch, branch)
-    run_tool(arch, branch, cmd)
+    bpo.repo.tools.run(arch, branch, "WIP", get_path(arch, branch), cmd)
 
 
 def sign(arch, branch):
     cmd = ["abuild-sign.noinclude",
            "-k", bpo.config.const.repo_wip_keys + "/wip.rsa",
            "APKINDEX.tar.gz"]
-    run_tool(arch, branch, cmd)
+    bpo.repo.tools.run(arch, branch, "WIP", get_path(arch, branch), cmd)
 
 
 def finish_upload_from_job(arch, branch):

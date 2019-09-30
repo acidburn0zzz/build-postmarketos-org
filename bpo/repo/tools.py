@@ -41,3 +41,18 @@ def init():
     extract_tool_apk("apk-tools-static", ["sbin/apk.static"])
     extract_tool_apk("abuild-sign-noinclude", ["usr/bin/abuild-sign.noinclude",
                                                "usr/bin/abuild-tar.static"])
+
+
+def run(arch, branch, repo_name, cwd, cmd):
+    """ Run a tool with a nice log message and a proper PATH.
+        :param cwd: current working dir, where cmd should get executed
+        :param cmd: the command to execute
+
+        All other parameters (arch, branch, repo_name) are just for printing a
+        nice log message. """
+    tools_bin = bpo.config.args.temp_path + "/repo_tools/bin"
+    env = {"PATH": tools_bin + ":" + os.getenv("PATH")}
+
+    logging.debug("{}@{}: running in {} repo: {}".format(arch, branch,
+                                                         repo_name, cmd))
+    subprocess.run(cmd, cwd=cwd, env=env, check=True)
