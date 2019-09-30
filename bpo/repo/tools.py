@@ -42,8 +42,32 @@ def extract():
     extract_tool_apk("abuild-sign-noinclude", ["usr/bin/abuild-sign.noinclude",
                                                "usr/bin/abuild-tar.static"])
 
+
+def run_in_wip_repo(arch, branch, cmd):
+    cwd = bpo.config.args.repo_wip_path + "/" + branch + "/" + arch
+    tools_bin = bpo.config.args.temp_path + "/repo_tools/bin"
+    env = {"PATH": tools_bin + ":" + os.getenv("PATH") }
+
+    logging.debug("{}@{}: running in WIP repo: {}".format(arch, branch, cmd))
+    subprocess.run(cmd, cwd=cwd, env=env, check=True)
+
+
+def get_wip_repo_apks(arch, branch):
+    pattern = "{}/{}/{}/*.apk".format(bpo.config.args.repo_wip_path, branch,
+                                      arch)
+    apks = glob.glob(pattern)
+    ret = []
+    for apk in apks:
+        ret += [os.path.basename(apk)]
+    ret.sort()
+
+    return ret
+
+
 def index_wip(arch, branch):
-    logging.info("STUB: bpo.repo.tools.index_wip")
+    cmd = ["apk.static", "-q", "index", "--output", "APKINDEX.tar.gz_",
+           "--rewrite-arch", arch] + get_wip_repo_apks(arch, branch)
+    run_in_wip_repo(arch, branch, cmd)
 
 
 def sign_wip(arch, branch):
