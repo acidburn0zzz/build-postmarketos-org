@@ -26,6 +26,7 @@ def main():
     bpo.config.args.init()
     bpo.config.tokens.init()
     bpo.db.init()
+    bpo.repo.tools.init()
 
     # Initialize flask server
     app = Flask(__name__)

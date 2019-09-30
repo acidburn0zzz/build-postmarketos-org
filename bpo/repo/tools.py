@@ -36,7 +36,7 @@ def extract_tool_apk(pkgname, paths):
                 os.chmod(extract_path, 0o755)
 
 
-def extract():
+def init():
     temp_path_prepare()
     extract_tool_apk("apk-tools-static", ["sbin/apk.static"])
     extract_tool_apk("abuild-sign-noinclude", ["usr/bin/abuild-sign.noinclude",

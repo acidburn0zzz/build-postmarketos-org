@@ -20,7 +20,6 @@ def publish(arch, branch):
 
 
 def index(arch, branch):
-    bpo.repo.tools.extract()
     bpo.repo.tools.index_wip(arch, branch)
     bpo.repo.tools.sign_wip(arch, branch)
     # bpo.jobs.sign_index.run(arch)
