@@ -8,6 +8,11 @@ import subprocess
 
 import bpo.config.const
 
+
+def get_path(arch, branch):
+    return "{}/{}/{}".format(bpo.config.args.repo_wip_path, branch, arch)
+
+
 def do_keygen():
     """ Generate key for signing the APKINDEX of the WIP repository locally."""
 
@@ -36,7 +41,7 @@ def init():
 
 
 def run_tool(arch, branch, cmd):
-    cwd = bpo.config.args.repo_wip_path + "/" + branch + "/" + arch
+    cwd = get_path(arch, branch)
     tools_bin = bpo.config.args.temp_path + "/repo_tools/bin"
     env = {"PATH": tools_bin + ":" + os.getenv("PATH") }
 
@@ -45,9 +50,7 @@ def run_tool(arch, branch, cmd):
 
 
 def get_apks(arch, branch):
-    pattern = "{}/{}/{}/*.apk".format(bpo.config.args.repo_wip_path, branch,
-                                      arch)
-    apks = glob.glob(pattern)
+    apks = glob.glob(get_path(arch, branch) + "/*.apk")
     ret = []
     for apk in apks:
         ret += [os.path.basename(apk)]
