@@ -19,3 +19,7 @@ branches = ["master"]
 
 # How many build jobs can run in parallel (across all arches)
 max_parallel_build_jobs = 1
+
+# UID that is used for building packages with pmbootstrap (same as
+# chroot_user_id in pmb/config/__init__.py)
+pmbootstrap_chroot_uid_user = "12345"

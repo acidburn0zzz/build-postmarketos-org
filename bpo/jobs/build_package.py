@@ -50,7 +50,7 @@ def run(arch, pkgname, branch):
             # current_task.sh script can change before submit.py completes!
             exec pmaports/.build.postmarketos.org/submit.py
             """
-    })
+    }, branch)
 
     # FIXME: write job id back to Packages
 

@@ -43,7 +43,10 @@ def remove_additional_indent(script, spaces=12):
     return ret
 
 
-def run(name, tasks):
+def run(name, tasks, branch=None):
+    """ :param branch: of the build package job, so we can copy the right
+                       subdir of the WIP repository to the local packages dir
+                       (relevant for running with local job service only). """
     logging.info("[" + bpo.config.args.job_service + "] Run job: " + name)
     js = get_job_service()
 
@@ -51,7 +54,7 @@ def run(name, tasks):
     # TODO: add timeout for the job, and retries?
 
     # Job service specific setup task
-    script_setup = js.script_setup()
+    script_setup = js.script_setup(branch)
     tasks_formatted = {"setup": remove_additional_indent(script_setup, 8)}
 
     # Format input tasks
