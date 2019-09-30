@@ -31,7 +31,10 @@ def remove_additional_indent(script, spaces=12):
             continue
 
         # Remove additional indent from line
-        ret += line[spaces:] + "\n"
+        if line[:spaces] == " " * spaces:
+            ret += line[spaces:] + "\n"
+        else: # Line does not start with indent
+            ret += line + "\n"
 
     # Remove trailing empty lines
     while ret.endswith("\n\n"):
