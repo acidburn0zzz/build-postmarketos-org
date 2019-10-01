@@ -62,6 +62,11 @@ class LocalJobService(JobService):
         subprocess.run(command, check=True)
 
     def run_job(self, name, tasks):
+        # Create temp dir
+        temp_path = bpo.config.args.temp_path + "/local_job"
+        subprocess.run(["mkdir", "-p", temp_path], check=True)
+
+        # Common env vars for each task
         host = ("http://" + bpo.config.args.host + ":" +
                 str(bpo.config.args.port))
         wip_repo_path = bpo.config.args.repo_wip_path
@@ -74,7 +79,6 @@ class LocalJobService(JobService):
         """
 
         # Write each task's script into a temp file and run it
-        temp_path = bpo.config.args.temp_path + "/local_job"
         temp_script = temp_path + "/current_task.sh"
         for task, script in tasks.items():
             print("### Task: " + task + " ###")
