@@ -24,6 +24,7 @@ def reset():
     """ Remove the database, generated binary packages and temp dirs. To be
         used at the start of test cases. """
     paths = [bpo.config.args.db_path,
+             bpo.config.args.html_out,
              bpo.config.args.temp_path,
              bpo.config.args.repo_final_path,
              bpo.config.args.repo_wip_path,
