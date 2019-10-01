@@ -5,7 +5,6 @@ import configparser
 import hashlib
 import logging
 import os
-import secrets
 import string
 import sys
 
@@ -37,7 +36,7 @@ def hash_generate(token):
         :returns: hash of the generated token """
     # Generate
     chars = string.ascii_letters + string.digits
-    token_plain = "".join([secrets.choice(chars) for _ in range(50)])
+    token_plain = os.urandom(50).hex()
     token_hash = hashlib.sha512(token_plain.encode()).hexdigest()
 
     # Show the generated token to the user once
