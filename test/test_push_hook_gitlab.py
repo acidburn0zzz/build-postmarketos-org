@@ -4,27 +4,9 @@
 import requests
 
 import bpo_test
+import bpo_test.trigger
 import bpo.jobs
 import bpo.repo
-
-
-def trigger_push_hook_gitlab():
-    token = "iptTdfRNwSvg8ycZqiEdNhMqGalvsgvSXp91SIk2dukG74BNVu"
-    payload = {"object_kind":"push",
-               "ref": "refs/heads/master",
-               "checkout_sha": "deadbeef",
-               "commits":
-                [{"id": "5e9e102a00e58541ed91164de15fd209af628b42",
-                  "message": "main/postmarketos-ui-phosh: clean-up\n",
-                  "timestamp": "2019-05-25T16:23:30Z",
-                  "url": "https:\/\/gitlab.com\/...d91164de15fd209af628b42",
-                  "author": {"name": "John Doe", "email": "john@localhost"},
-                  "added": [],
-                  "modified": ["main/postmarketos-ui-phosh/APKBUILD"],
-                  "removed": []}]}
-    ret = requests.post("http://127.0.0.1:5000/api/push-hook/gitlab",
-                  json=payload, headers={"X-Gitlab-Token": token})
-    assert(ret)
 
 
 def test_push_hook_gitlab_to_nop(monkeypatch):
@@ -34,7 +16,7 @@ def test_push_hook_gitlab_to_nop(monkeypatch):
 
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.jobs.get_repo_missing, "run", bpo_test.nop)
-        trigger_push_hook_gitlab()
+        bpo_test.trigger.push_hook_gitlab()
 
 
 def test_push_hook_gitlab_to_repo_missing_to_nop(monkeypatch):
@@ -43,7 +25,7 @@ def test_push_hook_gitlab_to_repo_missing_to_nop(monkeypatch):
         and does not try to build the repo. """
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.nop)
-        trigger_push_hook_gitlab()
+        bpo_test.trigger.push_hook_gitlab()
 
 
 
