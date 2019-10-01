@@ -1,6 +1,7 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import collections
 import importlib
 import logging
 
@@ -54,8 +55,8 @@ def run(name, tasks, branch=None):
     # TODO: add timeout for the job, and retries?
 
     # Job service specific setup task
-    script_setup = js.script_setup(branch)
-    tasks_formatted = {"setup": remove_additional_indent(script_setup, 8)}
+    script_setup = remove_additional_indent(js.script_setup(branch), 8)
+    tasks_formatted = collections.OrderedDict([("setup", script_setup)])
 
     # Format input tasks
     for task, script in tasks.items():

@@ -3,6 +3,8 @@
 
 import bpo.db
 import bpo.helpers.job
+
+import collections
 import logging
 import os
 import shlex
@@ -29,13 +31,13 @@ def run(arch, pkgname, branch):
         mirrors = '$BPO_WIP_REPO_ARG ' + mirrors
 
     # Start job
-    bpo.helpers.job.run("build_package", {
-        "install wip.rsa.pub": """
+    bpo.helpers.job.run("build_package", collections.OrderedDict([
+        ("install wip.rsa.pub", """
             echo -n '""" + pubkey + """' \
                 > pmbootstrap/pmb/data/keys/wip.rsa.pub
-            """,
+            """),
         # FIXME: checkout branch
-        "pmbootstrap build": """
+        ("pmbootstrap build", """
             ./pmbootstrap/pmbootstrap.py \
                 """ + mirrors + """ \
                 build \
@@ -43,8 +45,8 @@ def run(arch, pkgname, branch):
                 --strict \
                 --arch """ + shlex.quote(arch) + """ \
                 """ + shlex.quote(pkgname) + """
-            """,
-        "submit": """
+            """),
+        ("submit", """
             export BPO_API_ENDPOINT="build-package"
             export BPO_ARCH=""" + shlex.quote(arch) + """
             export BPO_BRANCH=""" + shlex.quote(branch) + """
@@ -58,8 +60,8 @@ def run(arch, pkgname, branch):
             # Always run submit.py with exec, because when running locally, the
             # current_task.sh script can change before submit.py completes!
             exec pmaports/.build.postmarketos.org/submit.py
-            """
-    }, branch)
+            """)
+    ]), branch)
 
     # FIXME: write job id back to Packages
 
