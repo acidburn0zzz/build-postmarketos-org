@@ -14,6 +14,15 @@ $ source .venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
+## Running tests
+
+In the venv created above, run:
+
+```
+$ pip install pytest
+$ pytest -x -vv test
+```
+
 ## Network Architecture
 
 ### Job service

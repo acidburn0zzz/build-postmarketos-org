@@ -22,7 +22,9 @@ def logging_init():
                         format="[%(asctime)s] %(message)s", datefmt="%H:%M:%S")
 
 
-def main():
+def main(return_app=False):
+    """ :param return_app: return the flask app, instead of running it. This
+                           is used in the testsuite. """
     # Initialize logging, config, database, repo tools/keys
     logging_init()
     bpo.config.args.init()
@@ -34,6 +36,8 @@ def main():
     # Initialize flask server
     app = Flask(__name__)
     app.register_blueprint(bpo.api.blueprint)
+    if return_app:
+        return app
     app.run(host=bpo.config.args.host, port=bpo.config.args.port)
 
 
