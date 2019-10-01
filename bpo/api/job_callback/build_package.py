@@ -2,8 +2,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 import logging
-import pathlib
+import os
 import re
+
 from flask import Blueprint, request, abort
 from bpo.helpers.headerauth import header_auth
 import bpo.api
@@ -36,7 +37,7 @@ def job_callback_build_package():
     # Create WIP dir
     wip = (bpo.config.args.repo_wip_path + "/" + package.branch + "/" +
                package.arch)
-    pathlib.Path(wip).mkdir(0o755, True, True)
+    os.makedirs(wip, exist_ok=True)
 
     # Save files to disk
     for apk in apks:

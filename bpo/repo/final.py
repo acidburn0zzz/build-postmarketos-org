@@ -20,7 +20,7 @@ def copy_new_apks(arch, branch):
     repo_final_path = get_path(arch, branch)
     repo_symlink_path = bpo.repo.symlink.get_path(arch, branch)
 
-    subprocess.run(["mkdir", "-p", repo_final_path], check=True)
+    os.makedirs(repo_final_path, exist_ok=True)
 
     for apk in bpo.repo.get_apks(arch, branch, repo_symlink_path):
         src = os.path.realpath(repo_symlink_path + "/" + apk)

@@ -24,7 +24,7 @@ def clean(arch, branch):
     path = get_path(arch, branch)
     if os.path.exists(path):
         shutil.rmtree(path)
-    subprocess.run(["mkdir", "-p", path], check=True)
+    os.makedirs(path, exist_ok=True)
 
 
 def find_apk(wip, final, package):

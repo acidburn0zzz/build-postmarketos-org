@@ -16,7 +16,7 @@ def temp_path_prepare():
     temp_path = bpo.config.args.temp_path + "/repo_tools"
     if os.path.exists(temp_path):
         subprocess.run(["rm", "-rf", temp_path], check=True)
-    subprocess.run(["mkdir", "-p", temp_path + "/bin"], check=True)
+    os.makedirs(temp_path + "/bin", exist_ok=True)
 
 
 def extract_tool_apk(pkgname, paths):

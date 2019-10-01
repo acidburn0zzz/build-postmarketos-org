@@ -25,7 +25,7 @@ def do_keygen():
 
     # Generate keys (like do_keygen() in abuild-keygen)
     logging.info("Generating RSA keypair for WIP repository")
-    subprocess.run(["mkdir", "-p", path_dir], check=True)
+    os.makedirs(path_dir, exist_ok=True)
     subprocess.run(["openssl", "genrsa", "-out", "wip.rsa", "2048"],
                    check=True, cwd=path_dir)
     subprocess.run(["openssl", "rsa", "-in", "wip.rsa", "-pubout", "-out",

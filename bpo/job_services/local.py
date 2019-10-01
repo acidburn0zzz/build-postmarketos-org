@@ -64,7 +64,7 @@ class LocalJobService(JobService):
     def run_job(self, name, tasks):
         # Create temp dir
         temp_path = bpo.config.args.temp_path + "/local_job"
-        subprocess.run(["mkdir", "-p", temp_path], check=True)
+        os.makedirs(temp_path, exist_ok=True)
 
         # Common env vars for each task
         host = ("http://" + bpo.config.args.host + ":" +
