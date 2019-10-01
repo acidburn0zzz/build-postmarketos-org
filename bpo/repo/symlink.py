@@ -70,7 +70,6 @@ def sign(arch, branch):
 
 
 def create(arch, branch):
-    # TODO multithreading: make sure that this only runs once at a time
     logging.info("{}@{}: creating symlink repo".format(arch, branch))
     clean(arch, branch)
     link_to_all_packages(arch, branch)

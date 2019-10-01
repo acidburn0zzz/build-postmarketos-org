@@ -38,7 +38,8 @@ def main(return_app=False):
     app.register_blueprint(bpo.api.blueprint)
     if return_app:
         return app
-    app.run(host=bpo.config.args.host, port=bpo.config.args.port)
+    app.run(host=bpo.config.args.host, port=bpo.config.args.port,
+            threaded=False)
 
 
 if __name__ == "__main__":

@@ -40,8 +40,5 @@ def sign(arch, branch):
 
 
 def finish_upload_from_job(arch, branch):
-    # TODO once we have multithreading: make sure that this does not run
-    # multiple times in parallel!
-
     bpo.repo.tools.index(arch, branch, "WIP", get_path(arch, branch))
     sign(arch, branch)

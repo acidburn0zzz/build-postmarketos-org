@@ -77,7 +77,7 @@ class BPOServer():
             sys.argv = ["bpo.py", "-t", "test/test_tokens.cfg", "local"]
             app = bpo.main(True)
             self.srv = werkzeug.serving.make_server("127.0.0.1", 5000, app,
-                                                    threaded=True)
+                                                    threaded=False)
             self.ctx = app.app_context()
             self.ctx.push()
 
