@@ -27,6 +27,7 @@ import bpo.config.args
 
 base = sqlalchemy.ext.declarative.declarative_base()
 session = None
+init_relationships_complete = False
 
 
 class Push(base):
@@ -116,7 +117,11 @@ class Log(base):
 
 
 def init_relationships():
+    # Only run this once!
     self = sys.modules[__name__]
+    if self.init_relationships_complete:
+        return
+    self.init_relationships_complete = True
 
     # commits.push_id - n:1 - push.id
     self.Commit.push = relationship("Push", back_populates="commits")
