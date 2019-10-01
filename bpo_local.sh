@@ -1,5 +1,5 @@
 #!/bin/sh -ex
-rm -rf bpo.db _repo* || true
+rm -rf bpo.db _repo* _temp || true
 
 # Use old binary repository URL for testing locally, because otherwise it would
 # try to build *all* packages.
