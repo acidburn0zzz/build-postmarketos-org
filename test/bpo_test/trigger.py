@@ -25,6 +25,9 @@ def push_hook_gitlab():
 
 
 def job_callback_get_repo_missing():
+    """ Note that the versions must match the current versions in pmaports.git,
+        otherwise the bpo server will build the current packages and complain
+        later on, that the version isn't matching. """
     url = "http://127.0.0.1:5000/api/job-callback/get-repo-missing"
     token = "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2cO7i"
     headers = {"X-BPO-Arch": "x86_64",
