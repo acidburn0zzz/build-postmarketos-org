@@ -2,6 +2,18 @@
 
 [Work in progress.](https://postmarketos.org/blog/2019/06/23/two-years/#sourcehut-srht)
 
+## Installation
+
+Requires python 3.5 or higher.
+
+```
+$ git clone https://gitlab.com/postmarketOS/build.postmarketos.org
+$ cd build.postmarketos.org
+$ python3 -m venv .venv
+$ source .venv/bin/activate
+$ pip install -r requirements.txt
+```
+
 ## Network Architecture
 
 ### Job service
