@@ -4,6 +4,7 @@
 import threading
 import logging
 import os
+import queue
 import shutil
 import sys
 import werkzeug.serving
@@ -16,6 +17,8 @@ import bpo
 import bpo.config.args
 import bpo.config.const
 
+# Queue for passing test result between threads
+result = None
 
 def reset():
     """ Remove the database, generated binary packages and temp dirs. To be
@@ -43,7 +46,17 @@ def nop(*args, **kwargs):
     """ Use this for monkeypatching the bpo code, so a function does not do
         anything. For example, when testing the gitlab api push hook, we can
         use this to prevent bpo from building the entire repo. """
-    print("(nop called)")
+    logging.info("Thread called nop: " + threading.current_thread().name)
+
+
+def finish(*args, **kwargs):
+    """ Use this for monkeypatching the bpo code, so a function finishes the
+        test instead of performing the original functionallity. For example,
+        when testing the gitlab api push hook, we can use this to prevent bpo
+        from building the entire repo. """
+    global result
+    logging.info("Thread finishes test: " + threading.current_thread().name)
+    result.put(True)
 
 
 class BPOServer():
@@ -72,11 +85,17 @@ class BPOServer():
             self.srv.serve_forever()
 
     def __init__(self):
+        global result
         reset()
+        result = queue.Queue()
         self.thread = self.BPOServerThread()
 
     def __enter__(self):
         self.thread.start()
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
+        global result
+        # Wait until result is set with bpo_test.finish()
+        assert(result.get())
+        result.task_done()
         self.thread.srv.shutdown()

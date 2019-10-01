@@ -15,7 +15,7 @@ def test_push_hook_gitlab_to_nop(monkeypatch):
         won't try to actually get missing packages and build the repo. """
 
     with bpo_test.BPOServer():
-        monkeypatch.setattr(bpo.jobs.get_repo_missing, "run", bpo_test.nop)
+        monkeypatch.setattr(bpo.jobs.get_repo_missing, "run", bpo_test.finish)
         bpo_test.trigger.push_hook_gitlab()
 
 
@@ -24,7 +24,7 @@ def test_push_hook_gitlab_to_repo_missing_to_nop(monkeypatch):
         Monkeypatch bpo.repo.build, so it stops after receiving repo_missing
         and does not try to build the repo. """
     with bpo_test.BPOServer():
-        monkeypatch.setattr(bpo.repo, "build", bpo_test.nop)
+        monkeypatch.setattr(bpo.repo, "build", bpo_test.finish)
         bpo_test.trigger.push_hook_gitlab()
 
 

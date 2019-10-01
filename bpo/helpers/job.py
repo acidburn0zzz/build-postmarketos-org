@@ -4,6 +4,7 @@
 import collections
 import importlib
 import logging
+import threading
 
 import bpo.config.args
 
@@ -44,7 +45,7 @@ def remove_additional_indent(script, spaces=12):
     return ret
 
 
-def run(name, tasks, branch=None):
+def run_job_in_job_service(name, tasks, branch=None):
     """ :param branch: of the build package job, so we can copy the right
                        subdir of the WIP repository to the local packages dir
                        (relevant for running with local job service only). """
@@ -64,3 +65,19 @@ def run(name, tasks, branch=None):
 
     # Pass to bpo.job_services.(...).run_job()
     js.run_job(name, tasks_formatted)
+
+
+class JobThread(threading.Thread):
+
+    def __init__(self, name, tasks, branch=None):
+        threading.Thread.__init__(self, name="job:" + name)
+        self.name = name
+        self.tasks = tasks
+        self.branch = branch
+
+    def run(self):
+        run_job_in_job_service(self.name, self.tasks, self.branch)
+
+
+def run(name, tasks, branch=None):
+    JobThread(name, tasks, branch).start()

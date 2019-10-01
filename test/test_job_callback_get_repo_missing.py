@@ -16,7 +16,7 @@ def test_callback_repo_missing_to_nop(monkeypatch):
         bpo_test.trigger.push_hook_gitlab()
 
         # Trigger job-callback/get-repo-missing
-        monkeypatch.setattr(bpo.repo, "build", bpo_test.nop)
+        monkeypatch.setattr(bpo.repo, "build", bpo_test.finish)
         bpo_test.trigger.job_callback_get_repo_missing()
 
 
@@ -28,7 +28,7 @@ def test_callback_repo_missing_to_build_two_pkgs(monkeypatch):
 
         # Trigger job-callback/get-repo-missing and let it run all the way
         # until the final repository is ready to be published
-        monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.nop)
+        monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.finish)
         bpo_test.trigger.job_callback_get_repo_missing()
 
 # FIXME: test all kinds of errors, e.g. invalid push id
