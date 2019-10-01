@@ -58,8 +58,10 @@ def link_to_all_packages(arch, branch):
 
 def sign(arch, branch):
     # Copy index to wip repo (just because that makes it easy to download it)
+    repo_wip_path = bpo.repo.wip.get_path(arch, branch)
     src = get_path(arch, branch) + "/APKINDEX.tar.gz"
-    dst = bpo.repo.wip.get_path(arch, branch) + "/APKINDEX-symlink-repo.tar.gz"
+    dst = repo_wip_path + "/APKINDEX-symlink-repo.tar.gz"
+    os.makedirs(repo_wip_path, exist_ok=True)
     shutil.copy(src, dst)
 
     # Sign it with a job
