@@ -31,16 +31,17 @@ def find_apk(wip, final, package):
     """ :param wip: path to WIP repository
         :param final: path to final repository
         :param package: bpo.db.Package object """
-    apk_wip = "{}/{}-{}.apk".format(wip, package.pkgname, package.version)
+    apk = package.pkgname + "-" + package.version + ".apk"
+    apk_wip = wip + "/" + apk
     if os.path.exists(apk_wip):
         return apk_wip
 
-    apk_final = "{}/{}-{}.apk".format(final, package.pkgname, package.version)
+    apk_final = final + "/" + apk
     if os.path.exists(apk_final):
         return apk_final
 
     raise RuntimeError("Found package in database, but not in WIP or final"
-                       " repository: " + Package)
+                       " repository: " + apk)
 
 
 def link_to_all_packages(arch, branch):
