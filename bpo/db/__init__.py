@@ -109,16 +109,13 @@ class Log(base):
     date = Column(DateTime(timezone=True),
                            server_default=sqlalchemy.sql.func.now())
     action = Column(Text)
-    details = Column(Text)
     payload = Column(Text)
     arch = Column(Text)
     branch = Column(Text)
 
 
-    def __init__(self, action, details=None, payload=None, arch=None,
-                 branch=None):
+    def __init__(self, action, payload=None, arch=None, branch=None):
         self.action = action
-        self.details = json.dumps(details, indent=4) if details else None
         self.payload = json.dumps(payload, indent=4) if payload else None
         self.arch = arch
         self.branch = branch
