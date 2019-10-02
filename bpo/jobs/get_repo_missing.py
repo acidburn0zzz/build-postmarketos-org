@@ -7,7 +7,7 @@ import shlex
 import bpo.helpers.job
 
 
-def run(arch, branch):
+def run_arch_branch(arch, branch):
     bpo.helpers.job.run("get_repo_missing", collections.OrderedDict([
         # FIXME: checkout right pmaports.git branch (and somehow deal with it
         # when running locally, we don't want to change the branch then)
@@ -32,3 +32,9 @@ def run(arch, branch):
             exec pmaports/.build.postmarketos.org/submit.py
             """),
     ]), branch, arch)
+
+
+def run():
+    for branch in bpo.config.const.branches:
+        for arch in bpo.config.const.architectures:
+            run_arch_branch(arch, branch)

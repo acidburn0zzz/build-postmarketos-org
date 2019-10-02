@@ -24,12 +24,6 @@ def logging_init():
                         format="[%(asctime)s] %(message)s", datefmt="%H:%M:%S")
 
 
-def auto_get_repo_missing():
-    for branch in bpo.config.const.branches:
-        for arch in bpo.config.const.architectures:
-            bpo.jobs.get_repo_missing.run(arch, branch)
-
-
 def main(return_app=False):
     """ :param return_app: return the flask app, instead of running it. This
                            is used in the testsuite. """
@@ -50,7 +44,7 @@ def main(return_app=False):
 
     # Fill up queue with packages to build
     if bpo.config.args.auto_get_repo_missing:
-        auto_get_repo_missing()
+        bpo.jobs.get_repo_missing.run()
 
     # Initialize flask server
     app = Flask(__name__)
