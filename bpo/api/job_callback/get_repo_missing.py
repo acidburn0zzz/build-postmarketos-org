@@ -7,6 +7,7 @@ import bpo.api
 import bpo.config.args
 import bpo.db
 import bpo.repo
+import bpo.ui
 
 blueprint = bpo.api.blueprint
 
@@ -83,14 +84,9 @@ def job_callback_get_repo_missing():
     # Update packages in DB
     update_or_insert_packages(session, payload, arch, push.branch)
     update_package_depends(session, payload, arch, push.branch)
-
-    # Write log entry
-    log = bpo.db.Log(action="api_job_callback_get_repo_missing",
-                     payload=payload,
-                     arch=arch,
-                     branch=push.branch)
-    session.add(log)
     session.commit()
+    bpo.ui.log_and_update(action="api_job_callback_get_repo_missing",
+                          payload=payload, arch=arch, branch=push.branch)
     bpo.repo.build(arch, push.branch)
     
     return "warming up build servers..."
