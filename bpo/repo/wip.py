@@ -7,6 +7,8 @@ import os
 import subprocess
 
 import bpo.config.const
+import bpo.repo
+import bpo.repo.final
 
 
 def get_path(arch, branch):
@@ -42,3 +44,20 @@ def sign(arch, branch):
 def finish_upload_from_job(arch, branch):
     bpo.repo.tools.index(arch, branch, "WIP", get_path(arch, branch))
     sign(arch, branch)
+
+
+def clean(arch, branch):
+    """ Delete all apks from WIP repo, that are also in final repo, and update
+        the APKINDEX of the WIP repo. """
+    logging.debug("Cleaning WIP repo")
+    path_repo_wip = get_path(arch, branch)
+    path_repo_final = bpo.repo.final.get_path(arch, branch)
+
+    for apk in bpo.repo.get_apks(arch, branch, path_repo_wip):
+        if os.path.exists(path_repo_final + "/" + apk):
+            logging.debug(apk + ": found in final repo, delete from WIP repo")
+            os.unlink(path_repo_wip + "/" + apk)
+        else:
+            logging.debug(apk + ": not in final repo, keeping in WIP repo")
+
+    finish_upload_from_job(arch, branch)

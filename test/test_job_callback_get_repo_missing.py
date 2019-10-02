@@ -31,4 +31,16 @@ def test_callback_repo_missing_to_build_two_pkgs(monkeypatch):
         monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.finish)
         bpo_test.trigger.job_callback_get_repo_missing()
 
+    # WIP repo must be empty
+    arch = "x86_64"
+    branch = "master"
+    path = bpo.repo.wip.get_path(arch, branch)
+    apks = bpo.repo.get_apks(arch, branch, path)
+    assert(apks == [])
+
+    # Final repo must have both packages
+    path = bpo.repo.final.get_path(arch, branch)
+    apks = bpo.repo.get_apks(arch, branch, path)
+    assert(apks == ["hello-world-1-r4.apk", "hello-world-wrapper-1-r2.apk"])
+
 # FIXME: test all kinds of errors, e.g. invalid push id

@@ -44,7 +44,7 @@ def job_callback_sign_index():
                           branch=branch)
 
     bpo.repo.final.update_from_symlink_repo(arch, branch)
-    # FIXME: clean wip repo
+    bpo.repo.wip.clean(arch, branch)
     bpo.repo.final.publish(arch, branch)
 
     return "alright, rollin' out the new repo"
