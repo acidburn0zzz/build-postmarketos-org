@@ -64,7 +64,7 @@ def init():
     parser.add_argument("--temp-path",
                         help="used for various things, like extracting"
                              " APKINDEX tools and for running local jobs (will"
-                             " wiped!)")
+                             " get wiped!)")
 
     # Job service subparsers
     job_service = parser.add_subparsers(title="job service",
