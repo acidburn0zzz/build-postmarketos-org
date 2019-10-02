@@ -12,8 +12,16 @@ sys.path.insert(0, topdir)
 import bpo_test
 
 
+def api_request(path, headers, payload):
+    """ Send one HTTP request to the bpo server's API and stop the test if the
+        request fails. """
+    ret = requests.post("http://127.0.0.1:5000/api/" + path, headers=headers,
+                        json=payload)
+    if not ret.ok:
+        bpo_test.finish_nok()
+
+
 def push_hook_gitlab():
-    url = "http://127.0.0.1:5000/api/push-hook/gitlab"
     token = "iptTdfRNwSvg8ycZqiEdNhMqGalvsgvSXp91SIk2dukG74BNVu"
     headers = {"X-Gitlab-Token": token}
     payload = {"object_kind":"push",
@@ -28,16 +36,13 @@ def push_hook_gitlab():
                   "added": [],
                   "modified": ["main/postmarketos-ui-phosh/APKBUILD"],
                   "removed": []}]}
-    ret = requests.post(url, json=payload, headers=headers)
-    if not ret.ok:
-        bpo_test.finish_nok()
+    api_request("push-hook/gitlab", headers, payload)
 
 
 def job_callback_get_repo_missing():
     """ Note that the versions must match the current versions in pmaports.git,
         otherwise the bpo server will build the current packages and complain
         later on, that the version isn't matching. """
-    url = "http://127.0.0.1:5000/api/job-callback/get-repo-missing"
     token = "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2cO7i"
     headers = {"X-BPO-Arch": "x86_64",
                "X-BPO-Push-Id": "1",
@@ -50,6 +55,4 @@ def job_callback_get_repo_missing():
                 "repo": "main",
                 "version": "1-r2",
                 "depends": ["hello-world"]}]
-    ret = requests.post(url, json=payload, headers=headers)
-    if not ret.ok:
-        bpo_test.finish_nok()
+    api_request("job-callback/get-repo-missing", headers, payload)
