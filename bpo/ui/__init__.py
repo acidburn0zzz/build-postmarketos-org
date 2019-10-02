@@ -29,7 +29,6 @@ def init():
     env = jinja2.Environment(loader=loader, autoescape=autoescape)
 
     os.makedirs(bpo.config.args.html_out, exist_ok=True)
-    update()
 
 
 def log_and_update(*args, **kwargs):
