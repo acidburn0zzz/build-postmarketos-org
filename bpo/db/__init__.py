@@ -34,12 +34,11 @@ init_relationships_complete = False
 class Push(base):
     __tablename__ = "push"
     id = Column(Integer, primary_key=True)
+    date = Column(DateTime(timezone=True),
+                           server_default=sqlalchemy.sql.func.now())
     branch = Column(String)
-    date = Column(DateTime)
-
 
     def __init__(self, branch):
-        # FIXME: set date to current date!
         self.branch = branch
 
 class Commit(base):
@@ -60,6 +59,10 @@ class PackageStatus(enum.Enum):
 class Package(base):
     __tablename__ = "package"
     id = Column(Integer, primary_key=True)
+    date = Column(DateTime(timezone=True),
+                           server_default=sqlalchemy.sql.func.now())
+    last_update = Column(DateTime(timezone=True),
+                         onupdate=sqlalchemy.sql.func.now())
     arch = Column(String)
     branch = Column(String)
     pkgname = Column(String)
