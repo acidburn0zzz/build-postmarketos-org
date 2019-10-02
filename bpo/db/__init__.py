@@ -54,6 +54,7 @@ class PackageStatus(enum.Enum):
     building = 1
     built = 2
     published = 3
+    failed = 4
 
 
 class Package(base):
