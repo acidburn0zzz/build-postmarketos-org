@@ -10,6 +10,7 @@ from bpo.helpers.headerauth import header_auth
 import bpo.api
 import bpo.config.args
 import bpo.db
+import bpo.ui
 
 blueprint = bpo.api.blueprint
 
@@ -52,6 +53,10 @@ def job_callback_build_package():
     package.status = bpo.db.PackageStatus.built
     session.merge(package)
     session.commit()
+
+    bpo.ui.log_and_update(action="api_job_callback_build_package",
+                          arch=package.arch, branch=package.branch,
+                          pkgname=package.pkgname, version=package.version)
 
     # Build next package or publish repo after building all waiting packages
     bpo.repo.build(package.arch, package.branch)
