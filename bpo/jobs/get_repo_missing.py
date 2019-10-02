@@ -33,4 +33,4 @@ def run(push, arch):
             # current_task.sh script can change before submit.py completes!
             exec pmaports/.build.postmarketos.org/submit.py
             """),
-    ]))
+    ]), push.branch, arch)
