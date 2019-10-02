@@ -37,8 +37,7 @@ def next_package_to_build(session, arch, branch):
 
 def count_running_builds(session):
     building = bpo.db.PackageStatus.building
-    result = session.query(bpo.db.Package).filter_by(status=building).all()
-    return len(result)
+    return session.query(bpo.db.Package).filter_by(status=building).count()
 
 
 def build_arch_branch(session, slots_available, arch, branch):
