@@ -13,6 +13,7 @@ import bpo.api.push_hook.gitlab
 import bpo.config.args
 import bpo.config.tokens
 import bpo.db
+import bpo.repo
 import bpo.repo.tools
 import bpo.repo.wip
 import bpo.ui
@@ -37,6 +38,9 @@ def main(return_app=False):
     # Initialize UI and update it with a new log message
     bpo.ui.init()
     bpo.ui.log_and_update("restart")
+
+    # Kick off build jobs for queued packages
+    bpo.repo.build()
 
     # Initialize flask server
     app = Flask(__name__)
