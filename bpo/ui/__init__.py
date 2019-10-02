@@ -4,6 +4,7 @@ import jinja2
 import os
 import bpo.config.const
 import bpo.config.args
+import bpo.db
 
 env = None
 
@@ -28,4 +29,16 @@ def init():
     env = jinja2.Environment(loader=loader, autoescape=autoescape)
 
     os.makedirs(bpo.config.args.html_out, exist_ok=True)
+    update()
+
+
+def log_and_update(*args, **kwargs):
+    """ Write one log message and update the output. Do this after making
+        meaningful changes to the database, e.g. after a job callback was
+        executed. See bpo.db.Log.__init__() for the list of parameters. """
+    msg = bpo.db.Log(*args, **kwargs)
+    session = bpo.db.session()
+    session.add(msg)
+    session.commit()
+
     update()
