@@ -36,7 +36,7 @@ def main(return_app=False):
 
     # Initialize UI and update it with a new log message
     bpo.ui.init()
-    bpo.ui.log_and_update("start")
+    bpo.ui.log_and_update("restart")
 
     # Initialize flask server
     app = Flask(__name__)

@@ -17,7 +17,7 @@
         <ul>
             {% for entry in log_entries %}
             <li> {{ entry.date }}
-                {% if entry.action == "start" %}
+                {% if entry.action == "restart" %}
                     build.postmarketos.org server restarted
                 {% elif entry.action == "api_push_hook_gitlab" %}
                     {{entry.branch }}: new commit(s) pushed to pmaports.git
