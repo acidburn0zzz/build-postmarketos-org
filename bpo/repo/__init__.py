@@ -28,7 +28,11 @@ def next_package_to_build(session, arch, branch):
     for package in result:
         if package.depends_built():
             return package.pkgname
-    raise RuntimeError("can't resolve remaining packages: " + result.join(","))
+
+    # Can't resolve (this is expected, if we only have packages left that
+    # depend on packages that are currently building.)
+    logging.debug("can't resolve remaining packages: " + str(result))
+    return None
 
 
 def count_running_builds(session):
