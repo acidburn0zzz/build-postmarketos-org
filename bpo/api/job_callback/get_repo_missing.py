@@ -87,6 +87,6 @@ def job_callback_get_repo_missing():
     session.commit()
     bpo.ui.log_and_update(action="api_job_callback_get_repo_missing",
                           payload=payload, arch=arch, branch=push.branch)
-    bpo.repo.build(arch, push.branch)
+    bpo.repo.build()
     
     return "warming up build servers..."

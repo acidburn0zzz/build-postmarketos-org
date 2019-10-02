@@ -41,32 +41,40 @@ def count_running_builds(session):
     return len(result)
 
 
-def build(arch, branch):
+def build_arch_branch(session, slots_available, arch, branch):
+    """ :returns: amount of jobs that were started """
+    logging.info("Building " + arch + "@" + branch + ": starting new job(s)")
+    running = 0
+    while True:
+        pkgname = next_package_to_build(session, arch, branch)
+        if not pkgname:
+            if not running:
+                logging.info(arch + "@" + branch + ": WIP repo complete")
+                bpo.repo.symlink.create(arch, branch)
+            break
+
+        if slots_available > 0:
+            bpo.jobs.build_package.run(arch, pkgname, branch)
+            running += 1
+            slots_available -= 1
+        else:
+            break
+    return running
+
+
+def build():
     """ Start as many parallel build package jobs, as configured. When all
         packages are built, publish the packages. """
     session = bpo.db.session()
     running = count_running_builds(session)
+    slots_available = bpo.config.const.max_parallel_build_jobs - running
 
-    if running >= bpo.config.const.max_parallel_build_jobs:
-        logging.info("Building " + arch + "@" + branch + ": max parallel build"
-                     " jobs already running, starting more jobs is delayed.")
-        # FIXME: add logic to retry building for all arches+branches when a
-        # package was built. maybe rewrite this function to always take all
-        # branches and arches into account?
-        return
-
-    logging.info("Building " + arch + "@" + branch + ": starting new job(s)")
-    while running < bpo.config.const.max_parallel_build_jobs:
-        pkgname = next_package_to_build(session, arch, branch)
-        if not pkgname:
-            break
-
-        bpo.jobs.build_package.run(arch, pkgname, branch)
-        running += 1
-
-    if not running:
-        bpo.repo.symlink.create(arch, branch)
-    return
+    # Iterate over all branch-arch combinations, to give them a chance to start
+    # a new job or to proceed with rolling out their fully built WIP repo
+    for branch in bpo.config.const.branches:
+        for arch in bpo.config.const.architectures:
+            slots_available -= build_arch_branch(session, slots_available,
+                                                 arch, branch)
 
 
 def get_apks(arch, branch, cwd):
