@@ -108,10 +108,10 @@ class Log(base):
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(timezone=True),
                            server_default=sqlalchemy.sql.func.now())
-    action = Column(Text)
+    action = Column(String)
     payload = Column(Text)
-    arch = Column(Text)
-    branch = Column(Text)
+    arch = Column(String)
+    branch = Column(String)
     pkgname = Column(String)
     version = Column(String)
 
