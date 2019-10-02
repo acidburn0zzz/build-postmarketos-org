@@ -58,6 +58,6 @@ def job_callback_build_package():
                           arch=package.arch, branch=package.branch,
                           pkgname=package.pkgname, version=package.version)
 
-    # Build next package or publish repo after building all waiting packages
+    # Build next package or publish repo after building all queued packages
     bpo.repo.build(package.arch, package.branch)
     return "package received, kthxbye"

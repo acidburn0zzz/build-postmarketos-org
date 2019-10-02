@@ -19,12 +19,12 @@ def update():
     log_entries = session.query(bpo.db.Log).order_by(bpo.db.Log.id.desc()
                     ).limit(50)
     pkgcount_all = session.query(func.count(bpo.db.Package.id)).scalar()
-    pkgcount_queued = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.waiting).count()
+    pkgcount_queued = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.queued).count()
     pkgcount_failed = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.failed).count()
 
     pkgs_building = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.building)
     pkgs_failed = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.failed)
-    pkgs_queued = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.waiting)
+    pkgs_queued = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.queued)
 
     # Fill template
     global env

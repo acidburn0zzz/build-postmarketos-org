@@ -17,11 +17,11 @@ import bpo.repo.wip
 def next_package_to_build(session, arch, branch):
     """ :returns: pkgname """
 
-    # Get all packages for arch where status = waiting
-    waiting = bpo.db.PackageStatus.waiting
+    # Get all packages for arch where status = queued
+    queued = bpo.db.PackageStatus.queued
     result = session.query(bpo.db.Package).filter_by(arch=arch,
                                                      branch=branch,
-                                                     status=waiting).all()
+                                                     status=queued).all()
     if not len(result):
         return None
 

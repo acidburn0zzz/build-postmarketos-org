@@ -50,7 +50,7 @@ class Commit(base):
 
 
 class PackageStatus(enum.Enum):
-    waiting = 0
+    queued = 0
     building = 1
     built = 2
     published = 3
@@ -94,7 +94,7 @@ class Package(base):
         self.branch = branch
         self.pkgname = pkgname
         self.version = version
-        self.status = PackageStatus.waiting
+        self.status = PackageStatus.queued
 
 
     def depends_built(self):
