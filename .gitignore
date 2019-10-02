@@ -1,4 +1,5 @@
 bpo.db
+bpo.db-journal
 .tokens.cfg
 _repo*
 _temp
