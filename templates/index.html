@@ -35,10 +35,25 @@
         </ul>
 
         <h2>Building</h2>
+        <ul>
+            {% for package in pkgs_building %}
+            <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+            {% endfor %}
+        </ul>
 
         <h2>Failed</h2>
+        <ul>
+            {% for package in pkgs_failed %}
+            <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+            {% endfor %}
+        </ul>
 
         <h2>Queued</h2>
+        <ul>
+            {% for package in pkgs_queued %}
+            <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+            {% endfor %}
+        </ul>
 
         <h2>Server information</h2>
     </body>
