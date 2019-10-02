@@ -156,10 +156,17 @@ def init_relationships():
 
 def init():
     """ Initialize db """
+    # Disable check_same_thread, so pysqlite does not print ProgrammingError
+    # junk when running the tests with pytest. SQLAlchemy uses pooling to make
+    # sure that a single connection is not used in more than one thread, so we
+    # can safely disable this check.
+    # https://docs.sqlalchemy.org/en/latest/dialects/sqlite.html
+    connect_args = {"check_same_thread": False}
+
     # Open DB and initialize
     self = sys.modules[__name__]
     url = "sqlite:///" + bpo.config.args.db_path
-    engine = sqlalchemy.create_engine(url)
+    engine = sqlalchemy.create_engine(url, connect_args=connect_args)
     init_relationships()
     self.base.metadata.create_all(engine)
     self.session = sqlalchemy.orm.sessionmaker(bind=engine)
