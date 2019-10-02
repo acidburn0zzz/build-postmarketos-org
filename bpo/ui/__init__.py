@@ -12,12 +12,19 @@ env = None
 
 def update():
     """ Update html_out/index.html """
+    # Query information from DB
+    session = bpo.db.session()
+    log_entries = session.query(bpo.db.Log).order_by(bpo.db.Log.id.desc()
+                    ).limit(50)
+
+    # Fill template
     global env
     template = env.get_template("index.html")
-    html = template.render(pkgcount_all=100)
+    html = template.render(pkgcount_all=100, log_entries=log_entries)
+
+    # Write to output dir
     output = bpo.config.args.html_out + "/index.html"
     output_temp = output + "_"
-
     with open(output_temp, "w") as handle:
         handle.write(html)
     os.rename(output_temp, output)

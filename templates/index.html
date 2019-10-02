@@ -14,6 +14,25 @@
         </ul>
 
         <h2>Last log entries</h2>
+        <ul>
+            {% for entry in log_entries %}
+            <li> {{ entry.date }}
+                {% if entry.action == "start" %}
+                    build.postmarketos.org server restarted
+                {% elif entry.action == "api_push_hook_gitlab" %}
+                    {{entry.branch }}: new commit(s) pushed to pmaports.git
+                {% elif entry.action == "api_job_callback_get_repo_missing" %}
+                    {{entry.branch }}/{{entry.arch }}: new packages queued for building
+                {% elif entry.action == "api_job_callback_build_package" %}
+                    {{entry.branch }}/{{entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: package built
+                {% elif entry.action == "api_job_callback_sign_index" %}
+                    {{entry.branch }}/{{entry.arch }}: all packages built, publishing to mirror
+                {% else %}
+                    ???
+                {% endif %}
+                <i>({{ entry.action }})</i>
+            {% endfor %}
+        </ul>
 
         <h2>Building</h2>
 
