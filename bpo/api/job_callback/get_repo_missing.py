@@ -85,8 +85,10 @@ def job_callback_get_repo_missing():
     update_package_depends(session, payload, arch, push.branch)
 
     # Write log entry
-    log = bpo.db.Log(action="job_callback_get_repo_missing", payload=payload,
-                     push=push, arch=arch)
+    log = bpo.db.Log(action="api_job_callback_get_repo_missing",
+                     payload=payload,
+                     arch=arch,
+                     branch=push.branch)
     session.add(log)
     session.commit()
     bpo.repo.build(arch, push.branch)

@@ -18,6 +18,7 @@ import json
 import sqlalchemy
 import sqlalchemy.orm
 import sqlalchemy.ext.declarative
+import sqlalchemy.sql
 from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, \
                        Table, Boolean, Index, Enum
 from sqlalchemy.orm import relationship
@@ -102,18 +103,22 @@ class Package(base):
 class Log(base):
     __tablename__ = "log"
     id = Column(Integer, primary_key=True)
-    date = Column(DateTime)
+    date = Column(DateTime(timezone=True),
+                           server_default=sqlalchemy.sql.func.now())
     action = Column(Text)
+    details = Column(Text)
     payload = Column(Text)
-    push_id = Column(Integer, ForeignKey("push.id"))
     arch = Column(Text)
+    branch = Column(Text)
 
 
-    def __init__(self, action, payload=None, push=None, arch=None):
+    def __init__(self, action, details=None, payload=None, arch=None,
+                 branch=None):
         self.action = action
+        self.details = json.dumps(details, indent=4) if details else None
         self.payload = json.dumps(payload, indent=4) if payload else None
-        self.push = push
         self.arch = arch
+        self.branch = branch
 
 
 def init_relationships():
@@ -127,11 +132,6 @@ def init_relationships():
     self.Commit.push = relationship("Push", back_populates="commits")
     self.Push.commits = relationship("Commit", order_by=self.Commit.id,
                                      back_populates="push")
-
-    # log.push_id - n:1 - push.id
-    self.Log.push = relationship("Push", back_populates="logs")
-    self.Push.logs = relationship("Log", order_by=self.Log.id,
-                                  back_populates="push")
 
     # package.depends - n:n - package.required_by
     # See "Self-Referential Many-to-Many Relationship" in:

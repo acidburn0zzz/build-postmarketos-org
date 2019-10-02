@@ -55,7 +55,9 @@ def push_hook_gitlab():
         session.add(commit)
 
     # Insert log message
-    log = bpo.db.Log(action="push_hook", payload=payload, push=push)
+    log = bpo.db.Log(action="api_push_hook_gitlab",
+                     payload=payload,
+                     branch=branch)
     session.add(log)
     session.commit()
 
