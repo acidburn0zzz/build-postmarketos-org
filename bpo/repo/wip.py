@@ -41,7 +41,7 @@ def sign(arch, branch):
     bpo.repo.tools.run(arch, branch, "WIP", get_path(arch, branch), cmd)
 
 
-def finish_upload_from_job(arch, branch):
+def update_apkindex(arch, branch):
     bpo.repo.tools.index(arch, branch, "WIP", get_path(arch, branch))
     sign(arch, branch)
 
@@ -60,4 +60,4 @@ def clean(arch, branch):
         else:
             logging.debug(apk + ": not in final repo, keeping in WIP repo")
 
-    finish_upload_from_job(arch, branch)
+    update_apkindex(arch, branch)

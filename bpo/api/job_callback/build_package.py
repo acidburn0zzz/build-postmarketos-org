@@ -47,7 +47,7 @@ def job_callback_build_package():
         apk.save(path)
 
     # Index and sign WIP APKINDEX
-    bpo.repo.wip.finish_upload_from_job(package.arch, package.branch)
+    bpo.repo.wip.update_apkindex(package.arch, package.branch)
 
     # Change status to built
     package.status = bpo.db.PackageStatus.built
