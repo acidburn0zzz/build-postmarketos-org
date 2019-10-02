@@ -80,13 +80,13 @@ class Package(base):
     # Package.depends: see init_relationships() below.
 
 
-    def __str__(self):
+    def __repr__(self):
         depends=[]
         for depend in self.depends:
             depends.append(depend.pkgname)
-        return (self.arch + "/" + self.repo + "/" + self.pkgname + "-" +
-                self.version + "@" + self.branch + " (pmOS depends: " +
-                str(depends) + ")")
+        return (str(self.arch) + "/" + str(self.repo) + "/" +
+                str(self.pkgname) + "-" + str(self.version) +
+                "@" + self.branch + " (pmOS depends: " + str(depends) + ")")
 
 
     def __init__(self, arch, branch, pkgname, version):
