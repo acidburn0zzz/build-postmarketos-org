@@ -9,7 +9,7 @@ import bpo.helpers.job
 
 def run(push, arch):
     """ :param push: bpo.db.Push object """
-    bpo.helpers.job.run("get_depends", collections.OrderedDict([
+    bpo.helpers.job.run("get_repo_missing", collections.OrderedDict([
         # FIXME: checkout right pmaports.git branch (and somehow deal with it
         # when running locally, we don't want to change the branch then)
         ("pmbootstrap repo_missing", """
