@@ -18,7 +18,7 @@ import bpo.config.args
 import bpo.config.const
 
 # Queue for passing test result between threads
-result = None
+result_queue = None
 
 def reset():
     """ Remove the database, generated binary packages and temp dirs. To be
@@ -55,9 +55,16 @@ def finish(*args, **kwargs):
         test instead of performing the original functionallity. For example,
         when testing the gitlab api push hook, we can use this to prevent bpo
         from building the entire repo. """
-    global result
+    global result_queue
     logging.info("Thread finishes test: " + threading.current_thread().name)
-    result.put(True)
+    result_queue.put(True)
+
+
+def finish_nok(*args, **kwargs):
+    global result_queue
+    name = threading.current_thread().name
+    logging.info("Thread finishes test with NOK: " + name)
+    result_queue.put(False)
 
 
 class BPOServer():
@@ -86,17 +93,18 @@ class BPOServer():
             self.srv.serve_forever()
 
     def __init__(self):
-        global result
+        global result_queue
         reset()
-        result = queue.Queue()
+        result_queue = queue.Queue()
         self.thread = self.BPOServerThread()
 
     def __enter__(self):
         self.thread.start()
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
-        global result
-        # Wait until result is set with bpo_test.finish()
-        assert(result.get())
-        result.task_done()
+        global result_queue
+        # Wait until result_queue is set with bpo_test.finish()
+        result = result_queue.get()
+        result_queue.task_done()
         self.thread.srv.shutdown()
+        assert(result)

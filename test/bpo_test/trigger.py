@@ -1,7 +1,15 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import os
 import requests
+import sys
+
+# Add test dir to import path (so we can import bpo_test)
+topdir = os.path.realpath(os.path.join(os.path.dirname(__file__) + "/.."))
+sys.path.insert(0, topdir)
+
+import bpo_test
 
 
 def push_hook_gitlab():
@@ -21,7 +29,8 @@ def push_hook_gitlab():
                   "modified": ["main/postmarketos-ui-phosh/APKBUILD"],
                   "removed": []}]}
     ret = requests.post(url, json=payload, headers=headers)
-    assert(ret)
+    if not ret.ok:
+        bpo_test.finish_nok()
 
 
 def job_callback_get_repo_missing():
@@ -42,4 +51,5 @@ def job_callback_get_repo_missing():
                 "version": "1-r2",
                 "depends": ["hello-world"]}]
     ret = requests.post(url, json=payload, headers=headers)
-    assert(ret)
+    if not ret.ok:
+        bpo_test.finish_nok()
