@@ -163,12 +163,6 @@ def init():
     self.base.metadata.create_all(engine)
     self.session = sqlalchemy.orm.sessionmaker(bind=engine)
 
-    # Create log entry
-    msg = Log(action="db_init")
-    session = self.session()
-    session.add(msg)
-    session.commit()
-
 
 def get_package(session, pkgname, arch, branch):
     result = session.query(bpo.db.Package).filter_by(arch=arch,
