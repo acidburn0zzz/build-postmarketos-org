@@ -70,6 +70,13 @@ def sign(arch, branch):
 
 
 def create(arch, branch):
+    # Skip if WIP repo is empty
+    repo_wip_path = bpo.repo.wip.get_path(arch, branch)
+    if not len(bpo.repo.get_apks(arch, branch, repo_wip_path)):
+        logging.debug("{}@{}: empty WIP repo, skipping creation of symlink"
+                      " repo".format(arch, branch))
+        return
+
     logging.info("{}@{}: creating symlink repo".format(arch, branch))
     clean(arch, branch)
     link_to_all_packages(arch, branch)
