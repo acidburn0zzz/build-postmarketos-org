@@ -40,7 +40,6 @@ def run(arch, branch):
             export BPO_PAYLOAD_FILES="APKINDEX.tar.gz"
             export BPO_PAYLOAD_IS_JSON="0"
             export BPO_PKGNAME=""
-            export BPO_PUSH_ID=""
             export BPO_VERSION=""
 
             # Always run submit.py with exec, because when running locally, the

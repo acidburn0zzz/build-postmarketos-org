@@ -30,16 +30,6 @@ def get_branch(request):
     return branch
 
 
-def get_push(session, request):
-    """ Get the push ID from X-BPO-Push-Id header and load the Push object from
-        the database. """
-    push_id = get_header(request, "Push-Id")
-    result = session.query(bpo.db.Push).filter_by(id=int(push_id)).all()
-    if not len(result):
-        raise ValueError("invalid X-BPO-Push-Id: " + push_id)
-    return result[0]
-
-
 def get_package(session, request):
     pkgname = get_header(request, "Pkgname")
     arch = get_arch(request)

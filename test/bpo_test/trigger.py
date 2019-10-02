@@ -45,7 +45,7 @@ def job_callback_get_repo_missing():
         later on, that the version isn't matching. """
     token = "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2cO7i"
     headers = {"X-BPO-Arch": "x86_64",
-               "X-BPO-Push-Id": "1",
+               "X-BPO-Branch": "master",
                "X-BPO-Token": token}
     payload = [{"pkgname": "hello-world",
                 "repo": "main",

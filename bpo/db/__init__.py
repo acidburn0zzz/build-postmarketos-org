@@ -31,24 +31,6 @@ session = None
 init_relationships_complete = False
 
 
-class Push(base):
-    __tablename__ = "push"
-    id = Column(Integer, primary_key=True)
-    date = Column(DateTime(timezone=True),
-                           server_default=sqlalchemy.sql.func.now())
-    branch = Column(String)
-
-    def __init__(self, branch):
-        self.branch = branch
-
-class Commit(base):
-    __tablename__ = "commit"
-    id = Column(Integer, primary_key=True)
-    ref = Column(String)
-    message = Column(String)
-    push_id = Column(Integer, ForeignKey("push.id"))
-
-
 class PackageStatus(enum.Enum):
     queued = 0
     building = 1
@@ -132,11 +114,6 @@ def init_relationships():
     if self.init_relationships_complete:
         return
     self.init_relationships_complete = True
-
-    # commits.push_id - n:1 - push.id
-    self.Commit.push = relationship("Push", back_populates="commits")
-    self.Push.commits = relationship("Commit", order_by=self.Commit.id,
-                                     back_populates="push")
 
     # package.depends - n:n - package.required_by
     # See "Self-Referential Many-to-Many Relationship" in:

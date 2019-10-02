@@ -54,7 +54,6 @@ def run(arch, pkgname, branch):
                 -q config work)/packages/$BPO_ARCH/"*.apk)"
             export BPO_PAYLOAD_IS_JSON="0"
             export BPO_PKGNAME=""" + shlex.quote(pkgname) + """
-            export BPO_PUSH_ID=""
             export BPO_VERSION=""" + shlex.quote(package.version) + """
 
             # Always run submit.py with exec, because when running locally, the

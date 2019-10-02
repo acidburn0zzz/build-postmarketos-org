@@ -44,21 +44,13 @@ def push_hook_gitlab():
     if payload["object_kind"] != "push":
         abort(400, "Unknown object_kind")
 
-    # Insert push and commits
+    # Insert log entry
     session = bpo.db.session()
-    push = bpo.db.Push(branch)
-    session.add(push)
-    for commit_gitlab in payload["commits"]:
-        commit = bpo.db.Commit(ref=commit_gitlab["id"],
-                               message=commit_gitlab["message"],
-                               push=push)
-        session.add(commit)
-    session.commit()
     bpo.ui.log_and_update(action="api_push_hook_gitlab", payload=payload,
-                          branch=push.branch)
+                          branch=branch)
 
     # Run repo_missing job for all arches
     for arch in bpo.config.const.architectures:
-        bpo.jobs.get_repo_missing.run(push, arch)
+        bpo.jobs.get_repo_missing.run(arch, branch)
 
     return "Triggered!"

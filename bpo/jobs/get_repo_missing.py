@@ -7,8 +7,7 @@ import shlex
 import bpo.helpers.job
 
 
-def run(push, arch):
-    """ :param push: bpo.db.Push object """
+def run(arch, branch):
     bpo.helpers.job.run("get_repo_missing", collections.OrderedDict([
         # FIXME: checkout right pmaports.git branch (and somehow deal with it
         # when running locally, we don't want to change the branch then)
@@ -22,15 +21,14 @@ def run(push, arch):
         ("submit", """
             export BPO_API_ENDPOINT="get-repo-missing"
             export BPO_ARCH=""" + shlex.quote(arch) + """
-            export BPO_BRANCH=""" + shlex.quote(push.branch) + """
+            export BPO_BRANCH=""" + shlex.quote(branch) + """
             export BPO_PAYLOAD_FILES="repo_missing.json"
             export BPO_PAYLOAD_IS_JSON="1"
             export BPO_PKGNAME=""
-            export BPO_PUSH_ID=""" + shlex.quote(str(push.id)) + """
             export BPO_VERSION=""
 
             # Always run submit.py with exec, because when running locally, the
             # current_task.sh script can change before submit.py completes!
             exec pmaports/.build.postmarketos.org/submit.py
             """),
-    ]), push.branch, arch)
+    ]), branch, arch)

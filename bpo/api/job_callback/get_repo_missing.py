@@ -77,16 +77,16 @@ def update_package_depends(session, payload, arch, branch):
 def job_callback_get_repo_missing():
     # Parse input data
     arch = bpo.api.get_arch(request)
+    branch = bpo.api.get_branch(request)
     payload = get_payload(request)
     session = bpo.db.session()
-    push = bpo.api.get_push(session, request)
 
     # Update packages in DB
-    update_or_insert_packages(session, payload, arch, push.branch)
-    update_package_depends(session, payload, arch, push.branch)
+    update_or_insert_packages(session, payload, arch, branch)
+    update_package_depends(session, payload, arch, branch)
     session.commit()
     bpo.ui.log_and_update(action="api_job_callback_get_repo_missing",
-                          payload=payload, arch=arch, branch=push.branch)
+                          payload=payload, arch=arch, branch=branch)
     bpo.repo.build()
     
     return "warming up build servers..."
