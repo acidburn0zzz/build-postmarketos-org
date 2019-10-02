@@ -23,6 +23,7 @@ local_pmaports = os.path.realpath(bpo.config.const.top_dir +
                                   "/../pmbootstrap/aports")
 local_pmbootstrap = os.path.realpath(bpo.config.const.top_dir +
                                      "/../pmbootstrap")
+auto_get_repo_missing = False
 
 
 def job_service_local(parser):
@@ -41,6 +42,9 @@ def init():
     # Common arguments
     parser = argparse.ArgumentParser(description="postmarketOS build"
                                                  "coordinator", prog="bpo")
+    parser.add_argument("-a", "--auto-get-repo-missing", action="store_true",
+                        help="automatically get missing packages (don't wait"
+                             " for the push hook from gitlab)")
     parser.add_argument("-b", "--bind", dest="host",
                         help="host to listen on")
     parser.add_argument("-t", "--tokens",
