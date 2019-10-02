@@ -84,9 +84,8 @@ class Package(base):
         depends=[]
         for depend in self.depends:
             depends.append(depend.pkgname)
-        return (str(self.arch) + "/" + str(self.repo) + "/" +
-                str(self.pkgname) + "-" + str(self.version) +
-                "@" + self.branch + " (pmOS depends: " + str(depends) + ")")
+        return "{}/{}/{}-{}.apk (pmOS depends: {})".format(self.branch,
+            self.arch, self.pkgname, self.version, depends)
 
 
     def __init__(self, arch, branch, pkgname, version):
