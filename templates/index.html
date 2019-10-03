@@ -20,21 +20,21 @@
                 {% if entry.action == "restart" %}
                     build.postmarketos.org server restarted
                 {% elif entry.action == "api_push_hook_gitlab" %}
-                    {{entry.branch }}: new commit(s) pushed to pmaports.git
+                    {{ entry.branch }}: new commit(s) pushed to pmaports.git
                 {% elif entry.action == "job_get_repo_missing" %}
-                    {{entry.branch }}/{{entry.arch }}: calculating missing binary packages
+                    {{ entry.branch }}/{{ entry.arch }}: calculating missing binary packages
                 {% elif entry.action == "api_job_callback_get_repo_missing" %}
-                    {{entry.branch }}/{{entry.arch }}: new packages queued for building
+                    {{ entry.branch }}/{{ entry.arch }}: new packages queued for building
                 {% elif entry.action == "job_build_package" %}
-                    {{entry.branch }}/{{entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: building package
+                    {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: building package
                 {% elif entry.action == "api_job_callback_build_package" %}
-                    {{entry.branch }}/{{entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: package built
+                    {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: package built
                 {% elif entry.action == "job_sign_index" %}
-                    {{entry.branch }}/{{entry.arch }}: signing the package index
+                    {{ entry.branch }}/{{ entry.arch }}: signing the package index
                 {% elif entry.action == "api_job_callback_sign_index" %}
-                    {{entry.branch }}/{{entry.arch }}: all packages built, publishing to mirror
+                    {{ entry.branch }}/{{ entry.arch }}: all packages built, publishing to mirror
                 {% elif entry.action == "job_service_local_restart_failed" %}
-                    {{entry.branch }}/{{entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: was marked as "running" before restart, changing to "failed"
+                    {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: was marked as "running" before restart, changing to "failed"
                 {% else %}
                     ???
                 {% endif %}
