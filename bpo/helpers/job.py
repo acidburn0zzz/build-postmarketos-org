@@ -83,3 +83,7 @@ def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
     bpo.ui.log_and_update(action="job_" + name, arch=arch, branch=branch,
                           pkgname=pkgname, version=version)
     JobThread(name, tasks, branch).start()
+
+
+def update_package_status_after_restart():
+    get_job_service().update_package_status_after_restart()

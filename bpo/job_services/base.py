@@ -7,3 +7,6 @@ class JobService:
 
     def run_job(self, name, tasks):
         pass
+
+    def update_package_status_after_restart(self):
+        pass

@@ -13,6 +13,7 @@ import bpo.api.push_hook.gitlab
 import bpo.config.args
 import bpo.config.tokens
 import bpo.db
+import bpo.helpers.job
 import bpo.repo
 import bpo.repo.tools
 import bpo.repo.wip
@@ -40,6 +41,7 @@ def main(return_app=False):
     bpo.ui.log_and_update("restart")
 
     # Kick off build jobs for queued packages
+    bpo.helpers.job.update_package_status_after_restart()
     bpo.repo.build()
 
     # Fill up queue with packages to build
