@@ -62,20 +62,20 @@ class Package(base):
     # Package.depends: see init_relationships() below.
 
 
-    def __repr__(self):
-        depends=[]
-        for depend in self.depends:
-            depends.append(depend.pkgname)
-        return "{}/{}/{}-{}.apk (pmOS depends: {})".format(self.branch,
-            self.arch, self.pkgname, self.version, depends)
-
-
     def __init__(self, arch, branch, pkgname, version):
         self.arch = arch
         self.branch = branch
         self.pkgname = pkgname
         self.version = version
         self.status = PackageStatus.queued
+
+
+    def __repr__(self):
+        depends=[]
+        for depend in self.depends:
+            depends.append(depend.pkgname)
+        return "{}/{}/{}-{}.apk (pmOS depends: {})".format(self.branch,
+            self.arch, self.pkgname, self.version, depends)
 
 
     def depends_built(self):
