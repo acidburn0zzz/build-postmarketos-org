@@ -18,9 +18,7 @@ def update():
     session = bpo.db.session()
     log_entries = session.query(bpo.db.Log).order_by(bpo.db.Log.id.desc()
                     ).limit(50)
-    pkgcount_all = session.query(func.count(bpo.db.Package.id)).scalar()
-    pkgcount_queued = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.queued).count()
-    pkgcount_failed = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.failed).count()
+    pkgcount = session.query(func.count(bpo.db.Package.id)).scalar()
 
     pkgs = {}
     for status in bpo.db.PackageStatus:
@@ -31,11 +29,9 @@ def update():
     global env
     template = env.get_template("index.html")
     html = template.render(bpo=bpo,
-                           pkgcount_all=pkgcount_all,
-                           pkgcount_queued=pkgcount_queued,
-                           pkgcount_failed=pkgcount_failed,
-                           log_entries=log_entries,
-                           pkgs=pkgs)
+                           pkgcount=pkgcount,
+                           pkgs=pkgs,
+                           log_entries=log_entries)
 
     # Write to output dir
     output = bpo.config.args.html_out + "/index.html"

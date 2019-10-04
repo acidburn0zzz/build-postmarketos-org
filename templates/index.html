@@ -8,9 +8,12 @@
         <h2>Overview</h2>
 
         <ul>
-            <li> {{ pkgcount_all }} Packages
-            <li> {{ pkgcount_queued }} Queued
-            <li> {{ pkgcount_failed }} Failed
+            <li> {{ pkgcount }} Packages
+            <li> {{ pkgs.building.count() }} Building
+            <li> {{ pkgs.failed.count() }} Failed
+            <li> {{ pkgs.built.count() }} Built
+            <li> {{ pkgs.queued.count() }} Queued
+            <li> {{ pkgs.published.count() }} Published
         </ul>
 
         <h2>Last log entries</h2>
