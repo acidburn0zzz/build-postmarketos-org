@@ -18,12 +18,12 @@ temp_path = bpo.config.const.top_dir + "/_temp"
 repo_final_path = bpo.config.const.top_dir + "/_repo_final"
 repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
 html_out = bpo.config.const.top_dir + "/_html_out"
+auto_get_repo_missing = False
 
 local_pmaports = os.path.realpath(bpo.config.const.top_dir +
                                   "/../pmbootstrap/aports")
 local_pmbootstrap = os.path.realpath(bpo.config.const.top_dir +
                                      "/../pmbootstrap")
-auto_get_repo_missing = False
 
 
 def job_service_local(parser):
