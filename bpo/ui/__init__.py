@@ -22,9 +22,10 @@ def update():
     pkgcount_queued = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.queued).count()
     pkgcount_failed = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.failed).count()
 
-    pkgs_building = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.building)
-    pkgs_failed = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.failed)
-    pkgs_queued = session.query(bpo.db.Package).filter_by(status=bpo.db.PackageStatus.queued)
+    pkgs = {}
+    for status in bpo.db.PackageStatus:
+        pkgs[status.name] = session.query(bpo.db.Package).\
+                                    filter_by(status=status)
 
     # Fill template
     global env
@@ -34,9 +35,7 @@ def update():
                            pkgcount_queued=pkgcount_queued,
                            pkgcount_failed=pkgcount_failed,
                            log_entries=log_entries,
-                           pkgs_building=pkgs_building,
-                           pkgs_failed=pkgs_failed,
-                           pkgs_queued=pkgs_queued)
+                           pkgs=pkgs)
 
     # Write to output dir
     output = bpo.config.args.html_out + "/index.html"
