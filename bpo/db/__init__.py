@@ -50,7 +50,7 @@ class Package(base):
     branch = Column(String)
     pkgname = Column(String)
     status = Column(Enum(PackageStatus))
-    build_id = Column(Integer, unique=True)
+    job_id = Column(Integer, unique=True)
 
     # The following columns represent the latest state. We don't store the
     # history in bpo (avoids complexity, we have the git history for that).
@@ -58,6 +58,7 @@ class Package(base):
     repo = Column(String)
 
     Index("pkgname-arch-branch", pkgname, arch, branch, unique=True)
+    Index("job_id", job_id)
 
     # Package.depends: see init_relationships() below.
 
