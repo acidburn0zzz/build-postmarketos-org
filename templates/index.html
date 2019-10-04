@@ -39,6 +39,9 @@
                     ???
                 {% endif %}
                 <i>({{ entry.action }})</i>
+                {% if entry.action.startswith("job_") %}
+                    <a href="{{ bpo.helpers.job.get_link(entry.job_id) }}">[log]</a>
+                {% endif %}
             {% endfor %}
         </ul>
 
@@ -46,6 +49,7 @@
         <ul>
             {% for package in pkgs_building %}
             <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+                <a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
             {% endfor %}
         </ul>
 
@@ -53,6 +57,7 @@
         <ul>
             {% for package in pkgs_failed %}
             <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+                <a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
             {% endfor %}
         </ul>
 

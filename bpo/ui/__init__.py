@@ -29,7 +29,8 @@ def update():
     # Fill template
     global env
     template = env.get_template("index.html")
-    html = template.render(pkgcount_all=pkgcount_all,
+    html = template.render(bpo=bpo,
+                           pkgcount_all=pkgcount_all,
                            pkgcount_queued=pkgcount_queued,
                            pkgcount_failed=pkgcount_failed,
                            log_entries=log_entries,
