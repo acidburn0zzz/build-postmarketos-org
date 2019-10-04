@@ -39,7 +39,7 @@ def main(return_app=False):
 
     # Initialize UI and update it with a new log message
     bpo.ui.init()
-    bpo.ui.log_and_update("restart")
+    bpo.ui.log("restart")
 
     # Kick off build jobs for queued packages
     bpo.helpers.job.update_package_status()

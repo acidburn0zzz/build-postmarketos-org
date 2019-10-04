@@ -67,8 +67,8 @@ def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
     # Pass to bpo.job_services.(...).run_job()
     job_id = js.run_job(name, tasks_formatted)
 
-    bpo.ui.log_and_update(action="job_" + name, arch=arch, branch=branch,
-                          pkgname=pkgname, version=version, job_id=job_id)
+    bpo.ui.log("job_" + name, arch=arch, branch=branch, pkgname=pkgname,
+               version=version, job_id=job_id)
 
     return job_id
 
@@ -86,7 +86,7 @@ def update_package_status():
             continue
         package.status = status_new
         action = "job_update_package_status_" + status_new.name
-        bpo.ui.log_and_update_package(package, action)
+        bpo.ui.log_package(package, action)
         session.merge(package)
     session.commit()
 

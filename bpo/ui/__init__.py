@@ -55,7 +55,7 @@ def init():
     os.makedirs(bpo.config.args.html_out, exist_ok=True)
 
 
-def log_and_update(*args, **kwargs):
+def log(*args, **kwargs):
     """ Write one log message and update the output. Do this after making
         meaningful changes to the database, e.g. after a job callback was
         executed. See bpo.db.Log.__init__() for the list of parameters. """
@@ -67,9 +67,9 @@ def log_and_update(*args, **kwargs):
     update()
 
 
-def log_and_update_package(package, action):
+def log_package(package, action):
     """ Convenience wrapper
         :param package: bpo.db.Package object """
-    log_and_update(action=action, arch=package.arch, branch=package.branch,
+    log(action=action, arch=package.arch, branch=package.branch,
                    pkgname=package.pkgname, version=package.pkgname,
                    job_id=package.job_id)

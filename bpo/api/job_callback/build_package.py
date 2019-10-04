@@ -54,7 +54,7 @@ def job_callback_build_package():
     session.merge(package)
     session.commit()
 
-    bpo.ui.log_and_update_package(package, "api_job_callback_build_package")
+    bpo.ui.log_package(package, "api_job_callback_build_package")
 
     # Build next package or publish repo after building all queued packages
     bpo.repo.build()

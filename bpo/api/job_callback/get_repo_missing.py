@@ -86,8 +86,8 @@ def job_callback_get_repo_missing():
     update_or_insert_packages(session, payload, arch, branch)
     update_package_depends(session, payload, arch, branch)
     session.commit()
-    bpo.ui.log_and_update(action="api_job_callback_get_repo_missing",
-                          payload=payload, arch=arch, branch=branch)
+    bpo.ui.log("api_job_callback_get_repo_missing", payload=payload, arch=arch,
+               branch=branch)
 
 
     # Make sure that we did not miss any job status changes

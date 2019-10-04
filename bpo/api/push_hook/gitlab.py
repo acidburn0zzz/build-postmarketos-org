@@ -46,8 +46,7 @@ def push_hook_gitlab():
 
     # Insert log entry
     session = bpo.db.session()
-    bpo.ui.log_and_update(action="api_push_hook_gitlab", payload=payload,
-                          branch=branch)
+    bpo.ui.log("api_push_hook_gitlab", payload=payload, branch=branch)
 
     # Run repo_missing job for all arches
     for arch in bpo.config.const.architectures:

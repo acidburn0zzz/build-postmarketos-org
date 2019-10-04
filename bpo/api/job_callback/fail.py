@@ -47,15 +47,13 @@ def job_callback_fail():
         # Update DB and add log message
         session.merge(package)
         session.commit()
-        bpo.ui.log_and_update_package(package,
-                                      "job_callback_fail_build_package")
+        bpo.ui.log_package(package, "job_callback_fail_build_package")
 
         # build next package
         job_callback_fail_continue_build_package()
     else:
         # can't handle this failure
-        bpo.ui.log_and_update(action="job_callback_fail_" + job_name,
-                              job_id=job_id)
+        bpo.ui.log("job_callback_fail_" + job_name, job_id=job_id)
 
     return "ouch, trying to recover..."
 
