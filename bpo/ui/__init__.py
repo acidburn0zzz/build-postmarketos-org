@@ -66,5 +66,5 @@ def log_package(package, action):
     """ Convenience wrapper
         :param package: bpo.db.Package object """
     log(action=action, arch=package.arch, branch=package.branch,
-                   pkgname=package.pkgname, version=package.pkgname,
+                   pkgname=package.pkgname, version=package.version,
                    job_id=package.job_id)
