@@ -10,3 +10,6 @@ class JobService:
 
     def update_package_status_after_restart(self):
         pass
+
+    def get_link(self, job_id):
+        pass

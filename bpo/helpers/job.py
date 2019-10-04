@@ -75,3 +75,8 @@ def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
 
 def update_package_status_after_restart():
     get_job_service().update_package_status_after_restart()
+
+
+def get_link(job_id):
+    """ :returns: the web link, that shows the build log """
+    return get_job_service().get_link(job_id)

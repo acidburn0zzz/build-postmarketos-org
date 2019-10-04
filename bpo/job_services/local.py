@@ -132,3 +132,7 @@ class LocalJobService(JobService):
                                   version=package.version)
             session.merge(package)
         session.commit()
+
+    def get_link(self, job_id):
+        return ("file://" + bpo.config.args.temp_path + "/local_job_logs/" +
+                str(job_id) + ".txt")
