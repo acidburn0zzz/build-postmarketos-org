@@ -62,3 +62,8 @@ After the index of the symlink repo is signed, the final repo gets updated to re
 ### Why are there no subdirs in the binary repository?
 
 We have plenty of subdirs in pmaports.git (cross, device, firmware, hybris, kde, maemo, main, ...). For postmarketOS, it makes a lot of sense to keep the packages sorted that way. But if we turn each of them into a subdir in the binary repository, we would need to add a separate URL for them to the repositories list (/etc/apk/repositories) as well, and apk and pmbootstrap would need to download an APKINDEX for each of them. This makes the update process slower (especially for pmbootstrap, which may download these index files for multiple architectures, depending on what you are doing). So we just use one APKINDEX (per architecture and branch) without the additional subdir.
+
+### What to do if something went wrong and the BPO server missed that a sourcehut job failed or completed?
+
+* Run the pmaports.git trigger from gitlab again, then the bpo server will re-calculate the missing packages and update the status of the jobs that are supposed to be running right now.
+* If that does not help, run the build.postmarketos.org.git trigger again from gitlab, to restart the bpo server.
