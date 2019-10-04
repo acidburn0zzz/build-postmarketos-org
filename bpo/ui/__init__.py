@@ -65,3 +65,11 @@ def log_and_update(*args, **kwargs):
     session.commit()
 
     update()
+
+
+def log_and_update_package(package, action):
+    """ Convenience wrapper
+        :param package: bpo.db.Package object """
+    log_and_update(action=action, arch=package.arch, branch=package.branch,
+                   pkgname=package.pkgname, version=package.pkgname,
+                   job_id=package.job_id)

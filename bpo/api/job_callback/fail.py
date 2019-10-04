@@ -47,10 +47,8 @@ def job_callback_fail():
         # Update DB and add log message
         session.merge(package)
         session.commit()
-        bpo.ui.log_and_update("job_callback_fail_build_package",
-                              arch=package.arch, branch=package.branch,
-                              pkgname=package.pkgname, version=package.version,
-                              job_id=job_id)
+        bpo.ui.log_and_update_package(package,
+                                      "job_callback_fail_build_package")
 
         # build next package
         job_callback_fail_continue_build_package()

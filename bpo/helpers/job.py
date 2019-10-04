@@ -86,11 +86,7 @@ def update_package_status():
             continue
         package.status = status_new
         action = "job_update_package_status_" + status_new.name
-        bpo.ui.log_and_update(action=action,
-                              arch=package.arch, branch=package.branch,
-                              pkgname=package.pkgname,
-                              version=package.version,
-                              job_id=package.job_id)
+        bpo.ui.log_and_update_package(package, action)
         session.merge(package)
     session.commit()
 
