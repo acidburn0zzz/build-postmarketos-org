@@ -3,12 +3,57 @@
 
 import logging
 import os
+import random
 import shlex
 import subprocess
+import threading
 
 import bpo.config.args
 import bpo.db
 from bpo.job_services.base import JobService
+
+
+class LocalJobServiceThread(threading.Thread):
+    """ Local jobs are running on the same machine, but in a different
+        thread. """
+    def __init__(self, name, tasks, branch):
+        threading.Thread.__init__(self, name="job:" + name)
+        self.name = name
+        self.tasks = tasks
+        self.branch = branch
+        self.job_id = random.randint(1000000, 9999999)
+
+    def run_print(self, command):
+        print("[job " + str(self.job_id) + "] % " + " ".join(command))
+        subprocess.run(command, check=True)
+
+    def run(self):
+         # Create temp dir
+        temp_path = bpo.config.args.temp_path + "/local_job"
+        os.makedirs(temp_path, exist_ok=True)
+
+        # Common env vars for each task
+        host = ("http://" + bpo.config.args.host + ":" +
+                str(bpo.config.args.port))
+        wip_repo_path = bpo.config.args.repo_wip_path
+        env_vars = """
+            export BPO_TOKEN_FILE="./token"
+            export BPO_API_HOST=""" + shlex.quote(host) + """
+            export BPO_WIP_REPO_PATH=""" + shlex.quote(wip_repo_path) + """
+            export BPO_WIP_REPO_URL="" # empty, because we copy it instead
+            export BPO_WIP_REPO_ARG="" # empty, because we copy it instead
+        """
+
+        # Write each task's script into a temp file and run it
+        temp_script = temp_path + "/current_task.sh"
+        for task, script in self.tasks.items():
+            print("### Task: " + task + " ###")
+
+            with open(temp_script, "w", encoding="utf-8") as handle:
+                handle.write("cd " + shlex.quote(temp_path) + "\n" +
+                             env_vars + "\n" +
+                             script)
+            self.run_print(["sh", "-ex", temp_script])
 
 
 class LocalJobService(JobService):
@@ -58,38 +103,10 @@ class LocalJobService(JobService):
             fi
         """
 
-    def run_print(self, command):
-        print("% " + " ".join(command))
-        subprocess.run(command, check=True)
-
-    def run_job(self, name, tasks):
-        # Create temp dir
-        temp_path = bpo.config.args.temp_path + "/local_job"
-        os.makedirs(temp_path, exist_ok=True)
-
-        # Common env vars for each task
-        host = ("http://" + bpo.config.args.host + ":" +
-                str(bpo.config.args.port))
-        wip_repo_path = bpo.config.args.repo_wip_path
-        env_vars = """
-            export BPO_TOKEN_FILE="./token"
-            export BPO_API_HOST=""" + shlex.quote(host) + """
-            export BPO_WIP_REPO_PATH=""" + shlex.quote(wip_repo_path) + """
-            export BPO_WIP_REPO_URL="" # empty, because we copy it instead
-            export BPO_WIP_REPO_ARG="" # empty, because we copy it instead
-        """
-
-        # Write each task's script into a temp file and run it
-        temp_script = temp_path + "/current_task.sh"
-        for task, script in tasks.items():
-            print("### Task: " + task + " ###")
-
-            with open(temp_script, "w", encoding="utf-8") as handle:
-                handle.write("cd " + shlex.quote(temp_path) + "\n" +
-                             env_vars + "\n" +
-                             script)
-            self.run_print(["sh", "-ex", temp_script])
-
+    def run_job(self, name, tasks, branch=None):
+       thread = LocalJobServiceThread(name=name, tasks=tasks, branch=branch)
+       thread.start()
+       return thread.job_id
 
     def update_package_status_after_restart(self):
         """ Set all packages that were building to 'failed' after the local

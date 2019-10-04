@@ -45,10 +45,11 @@ def remove_additional_indent(script, spaces=12):
     return ret
 
 
-def run_job_in_job_service(name, tasks, branch=None):
+def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
     """ :param branch: of the build package job, so we can copy the right
                        subdir of the WIP repository to the local packages dir
-                       (relevant for running with local job service only). """
+                       (relevant for running with local job service only).
+        :returns: ID of the generated job, as passed by the backend """
     logging.info("[" + bpo.config.args.job_service + "] Run job: " + name)
     js = get_job_service()
 
@@ -64,25 +65,13 @@ def run_job_in_job_service(name, tasks, branch=None):
         tasks_formatted[task] = remove_additional_indent(script)
 
     # Pass to bpo.job_services.(...).run_job()
-    js.run_job(name, tasks_formatted)
+    job_id = js.run_job(name, tasks_formatted)
+    logging.info("=> job id: " + str(job_id))
 
-
-class JobThread(threading.Thread):
-
-    def __init__(self, name, tasks, branch=None):
-        threading.Thread.__init__(self, name="job:" + name)
-        self.name = name
-        self.tasks = tasks
-        self.branch = branch
-
-    def run(self):
-        run_job_in_job_service(self.name, self.tasks, self.branch)
-
-
-def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
     bpo.ui.log_and_update(action="job_" + name, arch=arch, branch=branch,
                           pkgname=pkgname, version=version)
-    JobThread(name, tasks, branch).start()
+
+    return job_id
 
 
 def update_package_status_after_restart():
