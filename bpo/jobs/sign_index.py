@@ -29,8 +29,9 @@ def run(arch, branch):
             chroot_target="$work_dir/chroot_native/home/pmos/APKINDEX.tar.gz"
             sudo cp APKINDEX.tar.gz "$chroot_target"
             sudo chown """ + shlex.quote(uid) + """ "$chroot_target"
-            ./pmbootstrap/pmbootstrap.py chroot --user -- \
-                abuild-sign /home/pmos/APKINDEX.tar.gz
+            ./pmbootstrap/pmbootstrap.py \
+                --details-to-stdout \
+                chroot --user -- abuild-sign /home/pmos/APKINDEX.tar.gz
             sudo mv "$chroot_target" APKINDEX.tar.gz
         """),
         ("upload", """

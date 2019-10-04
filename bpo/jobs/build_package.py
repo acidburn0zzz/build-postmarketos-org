@@ -38,6 +38,7 @@ def run(arch, pkgname, branch):
         ("pmbootstrap build", """
             ./pmbootstrap/pmbootstrap.py \
                 """ + mirrors + """ \
+                --details-to-stdout \
                 build \
                 --no-depends \
                 --strict \
