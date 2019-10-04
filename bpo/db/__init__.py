@@ -81,7 +81,8 @@ class Package(base):
 
     def depends_built(self):
         for depend in self.depends:
-            if depend.status.value < PackageStatus.built.value:
+            if depend.status not in [PackageStatus.built,
+                                     PackageStatus.published]:
                 return False
         return True
 
