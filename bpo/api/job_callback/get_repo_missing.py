@@ -6,6 +6,7 @@ from bpo.helpers.headerauth import header_auth
 import bpo.api
 import bpo.config.args
 import bpo.db
+import bpo.helpers.job
 import bpo.repo
 import bpo.ui
 
@@ -87,6 +88,11 @@ def job_callback_get_repo_missing():
     session.commit()
     bpo.ui.log_and_update(action="api_job_callback_get_repo_missing",
                           payload=payload, arch=arch, branch=branch)
+
+
+    # Make sure that we did not miss any job status changes
+    bpo.helpers.job.update_package_status()
+
     bpo.repo.build()
     
     return "warming up build servers..."
