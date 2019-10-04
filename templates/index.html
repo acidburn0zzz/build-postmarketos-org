@@ -63,6 +63,10 @@
             {% endfor %}
         </ul>
 
+        <p style="font-size: 80%; font-style: italic">
+            Note: the final repositories of each arch and branch only get updated when all packages of that arch and branch have been built successfully. This is to prevent half-baked updates (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/#repositories">more</a>).
+        </p>
+
         <h2>Queued</h2>
         <ul>
             {% for package in pkgs_queued %}
