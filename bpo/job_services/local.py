@@ -39,9 +39,10 @@ class LocalJobServiceThread(threading.Thread):
         except:
             url = "http://{}:{}/api/job-callback/fail".format(
                     bpo.config.args.host, bpo.config.args.port)
+            token = bpo.config.const.test_tokens["job_callback"]
             headers = {"X-BPO-Job-Name": self.name,
                        "X-BPO-Job-Id": str(self.job_id),
-                       "X-BPO-Token": "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2cO7i"}
+                       "X-BPO-Token": token}
             requests.post(url, headers=headers)
             raise
 
@@ -95,6 +96,7 @@ class LocalJobService(JobService):
         temp_path = bpo.config.args.temp_path + "/local_job"
         pmaports = bpo.config.args.local_pmaports
         pmbootstrap = bpo.config.args.local_pmbootstrap
+        token = bpo.config.const.test_tokens["job_callback"]
         repo_wip_path = bpo.config.args.repo_wip_path
         uid = bpo.config.const.pmbootstrap_chroot_uid_user
         return """
@@ -109,7 +111,7 @@ class LocalJobService(JobService):
             cd "$temp_dir"
             cp -r """ + shlex.quote(pmaports) + """ ./pmaports
             cp -r """ + shlex.quote(pmbootstrap) + """ ./pmbootstrap
-            echo "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2cO7i" > ./token
+            echo """ + shlex.quote(token) + """ > ./token
             ./pmbootstrap/pmbootstrap.py -q -y zap -p
 
             # Copy WIP repo

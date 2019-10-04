@@ -10,6 +10,7 @@ topdir = os.path.realpath(os.path.join(os.path.dirname(__file__) + "/.."))
 sys.path.insert(0, topdir)
 
 import bpo_test
+import bpo.config.const
 
 
 def api_request(path, headers, payload):
@@ -22,7 +23,7 @@ def api_request(path, headers, payload):
 
 
 def push_hook_gitlab():
-    token = "iptTdfRNwSvg8ycZqiEdNhMqGalvsgvSXp91SIk2dukG74BNVu"
+    token = bpo.config.const.test_tokens["push_hook_gitlab"]
     headers = {"X-Gitlab-Token": token}
     payload = {"object_kind":"push",
                "ref": "refs/heads/master",
@@ -43,7 +44,7 @@ def job_callback_get_repo_missing():
     """ Note that the versions must match the current versions in pmaports.git,
         otherwise the bpo server will build the current packages and complain
         later on, that the version isn't matching. """
-    token = "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2cO7i"
+    token = bpo.config.const.test_tokens["job_callback"]
     headers = {"X-BPO-Arch": "x86_64",
                "X-BPO-Branch": "master",
                "X-BPO-Token": token}

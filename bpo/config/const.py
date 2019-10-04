@@ -23,3 +23,9 @@ max_parallel_build_jobs = 1
 # UID that is used for building packages with pmbootstrap (same as
 # chroot_user_id in pmb/config/__init__.py)
 pmbootstrap_chroot_uid_user = "12345"
+
+# Values for the tokens in test/test_tokens.cfg
+test_tokens = {"push_hook_gitlab": "iptTdfRNwSvg8ycZqiEdNhMqGalvsgvSXp91SIk2du"
+                                   "kG74BNVu",
+               "job_callback": "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2"
+                               "cO7i"}
