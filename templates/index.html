@@ -41,7 +41,7 @@
                     ???
                 {% endif %}
                 <i>({{ entry.action }})</i>
-                {% if entry.action.startswith("job_") %}
+                {% if entry.job_id %}
                     <a href="{{ bpo.helpers.job.get_link(entry.job_id) }}">[log]</a>
                 {% endif %}
             {% endfor %}
