@@ -4,6 +4,7 @@
 import logging
 import os
 import random
+import requests
 import shlex
 import subprocess
 import threading
@@ -30,9 +31,19 @@ class LocalJobServiceThread(threading.Thread):
         logging.info("Job " + name + " started, logging to: " + self.log_path)
 
     def run_print(self, command):
-        with open(self.log_path, "a") as handle:
-            handle.write("% " + " ".join(command))
-            subprocess.run(command, check=True, stdout=handle, stderr=handle)
+        try:
+            with open(self.log_path, "a") as handle:
+                handle.write("% " + " ".join(command))
+                subprocess.run(command, check=True, stdout=handle,
+                               stderr=handle)
+        except:
+            url = "http://{}:{}/api/job-callback/fail".format(
+                    bpo.config.args.host, bpo.config.args.port)
+            headers = {"X-BPO-Job-Name": self.name,
+                       "X-BPO-Job-Id": str(self.job_id),
+                       "X-BPO-Token": "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2cO7i"}
+            requests.post(url, headers=headers)
+            raise
 
     def run(self):
          # Create temp dir

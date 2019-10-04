@@ -35,6 +35,8 @@
                     {{ entry.branch }}/{{ entry.arch }}: all packages built, publishing to mirror
                 {% elif entry.action == "job_service_local_restart_failed" %}
                     {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: was marked as "running" before restart, changing to "failed"
+                {% elif entry.action == "job_callback_fail_build_package" %}
+                    {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: <b>build failed</b>
                 {% else %}
                     ???
                 {% endif %}
