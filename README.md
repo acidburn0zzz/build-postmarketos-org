@@ -20,8 +20,10 @@ In the venv created above, run:
 
 ```
 $ pip install pytest
-$ pytest -x -vv test
+$ pytest -x -vv test --full-trace
 ```
+
+If a test is just hanging, hit ^C and look at the very top of the output.
 
 ## Network Architecture
 
