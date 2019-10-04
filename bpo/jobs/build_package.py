@@ -12,12 +12,9 @@ import shlex
 
 def run(arch, pkgname, branch):
     """ Start a single package build job. """
-    # Change status to building
+    # Load package from db
     session = bpo.db.session()
     package = bpo.db.get_package(session, pkgname, arch, branch)
-    package.status = bpo.db.PackageStatus.building
-    session.merge(package)
-    session.commit()
 
     # Read WIP repo pub key
     with open(bpo.config.const.repo_wip_keys + "/wip.rsa.pub", "r") as handle:
@@ -32,7 +29,7 @@ def run(arch, pkgname, branch):
         mirrors = '$BPO_WIP_REPO_ARG ' + mirrors
 
     # Start job
-    bpo.helpers.job.run("build_package", collections.OrderedDict([
+    job_id = bpo.helpers.job.run("build_package", collections.OrderedDict([
         ("install wip.rsa.pub", """
             echo -n '""" + pubkey + """' \
                 > pmbootstrap/pmb/data/keys/wip.rsa.pub
@@ -63,7 +60,11 @@ def run(arch, pkgname, branch):
             """)
     ]), branch, arch, pkgname, package.version)
 
-    # FIXME: write job id back to Packages
+    # Change status to building and save job_id
+    package.status = bpo.db.PackageStatus.building
+    package.job_id = job_id
+    session.merge(package)
+    session.commit()
 
 
 def abort(package):
