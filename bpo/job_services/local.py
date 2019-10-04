@@ -23,9 +23,16 @@ class LocalJobServiceThread(threading.Thread):
         self.branch = branch
         self.job_id = random.randint(1000000, 9999999)
 
+        # Prepare log
+        self.log_path = (bpo.config.args.temp_path + "/local_job_logs/" +
+                         str(self.job_id) + ".txt")
+        os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
+        logging.info("Job " + name + " started, logging to: " + self.log_path)
+
     def run_print(self, command):
-        print("[job " + str(self.job_id) + "] % " + " ".join(command))
-        subprocess.run(command, check=True)
+        with open(self.log_path, "a") as handle:
+            handle.write("% " + " ".join(command))
+            subprocess.run(command, check=True, stdout=handle, stderr=handle)
 
     def run(self):
          # Create temp dir
