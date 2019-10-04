@@ -66,10 +66,9 @@ def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
 
     # Pass to bpo.job_services.(...).run_job()
     job_id = js.run_job(name, tasks_formatted)
-    logging.info("=> job id: " + str(job_id))
 
     bpo.ui.log_and_update(action="job_" + name, arch=arch, branch=branch,
-                          pkgname=pkgname, version=version)
+                          pkgname=pkgname, version=version, job_id=job_id)
 
     return job_id
 

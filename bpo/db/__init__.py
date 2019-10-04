@@ -96,16 +96,18 @@ class Log(base):
     branch = Column(String)
     pkgname = Column(String)
     version = Column(String)
+    job_id = Column(Integer)
 
 
     def __init__(self, action, payload=None, arch=None, branch=None,
-                 pkgname=None, version=None):
+                 pkgname=None, version=None, job_id=None):
         self.action = action
         self.payload = json.dumps(payload, indent=4) if payload else None
         self.arch = arch
         self.branch = branch
         self.pkgname = pkgname
         self.version = version
+        self.job_id = job_id
 
 
 def init_relationships():
