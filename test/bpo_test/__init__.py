@@ -67,6 +67,10 @@ def finish_nok(*args, **kwargs):
     result_queue.put(False)
 
 
+def raise_exception(*args, **kwargs):
+    raise bpo.helpers.ThisExceptionIsExpectedAndCanBeIgnored("ohai")
+
+
 class BPOServer():
     """ Run the flask server in a second thread, so we can send requests to it
         from the main thread. Use this as "with statement", i.e.:

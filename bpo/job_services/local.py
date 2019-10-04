@@ -31,12 +31,18 @@ class LocalJobServiceThread(threading.Thread):
         logging.info("Job " + name + " started, logging to: " + self.log_path)
 
     def run_print(self, command):
+        with open(self.log_path, "a") as handle:
+            handle.write("% " + " ".join(command))
+            subprocess.run(command, check=True, stdout=handle, stderr=handle)
+
+    def run_print_try(self, command):
+        """ Try to execute a shell command, on failure send fail request to the
+            server. """
         try:
-            with open(self.log_path, "a") as handle:
-                handle.write("% " + " ".join(command))
-                subprocess.run(command, check=True, stdout=handle,
-                               stderr=handle)
-        except:
+            # Put this in an extra function, so we can easily monkeypatch
+            # it in the testsuite
+            self.run_print(command)
+        except Exception as e:
             url = "http://{}:{}/api/job-callback/fail".format(
                     bpo.config.args.host, bpo.config.args.port)
             token = bpo.config.const.test_tokens["job_callback"]
@@ -74,7 +80,7 @@ class LocalJobServiceThread(threading.Thread):
                 handle.write("cd " + shlex.quote(temp_path) + "\n" +
                              env_vars + "\n" +
                              script)
-            self.run_print(["sh", "-ex", temp_script])
+            self.run_print_try(["sh", "-ex", temp_script])
 
 
 class LocalJobService(JobService):

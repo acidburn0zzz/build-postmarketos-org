@@ -22,6 +22,10 @@ def get_package_by_job_id(session, job_id):
     raise RuntimeError("Unknown job id: " + job_id)
 
 
+def job_callback_fail_continue_build_package():
+    """ Own function, so it can easily be monkeypatched in the testsuite """
+    bpo.repo.build()
+
 
 @blueprint.route("/api/job-callback/fail", methods=["POST"])
 @header_auth("X-BPO-Token", "job_callback")
@@ -49,7 +53,7 @@ def job_callback_fail():
                               job_id=job_id)
 
         # build next package
-        bpo.repo.build()
+        job_callback_fail_continue_build_package()
     else:
         # can't handle this failure
         bpo.ui.log_and_update(action="job_callback_fail_" + job_name,
