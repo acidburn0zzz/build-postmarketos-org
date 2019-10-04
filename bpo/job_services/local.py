@@ -136,23 +136,11 @@ class LocalJobService(JobService):
        thread.start()
        return thread.job_id
 
-    def update_package_status_after_restart(self):
-        """ Set all packages that were building to 'failed' after the local
-            job service has been restarted, since this means ^C had been
-            pressed."""
-        building = bpo.db.PackageStatus.building
-        failed = bpo.db.PackageStatus.failed
-
-        session = bpo.db.session()
-        result = session.query(bpo.db.Package).filter_by(status=building).all()
-        for package in result:
-            package.status = failed
-            bpo.ui.log_and_update(action="job_service_local_restart_failed",
-                                  arch=package.arch, branch=package.branch,
-                                  pkgname=package.pkgname,
-                                  version=package.version)
-            session.merge(package)
-        session.commit()
+    def get_status(self, job_id):
+        """ When running locally, we can only run one job at a time. So if we
+            are wondering whether a job is still running, most likely we just
+            killed it with ^C and then restarted the bpo server. """
+        return bpo.db.PackageStatus.failed
 
     def get_link(self, job_id):
         return ("file://" + bpo.config.args.temp_path + "/local_job_logs/" +

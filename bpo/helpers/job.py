@@ -73,8 +73,26 @@ def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
     return job_id
 
 
-def update_package_status_after_restart():
-    get_job_service().update_package_status_after_restart()
+def update_package_status():
+    building = bpo.db.PackageStatus.building
+    failed = bpo.db.PackageStatus.failed
+    js = get_job_service()
+
+    session = bpo.db.session()
+    result = session.query(bpo.db.Package).filter_by(status=building).all()
+    for package in result:
+        status_new = js.get_status(package.job_id)
+        if status_new == building:
+            continue
+        package.status = status_new
+        action = "job_update_package_status_" + status_new.name
+        bpo.ui.log_and_update(action=action,
+                              arch=package.arch, branch=package.branch,
+                              pkgname=package.pkgname,
+                              version=package.version,
+                              job_id=package.job_id)
+        session.merge(package)
+    session.commit()
 
 
 def get_link(job_id):

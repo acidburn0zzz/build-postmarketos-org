@@ -42,7 +42,7 @@ def main(return_app=False):
     bpo.ui.log_and_update("restart")
 
     # Kick off build jobs for queued packages
-    bpo.helpers.job.update_package_status_after_restart()
+    bpo.helpers.job.update_package_status()
     bpo.repo.build()
 
     # Fill up queue with packages to build
