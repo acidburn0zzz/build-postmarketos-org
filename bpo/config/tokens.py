@@ -15,6 +15,7 @@ import bpo.config.args
 # Hashes of generated tokens will be stored here
 push_hook_gitlab = None
 job_callback = None
+sourcehut = None
 
 
 def load():
@@ -59,12 +60,32 @@ def hash_generate(token):
 
 def init():
     """ Load/generate all tokens. """
-    tokens = ["push_hook_gitlab", "job_callback"]
     self = sys.modules[__name__]
     cfg = load()
 
-    for token in tokens:
+    # Load or generate
+    for token in ["push_hook_gitlab", "job_callback"]:
         if token in cfg["bpo"]:
             setattr(self, token, cfg["bpo"][token])
         else:
             setattr(self, token, hash_generate(token))
+
+    # Just load
+    for token in ["sourcehut"]:
+        if token in cfg["bpo"]:
+            setattr(self, token, cfg["bpo"][token])
+
+
+def require(token):
+    """ :param token: name of the required token (e.g. "sourcehut") """
+    self = sys.modules[__name__]
+    if getattr(self, token):
+        return
+
+    print("=== Token missing! ===")
+    print("name: " + token)
+    print("Please obtain this token (see README.md for details) and put it in")
+    print("the [bpo] section of this file: " + bpo.config.args.tokens)
+    print("Then restart the bpo server and try again.")
+    print("========================")
+    sys.exit(1)

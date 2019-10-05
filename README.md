@@ -14,9 +14,26 @@ $ source .venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
-## Running tests
+All commands below are intended to be executed in this venv.
 
-In the venv created above, run:
+## Running
+## With local job service
+
+```
+$ ./bpo_local.sh
+```
+
+### With sourcehut job service
+
+After creating a [sr.ht](https://meta.sr.ht/register) account and a dedicated [personal access oauth token](https://meta.sr.ht/oauth):
+
+```
+$ cp bpo_sourcehut.example.sh bpo_sourcehut.sh
+$ $EDITOR bpo_sourcehut.sh # adjust USER
+$ ./bpo_sourcehut.sh # asks to store the token properly, then run it again
+```
+
+### Running tests
 
 ```
 $ pip install pytest

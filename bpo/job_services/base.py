@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 class JobService:
+    def init(self):
+        """ Initialize the job service when the bpo server starts (make sure
+            that tokens are there etc.) """
+        pass
+
     def script_setup(self):
         pass
 

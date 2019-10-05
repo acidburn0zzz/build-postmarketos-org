@@ -29,13 +29,14 @@ def logging_init():
 def main(return_app=False):
     """ :param return_app: return the flask app, instead of running it. This
                            is used in the testsuite. """
-    # Initialize logging, config, database, repo tools/keys
+    # Initialize logging, config, database, repo tools/keys, job service
     logging_init()
     bpo.config.args.init()
     bpo.config.tokens.init()
     bpo.db.init()
     bpo.repo.tools.init()
     bpo.repo.wip.do_keygen()
+    bpo.helpers.job.init()
 
     # Initialize UI and update it with a new log message
     bpo.ui.init()

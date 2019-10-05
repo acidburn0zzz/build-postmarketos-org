@@ -94,3 +94,8 @@ def update_package_status():
 def get_link(job_id):
     """ :returns: the web link, that shows the build log """
     return get_job_service().get_link(job_id)
+
+
+def init():
+    """ Initialize the job service (make sure that tokens are there etc.) """
+    return get_job_service().init()
