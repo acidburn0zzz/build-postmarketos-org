@@ -1,0 +1,8 @@
+---
+flake8:
+  image: alpine:latest
+  before_script:
+  - apk -q add py3-pip
+  - pip3 -q --disable-pip-version-check install flake8
+  script:
+  - .ci/flake8.sh
