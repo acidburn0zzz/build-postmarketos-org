@@ -12,11 +12,11 @@ import bpo.db
 from bpo.job_services.base import JobService
 
 
-def api_request(path, payload):
+def api_request(path, payload=None, method="POST"):
     url = "https://builds.sr.ht/api/" + path
     headers = {"Authorization": "token " + bpo.config.tokens.sourcehut}
-    ret = requests.post(url, headers=headers, json=payload)
-    logging.debug("sourcehut response: " + ret.text)
+    ret = requests.request(method, url=url, headers=headers, json=payload)
+    print("sourcehut response: " + ret.text)
     if not ret.ok:
         raise RuntimeError("sourcehut API request failed: " + url)
     return ret
@@ -54,6 +54,21 @@ def get_manifest(name, tasks, branch):
     return ret
 
 
+def convert_status(status):
+    """ Convert sourchut status enum value to bpo.db.PackageStatus.
+        Reference: https://man.sr.ht/builds.sr.ht/api.md#job-status-enum """
+    if status in ["pending", "queued", "running"]:
+        return bpo.db.PackageStatus.building
+    if status == "success":
+        return bpo.db.PackageStatus.built
+    if status == "failed":
+        return bpo.db.PackageStatus.failed
+
+    # Fallback
+    logging.critical("ERROR: can't convert sourcehut status: " + status)
+    return bpo.db.PackageStatus.failed
+
+
 class SourcehutJobService(JobService):
 
     def run_job(self, name, tasks, branch="master"):
@@ -70,8 +85,10 @@ class SourcehutJobService(JobService):
         return job_id
 
     def get_status(self, job_id):
-        # TODO: get status from sourcehut
-        return bpo.db.PackageStatus.failed
+        result = api_request("jobs/" + str(job_id), method="GET")
+        status = convert_status(result.json()["status"])
+        logging.info("=> status: " + status.name)
+        return status
 
     def get_link(self, job_id):
         user = bpo.config.args.sourcehut_user
