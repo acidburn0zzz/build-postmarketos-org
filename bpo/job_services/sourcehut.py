@@ -45,12 +45,12 @@ def get_manifest(name, tasks, branch):
            yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
     """
 
-    ret = bpo.helpers.job.remove_additional_indent(ret, 8)
+    ret = bpo.helpers.job.remove_additional_indent(ret, 8)[:-1]
 
     # Add tasks
     for name, script in tasks.items():
-        script_indented = "   " + script.replace("\n", "\n   ")
-        ret += "- {}: |\n{}".format(name, script_indented)
+        script_indented = "   " + script[:-1].replace("\n", "\n   ")
+        ret += "\n- {}: |\n{}".format(name, script_indented)
     return ret
 
 
