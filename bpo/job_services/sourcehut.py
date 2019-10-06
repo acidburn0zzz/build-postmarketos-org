@@ -41,12 +41,6 @@ def get_manifest(tasks):
 
 
 class SourcehutJobService(JobService):
-    def script_setup(self, branch=None):
-        # TODO: install pmbootstrap
-        # TODO: yes "" | pmbootstrap init
-        return """
-            env
-        """
 
     def run_job(self, name, tasks, branch=None):
         note = "WIP testing new bpo run job code"

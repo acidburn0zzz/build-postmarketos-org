@@ -55,11 +55,8 @@ def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
     # TODO: some database foo, kill existing job etc.
     # TODO: add timeout for the job, and retries?
 
-    # Job service specific setup task
-    script_setup = remove_additional_indent(js.script_setup(branch), 8)
-    tasks_formatted = collections.OrderedDict([("setup", script_setup)])
-
     # Format input tasks
+    tasks_formatted = collections.OrderedDict()
     for task, script in tasks.items():
         tasks_formatted[task] = remove_additional_indent(script)
 

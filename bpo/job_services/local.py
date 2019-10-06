@@ -31,6 +31,10 @@ class LocalJobServiceThread(threading.Thread):
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
         logging.info("Job " + name + " started, logging to: " + self.log_path)
 
+        # Begin with setup task
+        self.tasks["setup"] = self.setup_task()
+        self.tasks.move_to_end("setup", last=False)
+
     def run_print(self, command):
         with open(self.log_path, "a") as handle:
             handle.write("% " + " ".join(command))
@@ -52,6 +56,49 @@ class LocalJobServiceThread(threading.Thread):
                        "X-BPO-Token": token}
             requests.post(url, headers=headers)
             raise
+
+    def setup_task(self):
+        """ Setup temp_path with copy of pmaports.git/pmbootstrap.git and
+            remove locally built packages.
+
+            Optionally copy the WIP repository to the local packages dir, so we
+            can build packages depending on others, without actually firing up
+            a second webserver when testing locally and making the whole
+            development / automated testing setup more complicated. When BPO is
+            using a different backend than the local one (e.g. sourcehut), the
+            WIP repository will not get copied over the local packages dir,
+            instead it will get added as regular HTTPS mirror."""
+        temp_path = bpo.config.args.temp_path + "/local_job"
+        pmaports = bpo.config.args.local_pmaports
+        pmbootstrap = bpo.config.args.local_pmbootstrap
+        token = bpo.config.const.test_tokens["job_callback"]
+        repo_wip_path = bpo.config.args.repo_wip_path
+        uid = bpo.config.const.pmbootstrap_chroot_uid_user
+        return """
+            # Remove old temp dir
+            temp_dir=""" + shlex.quote(temp_path) + """
+            if [ -d "$temp_dir" ]; then
+                sudo rm -rf "$temp_dir"
+            fi
+
+            # Prepare temp dir
+            mkdir -p "$temp_dir"
+            cd "$temp_dir"
+            cp -r """ + shlex.quote(pmaports) + """ ./pmaports
+            cp -r """ + shlex.quote(pmbootstrap) + """ ./pmbootstrap
+            echo """ + shlex.quote(token) + """ > ./token
+            ./pmbootstrap/pmbootstrap.py -q -y zap -p
+
+            # Copy WIP repo
+            branch=""" + shlex.quote(self.branch) + """
+            work_path="$(./pmbootstrap/pmbootstrap.py -q config work)"
+            packages_path="$work_path/packages"
+            repo_wip_path=""" + shlex.quote(repo_wip_path) + """
+            if [ -n "$branch" ] && [ -d "$repo_wip_path/$branch" ]; then
+                sudo cp -r "$repo_wip_path/$branch" "$packages_path"
+                sudo chown -R """ + shlex.quote(uid) + """ "$packages_path"
+            fi
+        """
 
     def run(self):
         # Create temp dir
@@ -85,54 +132,8 @@ class LocalJobServiceThread(threading.Thread):
 
 
 class LocalJobService(JobService):
-    def script_setup(self, branch=None):
-        """ Setup temp_path with copy of pmaports.git/pmbootstrap.git and
-            remove locally built packages.
 
-            Optionally copy the WIP repository to the local packages dir, so we
-            can build packages depending on others, without actually firing up
-            a second webserver when testing locally and making the whole
-            development / automated testing setup more complicated. When BPO is
-            using a different backend than the local one (e.g. sourcehut), the
-            WIP repository will not get copied over the local packages dir,
-            instead it will get added as regular HTTPS mirror.
-
-            :param branch: of the build package job, so we can copy the right
-                           subdir of the WIP repository to the local packages
-                           dir. """
-        temp_path = bpo.config.args.temp_path + "/local_job"
-        pmaports = bpo.config.args.local_pmaports
-        pmbootstrap = bpo.config.args.local_pmbootstrap
-        token = bpo.config.const.test_tokens["job_callback"]
-        repo_wip_path = bpo.config.args.repo_wip_path
-        uid = bpo.config.const.pmbootstrap_chroot_uid_user
-        return """
-            # Remove old temp dir
-            temp_dir=""" + shlex.quote(temp_path) + """
-            if [ -d "$temp_dir" ]; then
-                sudo rm -rf "$temp_dir"
-            fi
-
-            # Prepare temp dir
-            mkdir -p "$temp_dir"
-            cd "$temp_dir"
-            cp -r """ + shlex.quote(pmaports) + """ ./pmaports
-            cp -r """ + shlex.quote(pmbootstrap) + """ ./pmbootstrap
-            echo """ + shlex.quote(token) + """ > ./token
-            ./pmbootstrap/pmbootstrap.py -q -y zap -p
-
-            # Copy WIP repo
-            branch=""" + shlex.quote(branch) + """
-            work_path="$(./pmbootstrap/pmbootstrap.py -q config work)"
-            packages_path="$work_path/packages"
-            repo_wip_path=""" + shlex.quote(repo_wip_path) + """
-            if [ -n "$branch" ] && [ -d "$repo_wip_path/$branch" ]; then
-                sudo cp -r "$repo_wip_path/$branch" "$packages_path"
-                sudo chown -R """ + shlex.quote(uid) + """ "$packages_path"
-            fi
-        """
-
-    def run_job(self, name, tasks, branch=None):
+    def run_job(self, name, tasks, branch="master"):
         thread = LocalJobServiceThread(name=name, tasks=tasks, branch=branch)
         thread.start()
         return thread.job_id
