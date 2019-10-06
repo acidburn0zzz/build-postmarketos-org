@@ -4,7 +4,7 @@
 
 import logging
 import requests
-import yaml
+import shlex
 
 import bpo.config.args
 import bpo.config.tokens
@@ -22,29 +22,43 @@ def api_request(path, payload):
     return ret
 
 
-def get_manifest(tasks):
-    manifest = {"image": "alpine/latest",
-                "packages": ["coreutils", "py3-requests"],
-                "sources": ["https://gitlab.com/postmarketOS/pmaports.git/"],
-                "environment": {},
-                "secrets": []}
-    ret = yaml.safe_dump(manifest)
+def get_manifest(name, tasks, branch):
+    url_api = bpo.config.args.url_api
+    url_repo_wip = bpo.config.args.url_repo_wip
+    ret = """
+        image: alpine/latest
+        packages:
+        - coreutils
+        - py3-requests
+        sources:
+        - "https://gitlab.com/postmarketOS/pmaports.git/"
+        - "https://gitlab.com/postmarketOS/pmbootstrap.git/"
+        tasks:
+        - bpo_setup: |
+           export BPO_TOKEN_FILE="./token"
+           export BPO_API_HOST=""" + shlex.quote(url_api) + """
+           export BPO_JOB_ID="$JOB_ID"
+           export BPO_JOB_NAME=""" + shlex.quote(name) + """
+           export BPO_WIP_REPO_URL=""" + shlex.quote(url_repo_wip) + """
+           export BPO_WIP_REPO_ARG="-mp "$BPO_WIP_REPO_URL""
 
-    # Pyyaml's safe_dump chokes on ordereddicts, so format tasks manually. This
-    # also makes sure that the formatting looks good, and is not in a single.
-    ret += "tasks:\n"
+           yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
+    """
+
+    ret = bpo.helpers.job.remove_additional_indent(ret, 8)
+
+    # Add tasks
     for name, script in tasks.items():
         script_indented = "   " + script.replace("\n", "\n   ")
-        ret += "- {}: |\n{}".format(name, script_indented) + "\n"
-
+        ret += "- {}: |\n{}".format(name, script_indented)
     return ret
 
 
 class SourcehutJobService(JobService):
 
-    def run_job(self, name, tasks, branch=None):
+    def run_job(self, name, tasks, branch="master"):
         note = "WIP testing new bpo run job code"
-        manifest = get_manifest(tasks)
+        manifest = get_manifest(name, tasks, branch)
         print(manifest)
         result = api_request("jobs", {"manifest": manifest,
                                       "note": note,

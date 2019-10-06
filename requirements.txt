@@ -1,4 +1,3 @@
 Flask
 SQLAlchemy
 Requests
-PyYAML
