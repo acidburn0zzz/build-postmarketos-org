@@ -17,6 +17,7 @@ from bpo.job_services.base import JobService
 class LocalJobServiceThread(threading.Thread):
     """ Local jobs are running on the same machine, but in a different
         thread. """
+
     def __init__(self, name, tasks, branch):
         threading.Thread.__init__(self, name="job:" + name)
         self.name = name
@@ -42,9 +43,9 @@ class LocalJobServiceThread(threading.Thread):
             # Put this in an extra function, so we can easily monkeypatch
             # it in the testsuite
             self.run_print(command)
-        except Exception as e:
+        except Exception:
             url = "http://{}:{}/api/job-callback/fail".format(
-                    bpo.config.args.host, bpo.config.args.port)
+                bpo.config.args.host, bpo.config.args.port)
             token = bpo.config.const.test_tokens["job_callback"]
             headers = {"X-BPO-Job-Name": self.name,
                        "X-BPO-Job-Id": str(self.job_id),
@@ -53,7 +54,7 @@ class LocalJobServiceThread(threading.Thread):
             raise
 
     def run(self):
-         # Create temp dir
+        # Create temp dir
         temp_path = bpo.config.args.temp_path + "/local_job"
         os.makedirs(temp_path, exist_ok=True)
 
@@ -132,9 +133,9 @@ class LocalJobService(JobService):
         """
 
     def run_job(self, name, tasks, branch=None):
-       thread = LocalJobServiceThread(name=name, tasks=tasks, branch=branch)
-       thread.start()
-       return thread.job_id
+        thread = LocalJobServiceThread(name=name, tasks=tasks, branch=branch)
+        thread.start()
+        return thread.job_id
 
     def get_status(self, job_id):
         """ When running locally, we can only run one job at a time. So if we

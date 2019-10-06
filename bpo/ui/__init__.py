@@ -17,13 +17,13 @@ def update():
     # Query information from DB
     session = bpo.db.session()
     log_entries = session.query(bpo.db.Log).order_by(bpo.db.Log.id.desc()
-                    ).limit(50)
+                                                     ).limit(50)
     pkgcount = session.query(func.count(bpo.db.Package.id)).scalar()
 
     pkgs = {}
     for status in bpo.db.PackageStatus:
         pkgs[status.name] = session.query(bpo.db.Package).\
-                                    filter_by(status=status)
+            filter_by(status=status)
 
     # Fill template
     global env
@@ -66,5 +66,5 @@ def log_package(package, action):
     """ Convenience wrapper
         :param package: bpo.db.Package object """
     log(action=action, arch=package.arch, branch=package.branch,
-                   pkgname=package.pkgname, version=package.version,
-                   job_id=package.job_id)
+        pkgname=package.pkgname, version=package.version,
+        job_id=package.job_id)

@@ -3,9 +3,7 @@
 """ Job service for builds.sr.ht, see: https://man.sr.ht/builds.sr.ht """
 
 import logging
-import os
 import requests
-import shlex
 import yaml
 
 import bpo.config.args
@@ -44,11 +42,11 @@ class SourcehutJobService(JobService):
     def run_job(self, name, tasks, branch=None):
         note = "WIP testing new bpo run job code"
         result = api_request("jobs", {"manifest": get_manifest(tasks),
-                                     "note": note,
-                                     "tags": [name],
-                                     "execute": True,
-                                     "secrets": True})
-        # FIXME: extract job ID from result and return it
+                                      "note": note,
+                                      "tags": [name],
+                                      "execute": True,
+                                      "secrets": True})
+        print(result)  # FIXME: extract job ID from result and return it
         return 0
 
     def get_status(self, job_id):

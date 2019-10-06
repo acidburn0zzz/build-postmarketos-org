@@ -1,7 +1,6 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-import glob
 import logging
 import os
 import subprocess
@@ -20,7 +19,6 @@ def do_keygen():
 
     # Skip if pub key exists
     path_dir = bpo.config.const.repo_wip_keys
-    path_private = path_dir + "/wip.rsa"
     path_public = path_dir + "/wip.rsa.pub"
     if os.path.exists(path_public):
         return

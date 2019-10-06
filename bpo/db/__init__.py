@@ -9,9 +9,6 @@
         session.commit() """
 
 import enum
-import glob
-import logging
-import os
 import sys
 import json
 
@@ -20,7 +17,7 @@ import sqlalchemy.orm
 import sqlalchemy.ext.declarative
 import sqlalchemy.sql
 from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, \
-                       Table, Boolean, Index, Enum
+    Table, Index, Enum
 from sqlalchemy.orm import relationship
 
 import bpo.config.args
@@ -43,7 +40,7 @@ class Package(base):
     __tablename__ = "package"
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(timezone=True),
-                           server_default=sqlalchemy.sql.func.now())
+                  server_default=sqlalchemy.sql.func.now())
     last_update = Column(DateTime(timezone=True),
                          onupdate=sqlalchemy.sql.func.now())
     arch = Column(String)
@@ -62,7 +59,6 @@ class Package(base):
 
     # Package.depends: see init_relationships() below.
 
-
     def __init__(self, arch, branch, pkgname, version):
         self.arch = arch
         self.branch = branch
@@ -70,14 +66,15 @@ class Package(base):
         self.version = version
         self.status = PackageStatus.queued
 
-
     def __repr__(self):
-        depends=[]
+        depends = []
         for depend in self.depends:
             depends.append(depend.pkgname)
         return "{}/{}/{}-{}.apk (pmOS depends: {})".format(self.branch,
-            self.arch, self.pkgname, self.version, depends)
-
+                                                           self.arch,
+                                                           self.pkgname,
+                                                           self.version,
+                                                           depends)
 
     def depends_built(self):
         for depend in self.depends:
@@ -91,7 +88,7 @@ class Log(base):
     __tablename__ = "log"
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(timezone=True),
-                           server_default=sqlalchemy.sql.func.now())
+                  server_default=sqlalchemy.sql.func.now())
     action = Column(String)
     payload = Column(Text)
     arch = Column(String)
@@ -99,7 +96,6 @@ class Log(base):
     pkgname = Column(String)
     version = Column(String)
     job_id = Column(Integer)
-
 
     def __init__(self, action, payload=None, arch=None, branch=None,
                  pkgname=None, version=None, job_id=None):
@@ -127,11 +123,13 @@ def init_relationships():
                          primary_key=True),
                   Column("dependency_id", ForeignKey("package.id"),
                          primary_key=True))
+    primaryjoin = self.Package.id == assoc.c.package_id
+    secondaryjoin = self.Package.id == assoc.c.dependency_id
     self.Package.depends = relationship("Package", secondary=assoc,
-        primaryjoin=self.Package.id==assoc.c.package_id,
-        secondaryjoin=self.Package.id==assoc.c.dependency_id,
-        order_by=self.Package.id,
-        backref="required_by")
+                                        primaryjoin=primaryjoin,
+                                        secondaryjoin=secondaryjoin,
+                                        order_by=self.Package.id,
+                                        backref="required_by")
 
 
 def init():

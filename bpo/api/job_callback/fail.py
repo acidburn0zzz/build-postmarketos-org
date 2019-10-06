@@ -1,11 +1,7 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-import logging
-import os
-import re
-
-from flask import Blueprint, request, abort
+from flask import request
 from bpo.helpers.headerauth import header_auth
 import bpo.api
 import bpo.db
@@ -56,4 +52,3 @@ def job_callback_fail():
         bpo.ui.log("job_callback_fail_" + job_name, job_id=job_id)
 
     return "ouch, trying to recover..."
-

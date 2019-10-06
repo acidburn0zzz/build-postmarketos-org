@@ -5,7 +5,7 @@ import logging
 import os
 import re
 
-from flask import Blueprint, request, abort
+from flask import request
 from bpo.helpers.headerauth import header_auth
 import bpo.api
 import bpo.config.args
@@ -32,12 +32,11 @@ def get_apks(request):
 def job_callback_build_package():
     session = bpo.db.session()
     package = bpo.api.get_package(session, request)
-    version = bpo.api.get_version(request, package)
     apks = get_apks(request)
 
     # Create WIP dir
     wip = (bpo.config.args.repo_wip_path + "/" + package.branch + "/" +
-               package.arch)
+           package.arch)
     os.makedirs(wip, exist_ok=True)
 
     # Save files to disk

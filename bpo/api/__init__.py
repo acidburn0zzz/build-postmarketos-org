@@ -7,6 +7,7 @@ import bpo.db
 
 blueprint = flask.Blueprint("bpo_api", __name__)
 
+
 def get_header(request, key):
     header = "X-BPO-" + key
     if header not in request.headers:

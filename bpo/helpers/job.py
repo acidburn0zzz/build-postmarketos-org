@@ -4,7 +4,6 @@
 import collections
 import importlib
 import logging
-import threading
 
 import bpo.config.args
 
@@ -35,7 +34,7 @@ def remove_additional_indent(script, spaces=12):
         # Remove additional indent from line
         if line[:spaces] == " " * spaces:
             ret += line[spaces:] + "\n"
-        else: # Line does not start with indent
+        else:  # Line does not start with indent
             ret += line + "\n"
 
     # Remove trailing empty lines
@@ -75,7 +74,6 @@ def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
 
 def update_package_status():
     building = bpo.db.PackageStatus.building
-    failed = bpo.db.PackageStatus.failed
     js = get_job_service()
 
     session = bpo.db.session()

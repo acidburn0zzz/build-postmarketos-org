@@ -3,9 +3,7 @@
 
 import configparser
 import hashlib
-import logging
 import os
-import string
 import sys
 
 import bpo.config.const
@@ -36,7 +34,6 @@ def hash_generate(token):
         :param token: name of the token, e.g. "push_hook_gitlab"
         :returns: hash of the generated token """
     # Generate
-    chars = string.ascii_letters + string.digits
     token_plain = os.urandom(50).hex()
     token_hash = hashlib.sha512(token_plain.encode()).hexdigest()
 

@@ -1,8 +1,5 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
-
-import requests
-
 import bpo_test
 import bpo_test.trigger
 import bpo.api.job_callback

@@ -13,12 +13,14 @@ import werkzeug.serving
 topdir = os.path.realpath(os.path.join(os.path.dirname(__file__) + "/../.."))
 sys.path.insert(0, topdir)
 
-import bpo
-import bpo.config.args
-import bpo.config.const
+# Use "noqa" to ignore "E402 module level import not at top of file"
+import bpo  # noqa
+import bpo.config.const  # noqa
+import bpo.config.args  # noqa
 
 # Queue for passing test result between threads
 result_queue = None
+
 
 def reset():
     """ Remove the database, generated binary packages and temp dirs. To be

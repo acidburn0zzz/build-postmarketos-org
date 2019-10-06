@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 import argparse
-import logging
 import sys
 import os
 import bpo.config.const
@@ -29,6 +28,7 @@ local_pmbootstrap = os.path.realpath(bpo.config.const.top_dir +
 
 # Defaults (sourcehut)
 sourcehut_user = "postmarketOS"
+
 
 def job_service_local(parser):
     sub = parser.add_parser("local", help="run all jobs locally (debug)")

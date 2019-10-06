@@ -1,6 +1,8 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import bpo.config.const
+import bpo_test
 import os
 import requests
 import sys
@@ -8,9 +10,6 @@ import sys
 # Add test dir to import path (so we can import bpo_test)
 topdir = os.path.realpath(os.path.join(os.path.dirname(__file__) + "/.."))
 sys.path.insert(0, topdir)
-
-import bpo_test
-import bpo.config.const
 
 
 def api_request(path, headers, payload):
@@ -25,18 +24,18 @@ def api_request(path, headers, payload):
 def push_hook_gitlab():
     token = bpo.config.const.test_tokens["push_hook_gitlab"]
     headers = {"X-Gitlab-Token": token}
-    payload = {"object_kind":"push",
+    payload = {"object_kind": "push",
                "ref": "refs/heads/master",
                "checkout_sha": "deadbeef",
                "commits":
-                [{"id": "5e9e102a00e58541ed91164de15fd209af628b42",
-                  "message": "main/postmarketos-ui-phosh: clean-up\n",
-                  "timestamp": "2019-05-25T16:23:30Z",
-                  "url": "https:\/\/gitlab.com\/...d91164de15fd209af628b42",
-                  "author": {"name": "John Doe", "email": "john@localhost"},
-                  "added": [],
-                  "modified": ["main/postmarketos-ui-phosh/APKBUILD"],
-                  "removed": []}]}
+               [{"id": "5e9e102a00e58541ed91164de15fd209af628b42",
+                 "message": "main/postmarketos-ui-phosh: clean-up\n",
+                 "timestamp": "2019-05-25T16:23:30Z",
+                 "url": "https://gitlab.com/...d91164de15fd209af628b42",
+                 "author": {"name": "John Doe", "email": "john@localhost"},
+                 "added": [],
+                 "modified": ["main/postmarketos-ui-phosh/APKBUILD"],
+                 "removed": []}]}
     api_request("push-hook/gitlab", headers, payload)
 
 

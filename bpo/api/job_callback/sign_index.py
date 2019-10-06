@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 import logging
-from flask import Blueprint, request, abort
+from flask import request
 from bpo.helpers.headerauth import header_auth
 import bpo.api
 import bpo.config.args

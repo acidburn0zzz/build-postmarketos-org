@@ -1,7 +1,7 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-from flask import Blueprint, request, abort
+from flask import request
 from bpo.helpers.headerauth import header_auth
 import bpo.api
 import bpo.config.args
@@ -89,10 +89,9 @@ def job_callback_get_repo_missing():
     bpo.ui.log("api_job_callback_get_repo_missing", payload=payload, arch=arch,
                branch=branch)
 
-
     # Make sure that we did not miss any job status changes
     bpo.helpers.job.update_package_status()
 
     bpo.repo.build()
-    
+
     return "warming up build servers..."

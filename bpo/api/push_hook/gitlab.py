@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 import logging
-from flask import Blueprint, request, abort
+from flask import request, abort
 from bpo.helpers.headerauth import header_auth
 import bpo.jobs.get_repo_missing
 import bpo.api
@@ -45,7 +45,6 @@ def push_hook_gitlab():
         abort(400, "Unknown object_kind")
 
     # Insert log entry
-    session = bpo.db.session()
     bpo.ui.log("api_push_hook_gitlab", payload=payload, branch=branch)
 
     # Run repo_missing job for all arches

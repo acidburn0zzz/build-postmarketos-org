@@ -4,9 +4,10 @@
 import hashlib
 from functools import wraps
 from hmac import compare_digest
-from flask import g, request, abort
+from flask import request, abort
 
 import bpo.config.tokens
+
 
 def header_auth(header, token):
     def decorator(f):

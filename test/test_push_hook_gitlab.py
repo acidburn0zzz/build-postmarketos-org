@@ -1,8 +1,6 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-import requests
-
 import bpo_test
 import bpo_test.trigger
 import bpo.jobs
@@ -26,7 +24,6 @@ def test_push_hook_gitlab_to_repo_missing_to_nop(monkeypatch):
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.finish)
         bpo_test.trigger.push_hook_gitlab()
-
 
 
 # FIXME: add test that provokes an error from server, e.g. by passing an

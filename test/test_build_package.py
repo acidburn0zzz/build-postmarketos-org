@@ -1,7 +1,7 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Testing bpo/jobs/build_package.py """
-import bpo_test
+import bpo_test  # noqa
 import bpo.config.const
 import bpo.jobs.build_package
 
