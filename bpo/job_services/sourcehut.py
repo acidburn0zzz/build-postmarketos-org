@@ -33,15 +33,15 @@ def get_manifest(name, tasks, branch):
         sources:
         - "https://gitlab.com/postmarketOS/pmaports.git/"
         - "https://gitlab.com/postmarketOS/pmbootstrap.git/"
+        environment:
+          BPO_JOB_ID: "$JOB_ID"
+          BPO_TOKEN_FILE: "./token"
+          BPO_API_HOST: """ + shlex.quote(url_api) + """
+          BPO_JOB_NAME: """ + shlex.quote(name) + """
+          BPO_WIP_REPO_URL: """ + shlex.quote(url_repo_wip) + """
+          BPO_WIP_REPO_ARG: '-mp "$BPO_WIP_REPO_URL"'
         tasks:
         - bpo_setup: |
-           export BPO_TOKEN_FILE="./token"
-           export BPO_API_HOST=""" + shlex.quote(url_api) + """
-           export BPO_JOB_ID="$JOB_ID"
-           export BPO_JOB_NAME=""" + shlex.quote(name) + """
-           export BPO_WIP_REPO_URL=""" + shlex.quote(url_repo_wip) + """
-           export BPO_WIP_REPO_ARG="-mp "$BPO_WIP_REPO_URL""
-
            yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
     """
 
@@ -66,7 +66,7 @@ class SourcehutJobService(JobService):
                                       "execute": True,
                                       "secrets": True})
         job_id = result.json()["id"]
-        logging.info("Job successfully started, got id: " + str(job_id))
+        logging.info("Job started: " + self.get_link(job_id))
         return job_id
 
     def get_status(self, job_id):
