@@ -13,7 +13,7 @@ def run(arch, branch):
     uid = bpo.config.const.pmbootstrap_chroot_uid_user
 
     bpo.helpers.job.run("sign_index", collections.OrderedDict([
-        ("download unsigned index", """
+        ("download_unsigned_index", """
             if [ -n "$BPO_WIP_REPO_PATH" ]; then
                 cp "$BPO_WIP_REPO_PATH"/""" + shlex.quote(unsigned) + """ \
                     APKINDEX.tar.gz

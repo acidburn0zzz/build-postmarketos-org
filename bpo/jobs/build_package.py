@@ -44,12 +44,12 @@ def run(arch, pkgname, branch):
 
     # Start job
     job_id = bpo.helpers.job.run("build_package", collections.OrderedDict([
-        ("install wip.rsa.pub", """
+        ("install_pubkey", """
             echo -n '""" + pubkey + """' \
                 > pmbootstrap/pmb/data/keys/wip.rsa.pub
             """),
         # FIXME: checkout branch
-        ("pmbootstrap build", """
+        ("pmbootstrap_build", """
             ./pmbootstrap/pmbootstrap.py \
                 """ + mirrors + """ \
                 --details-to-stdout \

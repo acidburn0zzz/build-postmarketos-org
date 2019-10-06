@@ -11,7 +11,7 @@ def run_arch_branch(arch, branch):
     mirror_final = bpo.config.args.mirror + "/" + branch + "/" + arch
 
     bpo.helpers.job.run("get_repo_missing", collections.OrderedDict([
-        ("pmbootstrap repo_missing", """
+        ("pmbootstrap_repo_missing", """
             ./pmbootstrap/pmbootstrap.py \
                 --mirror-pmOS """ + shlex.quote(mirror_final) + """ \
                 repo_missing > repo_missing.json
