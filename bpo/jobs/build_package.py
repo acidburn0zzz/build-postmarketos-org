@@ -50,20 +50,20 @@ def run(arch, pkgname, branch):
             """),
         # FIXME: checkout branch
         ("pmbootstrap_build", """
-            ./pmbootstrap/pmbootstrap.py \
-                """ + mirrors + """ \
-                --details-to-stdout \
-                build \
-                --no-depends \
-                """ + strict_arg + """ \
-                --arch """ + shlex.quote(arch) + """ \
+            ./pmbootstrap/pmbootstrap.py \\
+                """ + mirrors + """ \\
+                --details-to-stdout \\
+                build \\
+                --no-depends \\
+                """ + strict_arg + """ \\
+                --arch """ + shlex.quote(arch) + """ \\
                 """ + shlex.quote(pkgname) + """
             """),
         ("submit", """
             export BPO_API_ENDPOINT="build-package"
             export BPO_ARCH=""" + shlex.quote(arch) + """
             export BPO_BRANCH=""" + shlex.quote(branch) + """
-            export BPO_PAYLOAD_FILES="$(ls -1 "$(./pmbootstrap/pmbootstrap.py \
+            export BPO_PAYLOAD_FILES="$(ls -1 "$(pmbootstrap/pmbootstrap.py \\
                 -q config work)/packages/$BPO_ARCH/"*.apk)"
             export BPO_PAYLOAD_IS_JSON="0"
             export BPO_PKGNAME=""" + shlex.quote(pkgname) + """

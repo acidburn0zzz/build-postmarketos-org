@@ -12,8 +12,8 @@ def run_arch_branch(arch, branch):
 
     bpo.helpers.job.run("get_repo_missing", collections.OrderedDict([
         ("pmbootstrap_repo_missing", """
-            ./pmbootstrap/pmbootstrap.py \
-                --mirror-pmOS """ + shlex.quote(mirror_final) + """ \
+            ./pmbootstrap/pmbootstrap.py \\
+                --mirror-pmOS """ + shlex.quote(mirror_final) + """ \\
                 repo_missing > repo_missing.json
             """),
         # NOTE: the branch is already defined through the push_id in the

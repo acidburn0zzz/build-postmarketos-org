@@ -15,10 +15,10 @@ def run(arch, branch):
     bpo.helpers.job.run("sign_index", collections.OrderedDict([
         ("download_unsigned_index", """
             if [ -n "$BPO_WIP_REPO_PATH" ]; then
-                cp "$BPO_WIP_REPO_PATH"/""" + shlex.quote(unsigned) + """ \
+                cp "$BPO_WIP_REPO_PATH"/""" + shlex.quote(unsigned) + """ \\
                     APKINDEX.tar.gz
             else
-                wget "$BPO_WIP_REPO_URL"/""" + shlex.quote(unsigned) + """ \
+                wget "$BPO_WIP_REPO_URL"/""" + shlex.quote(unsigned) + """ \\
                     -O APKINDEX.tar.gz
             fi
             """),
@@ -29,8 +29,8 @@ def run(arch, branch):
             chroot_target="$work_dir/chroot_native/home/pmos/APKINDEX.tar.gz"
             sudo cp APKINDEX.tar.gz "$chroot_target"
             sudo chown """ + shlex.quote(uid) + """ "$chroot_target"
-            ./pmbootstrap/pmbootstrap.py \
-                --details-to-stdout \
+            ./pmbootstrap/pmbootstrap.py \\
+                --details-to-stdout \\
                 chroot --user -- abuild-sign /home/pmos/APKINDEX.tar.gz
             sudo mv "$chroot_target" APKINDEX.tar.gz
         """),
