@@ -40,7 +40,7 @@ $ pip install pytest
 $ pytest -x -vv test --full-trace
 ```
 
-If a test is just hanging, hit ^C and look at the very top of the output.
+If a test is just hanging, hit ^C and look at the very top of the output. The local job is running in a different thread, so if there's nothing useful in the trace, open _html_out/index.html and check the latest log files (which are linked there).
 
 ## Network Architecture
 
