@@ -37,6 +37,9 @@ def remove_additional_indent(script, spaces=12):
         else:  # Line does not start with indent
             ret += line + "\n"
 
+    # Always have one new line at the end
+    ret += "\n"
+
     # Remove trailing empty lines
     while ret.endswith("\n\n"):
         ret = ret[:-1]
