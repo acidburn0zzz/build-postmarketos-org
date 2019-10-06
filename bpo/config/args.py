@@ -19,6 +19,9 @@ repo_final_path = bpo.config.const.top_dir + "/_repo_final"
 repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
 html_out = bpo.config.const.top_dir + "/_html_out"
 auto_get_repo_missing = False
+url_api = "https://build.postmarketos.org/"
+url_repo_wip = "https://build.postmarketos.org/wip/"
+
 
 # Defaults (local)
 local_pmaports = os.path.realpath(bpo.config.const.top_dir +
@@ -80,6 +83,10 @@ def init():
                         help="used for various things, like extracting"
                              " APKINDEX tools and for running local jobs (will"
                              " get wiped!)")
+    parser.add_argument("--url-api", help="external URL to the bpo server for"
+                        " accessing the API (ignored with local job service)")
+    parser.add_argument("--url-repo-wip", help="external URL to the WIP repo"
+                        " dir (--repo-wip-path)")
 
     # Job service subparsers
     job_service = parser.add_subparsers(title="job service",
