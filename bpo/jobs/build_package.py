@@ -5,9 +5,21 @@ import bpo.db
 import bpo.helpers.job
 
 import collections
+import fnmatch
 import logging
 import os
 import shlex
+
+
+def do_build_strict(pkgname):
+    """ Check if --strict should be supplied to "pmbootstrap build". Usually
+        we want to use it every time, but in order to work around bugs we may
+        need to disable it for certain packages. For example:
+        https://gitlab.alpinelinux.org/alpine/apk-tools/issues/10649 """
+    for pattern in bpo.config.const.no_build_strict:
+        if fnmatch.fnmatch(pkgname, pattern):
+            return False
+    return True
 
 
 def run(arch, pkgname, branch):
@@ -28,6 +40,8 @@ def run(arch, pkgname, branch):
     if os.path.exists(wip_path):
         mirrors = '$BPO_WIP_REPO_ARG ' + mirrors
 
+    strict_arg = "--strict" if do_build_strict(pkgname) else ""
+
     # Start job
     job_id = bpo.helpers.job.run("build_package", collections.OrderedDict([
         ("install wip.rsa.pub", """
@@ -41,7 +55,7 @@ def run(arch, pkgname, branch):
                 --details-to-stdout \
                 build \
                 --no-depends \
-                --strict \
+                """ + strict_arg + """ \
                 --arch """ + shlex.quote(arch) + """ \
                 """ + shlex.quote(pkgname) + """
             """),

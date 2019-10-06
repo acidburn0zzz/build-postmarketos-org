@@ -17,6 +17,11 @@ architectures = ["x86_64"]
 # on Alpine's aports.git branches at some point (v3.10, v3.9, ...).
 branches = ["master"]
 
+# Omit the --strict argument for pmbootstrap build for these packages (fnmatch)
+# gcc*-*: https://gitlab.alpinelinux.org/alpine/apk-tools/issues/10649
+#         (fix is merged to abuild master, not yet in latest abuild release)
+no_build_strict = ["gcc*-*"]
+
 # How many build jobs can run in parallel (across all arches)
 max_parallel_build_jobs = 1
 
