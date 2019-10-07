@@ -35,11 +35,11 @@ def get_manifest(name, tasks, branch):
         - "https://gitlab.com/postmarketOS/pmbootstrap.git/"
         environment:
           BPO_JOB_ID: "$JOB_ID"
-          BPO_TOKEN_FILE: "./token"
+          BPO_TOKEN_FILE: "/home/build/.token"
           BPO_API_HOST: """ + shlex.quote(url_api) + """
           BPO_JOB_NAME: """ + shlex.quote(name) + """
           BPO_WIP_REPO_URL: """ + shlex.quote(url_repo_wip) + """
-          BPO_WIP_REPO_ARG: '-mp "$BPO_WIP_REPO_URL"'
+          BPO_WIP_REPO_ARG: '-mp """ + shlex.quote(url_repo_wip) + """'
         secrets:
         - """ + str(bpo.config.tokens.job_callback_secret) + """
         tasks:
