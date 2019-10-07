@@ -24,7 +24,7 @@ def api_request(path, payload=None, method="POST"):
 
 def get_manifest(name, tasks, branch):
     url_api = bpo.config.args.url_api
-    url_repo_wip = bpo.config.args.url_repo_wip
+    url_repo_wip = bpo.config.args.url_repo_wip + "/" + branch
     ret = """
         image: alpine/latest
         packages:
