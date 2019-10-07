@@ -19,8 +19,8 @@ repo_final_path = bpo.config.const.top_dir + "/_repo_final"
 repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
 html_out = bpo.config.const.top_dir + "/_html_out"
 auto_get_repo_missing = False
-url_api = "https://build.postmarketos.org/"
-url_repo_wip = "https://build.postmarketos.org/wip/"
+url_api = "https://build.postmarketos.org"
+url_repo_wip = "https://build.postmarketos.org/wip"
 
 
 # Defaults (local)
