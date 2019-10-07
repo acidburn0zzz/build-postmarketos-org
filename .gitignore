@@ -6,6 +6,8 @@ _temp
 _html_out
 bpo_sourcehut.sh
 
+/public
+
 # The rest below is more or less from a default Python .gitignore
 .*.swp
 
