@@ -26,10 +26,7 @@ def logging_init():
                         format="[%(asctime)s] %(message)s", datefmt="%H:%M:%S")
 
 
-def main(return_app=False):
-    """ :param return_app: return the flask app, instead of running it. This
-                           is used in the testsuite. """
-    # Initialize logging, config, database, repo tools/keys, job service
+def init_components():
     logging_init()
     bpo.config.args.init()
     bpo.config.tokens.init()
@@ -37,9 +34,15 @@ def main(return_app=False):
     bpo.repo.tools.init()
     bpo.repo.wip.do_keygen()
     bpo.helpers.job.init()
-
-    # Initialize UI and update it with a new log message
     bpo.ui.init()
+
+
+def main(return_app=False):
+    """ :param return_app: return the flask app, instead of running it. This
+                           is used in the testsuite. """
+    init_components()
+
+    # Update UI by writing a new log message
     bpo.ui.log("restart")
 
     # Kick off build jobs for queued packages

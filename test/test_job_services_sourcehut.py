@@ -11,7 +11,7 @@ import bpo.job_services.sourcehut
 def test_sourcehut_get_status(monkeypatch):
     # Initialize enough of bpo server, so get_job_service() works
     monkeypatch.setattr(sys, "argv", ["bpo.py", "sourcehut"])
-    bpo.main(True)
+    bpo.init_components()
 
     # Get the job service
     js = bpo.helpers.job.get_job_service()
