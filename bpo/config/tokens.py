@@ -13,7 +13,8 @@ import bpo.config.args
 # Hashes of generated tokens will be stored here
 push_hook_gitlab = None
 job_callback = None
-sourcehut = None
+job_callback_secret = None  # sourcehut secret ID for the job_callback token
+sourcehut = None  # personal access oauth token
 
 
 def load():
@@ -68,7 +69,7 @@ def init():
             setattr(self, token, hash_generate(token))
 
     # Just load
-    for token in ["sourcehut"]:
+    for token in ["sourcehut", "job_callback_secret"]:
         if token in cfg["bpo"]:
             setattr(self, token, cfg["bpo"][token])
 

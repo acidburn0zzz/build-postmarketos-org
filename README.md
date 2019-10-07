@@ -30,8 +30,18 @@ After creating a [sr.ht](https://meta.sr.ht/register) account and a dedicated [p
 ```
 $ cp bpo_sourcehut.example.sh bpo_sourcehut.sh
 $ $EDITOR bpo_sourcehut.sh # adjust USER
-$ ./bpo_sourcehut.sh # asks to store the token properly, then run it again
+$ ./bpo_sourcehut.sh
 ```
+
+Running bpo for the first time will generate the `push_hook_gitlab` and `job_callback` tokens, and display them once (and never again, only a hash is stored). Copy the tokens and set them up as push hook token in gitlab, and create a secret in sourcehut for the job_callback token.
+
+Then edit the token file and add `sourcehut` (personal access oauth token) and `job_callback_secret` (the secret ID that sourcehut generated for the job_callback token). Finally start the bpo server again.
+
+```
+$ EDITOR .tokens.cfg
+$ ./bpo_sourcehut.sh
+```
+
 
 ### Running tests
 

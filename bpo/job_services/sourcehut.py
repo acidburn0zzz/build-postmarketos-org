@@ -40,6 +40,8 @@ def get_manifest(name, tasks, branch):
           BPO_JOB_NAME: """ + shlex.quote(name) + """
           BPO_WIP_REPO_URL: """ + shlex.quote(url_repo_wip) + """
           BPO_WIP_REPO_ARG: '-mp "$BPO_WIP_REPO_URL"'
+        secrets:
+        - """ + str(bpo.config.tokens.job_callback_secret) + """
         tasks:
         - bpo_setup: |
            yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
