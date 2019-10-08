@@ -40,6 +40,12 @@ def count_running_builds(session):
     return session.query(bpo.db.Package).filter_by(status=building).count()
 
 
+def count_failed_builds(session, arch, branch):
+    failed = bpo.db.PackageStatus.failed
+    return session.query(bpo.db.Package).filter_by(status=failed, arch=arch,
+                                                   branch=branch).count()
+
+
 def build_arch_branch(session, slots_available, arch, branch):
     """ :returns: amount of jobs that were started """
     logging.info("Building " + arch + "@" + branch + ": starting new job(s)")
@@ -48,8 +54,11 @@ def build_arch_branch(session, slots_available, arch, branch):
         pkgname = next_package_to_build(session, arch, branch)
         if not pkgname:
             if not running:
-                logging.info(arch + "@" + branch + ": WIP repo complete")
-                bpo.repo.symlink.create(arch, branch)
+                if count_failed_builds(session, arch, branch):
+                    bpo.ui.log("build_repo_stuck", arch=arch, branch=branch)
+                else:
+                    logging.info(arch + "@" + branch + ": WIP repo complete")
+                    bpo.repo.symlink.create(arch, branch)
             break
 
         if slots_available > 0:

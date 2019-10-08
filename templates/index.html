@@ -42,6 +42,8 @@
                     {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: <b>build failed</b>
                 {% elif entry.action == "job_callback_fail_build_package" %}
                     {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: <b>build failed</b>
+                {% elif entry.action == "build_repo_stuck" %}
+                    {{ entry.branch }}/{{ entry.arch }}: <b>repo is stuck</b> - fix failed builds to continue
                 {% else %}
                     ???
                 {% endif %}
