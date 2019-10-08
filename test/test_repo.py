@@ -7,6 +7,116 @@ import bpo.db
 import bpo.repo
 
 
+def test_build_arch_branch(monkeypatch):
+    """ Test all code paths of bpo.repo.build_arch_branch(). Create the usual
+        test database with the two hello-world and hello-world-wrapper
+        packages, then let it build one package after another. When called
+        again, it must figure out, that the WIP repo is complete and start to
+        create the symlink repo. Also test the case, where the repo is stuck
+        (hello-world failed, but -wrapper depends on it and can't be built).
+    """
+    # *** Monkeypatch functions ***
+    # bpo.jobs.build_package.run
+    global build_package_run_called
+    global expected_pkgname
+
+    def build_package_run(arch, pkgname, branch):
+        global build_package_run_called
+        global expected_pkgname
+        build_package_run_called = True
+        assert pkgname == expected_pkgname
+    monkeypatch.setattr(bpo.jobs.build_package, "run", build_package_run)
+
+    # bpo.ui.log
+    global expected_log_action
+    global expected_log_action_found
+    expected_log_action = "build_repo_stuck"
+    expected_log_action_found = False
+
+    def bpo_ui_log(action, *args, **kwargs):
+        global expected_log_action
+        global expected_log_action_found
+        print("bpo_ui_log: args: {}, kwargs: {}".format(str(args),
+                                                        str(kwargs)))
+        if action == expected_log_action:
+            expected_log_action_found = True
+    monkeypatch.setattr(bpo.ui, "log", bpo_ui_log)
+
+    # bpo.repo.symlink.create
+    global bpo_symlink_create_called
+
+    def bpo_repo_symlink_create(arch, branch):
+        global bpo_symlink_create_called
+        bpo_symlink_create_called = True
+    monkeypatch.setattr(bpo.repo.symlink, "create", bpo_repo_symlink_create)
+
+    # *** Prepare test ***
+    # Fill the db with "hello-world", "hello-world-wrapper"
+    with bpo_test.BPOServer():
+        monkeypatch.setattr(bpo.repo, "build", bpo_test.finish)
+        bpo_test.trigger.job_callback_get_repo_missing()
+
+    # Function and arguments variables
+    session = bpo.db.session()
+    slots_available = 1
+    arch = "x86_64"
+    branch = "master"
+    func = bpo.repo.build_arch_branch
+
+    # *** Test building all packages successfully ***
+    # Start building "hello-world" (1/2)
+    build_package_run_called = False
+    expected_pkgname = "hello-world"
+    assert(func(session, slots_available, arch, branch) == 1)
+    assert(build_package_run_called)
+    assert(expected_log_action_found is False)
+
+    # Change "hello-world" to built
+    package = bpo.db.get_package(session, "hello-world", arch, branch)
+    package.status = bpo.db.PackageStatus.built
+    session.merge(package)
+
+    # Start building "hello-world-wrapper" (2/2)
+    build_package_run_called = False
+    expected_pkgname = "hello-world-wrapper"
+    assert(func(session, slots_available, arch, branch) == 1)
+    assert(build_package_run_called)
+    assert(expected_log_action_found is False)
+
+    # Change "hello-world-wrapper" to built (all packages are built!)
+    package = bpo.db.get_package(session, "hello-world-wrapper", arch, branch)
+    package.status = bpo.db.PackageStatus.built
+    session.merge(package)
+
+    # Create symlink repo
+    build_package_run_called = False
+    bpo_symlink_create_called = False
+    assert(func(session, slots_available, arch, branch) == 0)
+    assert(build_package_run_called is False)
+    assert(bpo_symlink_create_called)
+    assert(expected_log_action_found is False)
+
+    # *** Test repo being stuck ***
+    # Change "hello-world" to failed
+    package = bpo.db.get_package(session, "hello-world", arch, branch)
+    package.status = bpo.db.PackageStatus.failed
+    session.merge(package)
+
+    # Change "hello-world-wrapper" to queued
+    package = bpo.db.get_package(session, "hello-world-wrapper", arch, branch)
+    package.status = bpo.db.PackageStatus.queued
+    session.merge(package)
+
+    # Expect build_repo_stuck log message
+    build_package_run_called = False
+    bpo_symlink_create_called = False
+    expected_log_action_found = False
+    assert(func(session, slots_available, arch, branch) == 0)
+    assert(build_package_run_called is False)
+    assert(bpo_symlink_create_called is False)
+    assert(expected_log_action_found)
+
+
 def test_repo_next_package_to_build(monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
