@@ -99,6 +99,9 @@ def main():
     pkgnames = args.pkgnames
     arch = args.arch
     branch = args.branch
+    if not os.path.exists(args.db_path):
+        print("ERROR: could not find database: " + args.db_path)
+        sys.exit(1)
 
     # Initialize db
     bpo.config.args.db_path = args.db_path
