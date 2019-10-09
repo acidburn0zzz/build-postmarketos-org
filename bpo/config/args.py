@@ -10,7 +10,7 @@ import bpo.config.const
 tokens = bpo.config.const.top_dir + "/.tokens.cfg"
 host = "127.0.0.1"
 port = 5000
-db_path = "bpo.db"
+db_path = bpo.config.const.top_dir + "/bpo.db"
 job_service = "local"
 mirror = "http://postmarketos.brixit.nl/postmarketos"
 temp_path = bpo.config.const.top_dir + "/_temp"
