@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 import bpo.db
+import bpo.ui
 import bpo.helpers.job
 
 import collections
@@ -78,6 +79,7 @@ def run(arch, pkgname, branch):
     # Change status to building and save job_id
     bpo.db.set_package_status(session, package, bpo.db.PackageStatus.building,
                               job_id)
+    bpo.ui.update()
 
 
 def abort(package):
