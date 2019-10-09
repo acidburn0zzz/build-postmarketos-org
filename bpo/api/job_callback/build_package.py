@@ -30,6 +30,7 @@ def get_apks(request):
 @blueprint.route("/api/job-callback/build-package", methods=["POST"])
 @header_auth("X-BPO-Token", "job_callback")
 def job_callback_build_package():
+    job_id = bpo.api.get_header(request, "Job-Id")
     session = bpo.db.session()
     package = bpo.api.get_package(session, request)
     apks = get_apks(request)
@@ -49,7 +50,8 @@ def job_callback_build_package():
     bpo.repo.wip.update_apkindex(package.arch, package.branch)
 
     # Change status to built
-    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.built)
+    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.built,
+                              job_id)
 
     bpo.ui.log_package(package, "api_job_callback_build_package")
 
