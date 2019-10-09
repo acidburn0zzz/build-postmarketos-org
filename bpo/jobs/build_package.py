@@ -1,15 +1,15 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-import bpo.db
-import bpo.ui
-import bpo.helpers.job
-
 import collections
 import fnmatch
 import logging
 import os
 import shlex
+
+import bpo.db
+import bpo.ui
+import bpo.helpers.job
 
 
 def do_build_strict(pkgname):
