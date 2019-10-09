@@ -32,6 +32,10 @@ def parse_arguments():
                         help="pmaports.git branch (default: master)")
     parser.add_argument("-d", "--db-path", help="path to sqlite3 database",
                         default=bpo.config.args.db_path)
+    parser.add_argument("-f", help="when not specifying any pkgnames, instead"
+                        " of considering all packages, only look at those with"
+                        " a certain status", choices=status_choices(),
+                        dest="filter_status")
 
     # Get or set
     group = parser.add_mutually_exclusive_group(required=True)
@@ -43,10 +47,18 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def get_all_pkgnames(session, arch, branch):
+def get_all_pkgnames(session, arch, branch, status):
+    if status:
+        status = bpo.db.PackageStatus[status]
+        packages = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                           branch=branch,
+                                                           status=status)
+    else:
+        packages = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                           branch=branch)
+
     ret = []
-    for package in session.query(bpo.db.Package).filter_by(arch=arch,
-                                                           branch=branch):
+    for package in packages:
         ret += [package.pkgname]
     return sorted(ret)
 
@@ -94,7 +106,7 @@ def main():
     session = bpo.db.session()
 
     if not pkgnames:
-        pkgnames = get_all_pkgnames(session, arch, branch)
+        pkgnames = get_all_pkgnames(session, arch, branch, args.filter_status)
 
     if args.status:
         set_status(session, pkgnames, arch, branch, args.status)
