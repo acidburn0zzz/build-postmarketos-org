@@ -76,10 +76,8 @@ def run(arch, pkgname, branch):
     ]), branch, arch, pkgname, package.version)
 
     # Change status to building and save job_id
-    package.status = bpo.db.PackageStatus.building
-    package.job_id = job_id
-    session.merge(package)
-    session.commit()
+    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.building,
+                              job_id)
 
 
 def abort(package):

@@ -155,3 +155,13 @@ def get_package(session, pkgname, arch, branch):
                                                      branch=branch,
                                                      pkgname=pkgname).all()
     return result[0] if len(result) else None
+
+
+def set_package_status(session, package, status, job_id=None):
+    """ :param package: bpo.db.Package object
+        :param status: bpo.db.PackageStatus value """
+    package.status = status
+    if job_id:
+        package.job_id = job_id
+    session.merge(package)
+    session.commit()

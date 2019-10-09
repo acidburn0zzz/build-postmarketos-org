@@ -82,10 +82,9 @@ def update_package_status():
         status_new = js.get_status(package.job_id)
         if status_new == building:
             continue
-        package.status = status_new
+        bpo.db.set_package_status(session, package, status_new)
         action = "job_update_package_status_" + status_new.name
         bpo.ui.log_package(package, action)
-        session.merge(package)
     session.commit()
 
 

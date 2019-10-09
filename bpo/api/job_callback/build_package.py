@@ -49,9 +49,7 @@ def job_callback_build_package():
     bpo.repo.wip.update_apkindex(package.arch, package.branch)
 
     # Change status to built
-    package.status = bpo.db.PackageStatus.built
-    session.merge(package)
-    session.commit()
+    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.built)
 
     bpo.ui.log_package(package, "api_job_callback_build_package")
 

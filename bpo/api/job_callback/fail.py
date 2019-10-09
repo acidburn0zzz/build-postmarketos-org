@@ -35,14 +35,10 @@ def job_callback_fail():
         package = get_package_by_job_id(session, job_id)
 
         # Change status to failed
-        building = bpo.db.PackageStatus.building
-        failed = bpo.db.PackageStatus.failed
-        if package.status == building:
-            package.status = failed
+        if package.status == bpo.db.PackageStatus.building:
+            bpo.db.set_package_status(session, package,
+                                      bpo.db.PackageStatus.failed)
 
-        # Update DB and add log message
-        session.merge(package)
-        session.commit()
         bpo.ui.log_package(package, "job_callback_fail_build_package")
 
         # build next package

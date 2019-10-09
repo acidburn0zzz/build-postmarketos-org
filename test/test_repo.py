@@ -73,8 +73,7 @@ def test_build_arch_branch(monkeypatch):
 
     # Change "hello-world" to built
     package = bpo.db.get_package(session, "hello-world", arch, branch)
-    package.status = bpo.db.PackageStatus.built
-    session.merge(package)
+    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.built)
 
     # Start building "hello-world-wrapper" (2/2)
     build_package_run_called = False
@@ -85,8 +84,7 @@ def test_build_arch_branch(monkeypatch):
 
     # Change "hello-world-wrapper" to built (all packages are built!)
     package = bpo.db.get_package(session, "hello-world-wrapper", arch, branch)
-    package.status = bpo.db.PackageStatus.built
-    session.merge(package)
+    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.built)
 
     # Create symlink repo
     build_package_run_called = False
@@ -99,13 +97,11 @@ def test_build_arch_branch(monkeypatch):
     # *** Test repo being stuck ***
     # Change "hello-world" to failed
     package = bpo.db.get_package(session, "hello-world", arch, branch)
-    package.status = bpo.db.PackageStatus.failed
-    session.merge(package)
+    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.failed)
 
     # Change "hello-world-wrapper" to queued
     package = bpo.db.get_package(session, "hello-world-wrapper", arch, branch)
-    package.status = bpo.db.PackageStatus.queued
-    session.merge(package)
+    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.queued)
 
     # Expect build_repo_stuck log message
     build_package_run_called = False
@@ -133,8 +129,7 @@ def test_repo_next_package_to_build(monkeypatch):
 
     # Change "hello-world" to failed
     package = bpo.db.get_package(session, "hello-world", arch, branch)
-    package.status = bpo.db.PackageStatus.failed
-    session.merge(package)
+    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.failed)
 
     # Remaining "hello-world-wrapper" depends on failing package "hello-world"
     assert(func(session, arch, branch) is None)
