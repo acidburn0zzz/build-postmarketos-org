@@ -45,17 +45,28 @@ def update_apkindex(arch, branch):
 
 
 def clean(arch, branch):
-    """ Delete all apks from WIP repo, that are also in final repo, and update
-        the APKINDEX of the WIP repo. """
+    """ Delete all apks from WIP repo, that are either in final repo or not in
+        the db anymore (pmaport updated or deleted), and update the APKINDEX
+        of the WIP repo. """
     logging.debug("Cleaning WIP repo")
     path_repo_wip = get_path(arch, branch)
     path_repo_final = bpo.repo.final.get_path(arch, branch)
+    session = bpo.db.session()
 
     for apk in bpo.repo.get_apks(arch, branch, path_repo_wip):
+        apk_wip = path_repo_wip + "/" + apk
+        # Find in final repo
         if os.path.exists(path_repo_final + "/" + apk):
             logging.debug(apk + ": found in final repo, delete from WIP repo")
-            os.unlink(path_repo_wip + "/" + apk)
+            os.unlink(apk_wip)
+            continue
+
+        # Find in db
+        if bpo.repo.is_apk_origin_in_db(session, arch, branch, apk_wip):
+            logging.debug(apk + ": not in final repo, but found in db ->"
+                          " keeping in WIP repo")
         else:
-            logging.debug(apk + ": not in final repo, keeping in WIP repo")
+            logging.debug(apk + ": not found in db, delete from WIP repo")
+            os.unlink(apk_wip)
 
     update_apkindex(arch, branch)
