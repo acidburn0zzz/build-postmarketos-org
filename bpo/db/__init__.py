@@ -165,3 +165,11 @@ def set_package_status(session, package, status, job_id=None):
         package.job_id = job_id
     session.merge(package)
     session.commit()
+
+
+def package_has_version(session, pkgname, arch, branch, version):
+    count = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                    branch=branch,
+                                                    pkgname=pkgname,
+                                                    version=version).count()
+    return True if count else False

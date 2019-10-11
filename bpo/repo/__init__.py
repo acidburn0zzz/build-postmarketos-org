@@ -7,6 +7,7 @@ import os
 
 import bpo.config.const
 import bpo.db
+import bpo.helpers.apk
 import bpo.jobs.build_package
 import bpo.jobs.sign_index
 import bpo.repo.symlink
@@ -94,3 +95,14 @@ def get_apks(arch, branch, cwd):
     ret.sort()
 
     return ret
+
+
+def is_apk_origin_in_db(session, arch, branch, apk_path):
+    """ :param apk_path: full path to the apk file
+        :returns: True if the origin is in the db and has the same version,
+                  False otherwise """
+
+    metadata = bpo.helpers.apk.get_metadata(apk_path)
+    pkgname = metadata["origin"]
+    version = metadata["pkgver"]  # yes, this is actually the full version
+    return bpo.db.package_has_version(session, pkgname, arch, branch, version)

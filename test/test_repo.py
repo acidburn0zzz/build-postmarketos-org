@@ -7,6 +7,40 @@ import bpo.db
 import bpo.repo
 
 
+def test_repo_is_apk_origin_in_db(monkeypatch):
+    # Fill the db with "hello-world", "hello-world-wrapper"
+    with bpo_test.BPOServer():
+        monkeypatch.setattr(bpo.repo, "build", bpo_test.finish)
+        bpo_test.trigger.job_callback_get_repo_missing()
+
+    # Origin exists in db with same version
+    func = bpo.repo.is_apk_origin_in_db
+    arch = "x86_64"
+    branch = "master"
+    apk_path = (bpo.config.const.top_dir +
+                "/test/testdata/hello-world-wrapper-subpkg-1-r2.apk")
+    session = bpo.db.session()
+    assert func(session, arch, branch, apk_path) is True
+
+    # Change version of origin
+    origin_pkgname = "hello-world-wrapper"
+    package = bpo.db.get_package(session, origin_pkgname, arch, branch)
+    package.version = "9999-r0"
+    session.merge(package)
+    session.commit()
+
+    # Origin exists in db, but with different version
+    assert func(session, arch, branch, apk_path) is False
+
+    # Delete package from db
+    session.delete(package)
+    session.commit()
+    assert bpo.db.get_package(session, origin_pkgname, arch, branch) is None
+
+    # Origin not found in db
+    assert func(session, arch, branch, apk_path) is False
+
+
 def test_build_arch_branch(monkeypatch):
     """ Test all code paths of bpo.repo.build_arch_branch(). Create the usual
         test database with the two hello-world and hello-world-wrapper
