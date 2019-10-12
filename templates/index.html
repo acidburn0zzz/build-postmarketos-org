@@ -44,6 +44,8 @@
                     {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: <b>build failed</b>
                 {% elif entry.action == "build_repo_stuck" %}
                     {{ entry.branch }}/{{ entry.arch }}: <b>repo is stuck</b> - fix failed builds to continue
+                {% elif entry.action == "package_removed_from_pmaports" %}
+                    {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: removed from pmaports.git
                 {% else %}
                     ???
                 {% endif %}
