@@ -40,8 +40,10 @@ def sign(arch, branch):
 
 
 def update_apkindex(arch, branch):
-    bpo.repo.tools.index(arch, branch, "WIP", get_path(arch, branch))
-    sign(arch, branch)
+    path = get_path(arch, branch)
+    if os.path.exists(path):
+        bpo.repo.tools.index(arch, branch, "WIP", path)
+        sign(arch, branch)
 
 
 def clean(arch, branch):
