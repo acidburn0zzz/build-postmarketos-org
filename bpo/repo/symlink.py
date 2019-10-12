@@ -43,16 +43,33 @@ def find_apk(wip, final, package):
 
 
 def link_to_all_packages(arch, branch):
+    """ Create symlinks to new packages from WIP repo and to up-to-date
+        packages from final repo. """
+
     repo_symlink = get_path(arch, branch)
     repo_wip = bpo.repo.wip.get_path(arch, branch)
     repo_final = bpo.repo.final.get_path(arch, branch)
     session = bpo.db.session()
     packages = session.query(bpo.db.Package).filter_by(arch=arch,
                                                        branch=branch)
+
+    # Sanity check: make sure that all packages exist in wip or final repo
     for package in packages:
-        src = find_apk(repo_wip, repo_final, package)
-        logging.debug("new staging repo link: " + src)
-        os.symlink(src, repo_symlink + "/" + os.path.basename(src))
+        find_apk(repo_wip, repo_final, package)
+
+    # Remove outdated packages in WIP repo
+    bpo.repo.wip.clean(arch, branch)
+
+    # Link to everything in WIP repo
+    os.makedirs(repo_symlink, exist_ok=True)
+    for apk in bpo.repo.get_apks(arch, branch, repo_wip):
+        os.symlink(repo_wip + "/" + apk, repo_symlink + "/" + apk)
+
+    # Link to relevant packages from final repo
+    for apk in bpo.repo.get_apks(arch, branch, repo_final):
+        apk_final = repo_final + "/" + apk
+        if bpo.repo.is_apk_origin_in_db(session, arch, branch, apk_final):
+            os.symlink(apk_final, repo_symlink + "/" + apk)
 
 
 def sign(arch, branch):
