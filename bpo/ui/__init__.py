@@ -53,7 +53,11 @@ def init():
 def log(*args, **kwargs):
     """ Write one log message and update the output. Do this after making
         meaningful changes to the database, e.g. after a job callback was
-        executed. See bpo.db.Log.__init__() for the list of parameters. """
+        executed. See bpo.db.Log.__init__() for the list of parameters.
+
+        NOTE: Make sure that you have committed all changes to any open
+              sessions (run session.commit() after doing changes), otherwise
+              you will get a "database is locked" error. """
     msg = bpo.db.Log(*args, **kwargs)
     session = bpo.db.session()
     session.add(msg)
