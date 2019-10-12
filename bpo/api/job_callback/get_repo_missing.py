@@ -1,6 +1,7 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import os
 from flask import request
 from bpo.helpers.headerauth import header_auth
 import bpo.api
@@ -74,6 +75,40 @@ def update_package_depends(session, payload, arch, branch):
         session.merge(package_db)
 
 
+def remove_deleted_packages(session, payload, arch, branch):
+    """ Remove all packages from the database, that have been deleted from
+        pmaports.git """
+    # FIXME: this check is not good enough. We should be able to delete
+    # packages that never made it into the final repository with this code, but
+    # once they are there, they will be kept forever. In order to also delete
+    # packages that made it into the final repository, but which are no longer
+    # in the pmaports, we need a list of all packages in pmaports.git for the
+    # given arch and branch. Right now we only have the packages that need to
+    # be built.
+
+    # Sort payload by pkgname for faster lookups
+    packages_payload = {}
+    for package in payload:
+        packages_payload[package["pkgname"]] = package
+
+    # Iterate over packages in db
+    final_path = bpo.repo.final.get_path(arch, branch)
+    packages_db = session.query(bpo.db.Package).filter_by(arch=arch,
+                                                          branch=branch).all()
+    for package_db in packages_db:
+        # Keep entries, that are part of the repo_missing payload
+        if package_db.pkgname in packages_payload:
+            continue
+
+        # Keep entries, where we have a binary package
+        apk = "{}-{}.apk".format(package_db.pkgname, package_db.version)
+        if os.path.exists(final_path + "/" + apk):
+            continue
+
+        bpo.ui.log_package(package_db, "package_removed_from_pmaports")
+        session.delete(package_db)
+
+
 @blueprint.route("/api/job-callback/get-repo-missing", methods=["POST"])
 @header_auth("X-BPO-Token", "job_callback")
 def job_callback_get_repo_missing():
@@ -86,6 +121,7 @@ def job_callback_get_repo_missing():
     # Update packages in DB
     update_or_insert_packages(session, payload, arch, branch)
     update_package_depends(session, payload, arch, branch)
+    remove_deleted_packages(session, payload, arch, branch)
     session.commit()
     bpo.ui.log("api_job_callback_get_repo_missing", payload=payload, arch=arch,
                branch=branch)

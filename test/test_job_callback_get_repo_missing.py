@@ -1,9 +1,61 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
+import os
+import shutil
+
 import bpo_test
 import bpo_test.trigger
 import bpo.jobs
 import bpo.repo
+
+
+def test_callback_repo_missing_remove_deleted_packages(monkeypatch):
+    # Stop bpo server after bpo.repo.build was called 3x
+    global stop_count
+    stop_count = 0
+
+    def stop_count_increase(*args, **kwargs):
+        global stop_count
+        stop_count += 1
+        print("stop_count_increase: " + str(stop_count))
+        if stop_count == 3:
+            bpo_test.finish()
+    monkeypatch.setattr(bpo.repo, "build", stop_count_increase)
+
+    # Fill the db with "hello-world", "hello-world-wrapper"
+    with bpo_test.BPOServer():
+        bpo_test.trigger.job_callback_get_repo_missing()
+
+        # Insert a new package, that does not exist in the repo_missing payload
+        session = bpo.db.session()
+        arch = "x86_64"
+        branch = "master"
+        pkgname = "pkg-not-in-payload"
+        version = "1337-r42"
+        package_db = bpo.db.Package(arch, branch, pkgname, version)
+        session.merge(package_db)
+        session.commit()
+
+        # Put fake apk with a valid name for the new db entry in final repo
+        final_path = bpo.repo.final.get_path(arch, branch)
+        apk_path = "{}/{}-{}.apk".format(final_path, pkgname, version)
+        os.makedirs(final_path)
+        shutil.copy(__file__, apk_path)
+
+        # Indirectly trigger bpo.get_repo_missing.remove_deleted_packages()
+        bpo_test.trigger.job_callback_get_repo_missing()
+
+        # Package must still exist in db (because we have it in the final repo)
+        assert bpo.db.get_package(session, pkgname, arch, branch)
+
+        # Remove the package from the final repo
+        os.unlink(apk_path)
+
+        # Indirectly trigger bpo.get_repo_missing.remove_deleted_packages()
+        bpo_test.trigger.job_callback_get_repo_missing()
+
+        # Verify that the package was deleted from db
+        assert bpo.db.get_package(session, pkgname, arch, branch) is None
 
 
 def test_callback_repo_missing_update_package(monkeypatch):
