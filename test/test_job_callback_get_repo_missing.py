@@ -6,6 +6,43 @@ import bpo.jobs
 import bpo.repo
 
 
+def test_callback_repo_missing_update_package(monkeypatch):
+    # Stop bpo server after bpo.repo.build was called 2x
+    global stop_count
+    stop_count = 0
+
+    def stop_count_increase(*args, **kwargs):
+        global stop_count
+        stop_count += 1
+        print("stop_count_increase: " + str(stop_count))
+        if stop_count == 2:
+            bpo_test.finish()
+    monkeypatch.setattr(bpo.repo, "build", stop_count_increase)
+
+    # Fill the db with "hello-world", "hello-world-wrapper"
+    with bpo_test.BPOServer():
+        bpo_test.trigger.job_callback_get_repo_missing()
+
+        # hello-world: decrease version, change status to failed
+        session = bpo.db.session()
+        pkgname = "hello-world"
+        arch = "x86_64"
+        branch = "master"
+        package = bpo.db.get_package(session, pkgname, arch, branch)
+        package.version = "0-r0"
+        package.status = bpo.db.PackageStatus.failed
+        session.merge(package)
+        session.commit()
+
+        # Fill the db with "hello-world", "hello-world-wrapper" again
+        bpo_test.trigger.job_callback_get_repo_missing()
+
+        # Check if updated properly
+        package = bpo.db.get_package(session, pkgname, arch, branch)
+        assert package.status == bpo.db.PackageStatus.queued
+        assert package.version == "1-r4"
+
+
 def test_callback_repo_missing_to_nop(monkeypatch):
     with bpo_test.BPOServer():
         # Trigger job-callback/get-repo-missing

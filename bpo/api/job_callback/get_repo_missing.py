@@ -47,6 +47,7 @@ def update_or_insert_packages(session, payload, arch, branch):
                 bpo.jobs.build_package.abort(package_db)
             package_db.version = version
             package_db.repo = repo
+            package_db.status = bpo.db.PackageStatus.queued
         else:
             package_db = bpo.db.Package(arch, branch, pkgname, version)
         session.merge(package_db)
