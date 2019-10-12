@@ -34,7 +34,6 @@ def get_manifest(name, tasks, branch):
         - "https://gitlab.com/postmarketOS/pmaports.git/"
         - "https://gitlab.com/postmarketOS/pmbootstrap.git/"
         environment:
-          BPO_JOB_ID: "$JOB_ID"
           BPO_TOKEN_FILE: "/home/build/.token"
           BPO_API_HOST: """ + shlex.quote(url_api) + """
           BPO_JOB_NAME: """ + shlex.quote(name) + """
@@ -44,6 +43,7 @@ def get_manifest(name, tasks, branch):
         - """ + str(bpo.config.tokens.job_callback_secret) + """
         tasks:
         - bpo_setup: |
+           export BPO_JOB_ID="$JOB_ID"
            yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
     """
 
@@ -51,7 +51,8 @@ def get_manifest(name, tasks, branch):
 
     # Add tasks
     for name, script in tasks.items():
-        script_indented = "   " + script[:-1].replace("\n", "\n   ")
+        script_indented = ("   export BPO_JOB_ID=\"$JOB_ID\"\n"
+                           "   " + script[:-1].replace("\n", "\n   "))
         ret += "\n- {}: |\n{}".format(name, script_indented)
     return ret
 
