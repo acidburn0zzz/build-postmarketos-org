@@ -19,7 +19,7 @@ def test_callback_repo_missing_remove_deleted_packages(monkeypatch):
         stop_count += 1
         print("stop_count_increase: " + str(stop_count))
         if stop_count == 3:
-            bpo_test.finish()
+            bpo_test.stop_server()
     monkeypatch.setattr(bpo.repo, "build", stop_count_increase)
 
     # Fill the db with "hello-world", "hello-world-wrapper"
@@ -68,7 +68,7 @@ def test_callback_repo_missing_update_package(monkeypatch):
         stop_count += 1
         print("stop_count_increase: " + str(stop_count))
         if stop_count == 2:
-            bpo_test.finish()
+            bpo_test.stop_server()
     monkeypatch.setattr(bpo.repo, "build", stop_count_increase)
 
     # Fill the db with "hello-world", "hello-world-wrapper"
@@ -98,7 +98,7 @@ def test_callback_repo_missing_update_package(monkeypatch):
 def test_callback_repo_missing_to_nop(monkeypatch):
     with bpo_test.BPOServer():
         # Trigger job-callback/get-repo-missing
-        monkeypatch.setattr(bpo.repo, "build", bpo_test.finish)
+        monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
         bpo_test.trigger.job_callback_get_repo_missing()
 
 
@@ -106,7 +106,7 @@ def test_callback_repo_missing_to_build_two_pkgs(monkeypatch):
     with bpo_test.BPOServer():
         # Trigger job-callback/get-repo-missing and let it run all the way
         # until the final repository is ready to be published
-        monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.finish)
+        monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.stop_server)
         bpo_test.trigger.job_callback_get_repo_missing()
 
     # WIP repo must be empty

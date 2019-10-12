@@ -52,20 +52,20 @@ def nop(*args, **kwargs):
     logging.info("Thread called nop: " + threading.current_thread().name)
 
 
-def finish(*args, **kwargs):
+def stop_server(*args, **kwargs):
     """ Use this for monkeypatching the bpo code, so a function finishes the
         test instead of performing the original functionallity. For example,
         when testing the gitlab api push hook, we can use this to prevent bpo
         from building the entire repo. """
     global result_queue
-    logging.info("Thread finishes test: " + threading.current_thread().name)
+    logging.info("Thread stops bpo server: " + threading.current_thread().name)
     result_queue.put(True)
 
 
-def finish_nok(*args, **kwargs):
+def stop_server_nok(*args, **kwargs):
     global result_queue
     name = threading.current_thread().name
-    logging.info("Thread finishes test with NOK: " + name)
+    logging.info("Thread stops bpo server, NOK: " + name)
     result_queue.put(False)
 
 
@@ -109,7 +109,7 @@ class BPOServer():
 
     def __exit__(self, exc_type, exc_value, exc_traceback):
         global result_queue
-        # Wait until result_queue is set with bpo_test.finish()
+        # Wait until result_queue is set with bpo_test.stop_server()
         result = result_queue.get()
         result_queue.task_done()
         self.thread.srv.shutdown()

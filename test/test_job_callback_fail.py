@@ -21,7 +21,7 @@ def test_callback_fail_build_package(monkeypatch):
         # Finish build instead of trying to build the next package
         monkeypatch.setattr(bpo.api.job_callback.fail,
                             "job_callback_fail_continue_build_package",
-                            bpo_test.finish)
+                            bpo_test.stop_server)
 
         # Fill db and try to build hello-world
         bpo_test.trigger.job_callback_get_repo_missing()

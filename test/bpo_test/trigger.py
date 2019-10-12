@@ -18,7 +18,7 @@ def api_request(path, headers, payload):
     ret = requests.post("http://127.0.0.1:5000/api/" + path, headers=headers,
                         json=payload)
     if not ret.ok:
-        bpo_test.finish_nok()
+        bpo_test.stop_server_nok()
 
 
 def push_hook_gitlab():
