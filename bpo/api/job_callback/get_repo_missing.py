@@ -9,6 +9,7 @@ import bpo.config.args
 import bpo.db
 import bpo.helpers.job
 import bpo.repo
+import bpo.repo.wip
 import bpo.ui
 
 blueprint = bpo.api.blueprint
@@ -129,6 +130,7 @@ def job_callback_get_repo_missing():
     # Make sure that we did not miss any job status changes
     bpo.helpers.job.update_package_status()
 
+    bpo.repo.wip.clean(arch, branch)
     bpo.repo.build()
 
     return "warming up build servers..."
