@@ -46,6 +46,8 @@
                     {{ entry.branch }}/{{ entry.arch }}: <b>repo is stuck</b> - fix failed builds to continue
                 {% elif entry.action == "package_removed_from_pmaports" %}
                     {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: removed from pmaports.git
+                {% elif entry.action == "package_exists_in_wip_repo" %}
+                    {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: package exists in WIP repo already, build skipped
                 {% else %}
                     ???
                 {% endif %}

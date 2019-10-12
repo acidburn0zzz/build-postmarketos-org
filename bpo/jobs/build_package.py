@@ -24,10 +24,22 @@ def do_build_strict(pkgname):
 
 
 def run(arch, pkgname, branch):
-    """ Start a single package build job. """
+    """ Start a single package build job.
+        :returns: True if a new job was started, False if the apk exists
+                  already in the WIP repo and the build was skipped. """
     # Load package from db
     session = bpo.db.session()
     package = bpo.db.get_package(session, pkgname, arch, branch)
+
+    # Skip if package is already in WIP repo (this can happen, if we had a bug
+    # before and changed the package status from built to queued by accident)
+    wip_path = bpo.repo.wip.get_path(arch, branch)
+    apk = "{}/{}-{}.apk".format(wip_path, pkgname, package.version)
+    if os.path.exists(apk):
+        bpo.ui.log_package(package, "package_exists_in_wip_repo")
+        bpo.db.set_package_status(session, package, bpo.db.PackageStatus.built)
+        bpo.ui.update()
+        return False
 
     # Read WIP repo pub key
     with open(bpo.config.const.repo_wip_keys + "/wip.rsa.pub", "r") as handle:
@@ -80,6 +92,7 @@ def run(arch, pkgname, branch):
     bpo.db.set_package_status(session, package, bpo.db.PackageStatus.building,
                               job_id)
     bpo.ui.update()
+    return True
 
 
 def abort(package):

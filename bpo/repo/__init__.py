@@ -63,9 +63,9 @@ def build_arch_branch(session, slots_available, arch, branch):
             break
 
         if slots_available > 0:
-            bpo.jobs.build_package.run(arch, pkgname, branch)
-            running += 1
-            slots_available -= 1
+            if bpo.jobs.build_package.run(arch, pkgname, branch):
+                running += 1
+                slots_available -= 1
         else:
             break
     return running
