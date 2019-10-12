@@ -53,6 +53,7 @@ def update_or_insert_packages(session, payload, arch, branch):
         else:
             package_db = bpo.db.Package(arch, branch, pkgname, version)
         session.merge(package_db)
+    session.commit()
 
 
 def update_package_depends(session, payload, arch, branch):
@@ -74,6 +75,7 @@ def update_package_depends(session, payload, arch, branch):
                                         branch)
         package_db.depends = depends
         session.merge(package_db)
+    session.commit()
 
 
 def remove_deleted_packages(session, payload, arch, branch):
@@ -107,7 +109,12 @@ def remove_deleted_packages(session, payload, arch, branch):
             continue
 
         bpo.ui.log_package(package_db, "package_removed_from_pmaports")
+
+        # Delete package from db and commit this change, because we might write
+        # to the log in the next iteration. If we don't commit and write to the
+        # log, we get a "database is locked" error.
         session.delete(package_db)
+        session.commit()
 
 
 @blueprint.route("/api/job-callback/get-repo-missing", methods=["POST"])
@@ -123,7 +130,6 @@ def job_callback_get_repo_missing():
     update_or_insert_packages(session, payload, arch, branch)
     update_package_depends(session, payload, arch, branch)
     remove_deleted_packages(session, payload, arch, branch)
-    session.commit()
     bpo.ui.log("api_job_callback_get_repo_missing", payload=payload, arch=arch,
                branch=branch)
 
