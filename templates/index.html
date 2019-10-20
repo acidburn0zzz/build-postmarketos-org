@@ -78,6 +78,12 @@
         <ul>
             {% for package in pkgs.queued %}
             <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+                    {% if not package.depends_built() %}
+                        (missing depends:
+                        {% for depend in package.depends_missing_list()
+                            %}{{depend.pkgname}}{{", " if not loop.last}}{%
+                        endfor %})
+                    {% endif %}
             {% endfor %}
         </ul>
 

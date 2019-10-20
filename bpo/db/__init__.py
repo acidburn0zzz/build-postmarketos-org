@@ -83,6 +83,14 @@ class Package(base):
                 return False
         return True
 
+    def depends_missing_list(self):
+        ret = []
+        for depend in self.depends:
+            if depend.status not in [PackageStatus.built,
+                                     PackageStatus.published]:
+                ret += [depend]
+        return ret
+
 
 class Log(base):
     __tablename__ = "log"
