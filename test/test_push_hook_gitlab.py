@@ -1,5 +1,6 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
+import pytest
 
 import bpo_test
 import bpo_test.trigger
@@ -18,7 +19,8 @@ def test_push_hook_gitlab_to_nop(monkeypatch):
         bpo_test.trigger.push_hook_gitlab()
 
 
-def test_push_hook_gitlab_to_repo_missing_to_nop(monkeypatch):
+@pytest.mark.timeout(20)
+def test_push_hook_gitlab_to_repo_missing_to_nop_SLOW_20s(monkeypatch):
     """ Trigger the api push hook, then let bpo run the repo_missing job.
         Monkeypatch bpo.repo.build, so it stops after receiving repo_missing
         and does not try to build the repo. """

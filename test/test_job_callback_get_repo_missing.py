@@ -1,6 +1,7 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 import os
+import pytest
 import shutil
 
 import bpo_test
@@ -102,7 +103,8 @@ def test_callback_repo_missing_to_nop(monkeypatch):
         bpo_test.trigger.job_callback_get_repo_missing()
 
 
-def test_callback_repo_missing_to_build_two_pkgs(monkeypatch):
+@pytest.mark.timeout(45)
+def test_callback_repo_missing_to_build_two_pkgs_SLOW_45s(monkeypatch):
     with bpo_test.BPOServer():
         # Trigger job-callback/get-repo-missing and let it run all the way
         # until the final repository is ready to be published
