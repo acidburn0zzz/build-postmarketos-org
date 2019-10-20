@@ -75,7 +75,7 @@ def convert_status(status):
 class SourcehutJobService(JobService):
 
     def run_job(self, name, tasks, branch="master"):
-        note = "build.postmarketos.org: " + name
+        note = "build.postmarketos.org: `" + name + "`"
         manifest = get_manifest(name, tasks, branch)
         print(manifest)
         result = api_request("jobs", {"manifest": manifest,
