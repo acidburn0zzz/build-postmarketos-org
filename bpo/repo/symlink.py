@@ -3,6 +3,7 @@
 
 import logging
 import os
+import os.path
 import shutil
 
 import bpo.config.args
@@ -63,11 +64,12 @@ def link_to_all_packages(arch, branch):
     # Link to everything in WIP repo
     os.makedirs(repo_symlink, exist_ok=True)
     for apk in bpo.repo.get_apks(arch, branch, repo_wip):
-        os.symlink(repo_wip + "/" + apk, repo_symlink + "/" + apk)
+        apk_wip = os.path.realpath(repo_wip + "/" + apk)
+        os.symlink(apk_wip, repo_symlink + "/" + apk)
 
     # Link to relevant packages from final repo
     for apk in bpo.repo.get_apks(arch, branch, repo_final):
-        apk_final = repo_final + "/" + apk
+        apk_final = os.path.realpath(repo_final + "/" + apk)
         if bpo.repo.is_apk_origin_in_db(session, arch, branch, apk_final):
             os.symlink(apk_final, repo_symlink + "/" + apk)
 
