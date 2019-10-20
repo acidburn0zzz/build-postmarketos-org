@@ -59,6 +59,7 @@ def test_build_arch_branch(monkeypatch):
         global expected_pkgname
         build_package_run_called = True
         assert pkgname == expected_pkgname
+        return True
     monkeypatch.setattr(bpo.jobs.build_package, "run", build_package_run)
 
     # bpo.ui.log
