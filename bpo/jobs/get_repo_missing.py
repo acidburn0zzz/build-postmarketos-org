@@ -16,8 +16,6 @@ def run_arch_branch(arch, branch):
                 --mirror-pmOS """ + shlex.quote(mirror_final) + """ \\
                 repo_missing > repo_missing.json
             """),
-        # NOTE: the branch is already defined through the push_id in the
-        # database. But let's write it out explicitly to make debugging easier.
         ("submit", """
             export BPO_API_ENDPOINT="get-repo-missing"
             export BPO_ARCH=""" + shlex.quote(arch) + """
