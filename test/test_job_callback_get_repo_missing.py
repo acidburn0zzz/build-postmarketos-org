@@ -88,11 +88,7 @@ def test_callback_repo_missing_update_package(monkeypatch):
 
         # Fill the db with "hello-world", "hello-world-wrapper" again
         bpo_test.trigger.job_callback_get_repo_missing()
-
-        # Check if updated properly
-        package = bpo.db.get_package(session, pkgname, arch, branch)
-        assert package.status == bpo.db.PackageStatus.queued
-        assert package.version == "1-r4"
+        bpo_test.assert_package(pkgname, status="queued", version="1-r4")
 
 
 def test_callback_repo_missing_to_nop(monkeypatch):

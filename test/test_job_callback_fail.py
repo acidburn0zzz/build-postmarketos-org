@@ -27,6 +27,4 @@ def test_callback_fail_build_package(monkeypatch):
         bpo_test.trigger.job_callback_get_repo_missing()
 
     # Check package status
-    session = bpo.db.session()
-    package = bpo.db.get_package(session, "hello-world", "x86_64", "master")
-    assert(package.status == bpo.db.PackageStatus.failed)
+    bpo_test.assert_package("hello-world", status="failed")

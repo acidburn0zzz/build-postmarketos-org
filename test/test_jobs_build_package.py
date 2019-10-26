@@ -33,8 +33,4 @@ def test_build_package_run_skip_existing(monkeypatch):
 
     # Build should be skipped
     assert bpo.jobs.build_package.run(arch, pkgname, branch) is False
-
-    # Package status should be "built"
-    session = bpo.db.session()  # new session to avoid cached result
-    package = bpo.db.get_package(session, pkgname, arch, branch)
-    assert package.status == bpo.db.PackageStatus.built
+    bpo_test.assert_package(pkgname, status="built")
