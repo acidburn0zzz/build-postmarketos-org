@@ -45,8 +45,10 @@ def main(return_app=False):
     # Update UI by writing a new log message
     bpo.ui.log("restart")
 
+    # Fix repo status inconsistencies (disk, db, job service)
+    bpo.repo.status.fix()
+
     # Kick off build jobs for queued packages
-    bpo.helpers.job.update_package_status()
     bpo.repo.build()
 
     # Fill up queue with packages to build

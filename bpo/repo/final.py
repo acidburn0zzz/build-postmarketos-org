@@ -6,6 +6,7 @@ import os
 import shutil
 
 import bpo.config.const
+import bpo.repo.status
 
 
 def get_path(arch, branch):
@@ -53,6 +54,11 @@ def update_from_symlink_repo(arch, branch):
     copy_new_apks(arch, branch)
     copy_new_apkindex(arch, branch)
     delete_outdated_apks(arch, branch)
+
+    # Set package status to published
+    path = get_path(arch, branch)
+    bpo.repo.status.fix_disk_vs_db(arch, branch, path,
+                                   bpo.db.PackageStatus.published)
 
 
 def publish(arch, branch):
