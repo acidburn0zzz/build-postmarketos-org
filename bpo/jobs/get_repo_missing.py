@@ -8,7 +8,7 @@ import bpo.helpers.job
 
 
 def run_arch_branch(arch, branch):
-    mirror_final = bpo.config.args.mirror + "/" + branch + "/" + arch
+    mirror_final = bpo.config.args.mirror + "/" + branch
 
     bpo.helpers.job.run("get_repo_missing", collections.OrderedDict([
         ("pmbootstrap_repo_missing", """
