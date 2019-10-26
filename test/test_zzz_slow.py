@@ -12,7 +12,7 @@ import bpo.repo
 
 
 @pytest.mark.timeout(20)
-def test_push_hook_gitlab_to_repo_missing_to_nop_SLOW_20s(monkeypatch):
+def test_repo_missing_SLOW_20s(monkeypatch):
     """ Trigger the api push hook, then let bpo run the repo_missing job.
         Monkeypatch bpo.repo.build, so it stops after receiving repo_missing
         and does not try to build the repo. """
@@ -22,7 +22,7 @@ def test_push_hook_gitlab_to_repo_missing_to_nop_SLOW_20s(monkeypatch):
 
 
 @pytest.mark.timeout(45)
-def test_callback_repo_missing_to_build_two_pkgs_SLOW_45s(monkeypatch):
+def test_build_final_repo_with_two_pkgs_SLOW_45s(monkeypatch):
     with bpo_test.BPOServer():
         # Trigger job-callback/get-repo-missing and let it run all the way
         # until the final repository is ready to be published
