@@ -75,6 +75,10 @@
         </ul>
 
         <h2>Failed</h2>
+        <p style="font-size: 80%; font-style: italic">
+            Note: current failures are caused by <a href="https://gitlab.com/postmarketOS/build.postmarketos.org/issues/33">#33</a>.
+        </p>
+
         <ul>
             {% for package in pkgs.failed %}
             <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
