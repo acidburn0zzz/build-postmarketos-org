@@ -88,7 +88,8 @@ class BPOServer():
         def __init__(self):
             threading.Thread.__init__(self)
             os.environ["FLASK_ENV"] = "development"
-            sys.argv = ["bpo.py", "-t", "test/test_tokens.cfg", "local"]
+            sys.argv = ["bpo.py", "-t", "test/test_tokens.cfg", "--mirror", "",
+                        "local"]
             app = bpo.main(True)
             self.srv = werkzeug.serving.make_server("127.0.0.1", 5000, app,
                                                     threaded=False)
