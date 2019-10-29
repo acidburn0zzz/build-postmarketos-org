@@ -23,17 +23,19 @@ def run(arch, branch):
                     -O APKINDEX.tar.gz
             fi
             """),
-        # FIXME: make sure to use real signing key on sourcehut!
         ("sign", """
             ./pmbootstrap/pmbootstrap.py build_init
             work_dir="$(./pmbootstrap/pmbootstrap.py -q config work)"
-            chroot_target="$work_dir/chroot_native/home/pmos/APKINDEX.tar.gz"
-            sudo cp APKINDEX.tar.gz "$chroot_target"
-            sudo chown """ + shlex.quote(uid) + """ "$chroot_target"
+            chroot_target="$work_dir/chroot_native/home/pmos/"
+            sudo cp APKINDEX.tar.gz .final.rsa "$chroot_target"
+            sudo chown -R """ + shlex.quote(uid) + """ "$chroot_target"
             ./pmbootstrap/pmbootstrap.py \\
                 --details-to-stdout \\
-                chroot --user -- abuild-sign /home/pmos/APKINDEX.tar.gz
-            sudo mv "$chroot_target" APKINDEX.tar.gz
+                chroot --user -- \\
+                    abuild-sign \\
+                        -k /home/pmos/.final.rsa \\
+                        /home/pmos/APKINDEX.tar.gz
+            sudo mv "$chroot_target/APKINDEX.tar.gz" .
         """),
         ("upload", """
             export BPO_API_ENDPOINT="sign-index"

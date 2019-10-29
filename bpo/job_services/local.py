@@ -73,6 +73,7 @@ class LocalJobServiceThread(threading.Thread):
         pmbootstrap = bpo.config.args.local_pmbootstrap
         token = bpo.config.const.test_tokens["job_callback"]
         repo_wip_path = bpo.config.args.repo_wip_path
+        repo_wip_key = bpo.config.const.repo_wip_keys + "/wip.rsa"
         uid = bpo.config.const.pmbootstrap_chroot_uid_user
         return """
             # Remove old temp dir
@@ -98,6 +99,9 @@ class LocalJobServiceThread(threading.Thread):
                 sudo cp -r "$repo_wip_path/$branch" "$packages_path"
                 sudo chown -R """ + shlex.quote(uid) + """ "$packages_path"
             fi
+
+            # Use WIP repo key as final repo key (it's fine for local testing)
+            cp """ + shlex.quote(repo_wip_key) + """ .final.rsa
         """
 
     def run(self):
