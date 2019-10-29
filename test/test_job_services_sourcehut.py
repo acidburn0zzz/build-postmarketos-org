@@ -5,8 +5,22 @@ import pytest
 import sys
 
 import bpo_test  # noqa
+import bpo.config.const
+import bpo.config.tokens
 import bpo.db
 import bpo.job_services.sourcehut
+
+
+# This test does not need access to sourcehut
+def test_sourcehut_get_secrets_by_job(monkeypatch):
+    # Initialize enough of bpo server, so get_job_service() works
+    tokens_cfg = bpo.config.const.top_dir + "/test/test_tokens.cfg"
+    monkeypatch.setattr(sys, "argv", ["bpo.py", "-t", tokens_cfg, "sourcehut"])
+    bpo.init_components()
+
+    func = bpo.job_services.sourcehut.get_secrets_by_job_name
+    assert(func("any_job_name") == "secrets:\n- f00d\n")
+    assert(func("sign_index") == "secrets:\n- f00d\n- c4f3\n")
 
 
 @pytest.mark.sourcehut
