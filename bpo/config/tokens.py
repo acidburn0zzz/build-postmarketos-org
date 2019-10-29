@@ -15,6 +15,7 @@ push_hook_gitlab = None
 job_callback = None
 job_callback_secret = None  # sourcehut secret ID for the job_callback token
 sourcehut = None  # personal access oauth token
+final_sign_secret = None  # sourcehut secret ID for the final signing rsa key
 
 
 def load():
@@ -69,7 +70,7 @@ def init():
             setattr(self, token, hash_generate(token))
 
     # Just load
-    for token in ["sourcehut", "job_callback_secret"]:
+    for token in ["sourcehut", "job_callback_secret", "final_sign_secret"]:
         if token in cfg["bpo"]:
             setattr(self, token, cfg["bpo"][token])
 

@@ -33,12 +33,27 @@ $ $EDITOR bpo_sourcehut.sh # adjust USER
 $ ./bpo_sourcehut.sh
 ```
 
-Running bpo for the first time will generate the `push_hook_gitlab` and `job_callback` tokens, and display them once (and never again, only a hash is stored). Copy the tokens and set them up as push hook token in gitlab, and create a secret in sourcehut for the job_callback token.
+Running bpo for the first time will generate the `push_hook_gitlab` and `job_callback` tokens, and display them once (and never again, only a hash is stored). Copy the tokens and set them up as push hook token in gitlab, and [create a secret](https://builds.sr.ht/secrets) in sourcehut for the `job_callback` token (`/home/build/.token`).
 
-Then edit the token file and add `sourcehut` (personal access oauth token) and `job_callback_secret` (the secret ID that sourcehut generated for the job_callback token). Finally start the bpo server again.
+Then edit the token file and add `sourcehut` (personal access oauth token) and `job_callback_secret` (the secret ID that sourcehut generated for the job_callback token).
 
 ```
 $ EDITOR .tokens.cfg
+```
+
+Afterwards, generate the key that will be used to sign the final repo's APKINDEX. The bpo code was created with privilege separation in mind. For deploying a production setup, make sure to generate the key on a separate machine (which will not run the bpo server).
+
+```
+$ openssl genrsa -out final.rsa 4096
+$ openssl rsa -in final.rsa -pubout -out final.rsa.pub
+```
+
+For production setup, you need to place `final.rsa.pub` in pmbootstrap's `pmb/data/keys` directory.
+Create a new secret in sourcehut, this time with the contents of `final.rsa` and path `/home/build/.final.rsa`). Add the secret ID as `final_sign_secret` to bpo's token file.
+
+Finally start the bpo server again.
+
+```
 $ ./bpo_sourcehut.sh
 ```
 

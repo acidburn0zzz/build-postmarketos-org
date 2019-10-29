@@ -99,3 +99,5 @@ class SourcehutJobService(JobService):
 
     def init(self):
         bpo.config.tokens.require("sourcehut")
+        bpo.config.tokens.require("job_callback_secret")
+        bpo.config.tokens.require("final_sign_secret")
