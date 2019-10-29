@@ -30,7 +30,7 @@ local_pmbootstrap = os.path.realpath(bpo.config.const.top_dir +
                                      "/../pmbootstrap")
 
 # Defaults (sourcehut)
-sourcehut_user = "postmarketOS"
+sourcehut_user = "postmarketos"
 
 
 def job_service_local(parser):
