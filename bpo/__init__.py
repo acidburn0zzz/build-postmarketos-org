@@ -48,8 +48,15 @@ def main(return_app=False):
     # Fix repo status inconsistencies (disk, db, job service)
     bpo.repo.status.fix()
 
-    # Kick off build jobs for queued packages
-    bpo.repo.build()
+    if bpo.config.args.force_final_repo_sign:
+        # Force final repo sign
+        logging.warning("WARNING: doing force final repo sign (-f)!")
+        for branch in bpo.config.const.branches:
+            for arch in bpo.config.const.architectures:
+                bpo.repo.symlink.create(arch, branch, True)
+    else:
+        # Kick off build jobs for queued packages
+        bpo.repo.build()
 
     # Fill up queue with packages to build
     if bpo.config.args.auto_get_repo_missing:

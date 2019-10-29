@@ -20,6 +20,7 @@ html_out = bpo.config.const.top_dir + "/_html_out"
 auto_get_repo_missing = False
 url_api = "https://build.postmarketos.org"
 url_repo_wip = "https://build.postmarketos.org/wip"
+force_final_repo_sign = False
 
 
 # Defaults (local)
@@ -67,6 +68,12 @@ def init():
     parser.add_argument("-m", "--mirror", help="the final repository location,"
                         " where published and properly signed packages can be"
                         " found")
+    parser.add_argument("-f", "--force-final-repo-sign", action="store_true",
+                        help="sign the final repo after starting the server,"
+                             " even if it is incomplete. this is a workaround,"
+                             " in case the final repo was signed with an"
+                             " invalid key. it may lead to unexpected package"
+                             " deletion. do not use.")
     parser.add_argument("-p", "--port", type=int, help="port to listen on")
     parser.add_argument("-r", "--repo-final-path",
                         help="where to create the final binary repository")

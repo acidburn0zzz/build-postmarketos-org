@@ -43,7 +43,7 @@ def find_apk(wip, final, package):
                        " repository: " + apk)
 
 
-def link_to_all_packages(arch, branch):
+def link_to_all_packages(arch, branch, force=False):
     """ Create symlinks to new packages from WIP repo and to up-to-date
         packages from final repo. """
 
@@ -55,8 +55,9 @@ def link_to_all_packages(arch, branch):
                                                        branch=branch)
 
     # Sanity check: make sure that all packages exist in wip or final repo
-    for package in packages:
-        find_apk(repo_wip, repo_final, package)
+    if not force:
+        for package in packages:
+            find_apk(repo_wip, repo_final, package)
 
     # Remove outdated packages in WIP repo
     bpo.repo.wip.clean(arch, branch)
@@ -86,16 +87,16 @@ def sign(arch, branch):
     bpo.jobs.sign_index.run(arch, branch)
 
 
-def create(arch, branch):
+def create(arch, branch, force=False):
     # Skip if WIP repo is empty
     repo_wip_path = bpo.repo.wip.get_path(arch, branch)
-    if not len(bpo.repo.get_apks(arch, branch, repo_wip_path)):
+    if not force and not len(bpo.repo.get_apks(arch, branch, repo_wip_path)):
         logging.debug("{}@{}: empty WIP repo, skipping creation of symlink"
                       " repo".format(arch, branch))
         return
 
     logging.info("{}@{}: creating symlink repo".format(arch, branch))
     clean(arch, branch)
-    link_to_all_packages(arch, branch)
+    link_to_all_packages(arch, branch, force)
     bpo.repo.tools.index(arch, branch, "symlink", get_path(arch, branch))
     sign(arch, branch)
