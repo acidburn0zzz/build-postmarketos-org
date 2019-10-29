@@ -122,3 +122,13 @@ Run it before every git commit (recommended):
 ```
 $ ln -s .ci/flake8.sh .git/hooks/pre-commit
 ```
+
+### How to trigger a sign_index job for development?
+
+Run `test_build_final_repo_with_two_pkgs_SLOW_45s` to build a test repository with two packages, then move one of the generated packages from the final repo to the wip repo. When you start bpo with any job service (e.g. sourcehut), it will detect, that the package is now in the wip repo, and attempt to finalize the repository and sign it.
+
+```
+$ pytest -vv -x test/test_zzz_slow.py
+$ mv _repo_final/master/x86_64/hello-world-wrapper-1-r2.apk _repo_wip/master/x86_64/
+$ ./bpo_sourcehut.sh
+```
