@@ -12,6 +12,7 @@ def run(arch, branch):
     web_path = arch + "/APKINDEX-symlink-repo.tar.gz"
     local_path = branch + "/" + web_path
     uid = bpo.config.const.pmbootstrap_chroot_uid_user
+    rsa = bpo.config.const.final_repo_key_name
 
     bpo.helpers.job.run("sign_index", collections.OrderedDict([
         ("download_unsigned_index", """
@@ -27,13 +28,14 @@ def run(arch, branch):
             ./pmbootstrap/pmbootstrap.py build_init
             work_dir="$(./pmbootstrap/pmbootstrap.py -q config work)"
             chroot_target="$work_dir/chroot_native/home/pmos/"
-            sudo cp APKINDEX.tar.gz .final.rsa "$chroot_target"
+            sudo cp APKINDEX.tar.gz "$chroot_target"
+            sudo cp .final.rsa "$chroot_target"/""" + shlex.quote(rsa) + """
             sudo chown -R """ + shlex.quote(uid) + """ "$chroot_target"
             ./pmbootstrap/pmbootstrap.py \\
                 --details-to-stdout \\
                 chroot --user -- \\
                     abuild-sign \\
-                        -k /home/pmos/.final.rsa \\
+                        -k /home/pmos/""" + shlex.quote(rsa) + """ \\
                         /home/pmos/APKINDEX.tar.gz
             sudo mv "$chroot_target/APKINDEX.tar.gz" .
         """),

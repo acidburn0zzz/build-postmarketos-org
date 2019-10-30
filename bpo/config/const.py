@@ -34,3 +34,7 @@ test_tokens = {"push_hook_gitlab": "iptTdfRNwSvg8ycZqiEdNhMqGalvsgvSXp91SIk2du"
                                    "kG74BNVu",
                "job_callback": "5tJ7sPJQ4fLSf0JoS81KSpUwoGMmbWk5Km0OJiAHWF2PM2"
                                "cO7i"}
+
+# abuild-sign embeds this key name into the APKINDEX. The name of the .pub file
+# in pmbootstrap.git's pmb/data/keys dir must match it.
+final_repo_key_name = "build.postmarketos.org.rsa"
