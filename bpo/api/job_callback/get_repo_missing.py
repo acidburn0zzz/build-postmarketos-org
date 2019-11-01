@@ -1,6 +1,8 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import collections
+import json
 import os
 from flask import request
 from bpo.helpers.headerauth import header_auth
@@ -15,10 +17,12 @@ import bpo.ui
 blueprint = bpo.api.blueprint
 
 
-def get_payload(request):
+def get_payload(request, arch, branch):
     """ Get the get_repo_missing callback specific payload from the POST-data
         and verify it. """
-    ret = request.get_json()
+    filename = "repo_missing." + branch + "." + arch + ".json"
+    storage = bpo.api.get_file(request, filename)
+    ret = json.loads(storage.read().decode("utf-8"))
 
     # Check for duplicate pkgnames
     found = {}
@@ -121,22 +125,28 @@ def remove_deleted_packages(session, payload, arch, branch):
 @header_auth("X-BPO-Token", "job_callback")
 def job_callback_get_repo_missing():
     # Parse input data
-    arch = bpo.api.get_arch(request)
-    branch = bpo.api.get_branch(request)
-    payload = get_payload(request)
-    session = bpo.db.session()
+    job_id = bpo.api.get_header(request, "Job-Id")
+    payloads = collections.OrderedDict()
+    for branch in bpo.config.const.branches:
+        if branch not in payloads:
+            payloads[branch] = collections.OrderedDict()
+        for arch in bpo.config.const.architectures:
+            payloads[branch][arch] = get_payload(request, arch, branch)
 
     # Update packages in DB
-    update_or_insert_packages(session, payload, arch, branch)
-    update_package_depends(session, payload, arch, branch)
-    remove_deleted_packages(session, payload, arch, branch)
-    bpo.ui.log("api_job_callback_get_repo_missing", payload=payload, arch=arch,
-               branch=branch)
+    session = bpo.db.session()
+    for branch, payload_arch in payloads.items():
+        for arch, payload in payload_arch.items():
+            update_or_insert_packages(session, payload, arch, branch)
+            update_package_depends(session, payload, arch, branch)
+            remove_deleted_packages(session, payload, arch, branch)
+            bpo.repo.wip.clean(arch, branch)
+
+    bpo.ui.log("api_job_callback_get_repo_missing", payload=payload,
+               job_id=job_id)
 
     # Make sure that we did not miss any job status changes
     bpo.helpers.job.update_package_status()
 
-    bpo.repo.wip.clean(arch, branch)
     bpo.repo.build()
-
     return "warming up build servers..."

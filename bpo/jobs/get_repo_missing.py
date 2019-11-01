@@ -7,34 +7,39 @@ import shlex
 import bpo.helpers.job
 
 
-def run_arch_branch(arch, branch):
-    mirror_final = bpo.config.args.mirror
-    if mirror_final:
-        mirror_final += "/" + branch
-
-    bpo.helpers.job.run("get_repo_missing", collections.OrderedDict([
-        ("pmbootstrap_repo_missing", """
-            ./pmbootstrap/pmbootstrap.py \\
-                --mirror-pmOS """ + shlex.quote(mirror_final) + """ \\
-                repo_missing > repo_missing.json
-            """),
-        ("submit", """
-            export BPO_API_ENDPOINT="get-repo-missing"
-            export BPO_ARCH=""" + shlex.quote(arch) + """
-            export BPO_BRANCH=""" + shlex.quote(branch) + """
-            export BPO_PAYLOAD_FILES="repo_missing.json"
-            export BPO_PAYLOAD_IS_JSON="1"
-            export BPO_PKGNAME=""
-            export BPO_VERSION=""
-
-            # Always run submit.py with exec, because when running locally, the
-            # current_task.sh script can change before submit.py completes!
-            exec pmaports/.build.postmarketos.org/submit.py
-            """),
-    ]), branch, arch)
-
-
 def run():
+    tasks = collections.OrderedDict()
     for branch in bpo.config.const.branches:
+        mirror_final = bpo.config.args.mirror
+        if mirror_final:
+            mirror_final += "/" + branch
+
+        # FIXME: checkout proper pmaports branch (currently always master)
         for arch in bpo.config.const.architectures:
-            run_arch_branch(arch, branch)
+            tasks["repo_" + branch + "_" + arch] = """
+                export BRANCH=""" + shlex.quote(branch) + """
+                export ARCH=""" + shlex.quote(arch) + """
+                export JSON="repo_missing.$BRANCH.$ARCH.json"
+
+                ./pmbootstrap/pmbootstrap.py \\
+                    --mirror-pmOS """ + shlex.quote(mirror_final) + """ \\
+                    repo_missing --arch "$ARCH" \\
+                    > "$JSON"
+                cat "$JSON"
+                """
+
+    tasks["submit"] = """
+        export BPO_API_ENDPOINT="get-repo-missing"
+        export BPO_ARCH=""
+        export BPO_BRANCH=""
+        export BPO_PAYLOAD_FILES="$(ls -1 repo_missing.*.*.json)"
+        export BPO_PAYLOAD_IS_JSON="0"
+        export BPO_PKGNAME=""
+        export BPO_VERSION=""
+
+        # Always run submit.py with exec, because when running locally, the
+        # current_task.sh script can change before submit.py completes!
+        exec pmaports/.build.postmarketos.org/submit.py
+        """
+
+    bpo.helpers.job.run("get_repo_missing", tasks)

@@ -51,3 +51,11 @@ def get_version(request, package):
                          " that was not stopped after a new version of the"
                          " aport had been pushed?)")
     return version
+
+
+def get_file(request, filename):
+    """ :returns: werkzeug.datastructures.FileStorage object """
+    for storage in request.files.getlist("file[]"):
+        if storage.filename == filename:
+            return storage
+    raise ValueError("Missing file " + filename + " in payload.")

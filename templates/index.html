@@ -25,9 +25,9 @@
                 {% elif entry.action == "api_push_hook_gitlab" %}
                     {{ entry.branch }}: new commit(s) pushed to pmaports.git
                 {% elif entry.action == "job_get_repo_missing" %}
-                    {{ entry.branch }}/{{ entry.arch }}: calculating missing binary packages
+                    calculating missing binary packages
                 {% elif entry.action == "api_job_callback_get_repo_missing" %}
-                    {{ entry.branch }}/{{ entry.arch }}: new packages queued for building
+                    new packages queued for building
                 {% elif entry.action == "job_build_package" %}
                     {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: building package
                 {% elif entry.action in ["api_job_callback_build_package", "package_built"] %}

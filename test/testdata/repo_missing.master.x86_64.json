@@ -1,0 +1,10 @@
+[
+    {"pkgname": "hello-world",
+     "repo": "main",
+     "version": "1-r4",
+     "depends": []},
+    {"pkgname": "hello-world-wrapper",
+     "repo": "main",
+     "version": "1-r2",
+     "depends": ["hello-world"]}
+]
