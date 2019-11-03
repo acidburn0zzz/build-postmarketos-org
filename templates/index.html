@@ -8,6 +8,8 @@
         <h2>Overview</h2>
 
         <ul>
+            <li> {{ len(bpo.config.const.architectures) }} Arches ({{ ", ".join(bpo.config.const.architectures) }})
+            <li> {{ len(bpo.config.const.branches) }} Branches ({{ ", ".join(bpo.config.const.branches) }})
             <li> {{ pkgcount }} Packages
             <li> {{ pkgs.building.count() }} Building
             <li> {{ pkgs.failed.count() }} Failed

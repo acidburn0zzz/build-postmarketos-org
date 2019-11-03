@@ -31,6 +31,7 @@ def update():
     html = template.render(bpo=bpo,
                            pkgcount=pkgcount,
                            pkgs=pkgs,
+                           len=len,
                            log_entries=log_entries)
 
     # Write to output dir
