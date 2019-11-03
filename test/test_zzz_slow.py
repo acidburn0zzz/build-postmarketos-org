@@ -11,11 +11,15 @@ import bpo.jobs
 import bpo.repo
 
 
-@pytest.mark.timeout(20)
-def test_repo_missing_SLOW_20s(monkeypatch):
+@pytest.mark.timeout(40)
+def test_repo_missing_SLOW_40s(monkeypatch):
     """ Trigger the api push hook, then let bpo run the repo_missing job.
         Monkeypatch bpo.repo.build, so it stops after receiving repo_missing
         and does not try to build the repo. """
+
+    # Limit to two arches (more would increase test time)
+    monkeypatch.setattr(bpo.config.const, "architectures", ["x86_64", "armv7"])
+
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
         bpo_test.trigger.push_hook_gitlab()
