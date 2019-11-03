@@ -80,19 +80,23 @@ def fix(arch=None, branch=None):
     arches = [arch] if arch else bpo.config.const.architectures
     branches = [branch] if branch else bpo.config.const.branches
 
+    logging.info("Fixing inconsistencies between DB and files on disk")
     for arch in arches:
         for branch in branches:
             path_final = bpo.repo.final.get_path(arch, branch)
             path_wip = bpo.repo.wip.get_path(arch, branch)
 
             # Iterate over apks in wip and final repo
+            logging.info(branch + "/" + arch + ": fix WIP apks vs DB status")
             fix_disk_vs_db(arch, branch, path_wip,
                            bpo.db.PackageStatus.built, True)
+            logging.info(branch + "/" + arch + ": fix final apks vs DB status")
             fix_disk_vs_db(arch, branch, path_final,
                            bpo.db.PackageStatus.published)
             bpo.repo.wip.update_apkindex(arch, branch)
 
             # Iterate over packages in db
+            logging.info(branch + "/" + arch + ": fix DB status vs apks")
             fix_db_vs_disk(arch, branch)
 
     # Fix running job status

@@ -73,6 +73,7 @@ def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
 
 
 def update_package_status():
+    logging.info("Checking if 'building' packages have failed or finished")
     building = bpo.db.PackageStatus.building
     js = get_job_service()
 

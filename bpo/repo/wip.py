@@ -42,6 +42,7 @@ def sign(arch, branch):
 def update_apkindex(arch, branch):
     path = get_path(arch, branch)
     if os.path.exists(path):
+        logging.info(branch + "/" + arch + ": update WIP APKINDEX")
         bpo.repo.tools.index(arch, branch, "WIP", path)
         sign(arch, branch)
 
