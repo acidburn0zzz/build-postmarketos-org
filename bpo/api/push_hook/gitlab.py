@@ -48,7 +48,6 @@ def push_hook_gitlab():
     bpo.ui.log("api_push_hook_gitlab", payload=payload, branch=branch)
 
     # Run repo_missing job for all arches
-    for arch in bpo.config.const.architectures:
-        bpo.jobs.get_repo_missing.run()
+    bpo.jobs.get_repo_missing.run()
 
     return "Triggered!"
