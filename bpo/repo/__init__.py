@@ -49,7 +49,7 @@ def count_failed_builds(session, arch, branch):
 
 def build_arch_branch(session, slots_available, arch, branch):
     """ :returns: amount of jobs that were started """
-    logging.info("Building " + arch + "@" + branch + ": starting new job(s)")
+    logging.info(branch + "/" + arch + ": starting new package build job(s)")
     running = 0
     while True:
         pkgname = next_package_to_build(session, arch, branch)
@@ -58,7 +58,7 @@ def build_arch_branch(session, slots_available, arch, branch):
                 if count_failed_builds(session, arch, branch):
                     bpo.ui.log("build_repo_stuck", arch=arch, branch=branch)
                 else:
-                    logging.info(arch + "@" + branch + ": WIP repo complete")
+                    logging.info(branch + "/" + arch + ": WIP repo complete")
                     bpo.repo.symlink.create(arch, branch)
             break
 

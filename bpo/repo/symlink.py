@@ -91,11 +91,11 @@ def create(arch, branch, force=False):
     # Skip if WIP repo is empty
     repo_wip_path = bpo.repo.wip.get_path(arch, branch)
     if not force and not len(bpo.repo.get_apks(arch, branch, repo_wip_path)):
-        logging.debug("{}@{}: empty WIP repo, skipping creation of symlink"
-                      " repo".format(arch, branch))
+        logging.debug("{}/{}: empty WIP repo, skipping creation of symlink"
+                      " repo".format(branch, arch))
         return
 
-    logging.info("{}@{}: creating symlink repo".format(arch, branch))
+    logging.info("{}/{}: creating symlink repo".format(branch, arch))
     clean(arch, branch)
     link_to_all_packages(arch, branch, force)
     bpo.repo.tools.index(arch, branch, "symlink", get_path(arch, branch))
