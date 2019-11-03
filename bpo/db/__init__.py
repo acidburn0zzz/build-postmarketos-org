@@ -11,6 +11,7 @@
 import enum
 import sys
 import json
+import logging
 
 import sqlalchemy
 import sqlalchemy.orm
@@ -114,6 +115,21 @@ class Log(base):
         self.pkgname = pkgname
         self.version = version
         self.job_id = job_id
+        logging.info("### " + str(self) + " ###")
+
+    def __repr__(self):
+        ret = self.action
+        if self.branch:
+            ret += " " + self.branch + "/"
+        if self.arch:
+            ret += self.arch + "/"
+        if self.pkgname:
+            ret += self.pkgname
+            if self.version:
+                ret += "-" + self.version
+        if self.job_id:
+            ret += ", job: " + str(self.job_id)
+        return ret
 
 
 def init_relationships():
