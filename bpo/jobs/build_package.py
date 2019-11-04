@@ -51,7 +51,7 @@ def run(arch, pkgname, branch):
     mirror_final = bpo.config.args.mirror
     if mirror_final:
         mirror_final += "/" + branch
-    mirrors = "--mirror-pmOS " + shlex.quote(mirror_final)
+    mirrors = "-mp " + shlex.quote(mirror_final)
     if os.path.exists(wip_path):
         mirrors = '$BPO_WIP_REPO_ARG ' + mirrors
 

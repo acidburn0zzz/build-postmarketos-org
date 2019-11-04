@@ -22,7 +22,7 @@ def run():
                 export JSON="repo_missing.$BRANCH.$ARCH.json"
 
                 ./pmbootstrap/pmbootstrap.py \\
-                    --mirror-pmOS """ + shlex.quote(mirror_final) + """ \\
+                    -mp """ + shlex.quote(mirror_final) + """ \\
                     repo_missing --arch "$ARCH" \\
                     > "$JSON"
                 cat "$JSON"
