@@ -58,7 +58,9 @@ def run(arch, pkgname, branch):
     strict_arg = "--strict" if do_build_strict(pkgname) else ""
 
     # Start job
-    job_id = bpo.helpers.job.run("build_package", collections.OrderedDict([
+    note = "Build package: `{}/{}/{}-{}`".format(branch, arch, pkgname,
+                                                 package.version)
+    tasks = collections.OrderedDict([
         ("install_pubkey", """
             echo -n '""" + pubkey + """' \
                 > pmbootstrap/pmb/data/keys/wip.rsa.pub
@@ -88,7 +90,9 @@ def run(arch, pkgname, branch):
             # current_task.sh script can change before submit.py completes!
             exec pmaports/.build.postmarketos.org/submit.py
             """)
-    ]), branch, arch, pkgname, package.version)
+    ])
+    job_id = bpo.helpers.job.run("build_package", note, tasks, branch, arch,
+                                 pkgname, package.version)
 
     # Change status to building and save job_id
     bpo.db.set_package_status(session, package, bpo.db.PackageStatus.building,

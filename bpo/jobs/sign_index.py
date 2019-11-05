@@ -13,8 +13,9 @@ def run(arch, branch):
     local_path = branch + "/" + web_path
     uid = bpo.config.const.pmbootstrap_chroot_uid_user
     rsa = bpo.config.const.final_repo_key_name
+    note = "Sign index: `{}/{}`".format(branch, arch)
 
-    bpo.helpers.job.run("sign_index", collections.OrderedDict([
+    bpo.helpers.job.run("sign_index", note, collections.OrderedDict([
         ("download_unsigned_index", """
             if [ -n "$BPO_WIP_REPO_PATH" ]; then
                 cp "$BPO_WIP_REPO_PATH"/""" + shlex.quote(local_path) + """ \\

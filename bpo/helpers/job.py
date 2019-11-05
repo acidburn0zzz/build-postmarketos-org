@@ -47,12 +47,16 @@ def remove_additional_indent(script, spaces=12):
     return ret
 
 
-def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
-    """ :param branch: of the build package job, so we can copy the right
+def run(name, note, tasks, branch=None, arch=None, pkgname=None,
+        version=None):
+    """ :param note: what to send to the job service as description, rendered
+                     as markdown in sourcehut
+        :param branch: of the build package job, so we can copy the right
                        subdir of the WIP repository to the local packages dir
                        (relevant for running with local job service only).
         :returns: ID of the generated job, as passed by the backend """
-    logging.info("[" + bpo.config.args.job_service + "] Run job: " + name)
+    logging.info("[{}] Run job: {} ({})".format(bpo.config.args.job_service,
+                                                note, name))
     js = get_job_service()
 
     # TODO: some database foo, kill existing job etc.
@@ -64,7 +68,7 @@ def run(name, tasks, branch=None, arch=None, pkgname=None, version=None):
         tasks_formatted[task] = remove_additional_indent(script)
 
     # Pass to bpo.job_services.(...).run_job()
-    job_id = js.run_job(name, tasks_formatted)
+    job_id = js.run_job(name, note, tasks_formatted)
 
     bpo.ui.log("job_" + name, arch=arch, branch=branch, pkgname=pkgname,
                version=version, job_id=job_id)

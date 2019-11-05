@@ -42,4 +42,5 @@ def run():
         exec pmaports/.build.postmarketos.org/submit.py
         """
 
-    bpo.helpers.job.run("get_repo_missing", tasks)
+    note = "Parse packages and dependencies from pmaports.git"
+    bpo.helpers.job.run("get_repo_missing", note, tasks)

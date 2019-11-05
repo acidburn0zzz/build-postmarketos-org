@@ -8,7 +8,7 @@ class JobService:
             that tokens are there etc.) """
         pass
 
-    def run_job(self, name, tasks):
+    def run_job(self, name, note, tasks):
         pass
 
     def update_package_status_after_restart(self):
