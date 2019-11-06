@@ -74,6 +74,7 @@ def run(arch, pkgname, branch):
                 --no-depends \\
                 """ + strict_arg + """ \\
                 --arch """ + shlex.quote(arch) + """ \\
+                --force \\
                 """ + shlex.quote(pkgname) + """
             """),
         ("submit", """
