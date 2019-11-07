@@ -56,6 +56,7 @@ def run(arch, pkgname, branch):
         mirrors = '$BPO_WIP_REPO_ARG ' + mirrors
 
     strict_arg = "--strict" if do_build_strict(pkgname) else ""
+    timeout = shlex.quote(bpo.config.const.pmbootstrap_timeout)
 
     # Start job
     note = "Build package: `{}/{}/{}-{}`".format(branch, arch, pkgname,
@@ -69,6 +70,7 @@ def run(arch, pkgname, branch):
         ("pmbootstrap_build", """
             ./pmbootstrap/pmbootstrap.py \\
                 """ + mirrors + """ \\
+                --timeout """ + timeout + """ \\
                 --details-to-stdout \\
                 build \\
                 --no-depends \\

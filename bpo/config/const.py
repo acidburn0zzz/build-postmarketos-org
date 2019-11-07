@@ -29,6 +29,14 @@ max_parallel_build_jobs = 1
 # chroot_user_id in pmb/config/__init__.py)
 pmbootstrap_chroot_uid_user = "12345"
 
+# Seconds after which a build gets aborted by pmbootstrap if the commands ran
+# by the APKBUILD stopped writing any output. Usually we get nowhere near the
+# timeout without having anything written to stdout/stderr. However, linking
+# big binaries may come close to the timeout. Especially during cross
+# compilation, because we currently don't run the linker natively (could be
+# possible though, see pmaports#233).
+pmbootstrap_timeout = 1500
+
 # Values for the tokens in test/test_tokens.cfg
 test_tokens = {"push_hook_gitlab": "iptTdfRNwSvg8ycZqiEdNhMqGalvsgvSXp91SIk2du"
                                    "kG74BNVu",
