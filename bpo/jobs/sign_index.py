@@ -26,7 +26,9 @@ def run(arch, branch):
             fi
             """),
         ("sign", """
-            ./pmbootstrap/pmbootstrap.py build_init
+            ./pmbootstrap/pmbootstrap.py \\
+                --ccache-disable \\
+                build_init
             work_dir="$(./pmbootstrap/pmbootstrap.py -q config work)"
             chroot_target="$work_dir/chroot_native/home/pmos/"
             sudo cp APKINDEX.tar.gz "$chroot_target"
