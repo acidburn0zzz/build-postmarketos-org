@@ -58,6 +58,10 @@ def get_manifest(name, tasks, branch):
           BPO_WIP_REPO_URL: """ + shlex.quote(url_repo_wip) + """
           BPO_WIP_REPO_ARG: '-mp """ + shlex.quote(url_repo_wip) + """'
         """ + get_secrets_by_job_name(name) + """
+        triggers:
+        - action: webhook
+          condition: failure
+          url: """ + url_api + """/api/public/update-job-status
         tasks:
         - bpo_setup: |
            export BPO_JOB_ID="$JOB_ID"

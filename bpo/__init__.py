@@ -10,6 +10,7 @@ import bpo.api.job_callback.build_package
 import bpo.api.job_callback.fail
 import bpo.api.job_callback.get_repo_missing
 import bpo.api.job_callback.sign_index
+import bpo.api.public.update_job_status
 import bpo.api.push_hook.gitlab
 import bpo.config.args
 import bpo.config.tokens
