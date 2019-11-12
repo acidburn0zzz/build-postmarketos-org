@@ -47,6 +47,7 @@ def get_manifest(name, tasks, branch):
         image: alpine/latest
         packages:
         - coreutils
+        - procps
         - py3-requests
         sources:
         - "https://gitlab.com/postmarketOS/pmaports.git/"
