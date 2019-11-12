@@ -80,6 +80,11 @@ def run(arch, pkgname, branch):
                 --force \\
                 """ + shlex.quote(pkgname) + """
             """),
+        ("checksums", """
+            cd "$(pmbootstrap/pmbootstrap.py \\
+                -q config work)"/packages/""" + shlex.quote(arch) + """
+            sha512sum *.apk
+        """),
         ("submit", """
             export BPO_API_ENDPOINT="build-package"
             export BPO_ARCH=""" + shlex.quote(arch) + """
