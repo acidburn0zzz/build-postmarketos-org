@@ -9,6 +9,38 @@ import bpo.helpers.job
 import bpo.repo
 
 
+def is_apk_broken(metadata):
+    if metadata["abuild_version"] == "3.5.0_rc1-r0":  # see #56
+        return True
+    return False
+
+
+def remove_broken_apk(session, pkgname, version, arch, branch, apk_path):
+    # Remove from disk
+    bpo.ui.log("remove_broken_apk", arch=arch, branch=branch, pkgname=pkgname,
+               version=version)
+    os.unlink(apk_path)
+
+    # Reset package status to queued
+    queued = bpo.db.PackageStatus.queued
+    package = bpo.db.get_package(session, pkgname, arch, branch)
+    if package and package.version == version:
+        bpo.db.set_package_status(session, package, queued)
+        bpo.ui.log_package(package, "remove_broken_apk_reset_deleted")
+
+    # Reset packages depending on the deleted apk from failed to queued
+    failed = bpo.db.PackageStatus.failed
+    result = session.query(bpo.db.Package)\
+        .filter_by(arch=arch, branch=branch, status=failed)
+    for package_failed in result:
+        # There's probably a clever way to do this with sqlalchemy filters, but
+        # this is not performance critical
+        if package not in package_failed.depends:
+            continue
+        bpo.db.set_package_status(session, package_failed, queued)
+        bpo.ui.log_package(package_failed, "remove_broken_apk_reset_failed")
+
+
 def fix_disk_vs_db(arch, branch, path, status, is_wip=False):
     """ Iterate over apks on disk, fix package status if it is not set to
         built/published but binary packages exist in the wip/final repo. Also
@@ -29,6 +61,11 @@ def fix_disk_vs_db(arch, branch, path, status, is_wip=False):
         metadata = bpo.helpers.apk.get_metadata(path + "/" + apk)
         pkgname = metadata["origin"]
         version = metadata["pkgver"]  # metadata pkgver is really full version
+
+        if is_apk_broken(metadata):
+            remove_broken_apk(session, pkgname, version, arch, branch,
+                              path + "/" + apk)
+            continue
 
         package = bpo.db.get_package(session, pkgname, arch, branch)
         if not package or package.version != version:

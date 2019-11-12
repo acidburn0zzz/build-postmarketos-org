@@ -58,6 +58,12 @@
                     {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: not found in WIP repo on disk, although status was set to "built" in the DB -> changing back to "queued"
                 {% elif entry.action == "missing_published_apk" %}
                     {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: not found in final repo on disk, although status was set to "published" in the DB -> changing back to "built"
+                {% elif entry.action == "remove_broken_apk" %}
+                    {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: <b>broken package, removing</b> (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/issues/56">#56</a>)
+                {% elif entry.action == "remove_broken_apk_reset_deleted" %}
+                    {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: changing status back to "queued" after apk was removed
+                {% elif entry.action == "remove_broken_apk_reset_failed" %}
+                    {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: changing status back from "failed" to "queued", because the broken apk of a dependency was removed
                 {% else %}
                     ???
                 {% endif %}

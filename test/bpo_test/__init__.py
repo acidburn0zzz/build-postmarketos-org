@@ -52,6 +52,13 @@ def nop(*args, **kwargs):
     logging.info("Thread called nop: " + threading.current_thread().name)
 
 
+def true(*args, **kwargs):
+    """ Use this for monkeypatching the bpo code, so a function always returns
+        True. """
+    logging.info("Thread called true: " + threading.current_thread().name)
+    return True
+
+
 def stop_server(*args, **kwargs):
     """ Use this for monkeypatching the bpo code, so a function finishes the
         test instead of performing the original functionallity. For example,
