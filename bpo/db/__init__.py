@@ -22,10 +22,12 @@ from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, \
 from sqlalchemy.orm import relationship
 
 import bpo.config.args
+import bpo.db.migrate
 
 
 base = sqlalchemy.ext.declarative.declarative_base()
 session = None
+engine = None
 init_relationships_complete = False
 
 
@@ -39,6 +41,8 @@ class PackageStatus(enum.Enum):
 
 class Package(base):
     __tablename__ = "package"
+
+    # === Layout v0 === (only change in bpo.db.migrate.upgrade(), not here!)
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(timezone=True),
                   server_default=sqlalchemy.sql.func.now())
@@ -54,11 +58,12 @@ class Package(base):
     # history in bpo (avoids complexity, we have the git history for that).
     version = Column(String)
     repo = Column(String)
+    # Package.depends: see init_relationships() below.
 
     Index("pkgname-arch-branch", pkgname, arch, branch, unique=True)
     Index("job_id", job_id)
-
-    # Package.depends: see init_relationships() below.
+    # [v1]: Index("arch-branch", Package.arch, Package.branch)
+    # === End of layout v0 ===
 
     def __init__(self, arch, branch, pkgname, version):
         self.arch = arch
@@ -95,6 +100,8 @@ class Package(base):
 
 class Log(base):
     __tablename__ = "log"
+
+    # === Layout v0 === (only change in bpo.db.migrate.upgrade(), not here!)
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(timezone=True),
                   server_default=sqlalchemy.sql.func.now())
@@ -105,6 +112,8 @@ class Log(base):
     pkgname = Column(String)
     version = Column(String)
     job_id = Column(Integer)
+    # [v2]: commit = Column(String)
+    # === End of layout v0 ===
 
     def __init__(self, action, payload=None, arch=None, branch=None,
                  pkgname=None, version=None, job_id=None):
@@ -139,6 +148,7 @@ def init_relationships():
         return
     self.init_relationships_complete = True
 
+    # === Layout v0 === (only change in bpo.db.migrate.upgrade(), not here!)
     # package.depends - n:n - package.required_by
     # See "Self-Referential Many-to-Many Relationship" in:
     # https://docs.sqlalchemy.org/en/13/orm/join_conditions.html
@@ -154,6 +164,7 @@ def init_relationships():
                                         secondaryjoin=secondaryjoin,
                                         order_by=self.Package.id,
                                         backref="required_by")
+    # === End of layout v0 ===
 
 
 def init():
@@ -165,13 +176,18 @@ def init():
     # https://docs.sqlalchemy.org/en/latest/dialects/sqlite.html
     connect_args = {"check_same_thread": False}
 
-    # Open DB and initialize
     self = sys.modules[__name__]
     url = "sqlite:///" + bpo.config.args.db_path
-    engine = sqlalchemy.create_engine(url, connect_args=connect_args)
-    init_relationships()
-    self.base.metadata.create_all(engine)
-    self.session = sqlalchemy.orm.sessionmaker(bind=engine)
+
+    # Open database, upgrade, close, open again
+    for before_upgrade in [True, False]:
+        self.engine = sqlalchemy.create_engine(url, connect_args=connect_args)
+        init_relationships()
+        self.base.metadata.create_all(engine)
+        self.session = sqlalchemy.orm.sessionmaker(bind=engine)
+        if before_upgrade:
+            bpo.db.migrate.upgrade()
+            self.engine.dispose()
 
 
 def get_package(session, pkgname, arch, branch):
