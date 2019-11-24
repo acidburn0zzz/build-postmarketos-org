@@ -35,7 +35,7 @@ pmbootstrap_chroot_uid_user = "12345"
 # big binaries may come close to the timeout. Especially during cross
 # compilation, because we currently don't run the linker natively (could be
 # possible though, see pmaports#233).
-pmbootstrap_timeout = 2100
+pmbootstrap_timeout = 900
 
 # Values for the tokens in test/test_tokens.cfg
 test_tokens = {"push_hook_gitlab": "iptTdfRNwSvg8ycZqiEdNhMqGalvsgvSXp91SIk2du"
