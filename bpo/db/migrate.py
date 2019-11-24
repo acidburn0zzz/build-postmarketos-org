@@ -37,3 +37,9 @@ def upgrade():
     if version_get() == 1:
         engine.execute("ALTER TABLE 'log' ADD COLUMN 'commit' VARCHAR")
         version_set(2)
+
+    # Package: add index "status"
+    if version_get() == 2:
+        engine.execute("CREATE INDEX 'status'"
+                       "ON 'package' (`status`)")
+        version_set(3)

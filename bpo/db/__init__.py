@@ -63,6 +63,7 @@ class Package(base):
     Index("pkgname-arch-branch", pkgname, arch, branch, unique=True)
     Index("job_id", job_id)
     # [v1]: Index("arch-branch", Package.arch, Package.branch)
+    # [v3]: Index("status", Package.status)
     # === End of layout v0 ===
 
     def __init__(self, arch, branch, pkgname, version):
