@@ -21,7 +21,7 @@ def temp_path_prepare():
 
 def extract_tool_apk(pkgname, paths):
     bin_path = bpo.config.args.temp_path + "/repo_tools/bin"
-    pattern = bpo.config.const.top_dir + "/tools/" + pkgname + "-*.apk"
+    pattern = bpo.config.const.top_dir + "/data/tools/" + pkgname + "-*.apk"
     results = glob.glob(pattern)
     if len(results) != 1:
         raise RuntimeError("There must be exactly one file that matches: " +

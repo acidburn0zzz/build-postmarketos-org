@@ -44,7 +44,7 @@ def update():
 
 def init():
     global env
-    loader = jinja2.PackageLoader("bpo", "../templates")
+    loader = jinja2.PackageLoader("bpo", "../data/templates")
     autoescape = jinja2.select_autoescape(["html", "xml"])
     env = jinja2.Environment(loader=loader, autoescape=autoescape)
 
