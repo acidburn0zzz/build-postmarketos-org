@@ -38,7 +38,7 @@ def run(arch, pkgname, branch):
     if os.path.exists(apk):
         bpo.ui.log_package(package, "package_exists_in_wip_repo")
         bpo.db.set_package_status(session, package, bpo.db.PackageStatus.built)
-        bpo.ui.update()
+        bpo.ui.update(session)
         return False
 
     # Read WIP repo pub key
@@ -106,7 +106,7 @@ def run(arch, pkgname, branch):
     # Change status to building and save job_id
     bpo.db.set_package_status(session, package, bpo.db.PackageStatus.building,
                               job_id)
-    bpo.ui.update()
+    bpo.ui.update(session)
     return True
 
 

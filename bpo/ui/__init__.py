@@ -12,18 +12,14 @@ import bpo.db
 env = None
 
 
-def update():
-    """ Update html_out/index.html """
+def update_index(session, pkgs):
+    """ Update html_out/index.html
+        :param session: return value of bpo.db.session()
+        :param pkgs: return value of bpo.db.get_all_packages_by_status() """
     # Query information from DB
-    session = bpo.db.session()
     log_entries = session.query(bpo.db.Log).order_by(bpo.db.Log.id.desc()
                                                      ).limit(50)
     pkgcount = session.query(func.count(bpo.db.Package.id)).scalar()
-
-    pkgs = {}
-    for status in bpo.db.PackageStatus:
-        pkgs[status.name] = session.query(bpo.db.Package).\
-            filter_by(status=status)
 
     # Fill template
     global env
@@ -40,6 +36,12 @@ def update():
     with open(output_temp, "w") as handle:
         handle.write(html)
     os.rename(output_temp, output)
+
+
+def update(session):
+    """ Update everything in html_out """
+    pkgs = bpo.db.get_all_packages_by_status(session)
+    update_index(session, pkgs)
 
 
 def init():
@@ -63,8 +65,7 @@ def log(*args, **kwargs):
     session = bpo.db.session()
     session.add(msg)
     session.commit()
-
-    update()
+    update(session)
 
 
 def log_package(package, action):

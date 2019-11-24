@@ -197,6 +197,16 @@ def get_package(session, pkgname, arch, branch):
     return result[0] if len(result) else None
 
 
+def get_all_packages_by_status(session):
+    """ :returns: {"failed": pkglist1, "building": pkglist2, ...},
+                  pkglist is a list of bpo.db.Package objects """
+    ret = {}
+    for status in bpo.db.PackageStatus:
+        ret[status.name] = session.query(bpo.db.Package).\
+            filter_by(status=status)
+    return ret
+
+
 def set_package_status(session, package, status, job_id=None):
     """ :param package: bpo.db.Package object
         :param status: bpo.db.PackageStatus value """
