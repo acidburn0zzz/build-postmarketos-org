@@ -3,6 +3,7 @@
 
 import jinja2
 import os
+import shutil
 from sqlalchemy import func
 
 import bpo.config.const
@@ -10,6 +11,25 @@ import bpo.config.args
 import bpo.db
 
 env = None
+
+
+def update_badge(session, pkgs):
+    """ Update html_out/badge.svg
+        :param session: return value of bpo.db.session()
+        :param pkgs: return value of bpo.db.get_all_packages_by_status() """
+    # Get new name
+    new = "up-to-date"
+    if pkgs["failed"].count():
+        new = "failed"
+    elif pkgs["building"].count() or pkgs["queued"].count():
+        new = "building"
+
+    # Copy to output dir
+    source = bpo.config.const.top_dir + "/data/badges/" + new + ".svg"
+    target = bpo.config.args.html_out + "/badge.svg"
+    target_temp = target + "_"
+    shutil.copy(source, target_temp)
+    os.rename(target_temp, target)
 
 
 def update_index(session, pkgs):
@@ -42,6 +62,7 @@ def update(session):
     """ Update everything in html_out """
     pkgs = bpo.db.get_all_packages_by_status(session)
     update_index(session, pkgs)
+    update_badge(session, pkgs)
 
 
 def init():
