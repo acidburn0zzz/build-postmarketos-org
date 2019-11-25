@@ -7,6 +7,7 @@ import os
 import subprocess
 import shutil
 import tarfile
+import datetime
 
 import bpo.config.const
 import bpo.repo
@@ -62,6 +63,13 @@ def run(arch, branch, repo_name, cwd, cmd):
 def index(arch, branch, repo_name, cwd):
     """ Sign a repository.
         :param cwd: path to the repository """
+
+    # aports-turbo, hosted at pkgs.postmarketos.org, uses the description to
+    # check if the APKINDEX was modified. Set it to the current date to make
+    # that check work.
+    description = str(datetime.datetime.utcnow())
+
     cmd = ["apk.static", "-q", "index", "--output", "APKINDEX.tar.gz",
-           "--rewrite-arch", arch] + bpo.repo.get_apks(arch, branch, cwd)
+           "--rewrite-arch", arch,
+           "--description", description] + bpo.repo.get_apks(arch, branch, cwd)
     bpo.repo.tools.run(arch, branch, repo_name, cwd, cmd)
