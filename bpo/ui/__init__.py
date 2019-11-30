@@ -3,6 +3,7 @@
 
 import jinja2
 import os
+import logging
 import shutil
 from sqlalchemy import func
 
@@ -65,6 +66,25 @@ def update(session):
     update_badge(session, pkgs)
 
 
+def copy_static():
+    """ Copy the static dir to _html_out, as much in an atomic operation as
+        possible. """
+    source = bpo.config.const.top_dir + "/data/static"
+    target = bpo.config.args.html_out + "/static"
+    temp = target + "_"
+
+    logging.info("Copying " + source + " to " + target)
+
+    if os.path.exists(temp):
+        shutil.rmtree(temp)
+
+    shutil.copytree(source, temp)
+
+    if os.path.exists(target):
+        shutil.rmtree(target)
+    shutil.move(temp, target)
+
+
 def init():
     global env
     loader = jinja2.PackageLoader("bpo", "../data/templates")
@@ -72,6 +92,7 @@ def init():
     env = jinja2.Environment(loader=loader, autoescape=autoescape)
 
     os.makedirs(bpo.config.args.html_out, exist_ok=True)
+    copy_static()
 
 
 def log(*args, **kwargs):
