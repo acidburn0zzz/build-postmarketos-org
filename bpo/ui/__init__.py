@@ -1,6 +1,7 @@
 # Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import collections
 import jinja2
 import os
 import logging
@@ -33,13 +34,27 @@ def update_badge(session, pkgs):
     os.rename(target_temp, target)
 
 
+def log_entries_by_day(session):
+    """ :returns: {"2019-01-01": [a, b, ...],
+                   "2019-01-02": [c, d, ...], ... }
+                   a, b, c, d: bpo.db.Log objects """
+    entries = session.query(bpo.db.Log).order_by(bpo.db.Log.id.desc()
+                                                 ).limit(50)
+    ret = collections.OrderedDict()
+    for entry in entries:
+        day = entry.date.strftime("%Y-%m-%d")
+        if day not in ret:
+            ret[day] = []
+        ret[day].append(entry)
+    return ret
+
+
 def update_index(session, pkgs):
     """ Update html_out/index.html
         :param session: return value of bpo.db.session()
         :param pkgs: return value of bpo.db.get_all_packages_by_status() """
     # Query information from DB
-    log_entries = session.query(bpo.db.Log).order_by(bpo.db.Log.id.desc()
-                                                     ).limit(50)
+    log_entries_days = log_entries_by_day(session)
     pkgcount = session.query(func.count(bpo.db.Package.id)).scalar()
 
     # Fill template
@@ -49,7 +64,7 @@ def update_index(session, pkgs):
                            pkgcount=pkgcount,
                            pkgs=pkgs,
                            len=len,
-                           log_entries=log_entries)
+                           log_entries_days=log_entries_days)
 
     # Write to output dir
     output = bpo.config.args.html_out + "/index.html"
