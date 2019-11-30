@@ -63,6 +63,9 @@ def main(return_app=False):
     if bpo.config.args.auto_get_repo_missing:
         bpo.jobs.get_repo_missing.run()
 
+    # Restart is complete
+    bpo.ui.log("restart_done")
+
     # Initialize flask server
     app = Flask(__name__)
     app.register_blueprint(bpo.api.blueprint)

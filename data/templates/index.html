@@ -23,7 +23,9 @@
             {% for entry in log_entries %}
             <li> {{ entry.date }}
                 {% if entry.action == "restart" %}
-                    build.postmarketos.org server restarted
+                    build.postmarketos.org server restart initiated, doing integrity checks...
+                {% elif entry.action == "restart_done" %}
+                    build.postmarketos.org server restart completed
                 {% elif entry.action == "api_push_hook_gitlab" %}
                     {{ entry.branch }}: new commit(s) pushed to pmaports.git
                 {% elif entry.action == "job_get_repo_missing" %}
