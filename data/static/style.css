@@ -24,11 +24,41 @@ body {
 .header {
     grid-area: header;
     display: grid;
-    grid-template-areas: "logo   . ."
-                         "logo   . badge"
-                         "logo   . .";
+    grid-template-areas: "logo .   ."
+                         "logo .   badge"
+                         "logo .   ."
+                         "nav  nav powered_by"; /* class: header-bottom */
     grid-template-columns: auto 1fr auto;
     background: #222;
+}
+
+.header-bottom {
+    background: lightgray;
+    padding: 10px 0px;
+}
+
+.header-bottom a {
+    padding: 10px;
+    text-decoration: none;
+}
+
+.header-bottom a:hover {
+    background: white;
+}
+
+.nav {
+    grid-area: nav;
+}
+
+.powered-by {
+    grid-area: powered_by;
+    color: gray;
+    background: lightgray;
+    text-align: right;
+}
+
+.sourcehut-builds {
+    color: #dc3545;
 }
 
 .badge {
