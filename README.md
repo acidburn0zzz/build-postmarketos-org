@@ -1,7 +1,5 @@
 # bpo (build.postmarketos.org)
 
-[Work in progress.](https://postmarketos.org/blog/2019/06/23/two-years/#sourcehut-srht)
-
 ## Installation
 
 Requires python 3.5 or higher.
@@ -65,7 +63,7 @@ $ pip install pytest pytest-cov pytest-timeout
 $ .ci/pytest.sh
 ```
 
-If a test is just hanging, hit ^C and look at the very top of the output. The local job is running in a different thread, so if there's nothing useful in the trace, open _html_out/index.html and check the latest log files (which are linked there).
+The local job is running in a different thread, so if there's nothing useful in the trace, open _html_out/index.html and check the latest log files (which are linked there).
 
 ## Network Architecture
 
