@@ -1,5 +1,10 @@
 a {
     color: black;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+    color: #0d8000;
 }
 
 ul {
@@ -11,7 +16,8 @@ ul {
 body {
     display: grid;
     grid-template-areas: ". header ."
-                         ". main   .";
+                         ". main   ."
+                         ". footer .";
     grid-template-columns: auto minmax(360px, 1024px) auto;
     margin: 0px;
 
@@ -81,6 +87,10 @@ body {
     text-decoration: none;
 }
 
+.logo:hover {
+    text-decoration: none;
+}
+
 .logo img {
     grid-area: logo-img;
 
@@ -102,9 +112,58 @@ body {
 main {
     grid-area: main;
     background: white;
-    padding: 0px 10px 10px;
+    padding: 0px 10px 30px;
+}
+
+.h, .h3 {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 20pt;
+    padding: 5px 0px;
+    margin: 5px 0px;
+}
+.h {
+    margin-top: 15px;
+}
+.h3 {
+    font-size: 14pt;
+}
+
+.toc {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+.toc td:nth-child(1){
+    text-align: right;
+}
+.toc td {
+    border: 1px solid lightgray;
+    padding: 5px 10px;
+}
+.toc a {
+    text-decoration: underline;
 }
 
 .log .time {
     color: gray;
+}
+
+/* FOOTER */
+footer {
+    grid-area: footer;
+    display: grid;
+    grid-template-areas: "source . copyright";
+    grid-template-columns: auto 1fr auto;
+    background: #222;
+    color: white;
+    padding: 10px;
+}
+footer a, footer a:hover {
+    color: white;
+}
+footer .source {
+    grid-area: source;
+}
+footer .copyright {
+    grid-area: copyright;
 }

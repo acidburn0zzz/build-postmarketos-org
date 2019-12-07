@@ -26,23 +26,49 @@
         </header>
 
         <main class="main">
-            <h2>Overview</h2>
+            <a class="h" name="toc" href="#toc">Overview</a>
 
-            <ul>
-                <li> {{ len(bpo.config.const.architectures) }} Arches ({{ ", ".join(bpo.config.const.architectures) }})
-                <li> {{ len(bpo.config.const.branches) }} Branches ({{ ", ".join(bpo.config.const.branches) }})
-                <li> {{ pkgs.building.count() }} Building
-                <li> {{ pkgs.failed.count() }} Failed
-                <li> {{ pkgs.queued.count() }} Queued
-                <li> {{ pkgs.built.count() }} Built
-                <li> {{ pkgs.published.count() }} Published
-                <li> {{ pkgcount }} Packages total
-            </ul>
+            <table class="toc">
+                <tr>
+                    <td>{{ len(bpo.config.const.architectures) }}</td>
+                    <td>arches</td>
+                    <td>{{ ", ".join(bpo.config.const.architectures) }}</td>
+                </tr>
+                <tr>
+                    <td>{{ len(bpo.config.const.branches) }}</td>
+                    <td>branches</td>
+                    <td>{{ ", ".join(bpo.config.const.branches) }}</td>
+                </tr>
+                <tr>
+                    <td>{{ pkgs.building.count() }}</td>
+                    <td><a href="#building">building</a></td>
+                </tr>
+                <tr>
+                    <td>{{ pkgs.failed.count() }}</td>
+                    <td><a href="#failed">failed</a></td>
+                </tr>
+                <tr>
+                    <td>{{ pkgs.queued.count() }}</td>
+                    <td><a href="#queued">queued</a></td>
+                </tr>
+                <tr>
+                    <td>{{ pkgs.built.count() }}</td>
+                    <td><a href="#built">built</a></td>
+                </tr>
+                <tr>
+                    <td>{{ pkgs.published.count() }}</td>
+                    <td><a href="#published">published</a></td>
+                </tr>
+                <tr>
+                    <td>{{ pkgcount }}</td>
+                    <td>packages total</td>
+                </tr>
+            </table>
 
-            <h2>Log</h2>
+            <a class="h" name="log" href="#log">Log</a>
             <div class="log">
                 {% for day,log_entries in log_entries_days.items() %}
-                <h3>{{ day }}</h3>
+                <a class="h3" name="{{ day }}" href="#{{ day }}">{{ day }}</a>
                     <ul>
                     {% for entry in log_entries %}
                     <li> <span class="time">{{ entry.date.strftime("%H:%M:%S") }}</span>
@@ -102,7 +128,9 @@
                 {% endfor %}
             </div>
 
-            <h2>Building ({{ pkgs.building.count() }})</h2>
+	    <a class="h" name="building" href="#building">
+                Building ({{ pkgs.building.count() }})
+	    </a>
             <ul>
                 {% for package in pkgs.building %}
                 <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
@@ -110,7 +138,9 @@
                 {% endfor %}
             </ul>
 
-            <h2>Failed ({{ pkgs.failed.count() }})</h2>
+	    <a class="h" name="failed" href="#failed">
+                Failed ({{ pkgs.failed.count() }})
+	    </a>
             <ul>
                 {% for package in pkgs.failed %}
                 <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
@@ -118,7 +148,9 @@
                 {% endfor %}
             </ul>
 
-            <h2>Queued ({{ pkgs.queued.count() }})</h2>
+	    <a class="h" name="queued" href="#queued">
+                Queued ({{ pkgs.queued.count() }})
+            </a>
             <ul>
                 {% for package in pkgs.queued %}
                 <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
@@ -131,7 +163,9 @@
                 {% endfor %}
             </ul>
 
-            <h2>Built ({{ pkgs.built.count() }})</h2>
+	    <a class="h" name="built" href="#built">
+                Built ({{ pkgs.built.count() }})
+            </a>
             <p style="font-size: 80%; font-style: italic">
                 Note: these packages get published, after there are no more queued and failing packages for the same arch and branch. This is to prevent half-baked updates (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/#repositories">more</a>).
             </p>
@@ -143,7 +177,9 @@
                 {% endfor %}
             </ul>
 
-            <h2>Published ({{ pkgs.published.count() }})</h2>
+	    <a class="h" name="published" href="#published">
+                Published ({{ pkgs.published.count() }})
+            </a>
             <ul>
                 {% for package in pkgs.published %}
                 <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
@@ -151,5 +187,15 @@
                 {% endfor %}
             </ul>
         </main>
+        <footer>
+            <div class="source">
+                AGPL-3.0
+                (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org"
+                    >source</a>)
+            </div>
+            <div class="copyright">
+                &copy; 2019 postmarketOS contributors
+            </div>
+        </footer>
     </body>
 </html>
