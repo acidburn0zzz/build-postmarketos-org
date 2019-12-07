@@ -183,3 +183,23 @@ footer .source {
 footer .copyright {
     grid-area: copyright;
 }
+
+/* RESPONSIVENESS */
+@media screen and (max-width: 710px) {
+    .header {
+        grid-template-areas: "logo"
+                             "badge"
+                             "nav"
+                             "powered_by";
+        grid-template-columns: 100%;
+    }
+    .logo {
+        margin: auto;
+    }
+    .badge {
+        margin: 0px auto 30px;
+    }
+    .powered-by, .nav {
+        text-align: center;
+    }
+}
