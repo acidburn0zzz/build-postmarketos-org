@@ -145,6 +145,22 @@ main {
 }
 
 .log .time {
+    color: gray
+}
+.log .branch {
+    color: darkgreen;
+}
+.log .arch {
+    color: darkred;
+}
+.log .pkgname {
+    color: darkcyan;
+}
+.log .version {
+    color: purple;
+}
+
+.job-log {
     color: gray;
 }
 

@@ -72,6 +72,16 @@
                     <ul>
                     {% for entry in log_entries %}
                     <li> <span class="time">{{ entry.date.strftime("%H:%M:%S") }}</span>
+                        {% if entry.branch
+                        %}<span class="branch">{{ entry.branch }}</span>{%
+                        endif %}{% if entry.arch
+                        %}/<span class="arch">{{ entry.arch }}</span>{%
+                        endif %}{% if entry.pkgname
+                        %}/<span class="pkgname">{{ entry.pkgname }}</span>{%
+                        endif %}{% if entry.version
+                        %}-<span class="version">{{ entry.version }}</span>{%
+                        endif %}
+
                         {% if entry.action == "restart" %}
                             build.postmarketos.org server restart initiated, doing integrity checks...
                         {% elif entry.action == "restart_done" %}
@@ -83,45 +93,45 @@
                         {% elif entry.action == "api_job_callback_get_repo_missing" %}
                             new packages queued for building
                         {% elif entry.action == "job_build_package" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: building package
+                            building package
                         {% elif entry.action in ["api_job_callback_build_package", "package_built"] %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: package built
+                            package built
                         {% elif entry.action == "job_sign_index" %}
-                            {{ entry.branch }}/{{ entry.arch }}: signing the package index
+                            signing the package index
                         {% elif entry.action == "api_job_callback_sign_index" %}
-                            {{ entry.branch }}/{{ entry.arch }}: all packages built, publishing to mirror
+                            all packages built, publishing to mirror
                         {% elif entry.action == "job_update_package_status_built" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: package built
+                            package built
                         {% elif entry.action == "job_update_package_status_failed" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: <b>build failed</b>
+                            <b>build failed</b>
                         {% elif entry.action == "job_callback_fail_build_package" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: <b>build failed</b>
+                            <b>build failed</b>
                         {% elif entry.action == "build_repo_stuck" %}
-                            {{ entry.branch }}/{{ entry.arch }}: <b>repo is stuck</b> - fix failed builds to continue
+                            <b>repo is stuck</b> - fix failed builds to continue
                         {% elif entry.action == "package_removed_from_pmaports" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: removed from pmaports.git
+                            removed from pmaports.git
                         {% elif entry.action == "package_exists_in_wip_repo" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: package exists in WIP repo already, build skipped
+                            package exists in WIP repo already, build skipped
                         {% elif entry.action == "package_published" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: package published
+                            package published
                         {% elif entry.action == "obsolete_wip_package" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: does not exist in pmaports.git anymore, removing from WIP repo
+                            does not exist in pmaports.git anymore, removing from WIP repo
                         {% elif entry.action == "missing_built_apk" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: not found in WIP repo on disk, although status was set to "built" in the DB -&gt; changing back to "queued"
+                            not found in WIP repo on disk, although status was set to "built" in the DB -&gt; changing back to "queued"
                         {% elif entry.action == "missing_published_apk" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: not found in final repo on disk, although status was set to "published" in the DB -&gt; changing back to "built"
+                            not found in final repo on disk, although status was set to "published" in the DB -&gt; changing back to "built"
                         {% elif entry.action == "remove_broken_apk" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: <b>broken package, removing</b> (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/issues/56">#56</a>)
+                            <b>broken package, removing</b> (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/issues/56">#56</a>)
                         {% elif entry.action == "remove_broken_apk_reset_deleted" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: changing status back to "queued" after apk was removed
+                            changing status back to "queued" after apk was removed
                         {% elif entry.action == "remove_broken_apk_reset_failed" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: changing status back from "failed" to "queued", because the broken apk of a dependency was removed
+                            changing status back from "failed" to "queued", because the broken apk of a dependency was removed
                         {% else %}
-                            ???
+                        (unknown action: {{ entry.action }})
                         {% endif %}
                         <!-- action: {{ entry.action }} -->
                         {% if entry.job_id %}
-                            <a href="{{ bpo.helpers.job.get_link(entry.job_id) }}">[log]</a>
+                            <a class="job-log" href="{{ bpo.helpers.job.get_link(entry.job_id) }}">[log]</a>
                         {% endif %}
                     {% endfor %}
                     </ul>
@@ -183,7 +193,7 @@
             <ul>
                 {% for package in pkgs.published %}
                 <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
-                    <a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
+                    <a class="job-log" href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
                 {% endfor %}
             </ul>
         </main>
