@@ -81,9 +81,9 @@
                         {% elif entry.action == "obsolete_wip_package" %}
                             {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: does not exist in pmaports.git anymore, removing from WIP repo
                         {% elif entry.action == "missing_built_apk" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: not found in WIP repo on disk, although status was set to "built" in the DB -> changing back to "queued"
+                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: not found in WIP repo on disk, although status was set to "built" in the DB -&gt; changing back to "queued"
                         {% elif entry.action == "missing_published_apk" %}
-                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: not found in final repo on disk, although status was set to "published" in the DB -> changing back to "built"
+                            {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: not found in final repo on disk, although status was set to "published" in the DB -&gt; changing back to "built"
                         {% elif entry.action == "remove_broken_apk" %}
                             {{ entry.branch }}/{{ entry.arch }}/{{ entry.pkgname }}-{{ entry.version }}.apk: <b>broken package, removing</b> (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/issues/56">#56</a>)
                         {% elif entry.action == "remove_broken_apk_reset_deleted" %}
