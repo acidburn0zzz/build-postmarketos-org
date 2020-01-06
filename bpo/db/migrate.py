@@ -1,4 +1,4 @@
-# Copyright 2019 Oliver Smith
+# Copyright 2020 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Full migration libraries like alembic are overkill for this simple program.
     Instead of creating a dedicated script for migrating back and forth with

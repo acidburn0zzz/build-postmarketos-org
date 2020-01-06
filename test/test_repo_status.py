@@ -1,4 +1,4 @@
-# Copyright 2019 Oliver Smith
+# Copyright 2020 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Testing bpo/repo/status.py """
 import bpo_test
