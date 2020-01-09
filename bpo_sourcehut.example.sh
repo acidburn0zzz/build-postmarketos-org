@@ -6,7 +6,7 @@ args=""
 
 # Fill DB with missing packages on first run
 if ! [ -f "./bpo.db" ]; then
-    args="$args --auto-get-repo-missing"
+    args="$args --auto-get-depends"
 fi
 
 ./bpo.py $args sourcehut --user "$USER"

@@ -12,9 +12,9 @@ import bpo.repo
 
 
 @pytest.mark.timeout(40)
-def test_repo_missing_SLOW_40s(monkeypatch):
-    """ Trigger the api push hook, then let bpo run the repo_missing job.
-        Monkeypatch bpo.repo.build, so it stops after receiving repo_missing
+def test_depends_SLOW_40s(monkeypatch):
+    """ Trigger the api push hook, then let bpo run the depends job.
+        Monkeypatch bpo.repo.build, so it stops after receiving depends
         and does not try to build the repo. """
 
     # Limit to two arches (more would increase test time)
@@ -28,10 +28,10 @@ def test_repo_missing_SLOW_40s(monkeypatch):
 @pytest.mark.timeout(45)
 def test_build_final_repo_with_two_pkgs_SLOW_45s(monkeypatch):
     with bpo_test.BPOServer():
-        # Trigger job-callback/get-repo-missing and let it run all the way
-        # until the final repository is ready to be published
+        # Trigger job-callback/get-depends and let it run all the way until the
+        # final repository is ready to be published
         monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_repo_missing()
+        bpo_test.trigger.job_callback_get_depends()
 
     # WIP repo must be empty
     arch = "x86_64"

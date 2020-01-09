@@ -89,9 +89,9 @@
                             build.postmarketos.org server restart completed
                         {% elif entry.action == "api_push_hook_gitlab" %}
                             new commit(s) pushed to pmaports.git
-                        {% elif entry.action == "job_get_repo_missing" %}
+                        {% elif entry.action == "job_get_depends" %}
                             calculating missing binary packages
-                        {% elif entry.action == "api_job_callback_get_repo_missing" %}
+                        {% elif entry.action == "api_job_callback_get_depends" %}
                             new packages queued for building
                         {% elif entry.action == "job_build_package" %}
                             building package

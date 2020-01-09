@@ -24,7 +24,7 @@ def test_repo_wip_clean(monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_repo_missing()
+        bpo_test.trigger.job_callback_get_depends()
 
     # Skip updating apkindex at the end of clean()
     monkeypatch.setattr(bpo.repo.wip, "update_apkindex", bpo_test.nop)

@@ -8,11 +8,11 @@ import bpo.repo
 
 def test_push_hook_gitlab_to_nop(monkeypatch):
     """ Pretend to be gitlab and send data to the push hook. Monkeypatch the
-        get_repo_missing job, so after successfully receiving the data, bpo
+        get_depends job, so after successfully receiving the data, bpo
         won't try to actually get missing packages and build the repo. """
 
     with bpo_test.BPOServer():
-        monkeypatch.setattr(bpo.jobs.get_repo_missing, "run",
+        monkeypatch.setattr(bpo.jobs.get_depends, "run",
                             bpo_test.stop_server)
         bpo_test.trigger.push_hook_gitlab()
 

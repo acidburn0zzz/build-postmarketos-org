@@ -8,7 +8,7 @@ from flask import Flask
 import bpo.api
 import bpo.api.job_callback.build_package
 import bpo.api.job_callback.fail
-import bpo.api.job_callback.get_repo_missing
+import bpo.api.job_callback.get_depends
 import bpo.api.job_callback.sign_index
 import bpo.api.public.update_job_status
 import bpo.api.push_hook.gitlab
@@ -60,8 +60,8 @@ def main(return_app=False):
         bpo.repo.build()
 
     # Fill up queue with packages to build
-    if bpo.config.args.auto_get_repo_missing:
-        bpo.jobs.get_repo_missing.run()
+    if bpo.config.args.auto_get_depends:
+        bpo.jobs.get_depends.run()
 
     # Restart is complete
     bpo.ui.log("restart_done")

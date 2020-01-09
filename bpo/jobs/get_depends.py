@@ -19,7 +19,7 @@ def run():
             tasks["repo_" + branch + "_" + arch] = """
                 export BRANCH=""" + shlex.quote(branch) + """
                 export ARCH=""" + shlex.quote(arch) + """
-                export JSON="repo_missing.$BRANCH.$ARCH.json"
+                export JSON="depends.$BRANCH.$ARCH.json"
 
                 ./pmbootstrap/pmbootstrap.py \\
                     -mp """ + shlex.quote(mirror_final) + """ \\
@@ -29,10 +29,10 @@ def run():
                 """
 
     tasks["submit"] = """
-        export BPO_API_ENDPOINT="get-repo-missing"
+        export BPO_API_ENDPOINT="get-depends"
         export BPO_ARCH=""
         export BPO_BRANCH=""
-        export BPO_PAYLOAD_FILES="$(ls -1 repo_missing.*.*.json)"
+        export BPO_PAYLOAD_FILES="$(ls -1 depends.*.*.json)"
         export BPO_PAYLOAD_IS_JSON="0"
         export BPO_PKGNAME=""
         export BPO_VERSION=""
@@ -43,4 +43,4 @@ def run():
         """
 
     note = "Parse packages and dependencies from pmaports.git"
-    bpo.helpers.job.run("get_repo_missing", note, tasks)
+    bpo.helpers.job.run("get_depends", note, tasks)

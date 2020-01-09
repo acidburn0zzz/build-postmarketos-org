@@ -4,7 +4,7 @@
 import logging
 from flask import request, abort
 from bpo.helpers.headerauth import header_auth
-import bpo.jobs.get_repo_missing
+import bpo.jobs.get_depends
 import bpo.api
 import bpo.db
 
@@ -47,7 +47,7 @@ def push_hook_gitlab():
     # Insert log entry
     bpo.ui.log("api_push_hook_gitlab", payload=payload, branch=branch)
 
-    # Run repo_missing job for all arches
-    bpo.jobs.get_repo_missing.run()
+    # Run depends job for all arches
+    bpo.jobs.get_depends.run()
 
     return "Triggered!"

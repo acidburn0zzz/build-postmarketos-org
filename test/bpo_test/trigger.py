@@ -39,7 +39,7 @@ def push_hook_gitlab():
     api_request("push-hook/gitlab", headers, payload)
 
 
-def job_callback_get_repo_missing():
+def job_callback_get_depends():
     """ Note that the versions must match the current versions in pmaports.git,
         otherwise the bpo server will build the current packages and complain
         later on, that the version isn't matching. """
@@ -48,7 +48,7 @@ def job_callback_get_repo_missing():
                "X-BPO-Token": token}
 
     # master/x86_64: "hello-world", "hello-world-wrapper"
-    file_name = "repo_missing.master.x86_64.json"
+    file_name = "depends.master.x86_64.json"
     file_path = (bpo.config.const.top_dir + "/test/testdata/" + file_name)
     files = [("file[]", (file_name, open(file_path, "rb"),
                          "application/octet-stream"))]
@@ -59,8 +59,8 @@ def job_callback_get_repo_missing():
         for arch in bpo.config.const.architectures:
             if branch == "master" and arch == "x86_64":
                 continue
-            file_name = "repo_missing." + branch + "." + arch + ".json"
+            file_name = "depends." + branch + "." + arch + ".json"
             files.append(("file[]", (file_name, open(file_path, "rb"),
                                      "application/octet-stream")))
 
-    api_request("job-callback/get-repo-missing", headers, files=files)
+    api_request("job-callback/get-depends", headers, files=files)

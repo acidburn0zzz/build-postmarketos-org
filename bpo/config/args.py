@@ -17,7 +17,7 @@ temp_path = bpo.config.const.top_dir + "/_temp"
 repo_final_path = bpo.config.const.top_dir + "/_repo_final"
 repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
 html_out = bpo.config.const.top_dir + "/_html_out"
-auto_get_repo_missing = False
+auto_get_depends = False
 url_api = "https://build.postmarketos.org"
 url_repo_wip = "https://build.postmarketos.org/wip"
 force_final_repo_sign = False
@@ -56,7 +56,7 @@ def init():
     # Common arguments
     parser = argparse.ArgumentParser(description="postmarketOS build"
                                                  "coordinator", prog="bpo")
-    parser.add_argument("-a", "--auto-get-repo-missing", action="store_true",
+    parser.add_argument("-a", "--auto-get-depends", action="store_true",
                         help="automatically get missing packages (don't wait"
                              " for the push hook from gitlab)")
     parser.add_argument("-b", "--bind", dest="host",

@@ -18,9 +18,9 @@ blueprint = bpo.api.blueprint
 
 
 def get_payload(request, arch, branch):
-    """ Get the get_repo_missing callback specific payload from the POST-data
+    """ Get the get_depends callback specific payload from the POST-data
         and verify it. """
-    filename = "repo_missing." + branch + "." + arch + ".json"
+    filename = "depends." + branch + "." + arch + ".json"
     storage = bpo.api.get_file(request, filename)
     ret = json.loads(storage.read().decode("utf-8"))
 
@@ -103,7 +103,7 @@ def remove_deleted_packages(session, payload, arch, branch):
     packages_db = session.query(bpo.db.Package).filter_by(arch=arch,
                                                           branch=branch).all()
     for package_db in packages_db:
-        # Keep entries, that are part of the repo_missing payload
+        # Keep entries, that are part of the depends payload
         if package_db.pkgname in packages_payload:
             continue
 
@@ -121,9 +121,9 @@ def remove_deleted_packages(session, payload, arch, branch):
         session.commit()
 
 
-@blueprint.route("/api/job-callback/get-repo-missing", methods=["POST"])
+@blueprint.route("/api/job-callback/get-depends", methods=["POST"])
 @header_auth("X-BPO-Token", "job_callback")
-def job_callback_get_repo_missing():
+def job_callback_get_depends():
     # Parse input data
     job_id = bpo.api.get_header(request, "Job-Id")
     payloads = collections.OrderedDict()
@@ -142,7 +142,7 @@ def job_callback_get_repo_missing():
             remove_deleted_packages(session, payload, arch, branch)
             bpo.repo.wip.clean(arch, branch)
 
-    bpo.ui.log("api_job_callback_get_repo_missing", payload=payload,
+    bpo.ui.log("api_job_callback_get_depends", payload=payload,
                job_id=job_id)
 
     # Make sure that we did not miss any job status changes
