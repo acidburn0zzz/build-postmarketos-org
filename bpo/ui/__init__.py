@@ -102,7 +102,8 @@ def copy_static():
 
 def init():
     global env
-    loader = jinja2.PackageLoader("bpo", "../data/templates")
+    templates_dir = bpo.config.const.top_dir + "/data/templates"
+    loader = jinja2.FileSystemLoader(templates_dir)
     autoescape = jinja2.select_autoescape(["html", "xml"])
     env = jinja2.Environment(loader=loader, autoescape=autoescape)
 
