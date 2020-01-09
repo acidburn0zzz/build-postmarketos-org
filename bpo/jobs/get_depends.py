@@ -16,7 +16,7 @@ def run():
 
         # FIXME: checkout proper pmaports branch (currently always master)
         for arch in bpo.config.const.architectures:
-            tasks["repo_" + branch + "_" + arch] = """
+            tasks[branch + "_" + arch] = """
                 export BRANCH=""" + shlex.quote(branch) + """
                 export ARCH=""" + shlex.quote(arch) + """
                 export JSON="depends.$BRANCH.$ARCH.json"
