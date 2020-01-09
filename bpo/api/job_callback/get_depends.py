@@ -84,7 +84,8 @@ def update_package_depends(session, payload, arch, branch):
 
 def remove_deleted_packages(session, payload, arch, branch):
     """ Remove all packages from the database, that have been deleted from
-        pmaports.git """
+        pmaports.git
+        :returns: True if packages were deleted, False otherwise """
     # FIXME: this check is not good enough. We should be able to delete
     # packages that never made it into the final repository with this code, but
     # once they are there, they will be kept forever. In order to also delete
@@ -92,6 +93,7 @@ def remove_deleted_packages(session, payload, arch, branch):
     # in the pmaports, we need a list of all packages in pmaports.git for the
     # given arch and branch. Right now we only have the packages that need to
     # be built.
+    ret = False
 
     # Sort payload by pkgname for faster lookups
     packages_payload = {}
@@ -112,6 +114,7 @@ def remove_deleted_packages(session, payload, arch, branch):
         if os.path.exists(final_path + "/" + apk):
             continue
 
+        ret = True
         bpo.ui.log_package(package_db, "package_removed_from_pmaports")
 
         # Delete package from db and commit this change, because we might write
@@ -119,6 +122,7 @@ def remove_deleted_packages(session, payload, arch, branch):
         # log, we get a "database is locked" error.
         session.delete(package_db)
         session.commit()
+    return ret
 
 
 @blueprint.route("/api/job-callback/get-depends", methods=["POST"])
@@ -139,8 +143,8 @@ def job_callback_get_depends():
         for arch, payload in payload_arch.items():
             update_or_insert_packages(session, payload, arch, branch)
             update_package_depends(session, payload, arch, branch)
-            remove_deleted_packages(session, payload, arch, branch)
-            bpo.repo.wip.clean(arch, branch)
+            if remove_deleted_packages(session, payload, arch, branch):
+                bpo.repo.wip.clean(arch, branch)
 
     bpo.ui.log("api_job_callback_get_depends", payload=payload,
                job_id=job_id)
