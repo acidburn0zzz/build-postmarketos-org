@@ -82,7 +82,7 @@ def update_package_depends(session, payload, arch, branch):
     session.commit()
 
 
-def remove_deleted_packages(session, payload, arch, branch):
+def remove_deleted_packages_db(session, payload, arch, branch):
     """ Remove all packages from the database, that have been deleted from
         pmaports.git
         :returns: True if packages were deleted, False otherwise """
@@ -143,7 +143,7 @@ def job_callback_get_depends():
         for arch, payload in payload_arch.items():
             update_or_insert_packages(session, payload, arch, branch)
             update_package_depends(session, payload, arch, branch)
-            if remove_deleted_packages(session, payload, arch, branch):
+            if remove_deleted_packages_db(session, payload, arch, branch):
                 bpo.repo.wip.clean(arch, branch)
 
     bpo.ui.log("api_job_callback_get_depends", payload=payload,

@@ -9,7 +9,7 @@ import bpo.jobs
 import bpo.repo
 
 
-def test_callback_depends_remove_deleted_packages(monkeypatch):
+def test_callback_depends_remove_deleted_packages_db(monkeypatch):
     # Stop bpo server after bpo.repo.build was called 3x
     global stop_count
     stop_count = 0
@@ -42,7 +42,7 @@ def test_callback_depends_remove_deleted_packages(monkeypatch):
         os.makedirs(final_path)
         shutil.copy(__file__, apk_path)
 
-        # Indirectly trigger bpo.get_depends.remove_deleted_packages()
+        # Indirectly trigger bpo.get_depends.remove_deleted_packages_db()
         bpo_test.trigger.job_callback_get_depends()
 
         # Package must still exist in db (because we have it in the final repo)
@@ -51,7 +51,7 @@ def test_callback_depends_remove_deleted_packages(monkeypatch):
         # Remove the package from the final repo
         os.unlink(apk_path)
 
-        # Indirectly trigger bpo.get_depends.remove_deleted_packages()
+        # Indirectly trigger bpo.get_depends.remove_deleted_packages_db()
         bpo_test.trigger.job_callback_get_depends()
 
         # Verify that the package was deleted from db
