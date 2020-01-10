@@ -125,7 +125,7 @@ class BPOServer():
 
 
 def assert_package(pkgname, arch="x86_64", branch="master", status=None,
-                   version=None):
+                   version=None, exists=True):
     """ Verify that a package exists, and optionally, that certain attributes
         are set to an expected value. This function is called assert_* but we
         are actually raising exceptions, because we can test if they get thrown
@@ -135,9 +135,17 @@ def assert_package(pkgname, arch="x86_64", branch="master", status=None,
         :param arch: package architecture
         :param branch: pmaports.git branch
         :param status: bpo.db.PackageStatus string, e.g. "built"
-        :param version: package version, e.g. "1-r4" """
+        :param version: package version, e.g. "1-r4"
+        :param exists: set to False if the package should not exist at all """
     session = bpo.db.session()
     package = bpo.db.get_package(session, pkgname, arch, branch)
+
+    if not exists:
+        if not package:
+            return
+        raise RuntimeError("Package should NOT exist in db: {}/{}/{}".format(
+            branch, arch, pkgname))
+
     if package is None:
         raise RuntimeError("Expected package to exist in db: {}/{}/{}".format(
             branch, arch, pkgname))

@@ -20,6 +20,7 @@ def test_assert_package(monkeypatch):
     func(pkgname, status="queued", version="1-r4")
     func(pkgname, status="queued")
     func(pkgname, version="1-r4")
+    func("invalid-pkgname", exists=False)
 
     # Package not in db
     with pytest.raises(RuntimeError) as e:
@@ -35,3 +36,8 @@ def test_assert_package(monkeypatch):
     with pytest.raises(RuntimeError) as e:
         bpo_test.assert_package(pkgname, version="1-r5")
         assert str(e.value).startswith("Expected version")
+
+    # Package should not exist, but does
+    with pytest.raises(RuntimeError) as e:
+        bpo_test.assert_package(pkgname, exists=False)
+        assert str(e.value).startswith("Package should NOT exist")
