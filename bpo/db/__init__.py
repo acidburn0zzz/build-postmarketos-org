@@ -66,12 +66,13 @@ class Package(base):
     # [v3]: Index("status", Package.status)
     # === End of layout v0 ===
 
-    def __init__(self, arch, branch, pkgname, version):
+    def __init__(self, arch, branch, pkgname, version,
+                 status=PackageStatus.queued):
         self.arch = arch
         self.branch = branch
         self.pkgname = pkgname
         self.version = version
-        self.status = PackageStatus.queued
+        self.status = status
 
     def __repr__(self):
         depends = []
