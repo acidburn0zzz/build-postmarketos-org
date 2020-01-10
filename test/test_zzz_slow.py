@@ -3,12 +3,64 @@
 """ Various tests, that need longer than the default timeout to run. Put them
     all here, so we can run the fast tests first and possibly see them fail
     rather quickly. In this file, place the faster tests at the top. """
+import os
 import pytest
+import shutil
 
 import bpo_test
 import bpo_test.trigger
+import bpo.config.const
+import bpo.db
 import bpo.jobs
 import bpo.repo
+import bpo.repo.final
+
+
+@pytest.mark.timeout(20)
+def test_remove_deleted_package_SLOW_20s(monkeypatch):
+    # Only one arch, so the bpo server doesn't attempt to run multiple repo
+    # indexing jobs at once. This doesn't work with the local job service.
+    monkeypatch.setattr(bpo.config.const, "architectures", ["x86_64"])
+
+    # Stop server when it would publish the packages
+    monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.stop_server)
+
+    with bpo_test.BPOServer():
+        # Put test apks in final repo
+        arch = "x86_64"
+        branch = "master"
+        final_path = bpo.repo.final.get_path(arch, branch)
+        testdata = bpo.config.const.top_dir + "/test/testdata/"
+        os.makedirs(final_path, exist_ok=True)
+        for apk in ["hello-world-1-r3.apk",  # wrong version
+                    "hello-world-1-r4.apk",
+                    "hello-world-wrapper-1-r2.apk"]:
+            shutil.copy(testdata + "/" + apk, final_path + "/" + apk)
+
+        # Put into db: hello-world, hello-world-wrapper
+        session = bpo.db.session()
+        published = bpo.db.PackageStatus.published
+        session.merge(bpo.db.Package(arch, branch, "hello-world", "1-r4",
+                                     published))
+        session.merge(bpo.db.Package(arch, branch, "hello-world-wrapper",
+                                     "1-r2", published))
+        session.commit()
+
+        # pmaports.git only has "hello-world", not "hello-world-wrapper"
+        testfile = "depends.master.x86_64_hello-world_only.json"
+        bpo_test.trigger.job_callback_get_depends(testfile)
+
+    # Check if database was updated properly
+    bpo_test.assert_package("hello-world", status="published", version="1-r4")
+    bpo_test.assert_package("hello-world-wrapper", exists=False)
+
+    # Check if packages were removed properly
+    assert os.path.exists(final_path + "/hello-world-1-r4.apk")
+    assert not os.path.exists(final_path + "/hello-world-1-r3.apk")
+    assert not os.path.exists(final_path + "/hello-world-wrapper-1-r2.apk")
+
+    # Check if APKINDEX was created for final repo
+    assert os.path.exists(final_path + "/APKINDEX.tar.gz")
 
 
 @pytest.mark.timeout(40)

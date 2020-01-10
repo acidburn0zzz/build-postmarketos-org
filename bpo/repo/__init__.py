@@ -47,8 +47,13 @@ def count_failed_builds(session, arch, branch):
                                                    branch=branch).count()
 
 
-def build_arch_branch(session, slots_available, arch, branch):
-    """ :returns: amount of jobs that were started """
+def build_arch_branch(session, slots_available, arch, branch,
+                      force_repo_update=False):
+    """ :returns: amount of jobs that were started
+        :param force_repo_update: rebuild the symlink and final repo, even if
+                                  no new packages were built. Set this to True
+                                  after deleting packages in the database, so
+                                  the apks get removed from the final repo. """
     logging.info(branch + "/" + arch + ": starting new package build job(s)")
     running = 0
     while True:
@@ -59,7 +64,7 @@ def build_arch_branch(session, slots_available, arch, branch):
                     bpo.ui.log("build_repo_stuck", arch=arch, branch=branch)
                 else:
                     logging.info(branch + "/" + arch + ": WIP repo complete")
-                    bpo.repo.symlink.create(arch, branch)
+                    bpo.repo.symlink.create(arch, branch, force_repo_update)
             break
 
         if slots_available > 0:
@@ -71,9 +76,13 @@ def build_arch_branch(session, slots_available, arch, branch):
     return running
 
 
-def build():
+def build(force_repo_update=False):
     """ Start as many parallel build package jobs, as configured. When all
-        packages are built, publish the packages. """
+        packages are built, publish the packages.
+        :param force_repo_update: rebuild the symlink and final repo, even if
+                                  no new packages were built. Set this to True
+                                  after deleting packages in the database, so
+                                  the apks get removed from the final repo. """
     session = bpo.db.session()
     running = count_running_builds(session)
     slots_available = bpo.config.const.max_parallel_build_jobs - running
@@ -83,7 +92,8 @@ def build():
     for branch in bpo.config.const.branches:
         for arch in bpo.config.const.architectures:
             slots_available -= build_arch_branch(session, slots_available,
-                                                 arch, branch)
+                                                 arch, branch,
+                                                 force_repo_update)
 
 
 def get_apks(arch, branch, cwd):

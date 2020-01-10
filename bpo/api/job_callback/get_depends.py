@@ -3,7 +3,6 @@
 
 import collections
 import json
-import os
 from flask import request
 from bpo.helpers.headerauth import header_auth
 import bpo.api
@@ -86,13 +85,6 @@ def remove_deleted_packages_db(session, payload, arch, branch):
     """ Remove all packages from the database, that have been deleted from
         pmaports.git
         :returns: True if packages were deleted, False otherwise """
-    # FIXME: this check is not good enough. We should be able to delete
-    # packages that never made it into the final repository with this code, but
-    # once they are there, they will be kept forever. In order to also delete
-    # packages that made it into the final repository, but which are no longer
-    # in the pmaports, we need a list of all packages in pmaports.git for the
-    # given arch and branch. Right now we only have the packages that need to
-    # be built.
     ret = False
 
     # Sort payload by pkgname for faster lookups
@@ -101,17 +93,11 @@ def remove_deleted_packages_db(session, payload, arch, branch):
         packages_payload[package["pkgname"]] = package
 
     # Iterate over packages in db
-    final_path = bpo.repo.final.get_path(arch, branch)
     packages_db = session.query(bpo.db.Package).filter_by(arch=arch,
                                                           branch=branch).all()
     for package_db in packages_db:
         # Keep entries, that are part of the depends payload
         if package_db.pkgname in packages_payload:
-            continue
-
-        # Keep entries, where we have a binary package
-        apk = "{}-{}.apk".format(package_db.pkgname, package_db.version)
-        if os.path.exists(final_path + "/" + apk):
             continue
 
         ret = True
@@ -139,12 +125,15 @@ def job_callback_get_depends():
 
     # Update packages in DB
     session = bpo.db.session()
+    force_repo_update = False
     for branch, payload_arch in payloads.items():
         for arch, payload in payload_arch.items():
             update_or_insert_packages(session, payload, arch, branch)
             update_package_depends(session, payload, arch, branch)
             if remove_deleted_packages_db(session, payload, arch, branch):
                 bpo.repo.wip.clean(arch, branch)
+                # Delete obsolete apks in final repo
+                force_repo_update = True
 
     bpo.ui.log("api_job_callback_get_depends", payload=payload,
                job_id=job_id)
@@ -152,5 +141,5 @@ def job_callback_get_depends():
     # Make sure that we did not miss any job status changes
     bpo.helpers.job.update_package_status()
 
-    bpo.repo.build()
+    bpo.repo.build(force_repo_update)
     return "warming up build servers..."

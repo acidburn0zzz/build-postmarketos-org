@@ -23,7 +23,7 @@ def run():
 
                 ./pmbootstrap/pmbootstrap.py \\
                     -mp """ + shlex.quote(mirror_final) + """ \\
-                    repo_missing --arch "$ARCH" \\
+                    repo_missing --built --arch "$ARCH" \\
                     > "$JSON"
                 cat "$JSON"
                 """

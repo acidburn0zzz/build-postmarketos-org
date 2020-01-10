@@ -80,7 +80,7 @@ def test_build_arch_branch(monkeypatch):
     # bpo.repo.symlink.create
     global bpo_symlink_create_called
 
-    def bpo_repo_symlink_create(arch, branch):
+    def bpo_repo_symlink_create(arch, branch, force):
         global bpo_symlink_create_called
         bpo_symlink_create_called = True
     monkeypatch.setattr(bpo.repo.symlink, "create", bpo_repo_symlink_create)

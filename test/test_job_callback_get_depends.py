@@ -5,6 +5,8 @@ import shutil
 
 import bpo_test
 import bpo_test.trigger
+import bpo.config.const
+import bpo.repo.final
 import bpo.jobs
 import bpo.repo
 
@@ -45,16 +47,8 @@ def test_callback_depends_remove_deleted_packages_db(monkeypatch):
         # Indirectly trigger bpo.get_depends.remove_deleted_packages_db()
         bpo_test.trigger.job_callback_get_depends()
 
-        # Package must still exist in db (because we have it in the final repo)
-        assert bpo.db.get_package(session, pkgname, arch, branch)
-
-        # Remove the package from the final repo
-        os.unlink(apk_path)
-
-        # Indirectly trigger bpo.get_depends.remove_deleted_packages_db()
-        bpo_test.trigger.job_callback_get_depends()
-
-        # Verify that the package was deleted from db
+        # Package must not exist in db anymore (it isn't in the payload)
+        # (apk still exists, because bpo.repo.build was monkeypatched)
         assert bpo.db.get_package(session, pkgname, arch, branch) is None
 
 
