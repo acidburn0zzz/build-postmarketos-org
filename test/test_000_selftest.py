@@ -24,20 +24,20 @@ def test_assert_package(monkeypatch):
 
     # Package not in db
     with pytest.raises(RuntimeError) as e:
-        bpo_test.assert_package("invalid-pkgname")
+        func("invalid-pkgname")
         assert str(e.value).startswith("Expected package to exist in db")
 
     # Different status
     with pytest.raises(RuntimeError) as e:
-        bpo_test.assert_package(pkgname, status="built")
+        func(pkgname, status="built")
         assert str(e.value).startswith("Expected status")
 
     # Different version
     with pytest.raises(RuntimeError) as e:
-        bpo_test.assert_package(pkgname, version="1-r5")
+        func(pkgname, version="1-r5")
         assert str(e.value).startswith("Expected version")
 
     # Package should not exist, but does
     with pytest.raises(RuntimeError) as e:
-        bpo_test.assert_package(pkgname, exists=False)
+        func(pkgname, exists=False)
         assert str(e.value).startswith("Package should NOT exist")
