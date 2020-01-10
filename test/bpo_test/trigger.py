@@ -39,7 +39,8 @@ def push_hook_gitlab():
     api_request("push-hook/gitlab", headers, payload)
 
 
-def job_callback_get_depends():
+def job_callback_get_depends(testfile="depends.master.x86_64.json",
+                             file_name="depends.master.x86_64.json"):
     """ Note that the versions must match the current versions in pmaports.git,
         otherwise the bpo server will build the current packages and complain
         later on, that the version isn't matching. """
@@ -48,8 +49,7 @@ def job_callback_get_depends():
                "X-BPO-Token": token}
 
     # master/x86_64: "hello-world", "hello-world-wrapper"
-    file_name = "depends.master.x86_64.json"
-    file_path = (bpo.config.const.top_dir + "/test/testdata/" + file_name)
+    file_path = (bpo.config.const.top_dir + "/test/testdata/" + testfile)
     files = [("file[]", (file_name, open(file_path, "rb"),
                          "application/octet-stream"))]
 
