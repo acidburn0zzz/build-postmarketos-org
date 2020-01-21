@@ -78,12 +78,18 @@ def test_depends_SLOW_40s(monkeypatch):
 
 
 @pytest.mark.timeout(45)
-def test_build_final_repo_with_two_pkgs_SLOW_45s(monkeypatch):
+def test_build_final_repo_with_two_pkgs_SLOW_45s(monkeypatch, tmpdir):
+    # Prepare job-callback/get-depends payload
+    payload = str(tmpdir) + "/payload.json"
+    overrides = {"hello-world": {"version": "1-r5"},
+                 "hello-world-wrapper": {"version": "1-r3"}}
+    bpo_test.trigger.override_depends_json(payload, overrides)
+
     with bpo_test.BPOServer():
         # Trigger job-callback/get-depends and let it run all the way until the
         # final repository is ready to be published
         monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends(testfile=payload)
 
     # WIP repo must be empty
     arch = "x86_64"
@@ -95,4 +101,4 @@ def test_build_final_repo_with_two_pkgs_SLOW_45s(monkeypatch):
     # Final repo must have both packages
     path = bpo.repo.final.get_path(arch, branch)
     apks = bpo.repo.get_apks(arch, branch, path)
-    assert(apks == ["hello-world-1-r4.apk", "hello-world-wrapper-1-r2.apk"])
+    assert(apks == ["hello-world-1-r5.apk", "hello-world-wrapper-1-r3.apk"])

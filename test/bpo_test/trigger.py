@@ -3,6 +3,7 @@
 
 import bpo.config.const
 import bpo_test
+import json
 import os
 import requests
 import sys
@@ -39,6 +40,40 @@ def push_hook_gitlab():
     api_request("push-hook/gitlab", headers, payload)
 
 
+def override_depends_json(output, overrides,
+                          testfile="depends.master.x86_64.json"):
+    """ Override values in the payload for /api/job-callback/get-depends.
+        :param output: where to store the modified json
+        :param testfile: original json in test/testdata
+        :param overrides: dict of what should be changed, e.g.
+                          {"hello-world": {"version": "1-r5"},
+                           "hello-world-wrapper": {...}} """
+    print("{}: creating from {}".format(output, testfile))
+    file_path = (bpo.config.const.top_dir + "/test/testdata/" + testfile)
+    with open(file_path, "r") as handle:
+        content = json.load(handle)
+
+    for pkgname, keys_values in overrides.items():
+        for key, value in keys_values.items():
+            found = False
+            for entry in content:
+                if entry["pkgname"] != pkgname:
+                    continue
+                found = True
+                if entry[key] != value:
+                    print("{}[{}][{}]: replaced '{}' with '{}'".format(output,
+                          pkgname, key, entry[key], value))
+                    entry[key] = value
+                break
+
+            if not found:
+                raise RuntimeError("pkgname {} not found in {}!".
+                                   format(pkgname, file_path))
+
+    with open(output, "w") as handle:
+        handle.write(json.dumps(content, indent=4))
+
+
 def job_callback_get_depends(testfile="depends.master.x86_64.json",
                              file_name="depends.master.x86_64.json"):
     """ Note that the versions must match the current versions in pmaports.git,
@@ -49,7 +84,9 @@ def job_callback_get_depends(testfile="depends.master.x86_64.json",
                "X-BPO-Token": token}
 
     # master/x86_64: "hello-world", "hello-world-wrapper"
-    file_path = (bpo.config.const.top_dir + "/test/testdata/" + testfile)
+    file_path = testfile
+    if not os.path.exists(file_path):
+        file_path = (bpo.config.const.top_dir + "/test/testdata/" + testfile)
     files = [("file[]", (file_name, open(file_path, "rb"),
                          "application/octet-stream"))]
 
