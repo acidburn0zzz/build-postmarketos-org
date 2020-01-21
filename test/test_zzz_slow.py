@@ -8,6 +8,7 @@ import pytest
 import shutil
 
 import bpo_test
+import bpo_test.const
 import bpo_test.trigger
 import bpo.config.const
 import bpo.db
@@ -81,8 +82,10 @@ def test_depends_SLOW_40s(monkeypatch):
 def test_build_final_repo_with_two_pkgs_SLOW_45s(monkeypatch, tmpdir):
     # Prepare job-callback/get-depends payload
     payload = str(tmpdir) + "/payload.json"
-    overrides = {"hello-world": {"version": "1-r5"},
-                 "hello-world-wrapper": {"version": "1-r3"}}
+    v_hello = bpo_test.const.version_hello_world
+    v_wrapper = bpo_test.const.version_hello_world_wrapper
+    overrides = {"hello-world": {"version": v_hello},
+                 "hello-world-wrapper": {"version": v_wrapper}}
     bpo_test.trigger.override_depends_json(payload, overrides)
 
     with bpo_test.BPOServer():
@@ -101,4 +104,5 @@ def test_build_final_repo_with_two_pkgs_SLOW_45s(monkeypatch, tmpdir):
     # Final repo must have both packages
     path = bpo.repo.final.get_path(arch, branch)
     apks = bpo.repo.get_apks(arch, branch, path)
-    assert(apks == ["hello-world-1-r5.apk", "hello-world-wrapper-1-r3.apk"])
+    assert(apks == ["hello-world-" + v_hello + ".apk",
+                    "hello-world-wrapper-" + v_wrapper + ".apk"])
