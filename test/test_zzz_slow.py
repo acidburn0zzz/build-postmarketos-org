@@ -48,8 +48,8 @@ def test_remove_deleted_package_SLOW_20s(monkeypatch):
         session.commit()
 
         # pmaports.git only has "hello-world", not "hello-world-wrapper"
-        testfile = "depends.master.x86_64_hello-world_only.json"
-        bpo_test.trigger.job_callback_get_depends(testfile)
+        payload = "depends.master.x86_64_hello-world_only.json"
+        bpo_test.trigger.job_callback_get_depends(payload)
 
     # Check if database was updated properly
     bpo_test.assert_package("hello-world", status="published", version="1-r4")
@@ -81,18 +81,18 @@ def test_depends_SLOW_40s(monkeypatch):
 @pytest.mark.timeout(45)
 def test_build_final_repo_with_two_pkgs_SLOW_45s(monkeypatch, tmpdir):
     # Prepare job-callback/get-depends payload
-    payload = str(tmpdir) + "/payload.json"
+    payload_path = str(tmpdir) + "/payload.json"
     v_hello = bpo_test.const.version_hello_world
     v_wrapper = bpo_test.const.version_hello_world_wrapper
     overrides = {"hello-world": {"version": v_hello},
                  "hello-world-wrapper": {"version": v_wrapper}}
-    bpo_test.trigger.override_depends_json(payload, overrides)
+    bpo_test.trigger.override_depends_json(payload_path, overrides)
 
     with bpo_test.BPOServer():
         # Trigger job-callback/get-depends and let it run all the way until the
         # final repository is ready to be published
         monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends(testfile=payload)
+        bpo_test.trigger.job_callback_get_depends(payload_path=payload_path)
 
     # WIP repo must be empty
     arch = "x86_64"
