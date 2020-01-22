@@ -49,6 +49,9 @@ def test_build_arch_branch(monkeypatch):
         create the symlink repo. Also test the case, where the repo is stuck
         (hello-world failed, but -wrapper depends on it and can't be built).
     """
+    # Disable retry_count code path (tested separately)
+    monkeypatch.setattr(bpo.config.const, "retry_count_max", 0)
+
     # *** Monkeypatch functions ***
     # bpo.jobs.build_package.run
     global build_package_run_called
@@ -149,6 +152,9 @@ def test_build_arch_branch(monkeypatch):
 
 
 def test_repo_next_package_to_build(monkeypatch):
+    # Disable retry_count code path (tested separately)
+    monkeypatch.setattr(bpo.config.const, "retry_count_max", 0)
+
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)

@@ -18,11 +18,20 @@ import bpo.repo.wip
 def next_package_to_build(session, arch, branch):
     """ :returns: pkgname """
 
+    # Get all packages for arch where status = failed and retries left
+    failed = bpo.db.PackageStatus.failed
+    retry_count_max = bpo.config.const.retry_count_max
+    result = session.query(bpo.db.Package)\
+                    .filter_by(arch=arch, branch=branch, status=failed)\
+                    .filter(bpo.db.Package.retry_count < retry_count_max)\
+                    .all()
+
     # Get all packages for arch where status = queued
     queued = bpo.db.PackageStatus.queued
-    result = session.query(bpo.db.Package).filter_by(arch=arch,
-                                                     branch=branch,
-                                                     status=queued).all()
+    result += session.query(bpo.db.Package)\
+                     .filter_by(arch=arch, branch=branch, status=queued)\
+                     .all()
+
     if not len(result):
         return None
 

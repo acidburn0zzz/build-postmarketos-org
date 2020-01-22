@@ -16,6 +16,9 @@ def test_public_update_job_status(monkeypatch):
     pkgname2 = "second-package"
     version = "1-r4"
 
+    # Disable retry_count code path (tested separately)
+    monkeypatch.setattr(bpo.config.const, "retry_count_max", 0)
+
     # Expect the bpo server to build "second-package" and exit the bpo server
     # as soon as it tries to do that
     def fake_build_package(arch, pkgname, branch):

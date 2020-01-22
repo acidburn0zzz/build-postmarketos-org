@@ -125,7 +125,7 @@ class BPOServer():
 
 
 def assert_package(pkgname, arch="x86_64", branch="master", status=None,
-                   version=None, exists=True):
+                   version=None, exists=True, retry_count=0):
     """ Verify that a package exists, and optionally, that certain attributes
         are set to an expected value. This function is called assert_* but we
         are actually raising exceptions, because we can test if they get thrown
@@ -136,7 +136,8 @@ def assert_package(pkgname, arch="x86_64", branch="master", status=None,
         :param branch: pmaports.git branch
         :param status: bpo.db.PackageStatus string, e.g. "built"
         :param version: package version, e.g. "1-r4"
-        :param exists: set to False if the package should not exist at all """
+        :param exists: set to False if the package should not exist at all
+        :param retry_count: how often build failed previously """
     session = bpo.db.session()
     package = bpo.db.get_package(session, pkgname, arch, branch)
 
@@ -158,3 +159,7 @@ def assert_package(pkgname, arch="x86_64", branch="master", status=None,
 
     if version and package.version != version:
         raise RuntimeError("Expected version {}: {}".format(version, package))
+
+    if package.retry_count != retry_count:
+        raise RuntimeError("Expected retry_count {}: {}"
+                           .format(retry_count, package))

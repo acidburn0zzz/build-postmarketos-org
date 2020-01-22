@@ -13,7 +13,7 @@ topdir = os.path.realpath(os.path.join(os.path.dirname(__file__) + "/.."))
 sys.path.insert(0, topdir)
 
 
-def api_request(path, headers, payload=None, files=None):
+def api_request(path, headers={}, payload=None, files=None):
     """ Send one HTTP request to the bpo server's API and stop the test if the
         request fails. """
     ret = requests.post("http://127.0.0.1:5000/api/" + path, headers=headers,
@@ -104,3 +104,9 @@ def job_callback_get_depends(payload="depends.master.x86_64.json",
     headers = {"X-BPO-Job-Id": "1",
                "X-BPO-Token": token}
     api_request("job-callback/get-depends", headers, files=files)
+
+
+def public_update_job_status():
+    # The bpo server doesn't read/trust the payload from sourcehut (#32), so
+    # don't bother with emulating it.
+    api_request("public/update-job-status")

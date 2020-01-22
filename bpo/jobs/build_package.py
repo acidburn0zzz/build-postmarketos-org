@@ -103,6 +103,12 @@ def run(arch, pkgname, branch):
     job_id = bpo.helpers.job.run("build_package", note, tasks, branch, arch,
                                  pkgname, package.version)
 
+    # Increase retry count
+    if package.status == bpo.db.PackageStatus.failed:
+        package.retry_count += 1
+        session.merge(package)
+        session.commit()
+
     # Change status to building and save job_id
     bpo.db.set_package_status(session, package, bpo.db.PackageStatus.building,
                               job_id)

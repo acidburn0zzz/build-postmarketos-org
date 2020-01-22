@@ -53,6 +53,7 @@ class Package(base):
     pkgname = Column(String)
     status = Column(Enum(PackageStatus))
     job_id = Column(Integer, unique=True)
+    retry_count = Column(Integer, default=0, system=True)  # [v4]
 
     # The following columns represent the latest state. We don't store the
     # history in bpo (avoids complexity, we have the git history for that).
@@ -78,11 +79,9 @@ class Package(base):
         depends = []
         for depend in self.depends:
             depends.append(depend.pkgname)
-        return "{}/{}/{}-{}.apk (pmOS depends: {})".format(self.branch,
-                                                           self.arch,
-                                                           self.pkgname,
-                                                           self.version,
-                                                           depends)
+        return "{}/{}/{}-{}.apk (pmOS depends: {}, retry_count: {})"\
+               .format(self.branch, self.arch, self.pkgname, self.version,
+                       depends, self.retry_count)
 
     def depends_built(self):
         for depend in self.depends:

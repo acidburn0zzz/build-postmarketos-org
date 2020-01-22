@@ -43,3 +43,10 @@ def upgrade():
         engine.execute("CREATE INDEX 'status'"
                        "ON 'package' (`status`)")
         version_set(3)
+
+    # Package: add column "retry_count"
+    if version_get() == 3:
+        engine.execute("ALTER TABLE 'package'"
+                       " ADD COLUMN 'retry_count'"
+                       " INT DEFAULT(0)")
+        version_set(4)

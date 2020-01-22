@@ -25,6 +25,10 @@ no_build_strict = ["gcc*-*"]
 # How many build jobs can run in parallel (across all arches)
 max_parallel_build_jobs = 1
 
+# Automatically retry build (sometimes builds fail due to network errors, so
+# just retry a few times to make it more robust) (#58)
+retry_count_max = 2
+
 # UID that is used for building packages with pmbootstrap (same as
 # chroot_user_id in pmb/config/__init__.py)
 pmbootstrap_chroot_uid_user = "12345"
