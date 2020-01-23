@@ -47,6 +47,13 @@ def count_failed_builds(session, arch, branch):
                                                    branch=branch).count()
 
 
+def set_stuck(arch, branch):
+    """ No more packages can be built, because all remaining packages in the
+        queue have already failed, or depend on packages that have failed. This
+        is an extra function, so we can hook it in the tests. """
+    bpo.ui.log("build_repo_stuck", arch=arch, branch=branch)
+
+
 def build_arch_branch(session, slots_available, arch, branch,
                       force_repo_update=False):
     """ :returns: amount of jobs that were started
@@ -61,7 +68,7 @@ def build_arch_branch(session, slots_available, arch, branch,
         if not pkgname:
             if not running:
                 if count_failed_builds(session, arch, branch):
-                    bpo.ui.log("build_repo_stuck", arch=arch, branch=branch)
+                    set_stuck(arch, branch)
                 else:
                     logging.info(branch + "/" + arch + ": WIP repo complete")
                     bpo.repo.symlink.create(arch, branch, force_repo_update)
