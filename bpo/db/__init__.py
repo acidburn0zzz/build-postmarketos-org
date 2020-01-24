@@ -42,7 +42,7 @@ class PackageStatus(enum.Enum):
 class Package(base):
     __tablename__ = "package"
 
-    # === Layout v0 === (only change in bpo.db.migrate.upgrade(), not here!)
+    # === DATABASE LAYOUT, DO NOT CHANGE! (read docs/db.md) ===
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(timezone=True),
                   server_default=sqlalchemy.sql.func.now())
@@ -64,7 +64,7 @@ class Package(base):
     Index("job_id", job_id)
     # [v1]: Index("arch-branch", Package.arch, Package.branch)
     # [v3]: Index("status", Package.status)
-    # === End of layout v0 ===
+    # === END OF DATABASE LAYOUT ===
 
     def __init__(self, arch, branch, pkgname, version,
                  status=PackageStatus.queued):
@@ -103,7 +103,7 @@ class Package(base):
 class Log(base):
     __tablename__ = "log"
 
-    # === Layout v0 === (only change in bpo.db.migrate.upgrade(), not here!)
+    # === DATABASE LAYOUT, DO NOT CHANGE! (read docs/db.md) ===
     id = Column(Integer, primary_key=True)
     date = Column(DateTime(timezone=True),
                   server_default=sqlalchemy.sql.func.now())
@@ -114,8 +114,8 @@ class Log(base):
     pkgname = Column(String)
     version = Column(String)
     job_id = Column(Integer)
-    # [v2]: commit = Column(String)
-    # === End of layout v0 ===
+    commit = Column(String, system=True)  # [v2]
+    # === END OF DATABASE LAYOUT ===
 
     def __init__(self, action, payload=None, arch=None, branch=None,
                  pkgname=None, version=None, job_id=None):
@@ -150,7 +150,7 @@ def init_relationships():
         return
     self.init_relationships_complete = True
 
-    # === Layout v0 === (only change in bpo.db.migrate.upgrade(), not here!)
+    # === DATABASE LAYOUT, DO NOT CHANGE! (read docs/db.md) ===
     # package.depends - n:n - package.required_by
     # See "Self-Referential Many-to-Many Relationship" in:
     # https://docs.sqlalchemy.org/en/13/orm/join_conditions.html
@@ -166,7 +166,7 @@ def init_relationships():
                                         secondaryjoin=secondaryjoin,
                                         order_by=self.Package.id,
                                         backref="required_by")
-    # === End of layout v0 ===
+    # === END OF DATABASE LAYOUT ===
 
 
 def init():
