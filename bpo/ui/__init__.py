@@ -131,4 +131,4 @@ def log_package(package, action):
         :param package: bpo.db.Package object """
     log(action=action, arch=package.arch, branch=package.branch,
         pkgname=package.pkgname, version=package.version,
-        job_id=package.job_id)
+        job_id=package.job_id, retry_count=package.retry_count)

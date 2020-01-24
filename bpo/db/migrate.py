@@ -50,3 +50,10 @@ def upgrade():
                        " ADD COLUMN 'retry_count'"
                        " INT DEFAULT(0)")
         version_set(4)
+
+    # Log: add column "retry_count"
+    if version_get() == 4:
+        engine.execute("ALTER TABLE 'log'"
+                       " ADD COLUMN 'retry_count'"
+                       " INT DEFAULT(0)")
+        version_set(5)
