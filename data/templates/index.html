@@ -95,6 +95,9 @@
                             new packages queued for building
                         {% elif entry.action == "job_build_package" %}
                             building package
+                            {% if entry.retry_count %}
+                                (try {{entry.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
+                            {% endif %}
                         {% elif entry.action in ["api_job_callback_build_package", "package_built"] %}
                             package built
                         {% elif entry.action == "job_sign_index" %}
@@ -103,10 +106,10 @@
                             all packages built, publishing to mirror
                         {% elif entry.action == "job_update_package_status_built" %}
                             package built
-                        {% elif entry.action == "job_update_package_status_failed" %}
+                        {% elif entry.action in ["job_update_package_status_failed",
+                                                 "job_callback_fail_build_package"] %}
                             <b>build failed</b>
-                        {% elif entry.action == "job_callback_fail_build_package" %}
-                            <b>build failed</b>
+                            (try {{entry.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
                         {% elif entry.action == "build_repo_stuck" %}
                             <b>repo is stuck</b> - fix failed builds to continue
                         {% elif entry.action == "package_removed_from_pmaports" %}
@@ -155,6 +158,7 @@
             <ul>
                 {% for package in pkgs.failed %}
                 <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+                    (try {{package.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
                     <a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
                 {% endfor %}
             </ul>
