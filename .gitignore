@@ -5,6 +5,7 @@ _repo*
 _temp
 _html_out
 bpo_sourcehut.sh
+pytest.log
 
 /public
 
