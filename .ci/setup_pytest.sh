@@ -25,4 +25,28 @@ wget -q "$pmb_url"
 tar -xf pmbootstrap-master.tar.bz2
 mv pmbootstrap-master ../pmbootstrap
 chown -R pmos:pmos ../pmbootstrap
-su pmos -c 'yes "" | ../pmbootstrap/pmbootstrap.py -q init'
+
+# Install python 3.6
+py3_url="https://github.com/chriskuehl/python3.6-debian-stretch/releases/download/v3.6.3-1-deb9u1"
+wget -q "$py3_url/python3.6_3.6.3-1.deb9u1_amd64.deb" \
+	"$py3_url/python3.6-minimal_3.6.3-1.deb9u1_amd64.deb" \
+	"$py3_url/python3.6-dev_3.6.3-1.deb9u1_amd64.deb" \
+	"$py3_url/libpython3.6_3.6.3-1.deb9u1_amd64.deb" \
+	"$py3_url/libpython3.6-minimal_3.6.3-1.deb9u1_amd64.deb" \
+	"$py3_url/libpython3.6-stdlib_3.6.3-1.deb9u1_amd64.deb" \
+	"$py3_url/libpython3.6-dev_3.6.3-1.deb9u1_amd64.deb"
+dpkg -i *.deb > /dev/null
+
+# Make pmbootstrap use python 3.6. This hack can be removed once our production
+# environment for bpo has python >= 3.6 available.
+cd ../pmbootstrap
+(echo "#!/usr/bin/python3.6"; cat pmbootstrap.py) > _
+chmod +x _
+mv _ pmbootstrap.py
+cat pmbootstrap.py
+python3 -V
+python3.6 -V
+
+# pmbootstrap init (echo: fix missing \n)
+su pmos -c 'yes "" | ./pmbootstrap.py -q init'
+echo
