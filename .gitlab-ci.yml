@@ -13,18 +13,7 @@ flake8:
 pytest:
   image: "debian:stretch"
   before_script:
-  - "apt-get update > /dev/null"
-  - "apt-get -y install git python3-pip sudo wget procps > /dev/null"
-  - "pip3 -q --disable-pip-version-check install -r requirements.txt pytest pytest-cov pytest-timeout"
-  - "mount -t binfmt_misc none /proc/sys/fs/binfmt_misc"
-  - "useradd pmos -m -s /bin/bash"
-  - "chown -R pmos:pmos ."
-  - "echo 'pmos ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
-  - "wget -q https://gitlab.com/postmarketOS/pmbootstrap/-/archive/master/pmbootstrap-master.tar.bz2"
-  - "tar -xf pmbootstrap-master.tar.bz2"
-  - "mv pmbootstrap-master ../pmbootstrap"
-  - "chown -R pmos:pmos ../pmbootstrap"
-  - "su pmos -c 'yes \"\" | ../pmbootstrap/pmbootstrap.py -q init'"
+  - ".ci/setup_pytest.sh"
   script:
   - "su pmos -c '.ci/pytest.sh'"
   artifacts:
