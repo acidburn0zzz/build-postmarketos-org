@@ -89,8 +89,8 @@ def run(arch, pkgname, branch):
             export BPO_API_ENDPOINT="build-package"
             export BPO_ARCH=""" + shlex.quote(arch) + """
             export BPO_BRANCH=""" + shlex.quote(branch) + """
-            export BPO_PAYLOAD_FILES="$(ls -1 "$(pmbootstrap/pmbootstrap.py \\
-                -q config work)/packages/$BPO_ARCH/"*.apk)"
+            packages="$(pmbootstrap/pmbootstrap.py -q config work)/packages"
+            export BPO_PAYLOAD_FILES="$(find "$packages" -name '*.apk')"
             export BPO_PAYLOAD_IS_JSON="0"
             export BPO_PKGNAME=""" + shlex.quote(pkgname) + """
             export BPO_VERSION=""" + shlex.quote(package.version) + """
