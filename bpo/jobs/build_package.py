@@ -81,9 +81,8 @@ def run(arch, pkgname, branch):
                 """ + shlex.quote(pkgname) + """
             """),
         ("checksums", """
-            cd "$(pmbootstrap/pmbootstrap.py \\
-                -q config work)"/packages/""" + shlex.quote(arch) + """
-            sha512sum *.apk
+            cd "$(pmbootstrap/pmbootstrap.py -q config work)/packages/"
+            sha512sum $(find . -name '*.apk')
         """),
         ("submit", """
             export BPO_API_ENDPOINT="build-package"
