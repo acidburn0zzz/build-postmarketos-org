@@ -95,8 +95,18 @@ class LocalJobServiceThread(threading.Thread):
             work_path="$(./pmbootstrap/pmbootstrap.py -q config work)"
             packages_path="$work_path/packages"
             repo_wip_path=""" + shlex.quote(repo_wip_path) + """
+            channel="edge"
             if [ -n "$branch" ] && [ -d "$repo_wip_path/$branch" ]; then
-                sudo cp -r "$repo_wip_path/$branch" "$packages_path"
+                if [ "$(cat "$work_path/version")" -gt 4 ]; then
+                    # pmbootstrap!1912 is merged
+                    sudo mkdir -p "$packages_path/$channel"
+                    sudo cp -r "$repo_wip_path/$branch/"* \
+                            "$packages_path/$channel"
+                else
+                    # pmbootstrap!1912 is not merged (remove this code path
+                    # when it's obsolete!)
+                    sudo cp -r "$repo_wip_path/$branch" "$packages_path"
+                fi
                 sudo chown -R """ + shlex.quote(uid) + """ "$packages_path"
             fi
 
