@@ -87,6 +87,9 @@ class LocalJobServiceThread(threading.Thread):
             cd "$temp_dir"
             cp -r """ + shlex.quote(pmaports) + """ ./pmaports
             cp -r """ + shlex.quote(pmbootstrap) + """ ./pmbootstrap
+            mkdir build.postmarketos.org
+            cp -r """ + shlex.quote(bpo.config.const.top_dir) + """/helpers \
+                    build.postmarketos.org
             echo """ + shlex.quote(token) + """ > ./token
             ./pmbootstrap/pmbootstrap.py -q -y zap -p
 

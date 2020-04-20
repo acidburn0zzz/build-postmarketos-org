@@ -96,7 +96,7 @@ def run(arch, pkgname, branch):
 
             # Always run submit.py with exec, because when running locally, the
             # current_task.sh script can change before submit.py completes!
-            exec pmaports/.build.postmarketos.org/submit.py
+            exec build.postmarketos.org/helpers/submit.py
             """)
     ])
     job_id = bpo.helpers.job.run("build_package", note, tasks, branch, arch,
