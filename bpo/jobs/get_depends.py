@@ -15,9 +15,8 @@ def run(branch):
 
     for arch in bpo.config.const.architectures:
         tasks[branch + "_" + arch] = """
-            export BRANCH=""" + shlex.quote(branch) + """
             export ARCH=""" + shlex.quote(arch) + """
-            export JSON="depends.$BRANCH.$ARCH.json"
+            export JSON="depends.$ARCH.json"
 
             ./pmbootstrap/pmbootstrap.py \\
                 -mp """ + shlex.quote(mirror_final) + """ \\
@@ -30,7 +29,7 @@ def run(branch):
         export BPO_API_ENDPOINT="get-depends"
         export BPO_ARCH=""
         export BPO_BRANCH=""" + shlex.quote(branch) + """
-        export BPO_PAYLOAD_FILES="$(ls -1 depends.*.*.json)"
+        export BPO_PAYLOAD_FILES="$(ls -1 depends.*.json)"
         export BPO_PAYLOAD_IS_JSON="0"
         export BPO_PKGNAME=""
         export BPO_VERSION=""

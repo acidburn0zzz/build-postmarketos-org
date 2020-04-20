@@ -16,10 +16,10 @@ import bpo.ui
 blueprint = bpo.api.blueprint
 
 
-def get_payload(request, arch, branch):
+def get_payload(request, arch):
     """ Get the get_depends callback specific payload from the POST-data
         and verify it. """
-    filename = "depends." + branch + "." + arch + ".json"
+    filename = "depends." + arch + ".json"
     storage = bpo.api.get_file(request, filename)
     ret = json.loads(storage.read().decode("utf-8"))
 
@@ -119,7 +119,7 @@ def job_callback_get_depends():
     branch = bpo.api.get_branch(request)
     payloads = collections.OrderedDict()
     for arch in bpo.config.const.architectures:
-        payloads[arch] = get_payload(request, arch, branch)
+        payloads[arch] = get_payload(request, arch)
 
     # Update packages in DB
     session = bpo.db.session()

@@ -40,8 +40,7 @@ def push_hook_gitlab():
     api_request("push-hook/gitlab", headers, payload)
 
 
-def override_depends_json(output, overrides,
-                          testfile="depends.master.x86_64.json"):
+def override_depends_json(output, overrides, testfile="depends.x86_64.json"):
     """ Override values in the payload for /api/job-callback/get-depends.
         :param output: where to store the modified json
         :param testfile: original json in test/testdata
@@ -74,7 +73,7 @@ def override_depends_json(output, overrides,
         handle.write(json.dumps(content, indent=4))
 
 
-def job_callback_get_depends(branch, payload="depends.master.x86_64.json",
+def job_callback_get_depends(branch, payload="depends.x86_64.json",
                              payload_path=None):
     """ Call job-callback/get-depends with a supplied payload file for
         master/x86_64 and empty lists for all other arches.
@@ -87,7 +86,7 @@ def job_callback_get_depends(branch, payload="depends.master.x86_64.json",
         payload_path = (bpo.config.const.top_dir + "/test/testdata/" + payload)
 
     # master/x86_64: supplied payload file
-    upload_name = "depends.master.x86_64.json"
+    upload_name = "depends.x86_64.json"
     files = [("file[]", (upload_name, open(payload_path, "rb"),
                          "application/octet-stream"))]
 
@@ -96,7 +95,7 @@ def job_callback_get_depends(branch, payload="depends.master.x86_64.json",
     for arch in bpo.config.const.architectures:
         if arch == "x86_64":
             continue
-        upload_name = "depends." + branch + "." + arch + ".json"
+        upload_name = "depends." + arch + ".json"
         files.append(("file[]", (upload_name, open(payload_path, "rb"),
                                  "application/octet-stream")))
 

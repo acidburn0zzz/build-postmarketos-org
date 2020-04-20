@@ -48,7 +48,7 @@ def test_remove_deleted_package_SLOW_20s(monkeypatch):
         session.commit()
 
         # pmaports.git only has "hello-world", not "hello-world-wrapper"
-        payload = "depends.master.x86_64_hello-world_only.json"
+        payload = "depends.x86_64_hello-world_only.json"
         bpo_test.trigger.job_callback_get_depends("master", payload)
 
     # Check if database was updated properly
