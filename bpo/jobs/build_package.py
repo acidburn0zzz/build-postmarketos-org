@@ -66,7 +66,6 @@ def run(arch, pkgname, branch):
             echo -n '""" + pubkey + """' \
                 > pmbootstrap/pmb/data/keys/wip.rsa.pub
             """),
-        # FIXME: checkout branch
         ("pmbootstrap_build", """
             ./pmbootstrap/pmbootstrap.py \\
                 """ + mirrors + """ \\

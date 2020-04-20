@@ -67,8 +67,14 @@ def get_manifest(name, tasks, branch):
         tasks:
         - bpo_setup: |
            export BPO_JOB_ID="$JOB_ID"
-           yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
 
+           # Switch branch and release channel
+           mkdir -p ~/.config
+           echo "[pmbootstrap]\\nis_default_channel = False\\n" \\
+               > ~/.config/pmbootstrap.cfg
+           git -C pmaports checkout """ + shlex.quote(branch) + """
+
+           yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
            sudo modprobe binfmt_misc
            sudo mount -t binfmt_misc none /proc/sys/fs/binfmt_misc
     """

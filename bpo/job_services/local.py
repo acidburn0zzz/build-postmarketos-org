@@ -32,7 +32,7 @@ class LocalJobServiceThread(threading.Thread):
         logging.info("Job " + name + " started, logging to: " + self.log_path)
 
         # Begin with setup task
-        self.tasks["setup"] = self.setup_task()
+        self.tasks["setup"] = self.setup_task(branch)
         self.tasks.move_to_end("setup", last=False)
 
     def run_print(self, command):
@@ -57,7 +57,7 @@ class LocalJobServiceThread(threading.Thread):
             requests.post(url, headers=headers)
             raise
 
-    def setup_task(self):
+    def setup_task(self, branch):
         """ Setup temp_path with copy of pmaports.git/pmbootstrap.git and
             remove locally built packages.
 
@@ -93,12 +93,15 @@ class LocalJobServiceThread(threading.Thread):
             echo """ + shlex.quote(token) + """ > ./token
             ./pmbootstrap/pmbootstrap.py -q -y zap -p
 
+            # Switch branch and release channel
+            git -C pmaports checkout """ + shlex.quote(branch) + """
+            channel="$(grep "^channel=" pmaports/pmaports.cfg | cut -d= -f 2)"
+
             # Copy WIP repo
             branch=""" + shlex.quote(self.branch) + """
             work_path="$(./pmbootstrap/pmbootstrap.py -q config work)"
             packages_path="$work_path/packages"
             repo_wip_path=""" + shlex.quote(repo_wip_path) + """
-            channel="edge"
             if [ -n "$branch" ] && [ -d "$repo_wip_path/$branch" ]; then
                 if [ "$(cat "$work_path/version")" -gt 4 ]; then
                     # pmbootstrap!1912 is merged
