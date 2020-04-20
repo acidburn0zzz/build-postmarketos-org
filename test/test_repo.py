@@ -11,7 +11,7 @@ def test_repo_is_apk_origin_in_db(monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
     # Origin exists in db with same version
     func = bpo.repo.is_apk_origin_in_db
@@ -92,7 +92,7 @@ def test_build_arch_branch(monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
     # Function and arguments variables
     session = bpo.db.session()
@@ -158,7 +158,7 @@ def test_repo_next_package_to_build(monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
     session = bpo.db.session()
     func = bpo.repo.next_package_to_build

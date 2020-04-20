@@ -24,7 +24,7 @@ def test_callback_fail_build_package(monkeypatch):
                             bpo_test.stop_server)
 
         # Fill db and try to build hello-world
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
     # Check package status
     bpo_test.assert_package("hello-world", status="failed")

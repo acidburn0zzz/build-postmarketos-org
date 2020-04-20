@@ -46,6 +46,6 @@ def push_hook_gitlab():
     bpo.ui.log("api_push_hook_gitlab", payload=payload, branch=branch)
 
     # Run depends job for all arches
-    bpo.jobs.get_depends.run()
+    bpo.jobs.get_depends.run(branch)
 
     return "Triggered!"

@@ -20,7 +20,7 @@ def test_remove_broken_apk_db(tmpdir, monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
     func = bpo.repo.status.remove_broken_apk
     apk_path = str(tmpdir) + "/delete-me.apk"
@@ -95,7 +95,7 @@ def test_fix_disk_vs_db(monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
     # Final repo: add up-to-date hello-world
     final_path = bpo.repo.final.get_path(arch, branch)
@@ -142,7 +142,7 @@ def test_fix_db_vs_disk_existing_apks(monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
     # Put hello-world-wrapper apk in wip repo, set to built
     wip_path = bpo.repo.wip.get_path(arch, branch)
@@ -175,7 +175,7 @@ def test_fix_db_vs_disk_missing_apks(monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
     # Everything is queued without existing apks -> no status change
     func(arch, branch)

@@ -49,7 +49,7 @@ def test_remove_deleted_package_SLOW_20s(monkeypatch):
 
         # pmaports.git only has "hello-world", not "hello-world-wrapper"
         payload = "depends.master.x86_64_hello-world_only.json"
-        bpo_test.trigger.job_callback_get_depends(payload)
+        bpo_test.trigger.job_callback_get_depends("master", payload)
 
     # Check if database was updated properly
     bpo_test.assert_package("hello-world", status="published", version="1-r4")
@@ -92,7 +92,8 @@ def test_build_final_repo_with_two_pkgs_SLOW_60s(monkeypatch, tmpdir):
         # Trigger job-callback/get-depends and let it run all the way until the
         # final repository is ready to be published
         monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends(payload_path=payload_path)
+        bpo_test.trigger.job_callback_get_depends("master",
+                                                  payload_path=payload_path)
 
     # WIP repo must be empty
     arch = "x86_64"

@@ -7,31 +7,29 @@ import shlex
 import bpo.helpers.job
 
 
-def run():
+def run(branch):
     tasks = collections.OrderedDict()
-    for branch in bpo.config.const.branches:
-        mirror_final = bpo.config.args.mirror
-        if mirror_final:
-            mirror_final += "/" + branch
+    mirror_final = bpo.config.args.mirror
+    if mirror_final:
+        mirror_final += "/" + branch
 
-        # FIXME: checkout proper pmaports branch (currently always master)
-        for arch in bpo.config.const.architectures:
-            tasks[branch + "_" + arch] = """
-                export BRANCH=""" + shlex.quote(branch) + """
-                export ARCH=""" + shlex.quote(arch) + """
-                export JSON="depends.$BRANCH.$ARCH.json"
+    for arch in bpo.config.const.architectures:
+        tasks[branch + "_" + arch] = """
+            export BRANCH=""" + shlex.quote(branch) + """
+            export ARCH=""" + shlex.quote(arch) + """
+            export JSON="depends.$BRANCH.$ARCH.json"
 
-                ./pmbootstrap/pmbootstrap.py \\
-                    -mp """ + shlex.quote(mirror_final) + """ \\
-                    repo_missing --built --arch "$ARCH" \\
-                    > "$JSON"
-                cat "$JSON"
-                """
+            ./pmbootstrap/pmbootstrap.py \\
+                -mp """ + shlex.quote(mirror_final) + """ \\
+                repo_missing --built --arch "$ARCH" \\
+                > "$JSON"
+            cat "$JSON"
+            """
 
     tasks["submit"] = """
         export BPO_API_ENDPOINT="get-depends"
         export BPO_ARCH=""
-        export BPO_BRANCH=""
+        export BPO_BRANCH=""" + shlex.quote(branch) + """
         export BPO_PAYLOAD_FILES="$(ls -1 depends.*.*.json)"
         export BPO_PAYLOAD_IS_JSON="0"
         export BPO_PKGNAME=""
@@ -43,4 +41,4 @@ def run():
         """
 
     note = "Parse packages and dependencies from pmaports.git"
-    bpo.helpers.job.run("get_depends", note, tasks)
+    bpo.helpers.job.run("get_depends", note, tasks, branch)

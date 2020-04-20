@@ -74,10 +74,11 @@ def override_depends_json(output, overrides,
         handle.write(json.dumps(content, indent=4))
 
 
-def job_callback_get_depends(payload="depends.master.x86_64.json",
+def job_callback_get_depends(branch, payload="depends.master.x86_64.json",
                              payload_path=None):
     """ Call job-callback/get-depends with a supplied payload file for
         master/x86_64 and empty lists for all other arches.
+        :param branch: pmaports.git branch
         :param payload: path to payload in test/testdata
         :param payload_path: full path to payload. If set, this overrides the
                              other payload argument. Use this with a file
@@ -90,19 +91,19 @@ def job_callback_get_depends(payload="depends.master.x86_64.json",
     files = [("file[]", (upload_name, open(payload_path, "rb"),
                          "application/octet-stream"))]
 
-    # Other branches and arches: no packages (simplifies tests)
+    # Other arches: no packages (simplifies tests)
     payload_path = bpo.config.const.top_dir + "/test/testdata/empty_list.json"
-    for branch in bpo.config.const.branches:
-        for arch in bpo.config.const.architectures:
-            if branch == "master" and arch == "x86_64":
-                continue
-            upload_name = "depends." + branch + "." + arch + ".json"
-            files.append(("file[]", (upload_name, open(payload_path, "rb"),
-                                     "application/octet-stream")))
+    for arch in bpo.config.const.architectures:
+        if arch == "x86_64":
+            continue
+        upload_name = "depends." + branch + "." + arch + ".json"
+        files.append(("file[]", (upload_name, open(payload_path, "rb"),
+                                 "application/octet-stream")))
 
     token = bpo.config.const.test_tokens["job_callback"]
     headers = {"X-BPO-Job-Id": "1",
-               "X-BPO-Token": token}
+               "X-BPO-Token": token,
+               "X-BPO-Branch": branch}
     api_request("job-callback/get-depends", headers, files=files)
 
 

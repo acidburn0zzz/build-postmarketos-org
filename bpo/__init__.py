@@ -61,7 +61,8 @@ def main(return_app=False):
 
     # Fill up queue with packages to build
     if bpo.config.args.auto_get_depends:
-        bpo.jobs.get_depends.run()
+        for branch in bpo.config.const.branches:
+            bpo.jobs.get_depends.run(branch)
 
     # Restart is complete
     bpo.ui.log("restart_done")

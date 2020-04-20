@@ -26,7 +26,7 @@ def test_callback_depends_remove_deleted_packages_db(monkeypatch):
 
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
         # Insert a new package, that does not exist in the depends payload
         session = bpo.db.session()
@@ -45,7 +45,7 @@ def test_callback_depends_remove_deleted_packages_db(monkeypatch):
         shutil.copy(__file__, apk_path)
 
         # Indirectly trigger bpo.get_depends.remove_deleted_packages_db()
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
         # Package must not exist in db anymore (it isn't in the payload)
         # (apk still exists, because bpo.repo.build was monkeypatched)
@@ -67,7 +67,7 @@ def test_callback_depends_update_package(monkeypatch):
 
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
         # hello-world: decrease version, change status to failed
         session = bpo.db.session()
@@ -81,7 +81,7 @@ def test_callback_depends_update_package(monkeypatch):
         session.commit()
 
         # Fill the db with "hello-world", "hello-world-wrapper" again
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
         bpo_test.assert_package(pkgname, status="queued", version="1-r4")
 
 
@@ -89,7 +89,7 @@ def test_callback_depends_to_nop(monkeypatch):
     with bpo_test.BPOServer():
         # Trigger job-callback/get-depends
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
 
 
 # FIXME: test all kinds of errors, e.g. invalid push id

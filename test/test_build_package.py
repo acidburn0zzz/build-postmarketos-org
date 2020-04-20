@@ -49,7 +49,7 @@ def test_retry_build(monkeypatch):
         # Fill the db with "hello-world", "hello-world-wrapper" and let the bpo
         # server start building "hello-world". The actual building is prevented
         # in this test by the job_run_fake() override above.
-        bpo_test.trigger.job_callback_get_depends()
+        bpo_test.trigger.job_callback_get_depends("master")
         bpo_test.assert_package(pkgname, status="building", retry_count=0)
         assert job_run_fake_count == 1
 

@@ -116,26 +116,23 @@ def remove_deleted_packages_db(session, payload, arch, branch):
 def job_callback_get_depends():
     # Parse input data
     job_id = bpo.api.get_header(request, "Job-Id")
+    branch = bpo.api.get_branch(request)
     payloads = collections.OrderedDict()
-    for branch in bpo.config.const.branches:
-        if branch not in payloads:
-            payloads[branch] = collections.OrderedDict()
-        for arch in bpo.config.const.architectures:
-            payloads[branch][arch] = get_payload(request, arch, branch)
+    for arch in bpo.config.const.architectures:
+        payloads[arch] = get_payload(request, arch, branch)
 
     # Update packages in DB
     session = bpo.db.session()
     force_repo_update = False
-    for branch, payload_arch in payloads.items():
-        for arch, payload in payload_arch.items():
-            update_or_insert_packages(session, payload, arch, branch)
-            update_package_depends(session, payload, arch, branch)
-            if remove_deleted_packages_db(session, payload, arch, branch):
-                bpo.repo.wip.clean(arch, branch)
-                # Delete obsolete apks in final repo
-                force_repo_update = True
+    for arch, payload in payloads.items():
+        update_or_insert_packages(session, payload, arch, branch)
+        update_package_depends(session, payload, arch, branch)
+        if remove_deleted_packages_db(session, payload, arch, branch):
+            bpo.repo.wip.clean(arch, branch)
+            # Delete obsolete apks in final repo
+            force_repo_update = True
 
-    bpo.ui.log("api_job_callback_get_depends", payload=payload,
+    bpo.ui.log("api_job_callback_get_depends", payload=payload, branch=branch,
                job_id=job_id)
 
     # Make sure that we did not miss any job status changes
