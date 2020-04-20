@@ -59,9 +59,6 @@ def run(name, note, tasks, branch=None, arch=None, pkgname=None,
                                                 note, name))
     js = get_job_service()
 
-    # TODO: some database foo, kill existing job etc.
-    # TODO: add timeout for the job, and retries?
-
     # Format input tasks
     tasks_formatted = collections.OrderedDict()
     for task, script in tasks.items():
