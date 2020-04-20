@@ -108,17 +108,18 @@ We have plenty of subdirs in pmaports.git (cross, device, firmware, hybris, kde,
 * Run the pmaports.git trigger from gitlab again, then the bpo server will re-calculate the missing packages and update the status of the jobs that are supposed to be running right now.
 * If that does not help, run the build.postmarketos.org.git trigger again from gitlab, to restart the bpo server.
 
-### How to run the flake8 check locally?
+### How to run the flake8/vermin checks locally?
 
 Run it once:
 ```
-$ pip install flake8
+$ pip install flake8 vermin
 $ .ci/flake8.sh
+$ .ci/vermin.sh
 ```
 
 Run it before every git commit (recommended):
 ```
-$ ln -s .ci/flake8.sh .git/hooks/pre-commit
+$ ln -s ../../helpers/pre-commit.sh .git/hooks/pre-commit
 ```
 
 ### How to trigger a sign_index job for development?
