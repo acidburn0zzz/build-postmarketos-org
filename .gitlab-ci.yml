@@ -7,6 +7,14 @@ flake8:
   script:
   - ".ci/flake8.sh"
 
+vermin:
+  image: "alpine:latest"
+  before_script:
+  - "apk -q add py3-pip"
+  - "pip3 -q --disable-pip-version-check install vermin"
+  script:
+  - ".ci/vermin.sh"
+
 # Run pytest testsuite with debian stretch (python 3.5), which matches the
 # production environment. Redirect apt-get stdout to /dev/null, because -qq
 # isn't quiet enough (https://askubuntu.com/a/258226).
