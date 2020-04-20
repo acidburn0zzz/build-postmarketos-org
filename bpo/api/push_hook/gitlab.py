@@ -26,7 +26,6 @@ def get_branch(payload):
     # Ignore non-configured branches
     branch = payload["ref"][len(prefix):]
     if branch not in bpo.config.const.branches:
-        # FIXME: write log message
         logging.info("NOTE: ignoring push for branch: " + branch)
         return None
     return branch
@@ -40,7 +39,6 @@ def push_hook_gitlab():
     if not branch:
         return "Branch isn't relevant, doing nothing"
 
-    # FIXME: move to own function like get_branch and simply skip when unknown
     if payload["object_kind"] != "push":
         abort(400, "Unknown object_kind")
 
