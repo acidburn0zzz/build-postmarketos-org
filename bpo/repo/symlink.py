@@ -64,12 +64,12 @@ def link_to_all_packages(arch, branch, force=False):
 
     # Link to everything in WIP repo
     os.makedirs(repo_symlink, exist_ok=True)
-    for apk in bpo.repo.get_apks(arch, branch, repo_wip):
+    for apk in bpo.repo.get_apks(repo_wip):
         apk_wip = os.path.realpath(repo_wip + "/" + apk)
         os.symlink(apk_wip, repo_symlink + "/" + apk)
 
     # Link to relevant packages from final repo
-    for apk in bpo.repo.get_apks(arch, branch, repo_final):
+    for apk in bpo.repo.get_apks(repo_final):
         apk_final = os.path.realpath(repo_final + "/" + apk)
         if bpo.repo.is_apk_origin_in_db(session, arch, branch, apk_final):
             os.symlink(apk_final, repo_symlink + "/" + apk)
@@ -90,7 +90,7 @@ def sign(arch, branch):
 def create(arch, branch, force=False):
     # Skip if WIP repo is empty
     repo_wip_path = bpo.repo.wip.get_path(arch, branch)
-    if not force and not len(bpo.repo.get_apks(arch, branch, repo_wip_path)):
+    if not force and not len(bpo.repo.get_apks(repo_wip_path)):
         logging.debug("{}/{}: empty WIP repo, skipping creation of symlink"
                       " repo".format(branch, arch))
         return

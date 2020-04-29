@@ -33,14 +33,14 @@ def test_repo_wip_clean(monkeypatch):
     os.makedirs(wip_path)
     shutil.copy(apk_path, wip_path)
     func(arch, branch)
-    assert bpo.repo.get_apks(arch, branch, wip_path) == [apk]
+    assert bpo.repo.get_apks(wip_path) == [apk]
 
     # 2. apk is in final repo, origin is in db => remove apk
     os.makedirs(final_path)
     shutil.copy(apk_path, wip_path)
     shutil.copy(apk_path, final_path)
     func(arch, branch)
-    assert bpo.repo.get_apks(arch, branch, wip_path) == []
+    assert bpo.repo.get_apks(wip_path) == []
 
     # Delete origin from db
     session = bpo.db.session()
@@ -53,10 +53,10 @@ def test_repo_wip_clean(monkeypatch):
     # 3. apk is in final repo, origin is not in db => remove apk
     shutil.copy(apk_path, wip_path)
     func(arch, branch)
-    assert bpo.repo.get_apks(arch, branch, wip_path) == []
+    assert bpo.repo.get_apks(wip_path) == []
 
     # 4. apk is not in final repo, origin is not in db => remove apk
     os.unlink(final_path + "/" + apk)
     shutil.copy(apk_path, wip_path)
     func(arch, branch)
-    assert bpo.repo.get_apks(arch, branch, wip_path) == []
+    assert bpo.repo.get_apks(wip_path) == []

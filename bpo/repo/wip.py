@@ -56,7 +56,7 @@ def clean(arch, branch):
     path_repo_final = bpo.repo.final.get_path(arch, branch)
     session = bpo.db.session()
 
-    for apk in bpo.repo.get_apks(arch, branch, path_repo_wip):
+    for apk in bpo.repo.get_apks(path_repo_wip):
         apk_wip = path_repo_wip + "/" + apk
         # Find in final repo
         if os.path.exists(path_repo_final + "/" + apk):

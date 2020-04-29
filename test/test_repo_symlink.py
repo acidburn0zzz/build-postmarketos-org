@@ -49,7 +49,7 @@ def test_repo_symlink_link_to_all_packages(monkeypatch):
     shutil.copy(apk_hello_wrapper, wip_path)
     shutil.copy(apk_hello_wrapper_subpkg, wip_path)
     func(arch, branch)
-    assert bpo.repo.get_apks(arch, branch, symlink_path) == expected_symlinks
+    assert bpo.repo.get_apks(symlink_path) == expected_symlinks
     assert not os.path.exists(wip_path + "/" + apk_hello_outdated)
 
     # 3. Outdated apk in final repo, rest in WIP repo
@@ -57,7 +57,7 @@ def test_repo_symlink_link_to_all_packages(monkeypatch):
     os.makedirs(final_path)
     shutil.copy(apk_hello_outdated, final_path)
     func(arch, branch)
-    assert bpo.repo.get_apks(arch, branch, symlink_path) == expected_symlinks
+    assert bpo.repo.get_apks(symlink_path) == expected_symlinks
 
     # 4. Outdated apk and wrapper + subpkg in final repo, hello in WIP repo
     shutil.rmtree(symlink_path)
@@ -67,4 +67,4 @@ def test_repo_symlink_link_to_all_packages(monkeypatch):
     shutil.copy(apk_hello_wrapper, final_path)
     shutil.copy(apk_hello_wrapper_subpkg, final_path)
     func(arch, branch)
-    assert bpo.repo.get_apks(arch, branch, symlink_path) == expected_symlinks
+    assert bpo.repo.get_apks(symlink_path) == expected_symlinks

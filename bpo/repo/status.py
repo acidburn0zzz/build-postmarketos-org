@@ -56,7 +56,7 @@ def fix_disk_vs_db(arch, branch, path, status, is_wip=False):
         :param is_wip: set to True when looking at the wip repo, False when
                        looking at the final repo. """
     session = bpo.db.session()
-    apks = bpo.repo.get_apks(arch, branch, path)
+    apks = bpo.repo.get_apks(path)
     for apk in apks:
         metadata = bpo.helpers.apk.get_metadata(path + "/" + apk)
         pkgname = metadata["origin"]

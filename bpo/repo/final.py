@@ -21,7 +21,7 @@ def copy_new_apks(arch, branch):
 
     os.makedirs(repo_final_path, exist_ok=True)
 
-    for apk in bpo.repo.get_apks(arch, branch, repo_symlink_path):
+    for apk in bpo.repo.get_apks(repo_symlink_path):
         src = os.path.realpath(repo_symlink_path + "/" + apk)
         dst = os.path.realpath(repo_final_path + "/" + apk)
         if src == dst:
@@ -43,7 +43,7 @@ def delete_outdated_apks(arch, branch):
     repo_final_path = get_path(arch, branch)
     repo_symlink_path = bpo.repo.symlink.get_path(arch, branch)
 
-    for apk in bpo.repo.get_apks(arch, branch, repo_final_path):
+    for apk in bpo.repo.get_apks(repo_final_path):
         if os.path.exists(repo_symlink_path + "/" + apk):
             continue
         logging.info(apk + ": does not exist in symlink repo, removing")

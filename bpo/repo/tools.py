@@ -71,5 +71,5 @@ def index(arch, branch, repo_name, cwd):
 
     cmd = ["apk.static", "-q", "index", "--output", "APKINDEX.tar.gz",
            "--rewrite-arch", arch,
-           "--description", description] + bpo.repo.get_apks(arch, branch, cwd)
+           "--description", description] + bpo.repo.get_apks(cwd)
     bpo.repo.tools.run(arch, branch, repo_name, cwd, cmd)

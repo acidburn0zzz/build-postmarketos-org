@@ -112,7 +112,7 @@ def build(force_repo_update=False):
                                                  force_repo_update)
 
 
-def get_apks(arch, branch, cwd):
+def get_apks(cwd):
     """ Get a sorted list of all apks in a repository.
         :param cwd: path to the repository """
     ret = []
