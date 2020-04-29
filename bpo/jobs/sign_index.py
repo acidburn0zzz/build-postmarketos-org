@@ -27,6 +27,7 @@ def run(arch, branch):
             """),
         ("sign", """
             ./pmbootstrap/pmbootstrap.py \\
+                --aports=$PWD/pmaports \\
                 --ccache-disable \\
                 build_init
             work_dir="$(./pmbootstrap/pmbootstrap.py -q config work)"
@@ -35,6 +36,7 @@ def run(arch, branch):
             sudo cp .final.rsa "$chroot_target"/""" + shlex.quote(rsa) + """
             sudo chown -R """ + shlex.quote(uid) + """ "$chroot_target"
             ./pmbootstrap/pmbootstrap.py \\
+                --aports=$PWD/pmaports \\
                 --details-to-stdout \\
                 chroot --user -- \\
                     abuild-sign \\
