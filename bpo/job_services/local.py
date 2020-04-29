@@ -153,7 +153,7 @@ class LocalJobServiceThread(threading.Thread):
 
 class LocalJobService(JobService):
 
-    def run_job(self, name, note, tasks, branch="master"):
+    def run_job(self, name, note, tasks, branch):
         thread = LocalJobServiceThread(name=name, tasks=tasks, branch=branch)
         thread.start()
         return thread.job_id
