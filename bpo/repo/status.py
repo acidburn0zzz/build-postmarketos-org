@@ -72,7 +72,11 @@ def fix_disk_vs_db(arch, branch, path, status, is_wip=False):
             if is_wip:
                 os.unlink(path + "/" + apk)
                 logging.warning("Removing obsolete wip package: " + apk)
-                bpo.ui.log_package(package, "obsolete_wip_package")
+                if package:
+                    bpo.ui.log_package(package, "obsolete_wip_package")
+                else:
+                    bpo.ui.log(action="obsolete_wip_package", arch=arch,
+                               branch=branch, pkgname=pkgname, version=version)
             continue
         if package.status != status:
             bpo.db.set_package_status(session, package, status)

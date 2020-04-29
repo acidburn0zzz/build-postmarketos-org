@@ -122,6 +122,15 @@ def test_fix_disk_vs_db(monkeypatch):
     assert(not os.path.exists(wip_path + "/hello-world-1-r3.apk"))
     assert(os.path.exists(wip_path + "/hello-world-wrapper-1-r2.apk"))
 
+    # Remove hello-world-wrapper from db; remove apk
+    session = bpo.db.session()
+    package_db = bpo.db.get_package(session, "hello-world-wrapper", arch,
+                                    branch)
+    session.delete(package_db)
+    session.commit()
+    func(arch, branch, wip_path, bpo.db.PackageStatus.built, True)
+    assert os.path.exists(wip_path + "/hello-world-wrapper-1-r2.apk") is False
+
     # Remove broken apk
     apk_path = final_path + "/hello-world-1-r4.apk"
     monkeypatch.setattr(bpo.repo.status, "is_apk_broken", bpo_test.true)
