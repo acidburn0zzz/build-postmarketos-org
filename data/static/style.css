@@ -69,8 +69,18 @@ body {
 
 .badge {
     grid-area: badge;
-    height: 30pt;
     margin-right: 30px;
+}
+.badge img {
+    height: 30pt;
+}
+.badge .star {
+    color: lightgray;
+    font-size: 45pt;
+    height: 30pt;
+}
+.badge .star:hover {
+    color: white;
 }
 
 /* HEADER: LOGO GRID */

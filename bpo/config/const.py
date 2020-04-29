@@ -16,6 +16,13 @@ architectures = ["x86_64", "armhf", "aarch64", "armv7", "x86"]
 # Which pmaports.git branches will be built (e.g. "master", "v20.05", ...)
 branches = ["master"]
 
+# WIP branches that are building for the first time should be listed here, so
+# they are ignored for the big overall status badge. We don't want errors from
+# these to overshadow errors from branches that are used in production. When
+# this is activated, a big star (*) is displayed next to the badge, and it
+# links to a note that is shown in the "failed" section.
+branches_ignore_errors = []
+
 # Omit the --strict argument for pmbootstrap build for these packages (fnmatch)
 # gcc*-*: https://gitlab.alpinelinux.org/alpine/apk-tools/issues/10649
 #         (fix is merged to abuild master, not yet in latest abuild release)

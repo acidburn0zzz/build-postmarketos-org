@@ -12,7 +12,12 @@
                 <img src="static/logo.svg">
                 <span>postmarketOS</span>
             </a>
-            <img src="badge.svg" class="badge">
+	    <div class="badge">
+		<img src="badge.svg">
+            {% if bpo.config.const.branches_ignore_errors %}
+                <a href="#failed" class="star">*</a>
+            {% endif %}
+	    </div>
             <span class="nav header-bottom">
                 <a href="https://postmarketos.org">about</a>
                 <a href="http://pkgs.postmarketos.org">package search</a>
@@ -155,6 +160,11 @@
 	    <a class="h" name="failed" href="#failed">
                 Failed ({{ pkgs.failed.count() }})
 	    </a>
+            {% if bpo.config.const.branches_ignore_errors %}
+            <p style="font-size: 80%; font-style: italic">
+              Note: failures on branch(es) {{", ".join(bpo.config.const.branches_ignore_errors)}} are ignored for the overall status badge on the top right, as these branch(es) are building for the first time and are not used by anybody. The badge is supposed to display the status for the branches that we are actually using.
+            </p>
+            {% endif %}
             <ul>
                 {% for package in pkgs.failed %}
                 <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk

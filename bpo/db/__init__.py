@@ -210,6 +210,19 @@ def get_all_packages_by_status(session):
     return ret
 
 
+def get_failed_packages_count_relevant(session):
+    """ :returns: count of failed packages, without the branches where we are
+                  building for the first time. """
+    relevant = []
+    for branch in bpo.config.const.branches:
+        if branch not in bpo.config.const.branches_ignore_errors:
+            relevant += [branch]
+
+    return session.query(bpo.db.Package).\
+        filter_by(status=bpo.db.PackageStatus.failed).\
+        filter(bpo.db.Package.branch.in_(relevant)).count()
+
+
 def set_package_status(session, package, status, job_id=None):
     """ :param package: bpo.db.Package object
         :param status: bpo.db.PackageStatus value """

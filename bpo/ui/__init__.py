@@ -22,7 +22,7 @@ def update_badge(session, pkgs):
         :returns: one of: "up-to-date", "failed", "building" """
     # Get new name
     new = "up-to-date"
-    if pkgs["failed"].count():
+    if bpo.db.get_failed_packages_count_relevant(session):
         new = "failed"
     elif pkgs["building"].count() or pkgs["queued"].count():
         new = "building"
