@@ -51,9 +51,7 @@ def run(name, note, tasks, branch=None, arch=None, pkgname=None,
         version=None):
     """ :param note: what to send to the job service as description, rendered
                      as markdown in sourcehut
-        :param branch: of the build package job, so we can copy the right
-                       subdir of the WIP repository to the local packages dir
-                       (relevant for running with local job service only).
+        :param branch: of pmaports to check out before running the job
         :returns: ID of the generated job, as passed by the backend """
     logging.info("[{}] Run job: {} ({})".format(bpo.config.args.job_service,
                                                 note, name))
