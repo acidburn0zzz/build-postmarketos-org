@@ -13,8 +13,7 @@ repo_wip_keys = top_dir + "/_repo_wip_keys"
 
 architectures = ["x86_64", "armhf", "aarch64", "armv7", "x86"]
 
-# Which pmaports.git branches will be built. The idea is to add branches based
-# on Alpine's aports.git branches at some point (v3.10, v3.9, ...).
+# Which pmaports.git branches will be built (e.g. "master", "v20.05", ...)
 branches = ["master"]
 
 # Omit the --strict argument for pmbootstrap build for these packages (fnmatch)
