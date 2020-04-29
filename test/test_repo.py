@@ -65,20 +65,14 @@ def test_build_arch_branch(monkeypatch):
         return True
     monkeypatch.setattr(bpo.jobs.build_package, "run", build_package_run)
 
-    # bpo.ui.log
-    global expected_log_action
-    global expected_log_action_found
-    expected_log_action = "build_repo_stuck"
-    expected_log_action_found = False
+    # bpo.repo.set_stuck
+    global build_repo_stuck
+    build_repo_stuck = False
 
-    def bpo_ui_log(action, *args, **kwargs):
-        global expected_log_action
-        global expected_log_action_found
-        print("bpo_ui_log: args: {}, kwargs: {}".format(str(args),
-                                                        str(kwargs)))
-        if action == expected_log_action:
-            expected_log_action_found = True
-    monkeypatch.setattr(bpo.ui, "log", bpo_ui_log)
+    def bpo_repo_set_stuck(arch, branch):
+        global build_repo_stuck
+        build_repo_stuck = True
+    monkeypatch.setattr(bpo.repo, "set_stuck", bpo_repo_set_stuck)
 
     # bpo.repo.symlink.create
     global bpo_symlink_create_called
@@ -107,7 +101,7 @@ def test_build_arch_branch(monkeypatch):
     expected_pkgname = "hello-world"
     assert(func(session, slots_available, arch, branch) == 1)
     assert(build_package_run_called)
-    assert(expected_log_action_found is False)
+    assert(build_repo_stuck is False)
 
     # Change "hello-world" to built
     package = bpo.db.get_package(session, "hello-world", arch, branch)
@@ -118,7 +112,7 @@ def test_build_arch_branch(monkeypatch):
     expected_pkgname = "hello-world-wrapper"
     assert(func(session, slots_available, arch, branch) == 1)
     assert(build_package_run_called)
-    assert(expected_log_action_found is False)
+    assert(build_repo_stuck is False)
 
     # Change "hello-world-wrapper" to built (all packages are built!)
     package = bpo.db.get_package(session, "hello-world-wrapper", arch, branch)
@@ -130,7 +124,7 @@ def test_build_arch_branch(monkeypatch):
     assert(func(session, slots_available, arch, branch) == 0)
     assert(build_package_run_called is False)
     assert(bpo_symlink_create_called)
-    assert(expected_log_action_found is False)
+    assert(build_repo_stuck is False)
 
     # *** Test repo being stuck ***
     # Change "hello-world" to failed
@@ -144,11 +138,10 @@ def test_build_arch_branch(monkeypatch):
     # Expect build_repo_stuck log message
     build_package_run_called = False
     bpo_symlink_create_called = False
-    expected_log_action_found = False
     assert(func(session, slots_available, arch, branch) == 0)
     assert(build_package_run_called is False)
     assert(bpo_symlink_create_called is False)
-    assert(expected_log_action_found)
+    assert(build_repo_stuck is True)
 
 
 def test_repo_next_package_to_build(monkeypatch):

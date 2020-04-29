@@ -60,7 +60,7 @@ def set_stuck(arch, branch):
     """ No more packages can be built, because all remaining packages in the
         queue have already failed, or depend on packages that have failed. This
         is an extra function, so we can hook it in the tests. """
-    bpo.ui.log("build_repo_stuck", arch=arch, branch=branch)
+    logging.info(branch + "/" + arch + ": repo is stuck")
 
 
 def build_arch_branch(session, slots_available, arch, branch,
