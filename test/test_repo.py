@@ -99,9 +99,9 @@ def test_build_arch_branch(monkeypatch):
     # Start building "hello-world" (1/2)
     build_package_run_called = False
     expected_pkgname = "hello-world"
-    assert(func(session, slots_available, arch, branch) == 1)
-    assert(build_package_run_called)
-    assert(build_repo_stuck is False)
+    assert func(session, slots_available, arch, branch) == 1
+    assert build_package_run_called
+    assert build_repo_stuck is False
 
     # Change "hello-world" to built
     package = bpo.db.get_package(session, "hello-world", arch, branch)
@@ -110,9 +110,9 @@ def test_build_arch_branch(monkeypatch):
     # Start building "hello-world-wrapper" (2/2)
     build_package_run_called = False
     expected_pkgname = "hello-world-wrapper"
-    assert(func(session, slots_available, arch, branch) == 1)
-    assert(build_package_run_called)
-    assert(build_repo_stuck is False)
+    assert func(session, slots_available, arch, branch) == 1
+    assert build_package_run_called
+    assert build_repo_stuck is False
 
     # Change "hello-world-wrapper" to built (all packages are built!)
     package = bpo.db.get_package(session, "hello-world-wrapper", arch, branch)
@@ -121,10 +121,10 @@ def test_build_arch_branch(monkeypatch):
     # Create symlink repo
     build_package_run_called = False
     bpo_symlink_create_called = False
-    assert(func(session, slots_available, arch, branch) == 0)
-    assert(build_package_run_called is False)
-    assert(bpo_symlink_create_called)
-    assert(build_repo_stuck is False)
+    assert func(session, slots_available, arch, branch) == 0
+    assert build_package_run_called is False
+    assert bpo_symlink_create_called
+    assert build_repo_stuck is False
 
     # *** Test repo being stuck ***
     # Change "hello-world" to failed
@@ -138,10 +138,10 @@ def test_build_arch_branch(monkeypatch):
     # Expect build_repo_stuck log message
     build_package_run_called = False
     bpo_symlink_create_called = False
-    assert(func(session, slots_available, arch, branch) == 0)
-    assert(build_package_run_called is False)
-    assert(bpo_symlink_create_called is False)
-    assert(build_repo_stuck is True)
+    assert func(session, slots_available, arch, branch) == 0
+    assert build_package_run_called is False
+    assert bpo_symlink_create_called is False
+    assert build_repo_stuck is True
 
 
 def test_repo_next_package_to_build(monkeypatch):
@@ -159,11 +159,11 @@ def test_repo_next_package_to_build(monkeypatch):
     branch = "master"
 
     # First package should be "hello-world"
-    assert(func(session, arch, branch) == "hello-world")
+    assert func(session, arch, branch) == "hello-world"
 
     # Change "hello-world" to failed
     package = bpo.db.get_package(session, "hello-world", arch, branch)
     bpo.db.set_package_status(session, package, bpo.db.PackageStatus.failed)
 
     # Remaining "hello-world-wrapper" depends on failing package "hello-world"
-    assert(func(session, arch, branch) is None)
+    assert func(session, arch, branch) is None

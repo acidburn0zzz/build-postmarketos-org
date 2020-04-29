@@ -14,12 +14,12 @@ def test_do_build_strict(monkeypatch):
     monkeypatch.setattr(bpo.config.const, "no_build_strict", ["gcc*-*"])
     func = bpo.jobs.build_package.do_build_strict
 
-    assert(func("gcc-armhf") is False)
-    assert(func("gcc4-aarch64") is False)
-    assert(func("gcc6-armv7") is False)
+    assert func("gcc-armhf") is False
+    assert func("gcc4-aarch64") is False
+    assert func("gcc6-armv7") is False
 
-    assert(func("gcc") is True)
-    assert(func("hello-world") is True)
+    assert func("gcc") is True
+    assert func("hello-world") is True
 
 
 def test_retry_build(monkeypatch):

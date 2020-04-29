@@ -100,10 +100,10 @@ def test_build_final_repo_with_two_pkgs_SLOW_60s(monkeypatch, tmpdir):
     branch = "master"
     path = bpo.repo.wip.get_path(arch, branch)
     apks = bpo.repo.get_apks(path)
-    assert(apks == [])
+    assert apks == []
 
     # Final repo must have both packages
     path = bpo.repo.final.get_path(arch, branch)
     apks = bpo.repo.get_apks(path)
-    assert(apks == ["hello-world-" + v_hello + ".apk",
-                    "hello-world-wrapper-" + v_wrapper + ".apk"])
+    assert apks == ["hello-world-" + v_hello + ".apk",
+                    "hello-world-wrapper-" + v_wrapper + ".apk"]

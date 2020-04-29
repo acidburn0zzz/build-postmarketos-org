@@ -19,8 +19,8 @@ def test_sourcehut_get_secrets_by_job(monkeypatch):
     bpo.init_components()
 
     func = bpo.job_services.sourcehut.get_secrets_by_job_name
-    assert(func("any_job_name") == "secrets:\n- f00d\n")
-    assert(func("sign_index") == "secrets:\n- f00d\n- c4f3\n")
+    assert func("any_job_name") == "secrets:\n- f00d\n"
+    assert func("sign_index") == "secrets:\n- f00d\n- c4f3\n"
 
 
 @pytest.mark.sourcehut
@@ -33,7 +33,7 @@ def test_sourcehut_get_status(monkeypatch):
     js = bpo.helpers.job.get_job_service()
 
     # https://builds.sr.ht/~ollieparanoid/job/94567
-    assert(js.get_status(94567) == bpo.db.PackageStatus.failed)
+    assert js.get_status(94567) == bpo.db.PackageStatus.failed
 
     # https://builds.sr.ht/~ollieparanoid/job/94499
-    assert(js.get_status(94499) == bpo.db.PackageStatus.built)
+    assert js.get_status(94499) == bpo.db.PackageStatus.built

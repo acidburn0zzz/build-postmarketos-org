@@ -121,7 +121,7 @@ class BPOServer():
         result = result_queue.get()
         result_queue.task_done()
         self.thread.srv.shutdown()
-        assert(result)
+        assert result
 
 
 def assert_package(pkgname, arch="x86_64", branch="master", status=None,

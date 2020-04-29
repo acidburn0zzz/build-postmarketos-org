@@ -119,8 +119,8 @@ def test_fix_disk_vs_db(monkeypatch):
     bpo_test.assert_package("hello-world-wrapper", status="queued")
     func(arch, branch, wip_path, bpo.db.PackageStatus.built, True)
     bpo_test.assert_package("hello-world-wrapper", status="built")
-    assert(not os.path.exists(wip_path + "/hello-world-1-r3.apk"))
-    assert(os.path.exists(wip_path + "/hello-world-wrapper-1-r2.apk"))
+    assert not os.path.exists(wip_path + "/hello-world-1-r3.apk")
+    assert os.path.exists(wip_path + "/hello-world-wrapper-1-r2.apk")
 
     # Remove hello-world-wrapper from db; remove apk
     session = bpo.db.session()
