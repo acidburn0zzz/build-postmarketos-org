@@ -18,7 +18,8 @@ env = None
 def update_badge(session, pkgs):
     """ Update html_out/badge.svg
         :param session: return value of bpo.db.session()
-        :param pkgs: return value of bpo.db.get_all_packages_by_status() """
+        :param pkgs: return value of bpo.db.get_all_packages_by_status()
+        :returns: one of: "up-to-date", "failed", "building" """
     # Get new name
     new = "up-to-date"
     if pkgs["failed"].count():
@@ -32,6 +33,8 @@ def update_badge(session, pkgs):
     target_temp = target + "_"
     shutil.copy(source, target_temp)
     os.rename(target_temp, target)
+
+    return new
 
 
 def log_entries_by_day(session):
