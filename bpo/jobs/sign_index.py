@@ -28,7 +28,7 @@ def run(arch, branch):
         ("sign", """
             ./pmbootstrap/pmbootstrap.py \\
                 --aports=$PWD/pmaports \\
-                --ccache-disable \\
+                --no-ccache \\
                 build_init
             work_dir="$(./pmbootstrap/pmbootstrap.py -q config work)"
             chroot_target="$work_dir/chroot_native/home/pmos/"

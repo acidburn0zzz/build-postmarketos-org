@@ -75,7 +75,7 @@ def run(arch, pkgname, branch):
             ./pmbootstrap/pmbootstrap.py \\
                 """ + mirrors + """ \\
                 --aports=$PWD/pmaports \\
-                --ccache-disable \\
+                --no-ccache \\
                 --timeout """ + timeout + """ \\
                 --details-to-stdout \\
                 build \\
