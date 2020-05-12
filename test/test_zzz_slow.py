@@ -20,7 +20,7 @@ import bpo.repo.final
 @pytest.mark.timeout(20)
 def test_remove_deleted_package_SLOW_20s(monkeypatch):
     # Only one arch, so the bpo server doesn't attempt to run multiple repo
-    # indexing jobs at once. This doesn't work with the local job service.
+    # indexing jobs at once.
     monkeypatch.setattr(bpo.config.const, "architectures", ["x86_64"])
 
     # Stop server when it would publish the packages

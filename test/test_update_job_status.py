@@ -37,6 +37,7 @@ def test_public_update_job_status(monkeypatch):
         session = bpo.db.session()
         package = bpo.db.Package(arch, branch, pkgname, version)
         package.status = bpo.db.PackageStatus.building
+        package.job_id = 1111
         session.merge(package)
 
         # Add "second-package" to DB, status: queued

@@ -1,39 +1,45 @@
 # Copyright 2020 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
+import copy
 import logging
 import os
-import random
 import requests
 import shlex
 import subprocess
 import threading
+import time
 
 import bpo.config.args
 import bpo.db
 from bpo.job_services.base import JobService
 
 
+# Instance of LocalJobServiceThread (created on demand)
+thread = None
+
+# When starting a job, the current ID increases by 1
+job_id = 0
+
+# The job queue. Jobs get added in the main thread, the LocalJobServiceThread
+# starts queued jobs and updates their status. jobs_cond is used for locking.
+# jobs[id] = {"name": ...,
+#             "note": ...,
+#             "tasks": [...],
+#             "branch": ...,
+#             "status": "queued" | "building" | "built" | "failed"}
+# Set jobs to None to exit the LocalJobServiceThread (used in testsuite).
+jobs = {}
+jobs_cond = threading.Condition()
+
+
 class LocalJobServiceThread(threading.Thread):
-    """ Local jobs are running on the same machine, but in a different
-        thread. """
+    """ Local jobs are running on the same machine, but in a different thread.
+        New jobs can be queued while another job is running. They will be
+        executed in sequence. """
 
-    def __init__(self, name, tasks, branch):
-        threading.Thread.__init__(self, name="job:" + name)
-        self.name = name
-        self.tasks = tasks
-        self.branch = branch
-        self.job_id = random.randint(1000000, 9999999)
-
-        # Prepare log
-        self.log_path = (bpo.config.args.temp_path + "/local_job_logs/" +
-                         str(self.job_id) + ".txt")
-        os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
-        logging.info("Job " + name + " started, logging to: " + self.log_path)
-
-        # Begin with setup task
-        self.tasks["setup"] = self.setup_task(branch)
-        self.tasks.move_to_end("setup", last=False)
+    def __init__(self):
+        threading.Thread.__init__(self, name="LocalJobService")
 
     def run_print(self, command):
         with open(self.log_path, "a") as handle:
@@ -41,21 +47,15 @@ class LocalJobServiceThread(threading.Thread):
             subprocess.run(command, check=True, stdout=handle, stderr=handle)
 
     def run_print_try(self, command):
-        """ Try to execute a shell command, on failure send fail request to the
-            server. """
+        """ Try to execute a shell command.
+            :returns: True if exit code is 0, False otherwise """
         try:
             # Put this in an extra function, so we can easily monkeypatch
             # it in the testsuite
             self.run_print(command)
+            return True
         except Exception:
-            url = "http://{}:{}/api/job-callback/fail".format(
-                bpo.config.args.host, bpo.config.args.port)
-            token = bpo.config.const.test_tokens["job_callback"]
-            headers = {"X-BPO-Job-Name": self.name,
-                       "X-BPO-Job-Id": str(self.job_id),
-                       "X-BPO-Token": token}
-            requests.post(url, headers=headers)
-            raise
+            return False
 
     def setup_task(self, branch):
         """ Setup temp_path with copy of pmaports.git/pmbootstrap.git and
@@ -98,7 +98,7 @@ class LocalJobServiceThread(threading.Thread):
             channel="$(grep "^channel=" pmaports/pmaports.cfg | cut -d= -f 2)"
 
             # Copy WIP repo
-            branch=""" + shlex.quote(self.branch) + """
+            branch=""" + shlex.quote(branch) + """
             work_path="$(./pmbootstrap/pmbootstrap.py -q config work)"
             packages_path="$work_path/packages"
             repo_wip_path=""" + shlex.quote(repo_wip_path) + """
@@ -120,7 +120,18 @@ class LocalJobServiceThread(threading.Thread):
             cp """ + shlex.quote(repo_wip_key) + """ .final.rsa
         """
 
-    def run(self):
+    def run_job(self, name, note, tasks, branch, job_id):
+        self.job_id = job_id
+
+        # Prepare log
+        self.log_path = (bpo.config.args.temp_path + "/local_job_logs/" +
+                         str(job_id) + ".txt")
+        logging.info("Job " + name + " started, logging to: " + self.log_path)
+
+        # Begin with setup task
+        tasks["setup"] = self.setup_task(branch)
+        tasks.move_to_end("setup", last=False)
+
         # Create temp dir
         temp_path = bpo.config.args.temp_path + "/local_job"
         os.makedirs(temp_path, exist_ok=True)
@@ -132,38 +143,174 @@ class LocalJobServiceThread(threading.Thread):
         env_vars = """
             export BPO_TOKEN_FILE="./token"
             export BPO_API_HOST=""" + shlex.quote(host) + """
-            export BPO_JOB_ID=""" + str(self.job_id) + """
-            export BPO_JOB_NAME=""" + shlex.quote(self.name) + """
+            export BPO_JOB_ID=""" + str(job_id) + """
+            export BPO_JOB_NAME=""" + shlex.quote(name) + """
             export BPO_WIP_REPO_PATH=""" + shlex.quote(wip_repo_path) + """
             export BPO_WIP_REPO_URL="" # empty, because we copy it instead
             export BPO_WIP_REPO_ARG="" # empty, because we copy it instead
+            export BPO_TIMEOUT="0.1"
+            export BPO_TIMEOUT_IGNORE="1"
         """
 
         # Write each task's script into a temp file and run it
         temp_script = temp_path + "/current_task.sh"
-        for task, script in self.tasks.items():
+        for task, script in tasks.items():
             print("### Task: " + task + " ###")
 
             with open(temp_script, "w", encoding="utf-8") as handle:
                 handle.write("cd " + shlex.quote(temp_path) + "\n" +
                              env_vars + "\n" +
                              script)
-            self.run_print_try(["sh", "-ex", temp_script])
+            if not self.run_print_try(["sh", "-ex", temp_script]):
+                logging.info("Job failed!")
+                return False
+        return True
+
+    def run(self):
+        global jobs
+        global jobs_cond
+
+        while True:
+            # Copy the jobs dict before iterating over it, so we don't block it
+            # while executing the job (and the other thread can happily queue
+            # new jobs in the meantime).
+            jobs_copy = None
+            with jobs_cond:
+                if jobs is None:
+                    logging.debug("terminated")
+                    jobs = {}
+                    jobs_cond.notify()
+                    break
+                jobs_copy = copy.deepcopy(jobs)
+
+            # Execute all queued jobs, one at a time
+            for job_id, job_data in jobs_copy.items():
+                if job_data["status"] != "queued":
+                    continue
+
+                # Extract job data
+                name = job_data["name"]
+                note = job_data["note"]
+                tasks = job_data["tasks"]
+                branch = job_data["branch"]
+                logging.info("Received job: " + name + " (" + note + ")")
+
+                # Set to running
+                with jobs_cond:
+                    # Check if LocalJobService must terminate
+                    if jobs is None:
+                        break
+                    jobs[job_id]["status"] = "running"
+
+                # Run the job
+                success = self.run_job(name, note, tasks, branch, job_id)
+                status = "success" if success else "failed"
+                logging.info("Job finished (" + status + ")")
+
+                # Set to success/failed
+                with jobs_cond:
+                    # Check if LocalJobService must terminate
+                    if jobs is None:
+                        break
+                    jobs[job_id]["status"] = status
+
+                # Notify API of failure (as the sourcehut job service would do)
+                if status == "failed":
+                    logging.debug("Telling bpo server that the job failed")
+                    url = "http://{}:{}/api/public/update-job-status".format(
+                        bpo.config.args.host, bpo.config.args.port)
+                    try:
+                        # The server may take long to answer (#49). We don't
+                        # care about the answer here, so move on quickly.
+                        requests.post(url, timeout=0.01)
+                    except requests.exceptions.ReadTimeout:
+                        logging.debug("BPO server takes long to answer,"
+                                      " moving on...")
+                        pass
+
+            # Sleep before trying to find new jobs
+            time.sleep(0.01)
 
 
 class LocalJobService(JobService):
 
     def run_job(self, name, note, tasks, branch):
-        thread = LocalJobServiceThread(name=name, tasks=tasks, branch=branch)
-        thread.start()
-        return thread.job_id
+        global thread
+        global job_id
+        global jobs
+        global jobs_cond
 
-    def get_status(self, job_id):
-        """ When running locally, we can only run one job at a time. So if we
-            are wondering whether a job is still running, most likely we just
-            killed it with ^C and then restarted the bpo server. """
-        return bpo.db.PackageStatus.failed
+        job_id += 1
+
+        # Prepare log dir, clear possibly existing log file
+        log_path = (bpo.config.args.temp_path + "/local_job_logs/" +
+                    str(job_id) + ".txt")
+        os.makedirs(os.path.dirname(log_path), exist_ok=True)
+        with open(log_path, "w") as handle:
+            handle.write("job queued\n")
+
+        # Add job to queue
+        with jobs_cond:
+            jobs[job_id] = {"name": name,
+                            "note": note,
+                            "tasks": tasks,
+                            "branch": branch,
+                            "status": "queued"}
+            jobs_cond.notify()
+
+        # Start thread
+        if not thread:
+            thread = LocalJobServiceThread()
+            thread.start()
+
+        return job_id
+
+    def get_status(self, job_id_check):
+        global job_id
+        global jobs
+        global jobs_cond
+
+        # Job from previous bpo instance
+        if job_id_check > job_id:
+            return bpo.db.PackageStatus.failed
+
+        with jobs_cond:
+            status = jobs[job_id_check]["status"]
+
+        # Convert the status string
+        if status == "success":
+            return bpo.db.PackageStatus.built
+        if status == "failed":
+            return bpo.db.PackageStatus.failed
+        return bpo.db.PackageStatus.building
 
     def get_link(self, job_id):
         return ("file://" + bpo.config.args.temp_path + "/local_job_logs/" +
                 str(job_id) + ".txt")
+
+
+def stop_thread():
+    global thread
+    global job_id
+    global jobs
+    global jobs_cond
+
+    if thread is None:
+        logging.debug("LocalJobService isn't running")
+        return
+
+    # Set jobs to None, so LocalJobService stops
+    logging.debug("Stopping LocalJobService...")
+    with jobs_cond:
+        thread = None
+        jobs = None
+        jobs_cond.notify()
+
+    # Wait until LocalJobService has stopped and sets jobs back to {}
+    logging.debug("Waiting until LocalJobService thread is stopped...")
+    while True:
+        time.sleep(0.01)
+        with jobs_cond:
+            if jobs == {}:
+                logging.debug("LocalJobService thread has stopped")
+                return

@@ -40,6 +40,8 @@ def test_retry_build(monkeypatch):
         assert version == "1-r4"
         assert job_run_fake_count < 3
 
+        return 1234
+
     monkeypatch.setattr(bpo.helpers.job, "run", job_run_fake)
     monkeypatch.setattr(bpo.config.const, "retry_count_max", 1)
     monkeypatch.setattr(bpo.repo, "set_stuck", bpo_test.stop_server)
@@ -50,13 +52,14 @@ def test_retry_build(monkeypatch):
         # server start building "hello-world". The actual building is prevented
         # in this test by the job_run_fake() override above.
         bpo_test.trigger.job_callback_get_depends("master")
-        bpo_test.assert_package(pkgname, status="building", retry_count=0)
+        bpo_test.assert_package(pkgname, status="building", retry_count=0,
+                                job_id=1234)
         assert job_run_fake_count == 1
 
         # Pretend that the build failed: call api/public/update-job-status,
         # just like sourcehut would do it. The bpo server then calls
-        # bpo.helpers.jobs.update_package_status(), which always reports job
-        # failures for the local job service. The bpo server starts the next
+        # bpo.helpers.jobs.update_package_status(), which reports a job
+        # failure for the local job service. The bpo server starts the next
         # build. job_run_fake() gets called again and stops the bpo server.
         bpo_test.trigger.public_update_job_status()
         bpo_test.assert_package(pkgname, status="building", retry_count=1)

@@ -17,6 +17,7 @@ sys.path.insert(0, topdir)
 import bpo  # noqa
 import bpo.config.const  # noqa
 import bpo.config.args  # noqa
+import bpo.job_services.local  # noqa
 
 # Queue for passing test result between threads
 result_queue = None
@@ -67,6 +68,7 @@ def stop_server(*args, **kwargs):
     global result_queue
     logging.info("Thread stops bpo server: " + threading.current_thread().name)
     result_queue.put(True)
+    bpo.job_services.local.stop_thread()
 
 
 def stop_server_nok(*args, **kwargs):
