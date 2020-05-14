@@ -37,7 +37,7 @@ class LocalJobServiceThread(threading.Thread):
 
     def run_print(self, command):
         with open(self.log_path, "a") as handle:
-            handle.write("% " + " ".join(command))
+            handle.write("% " + " ".join(command) + "\n")
             subprocess.run(command, check=True, stdout=handle, stderr=handle)
 
     def run_print_try(self, command):
