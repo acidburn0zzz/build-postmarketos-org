@@ -79,9 +79,10 @@ class Package(base):
         depends = []
         for depend in self.depends:
             depends.append(depend.pkgname)
-        return "{}/{}/{}-{}.apk (pmOS depends: {}, retry_count: {})"\
+        return "{}/{}/{}-{}.apk (pmOS depends: {}, retry_count: {}," \
+               " job_id: {})" \
                .format(self.branch, self.arch, self.pkgname, self.version,
-                       depends, self.retry_count)
+                       depends, self.retry_count, self.job_id)
 
     def depends_built(self):
         for depend in self.depends:
