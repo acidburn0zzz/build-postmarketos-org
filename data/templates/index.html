@@ -28,13 +28,9 @@
 	</span>
 </header>
 <main class="main">
-	<a class="h" name="toc" href="#toc">Overview</a>
+	<a class="h" name="toc" href="#toc">Overview</a><br>
+	<a class="h3" name="pkgs" href="#pkgs">Packages</a><br>
 	<table class="toc">
-		<tr>
-			<td>{{ len(bpo.config.const.branches) }}</td>
-			<td>branches</td>
-			<td>{{ ", ".join(bpo.config.const.branches.keys()) }}</td>
-		</tr>
 		<tr>
 			<td>{{ pkgs.building.count() }}</td>
 			<td><a href="#building">building</a></td>
@@ -60,6 +56,21 @@
 			<td>packages total</td>
 		</tr>
 	</table>
+
+	<br>
+	<a class="h3" name="branches" href="#branches">Branches</a><br>
+	<ul>
+		{% for branch, branch_data in bpo.config.const.branches.items() %}
+		<li> <span class="branch">{{branch}}</span> ({%for arch in branch_data["arches"]
+			%}<span class="arch">{{ arch }}</span>{{
+			", " if not loop.last
+			}}{%endfor%})
+			{% if branch_data["ignore_errors"] %}
+			(WIP)
+			{% endif %}
+
+		{% endfor %}
+	</ul>
 
 	<a class="h" name="log" href="#log">Log</a>
 	<div class="log">
