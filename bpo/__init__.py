@@ -51,8 +51,8 @@ def main(return_app=False):
     if bpo.config.args.force_final_repo_sign:
         # Force final repo sign
         logging.warning("WARNING: doing force final repo sign (-f)!")
-        for branch in bpo.config.const.branches:
-            for arch in bpo.config.const.architectures:
+        for branch, branch_data in bpo.config.const.branches.items():
+            for arch in branch_data["arches"]:
                 bpo.repo.symlink.create(arch, branch, True)
     else:
         # Kick off build jobs for queued packages
@@ -60,7 +60,7 @@ def main(return_app=False):
 
     # Fill up queue with packages to build
     if bpo.config.args.auto_get_depends:
-        for branch in bpo.config.const.branches:
+        for branch in bpo.config.const.branches.keys():
             bpo.jobs.get_depends.run(branch)
 
     # Restart is complete

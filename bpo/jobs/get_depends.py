@@ -13,7 +13,7 @@ def run(branch):
     if mirror_final:
         mirror_final += "/" + branch
 
-    for arch in bpo.config.const.architectures:
+    for arch in bpo.config.const.branches[branch]["arches"]:
         tasks[branch + "_" + arch] = """
             export ARCH=""" + shlex.quote(arch) + """
             export JSON="depends.$ARCH.json"

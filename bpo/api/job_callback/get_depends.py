@@ -118,7 +118,7 @@ def job_callback_get_depends():
     job_id = bpo.api.get_header(request, "Job-Id")
     branch = bpo.api.get_branch(request)
     payloads = collections.OrderedDict()
-    for arch in bpo.config.const.architectures:
+    for arch in bpo.config.const.branches[branch]["arches"]:
         payloads[arch] = get_payload(request, arch)
 
     # Update packages in DB

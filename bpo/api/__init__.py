@@ -15,10 +15,11 @@ def get_header(request, key):
     return request.headers[header]
 
 
-def get_arch(request):
+def get_arch(request, branch):
     """ Get architecture from X-BPO-Arch header and validate it. """
     arch = get_header(request, "Arch")
-    if arch not in bpo.config.const.architectures:
+    arches = bpo.config.const.branches[branch]["arches"]
+    if arch not in arches:
         raise ValueError("invalid X-BPO-Arch: " + arch)
     return arch
 
@@ -33,8 +34,8 @@ def get_branch(request):
 
 def get_package(session, request):
     pkgname = get_header(request, "Pkgname")
-    arch = get_arch(request)
     branch = get_branch(request)
+    arch = get_arch(request, branch)
     ret = bpo.db.get_package(session, pkgname, arch, branch)
     if not ret:
         raise ValueError("no package found with: pkgname=" + pkgname +

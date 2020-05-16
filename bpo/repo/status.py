@@ -118,12 +118,14 @@ def fix(arch=None, branch=None):
          and the running jobs.
         :param arch: architecture, e.g. "x86_64" (default: all)
         :param branch: pmaports.git branch, e.g. "master" (default: all) """
-    arches = [arch] if arch else bpo.config.const.architectures
-    branches = [branch] if branch else bpo.config.const.branches
+    branches = [branch] if branch else bpo.config.const.branches.keys()
 
     logging.info("Fixing inconsistencies between DB and files on disk")
-    for arch in arches:
-        for branch in branches:
+    for branch in branches:
+        arches = [arch]
+        if not arch:
+            arches = bpo.config.const.branches[branch]["arches"]
+        for arch in arches:
             path_final = bpo.repo.final.get_path(arch, branch)
             path_wip = bpo.repo.wip.get_path(arch, branch)
 

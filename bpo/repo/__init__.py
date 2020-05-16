@@ -105,8 +105,8 @@ def build(force_repo_update=False):
 
     # Iterate over all branch-arch combinations, to give them a chance to start
     # a new job or to proceed with rolling out their fully built WIP repo
-    for branch in bpo.config.const.branches:
-        for arch in bpo.config.const.architectures:
+    for branch, branch_data in bpo.config.const.branches.items():
+        for arch in branch_data["arches"]:
             slots_available -= build_arch_branch(session, slots_available,
                                                  arch, branch,
                                                  force_repo_update)

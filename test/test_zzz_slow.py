@@ -3,6 +3,7 @@
 """ Various tests, that need longer than the default timeout to run. Put them
     all here, so we can run the fast tests first and possibly see them fail
     rather quickly. In this file, place the faster tests at the top. """
+import collections
 import os
 import pytest
 import shutil
@@ -21,7 +22,10 @@ import bpo.repo.final
 def test_remove_deleted_package_SLOW_20s(monkeypatch):
     # Only one arch, so the bpo server doesn't attempt to run multiple repo
     # indexing jobs at once.
-    monkeypatch.setattr(bpo.config.const, "architectures", ["x86_64"])
+    branches = collections.OrderedDict()
+    branches["master"] = {"arches": ["x86_64"],
+                          "ignore_errors": False}
+    monkeypatch.setattr(bpo.config.const, "branches", branches)
 
     # Stop server when it would publish the packages
     monkeypatch.setattr(bpo.repo.final, "publish", bpo_test.stop_server)
@@ -71,7 +75,10 @@ def test_depends_SLOW_40s(monkeypatch):
         and does not try to build the repo. """
 
     # Limit to two arches (more would increase test time)
-    monkeypatch.setattr(bpo.config.const, "architectures", ["x86_64", "armv7"])
+    branches = collections.OrderedDict()
+    branches["master"] = {"arches": ["x86_64", "armv7"],
+                          "ignore_errors": False}
+    monkeypatch.setattr(bpo.config.const, "branches", branches)
 
     with bpo_test.BPOServer():
         monkeypatch.setattr(bpo.repo, "build", bpo_test.stop_server)

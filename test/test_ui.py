@@ -1,6 +1,8 @@
 # Copyright 2020 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Testing bpo/ui/__init__.py """
+import collections
+
 import bpo_test
 import bpo_test.trigger
 import bpo.config.const
@@ -10,8 +12,14 @@ import bpo.ui
 
 
 def test_update_badge(monkeypatch):
-    monkeypatch.setattr(bpo.config.const, "branches", ["master"])
-    monkeypatch.setattr(bpo.config.const, "branches_ignore_errors", [])
+    branches = collections.OrderedDict()
+    branches["master"] = {"arches": ["x86_64",
+                                     "armhf",
+                                     "aarch64",
+                                     "armv7",
+                                     "x86"],
+                          "ignore_errors": False}
+    monkeypatch.setattr(bpo.config.const, "branches", branches)
 
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
@@ -49,9 +57,9 @@ def test_update_badge(monkeypatch):
     assert func(session, func_pkgs(session)) == "up-to-date"
 
     # Branch is in config: failed
-    monkeypatch.setattr(bpo.config.const, "branches", ["master", "v20.05"])
+    branches["v20.05"] = {"arches": ["x86_64"], "ignore_errors": False}
     assert func(session, func_pkgs(session)) == "failed"
 
     # Branch is ignored: up-to-date
-    monkeypatch.setattr(bpo.config.const, "branches_ignore_errors", ["v20.05"])
+    branches["v20.05"]["ignore_errors"] = True
     assert func(session, func_pkgs(session)) == "up-to-date"

@@ -92,7 +92,7 @@ def job_callback_get_depends(branch, payload="depends.x86_64.json",
 
     # Other arches: no packages (simplifies tests)
     payload_path = bpo.config.const.top_dir + "/test/testdata/empty_list.json"
-    for arch in bpo.config.const.architectures:
+    for arch in bpo.config.const.branches[branch]["arches"]:
         if arch == "x86_64":
             continue
         upload_name = "depends." + arch + ".json"

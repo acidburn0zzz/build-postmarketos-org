@@ -24,8 +24,8 @@ def save_apkindex(request):
         raise RuntimeError("Unexpected file name: " + name)
 
     # Save to symlink repo
-    arch = bpo.api.get_arch(request)
     branch = bpo.api.get_branch(request)
+    arch = bpo.api.get_arch(request, branch)
     path = bpo.repo.symlink.get_path(arch, branch) + "/APKINDEX.tar.gz"
     logging.info("Saving " + path)
     files[0].save(path)
@@ -34,8 +34,8 @@ def save_apkindex(request):
 @blueprint.route("/api/job-callback/sign-index", methods=["POST"])
 @header_auth("X-BPO-Token", "job_callback")
 def job_callback_sign_index():
-    arch = bpo.api.get_arch(request)
     branch = bpo.api.get_branch(request)
+    arch = bpo.api.get_arch(request, branch)
 
     # FIXME: check if the index signing was expected
     save_apkindex(request)

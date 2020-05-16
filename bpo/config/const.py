@@ -3,6 +3,7 @@
 
 # Various configuration options, that the user shouldn't need to change (just
 # like pmb/config/__init__.py).
+import collections
 import os
 
 # Directory containing bpo.py and the bpo module
@@ -11,17 +12,19 @@ top_dir = os.path.normpath(os.path.realpath(__file__) + "/../../..")
 # Keypair for signing the APKINDEX of the WIP repository will be stored here
 repo_wip_keys = top_dir + "/_repo_wip_keys"
 
-architectures = ["x86_64", "armhf", "aarch64", "armv7", "x86"]
-
-# Which pmaports.git branches will be built (e.g. "master", "v20.05", ...)
-branches = ["master"]
-
-# WIP branches that are building for the first time should be listed here, so
-# they are ignored for the big overall status badge. We don't want errors from
-# these to overshadow errors from branches that are used in production. When
-# this is activated, a big star (*) is displayed next to the badge, and it
-# links to a note that is shown in the "failed" section.
-branches_ignore_errors = []
+# Which pmaports.git branches will be built (e.g. "master", "v20.05", ...).
+# The order of branches/arches is the order in which packages will be built.
+# ignore_errors: WIP branches that are building for the first time should be
+#                listed here, so they are ignored for the big overall status
+#                badge. We don't want errors from these to overshadow errors
+#                from branches that are used in production.
+branches = collections.OrderedDict()
+branches["master"] = {"arches": ["x86_64",
+                                 "armhf",
+                                 "aarch64",
+                                 "armv7",
+                                 "x86"],
+                      "ignore_errors": False}
 
 # Omit the --strict argument for pmbootstrap build for these packages (fnmatch)
 # gcc*-*: https://gitlab.alpinelinux.org/alpine/apk-tools/issues/10649

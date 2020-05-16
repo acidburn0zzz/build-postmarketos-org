@@ -215,8 +215,8 @@ def get_failed_packages_count_relevant(session):
     """ :returns: count of failed packages, without the branches where we are
                   building for the first time. """
     relevant = []
-    for branch in bpo.config.const.branches:
-        if branch not in bpo.config.const.branches_ignore_errors:
+    for branch, branch_data in bpo.config.const.branches.items():
+        if not branch_data["ignore_errors"]:
             relevant += [branch]
 
     return session.query(bpo.db.Package).\
