@@ -52,6 +52,12 @@ headers = {"X-BPO-Arch": os.environ["BPO_ARCH"],
            "X-BPO-Pkgname": os.environ["BPO_PKGNAME"],
            "X-BPO-Version": os.environ["BPO_VERSION"]}
 
+# The server may take long to answer (#49). Hack for the testsuite until this
+# is resolved: set a timeout and ignore the ReadTimeout exception
+timeout = None
+if "BPO_TIMEOUT" in os.environ:
+    timeout = float(os.environ["BPO_TIMEOUT"])
+
 # Submit JSON
 if is_json:
     if len(files) > 1:
@@ -64,7 +70,15 @@ if is_json:
     data = json.loads(data)
 
     print("Sending JSON to: " + url)
-    response = requests.post(url, json=data, headers=headers)
+    try:
+        response = requests.post(url, json=data, headers=headers,
+                                 timeout=timeout)
+    except requests.exceptions.ReadTimeout:
+        if "BPO_TIMEOUT_IGNORE" in os.environ:
+            print("hack for testsuite: ignore timeout")
+            exit(0)
+        raise
+
 else:  # Submit blobs
     blobs = []
     for path in files:
@@ -76,7 +90,14 @@ else:  # Submit blobs
                                  "application/octet-stream")))
 
     print("Uploading to: " + url)
-    response = requests.post(url, files=blobs, headers=headers)
+    try:
+        response = requests.post(url, files=blobs, headers=headers,
+                                 timeout=timeout)
+    except requests.exceptions.ReadTimeout:
+        if "BPO_TIMEOUT_IGNORE" in os.environ:
+            print("hack for testsuite: ignore timeout")
+            exit(0)
+        raise
 
 if response.status_code > 399:
     print("Error occurred:")
