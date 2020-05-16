@@ -146,19 +146,19 @@ main {
     text-decoration: underline;
 }
 
-.log .time {
+.time {
     color: gray
 }
-.log .branch {
+.branch {
     color: darkgreen;
 }
-.log .arch {
+.arch {
     color: darkred;
 }
-.log .pkgname {
+.pkgname {
     color: darkcyan;
 }
-.log .version {
+.version {
     color: purple;
 }
 
