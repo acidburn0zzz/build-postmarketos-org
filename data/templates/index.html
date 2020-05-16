@@ -215,7 +215,10 @@
 	</a>
 	<ul>
 		{% for package in pkgs.published %}
-		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+		<li> <span class="branch">{{package.branch}}</span>/<span
+			class="arch">{{package.arch}}</span>/<span
+			class="pkgname">{{package.pkgname}}</span>-<span
+			class="version">{{package.version}}</span>.apk
 			<a class="job-log" href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
 		{% endfor %}
 	</ul>
