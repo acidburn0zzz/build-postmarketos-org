@@ -111,8 +111,7 @@
                             all packages built, publishing to mirror
                         {% elif entry.action == "job_update_package_status_built" %}
                             package built
-                        {% elif entry.action in ["job_update_package_status_failed",
-                                                 "job_callback_fail_build_package"] %}
+                        {% elif entry.action == "job_update_package_status_failed" %}
                             <b>build failed</b>
                             (try {{entry.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
                         {% elif entry.action == "build_repo_stuck" %}
