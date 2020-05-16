@@ -1,225 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>postmarketOS // binary repo status</title>
-        <link rel="stylesheet" href="static/style.css">
-    </head>
-    <body>
-        <header class="header">
-            <a class="logo" name="^" href="/">
-                <img src="static/logo.svg">
-                <span>postmarketOS</span>
-            </a>
-	    <div class="badge">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>postmarketOS // binary repo status</title>
+	<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+<header class="header">
+	<a class="logo" name="^" href="/">
+		<img src="static/logo.svg">
+		<span>postmarketOS</span>
+	</a>
+	<div class="badge">
 		<img src="badge.svg">
-            {% if bpo.config.const.branches_ignore_errors %}
-                <a href="#failed" class="star">*</a>
-            {% endif %}
-	    </div>
-            <span class="nav header-bottom">
-                <a href="https://postmarketos.org">about</a>
-                <a href="http://pkgs.postmarketos.org">package search</a>
-                <a href="https://gitlab.com/postmarketOS/pmaports">build recipes</a>
-            </span>
-            <span class="powered-by header-bottom">powered by
-                <a href="https://sourcehut.org/">
-                    sourcehut
-                    <span class="sourcehut-builds">builds</span>
-                </a>
-            </span>
-        </header>
+		{% if bpo.config.const.branches_ignore_errors %}
+		<a href="#failed" class="star">*</a>
+		{% endif %}
+	</div>
+	<span class="nav header-bottom">
+		<a href="https://postmarketos.org">about</a>
+		<a href="http://pkgs.postmarketos.org">package search</a>
+		<a href="https://gitlab.com/postmarketOS/pmaports">build recipes</a>
+	</span>
+	<span class="powered-by header-bottom">powered by
+		<a href="https://sourcehut.org/">
+			sourcehut
+			<span class="sourcehut-builds">builds</span>
+		</a>
+	</span>
+</header>
+<main class="main">
+	<a class="h" name="toc" href="#toc">Overview</a>
+	<table class="toc">
+		<tr>
+			<td>{{ len(bpo.config.const.architectures) }}</td>
+			<td>arches</td>
+			<td>{{ ", ".join(bpo.config.const.architectures) }}</td>
+		</tr>
+		<tr>
+			<td>{{ len(bpo.config.const.branches) }}</td>
+			<td>branches</td>
+			<td>{{ ", ".join(bpo.config.const.branches) }}</td>
+		</tr>
+		<tr>
+			<td>{{ pkgs.building.count() }}</td>
+			<td><a href="#building">building</a></td>
+		</tr>
+		<tr>
+			<td>{{ pkgs.failed.count() }}</td>
+			<td><a href="#failed">failed</a></td>
+		</tr>
+		<tr>
+			<td>{{ pkgs.queued.count() }}</td>
+			<td><a href="#queued">queued</a></td>
+		</tr>
+		<tr>
+			<td>{{ pkgs.built.count() }}</td>
+			<td><a href="#built">built</a></td>
+		</tr>
+		<tr>
+			<td>{{ pkgs.published.count() }}</td>
+			<td><a href="#published">published</a></td>
+		</tr>
+		<tr>
+			<td>{{ pkgcount }}</td>
+			<td>packages total</td>
+		</tr>
+	</table>
 
-        <main class="main">
-            <a class="h" name="toc" href="#toc">Overview</a>
+	<a class="h" name="log" href="#log">Log</a>
+	<div class="log">
+		{% for day,log_entries in log_entries_days.items() %}
+		<a class="h3" name="{{ day }}" href="#{{ day }}">{{ day }}</a>
+		<ul>
+			{% for entry in log_entries %}
+			<li> <span class="time">{{ entry.date.strftime("%H:%M:%S") }}</span>
+			{% if entry.branch
+			%}<span class="branch">{{ entry.branch }}</span>{%
+			endif %}{% if entry.arch
+			%}/<span class="arch">{{ entry.arch }}</span>{%
+			endif %}{% if entry.pkgname
+			%}/<span class="pkgname">{{ entry.pkgname }}</span>{%
+			endif %}{% if entry.version
+			%}-<span class="version">{{ entry.version }}</span>{%
+			endif %}
 
-            <table class="toc">
-                <tr>
-                    <td>{{ len(bpo.config.const.architectures) }}</td>
-                    <td>arches</td>
-                    <td>{{ ", ".join(bpo.config.const.architectures) }}</td>
-                </tr>
-                <tr>
-                    <td>{{ len(bpo.config.const.branches) }}</td>
-                    <td>branches</td>
-                    <td>{{ ", ".join(bpo.config.const.branches) }}</td>
-                </tr>
-                <tr>
-                    <td>{{ pkgs.building.count() }}</td>
-                    <td><a href="#building">building</a></td>
-                </tr>
-                <tr>
-                    <td>{{ pkgs.failed.count() }}</td>
-                    <td><a href="#failed">failed</a></td>
-                </tr>
-                <tr>
-                    <td>{{ pkgs.queued.count() }}</td>
-                    <td><a href="#queued">queued</a></td>
-                </tr>
-                <tr>
-                    <td>{{ pkgs.built.count() }}</td>
-                    <td><a href="#built">built</a></td>
-                </tr>
-                <tr>
-                    <td>{{ pkgs.published.count() }}</td>
-                    <td><a href="#published">published</a></td>
-                </tr>
-                <tr>
-                    <td>{{ pkgcount }}</td>
-                    <td>packages total</td>
-                </tr>
-            </table>
+			{% if entry.action == "restart" %}
+			build.postmarketos.org server restart initiated, doing
+			integrity checks...
+			{% elif entry.action == "restart_done" %}
+			build.postmarketos.org server restart completed
+			{% elif entry.action == "api_push_hook_gitlab" %}
+			new commit(s) pushed to pmaports.git
+			{% elif entry.action == "job_get_depends" %}
+			calculating missing binary packages
+			{% elif entry.action == "api_job_callback_get_depends" %}
+			new packages queued for building
+			{% elif entry.action == "job_build_package" %}
+			building package
+				{% if entry.retry_count %}
+				(try {{entry.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
+				{% endif %}
+			{% elif entry.action in ["api_job_callback_build_package", "package_built"] %}
+			package built
+			{% elif entry.action == "job_sign_index" %}
+			signing the package index
+			{% elif entry.action == "api_job_callback_sign_index" %}
+			all packages built, publishing to mirror
+			{% elif entry.action == "job_update_package_status_built" %}
+			package built
+			{% elif entry.action == "job_update_package_status_failed" %}
+			<b>build failed</b>
+			(try {{entry.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
+			{% elif entry.action == "build_repo_stuck" %}
+			<b>repo is stuck</b> - fix failed builds to continue
+			{% elif entry.action == "package_removed_from_pmaports" %}
+			removed from pmaports.git
+			{% elif entry.action == "package_exists_in_wip_repo" %}
+			package exists in WIP repo already, build skipped
+			{% elif entry.action == "package_published" %}
+			package published
+			{% elif entry.action == "obsolete_wip_package" %}
+			does not exist in pmaports.git anymore, removing from
+			WIP repo
+			{% elif entry.action == "missing_built_apk" %}
+			not found in WIP repo on disk, although status was set
+			to "built" in the DB -&gt; changing back to "queued"
+			{% elif entry.action == "missing_published_apk" %}
+			not found in final repo on disk, although status was
+			set to "published" in the DB -&gt; changing back to
+			"built"
+			{% elif entry.action == "remove_broken_apk" %}
+			<b>broken package, removing</b>
+			(<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/issues/56">#56</a>)
+			{% elif entry.action == "remove_broken_apk_reset_deleted" %}
+			changing status back to "queued" after apk was removed
+			{% elif entry.action == "remove_broken_apk_reset_failed" %}
+			changing status back from "failed" to "queued", because
+			the broken apk of a dependency was removed
+			{% else %}
+			(unknown action: {{ entry.action }})
+			{% endif %}
+			<!-- action: {{ entry.action }} -->
+			{% if entry.job_id %}
+			<a class="job-log" href="{{ bpo.helpers.job.get_link(entry.job_id) }}">[log]</a>
+			{% endif %}
+			{% endfor %}
+		</ul>
+		{% endfor %}
+	</div>
 
-            <a class="h" name="log" href="#log">Log</a>
-            <div class="log">
-                {% for day,log_entries in log_entries_days.items() %}
-                <a class="h3" name="{{ day }}" href="#{{ day }}">{{ day }}</a>
-                    <ul>
-                    {% for entry in log_entries %}
-                    <li> <span class="time">{{ entry.date.strftime("%H:%M:%S") }}</span>
-                        {% if entry.branch
-                        %}<span class="branch">{{ entry.branch }}</span>{%
-                        endif %}{% if entry.arch
-                        %}/<span class="arch">{{ entry.arch }}</span>{%
-                        endif %}{% if entry.pkgname
-                        %}/<span class="pkgname">{{ entry.pkgname }}</span>{%
-                        endif %}{% if entry.version
-                        %}-<span class="version">{{ entry.version }}</span>{%
-                        endif %}
+	<a class="h" name="building" href="#building">
+		Building ({{ pkgs.building.count() }})
+	</a>
+	<ul>
+		{% for package in pkgs.building %}
+		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+			<a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
+		{% endfor %}
+	</ul>
 
-                        {% if entry.action == "restart" %}
-                            build.postmarketos.org server restart initiated, doing integrity checks...
-                        {% elif entry.action == "restart_done" %}
-                            build.postmarketos.org server restart completed
-                        {% elif entry.action == "api_push_hook_gitlab" %}
-                            new commit(s) pushed to pmaports.git
-                        {% elif entry.action == "job_get_depends" %}
-                            calculating missing binary packages
-                        {% elif entry.action == "api_job_callback_get_depends" %}
-                            new packages queued for building
-                        {% elif entry.action == "job_build_package" %}
-                            building package
-                            {% if entry.retry_count %}
-                                (try {{entry.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
-                            {% endif %}
-                        {% elif entry.action in ["api_job_callback_build_package", "package_built"] %}
-                            package built
-                        {% elif entry.action == "job_sign_index" %}
-                            signing the package index
-                        {% elif entry.action == "api_job_callback_sign_index" %}
-                            all packages built, publishing to mirror
-                        {% elif entry.action == "job_update_package_status_built" %}
-                            package built
-                        {% elif entry.action == "job_update_package_status_failed" %}
-                            <b>build failed</b>
-                            (try {{entry.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
-                        {% elif entry.action == "build_repo_stuck" %}
-                            <b>repo is stuck</b> - fix failed builds to continue
-                        {% elif entry.action == "package_removed_from_pmaports" %}
-                            removed from pmaports.git
-                        {% elif entry.action == "package_exists_in_wip_repo" %}
-                            package exists in WIP repo already, build skipped
-                        {% elif entry.action == "package_published" %}
-                            package published
-                        {% elif entry.action == "obsolete_wip_package" %}
-                            does not exist in pmaports.git anymore, removing from WIP repo
-                        {% elif entry.action == "missing_built_apk" %}
-                            not found in WIP repo on disk, although status was set to "built" in the DB -&gt; changing back to "queued"
-                        {% elif entry.action == "missing_published_apk" %}
-                            not found in final repo on disk, although status was set to "published" in the DB -&gt; changing back to "built"
-                        {% elif entry.action == "remove_broken_apk" %}
-                            <b>broken package, removing</b> (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/issues/56">#56</a>)
-                        {% elif entry.action == "remove_broken_apk_reset_deleted" %}
-                            changing status back to "queued" after apk was removed
-                        {% elif entry.action == "remove_broken_apk_reset_failed" %}
-                            changing status back from "failed" to "queued", because the broken apk of a dependency was removed
-                        {% else %}
-                        (unknown action: {{ entry.action }})
-                        {% endif %}
-                        <!-- action: {{ entry.action }} -->
-                        {% if entry.job_id %}
-                            <a class="job-log" href="{{ bpo.helpers.job.get_link(entry.job_id) }}">[log]</a>
-                        {% endif %}
-                    {% endfor %}
-                    </ul>
-                {% endfor %}
-            </div>
+	<a class="h" name="failed" href="#failed">
+			Failed ({{ pkgs.failed.count() }})
+	</a>
 
-	    <a class="h" name="building" href="#building">
-                Building ({{ pkgs.building.count() }})
-	    </a>
-            <ul>
-                {% for package in pkgs.building %}
-                <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
-                    <a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
-                {% endfor %}
-            </ul>
+	{% if bpo.config.const.branches_ignore_errors %}
+	<p style="font-size: 80%; font-style: italic">
+	Note: failures on branch(es) {{", ".join(bpo.config.const.branches_ignore_errors)}} are ignored for the overall status badge on the top right, as these branch(es) are building for the first time and are not used by anybody. The badge is supposed to display the status for the branches that we are actually using.
+	</p>
+	{% endif %}
+	<ul>
+		{% for package in pkgs.failed %}
+		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+			(try {{package.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
+			<a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
+		{% endfor %}
+	</ul>
 
-	    <a class="h" name="failed" href="#failed">
-                Failed ({{ pkgs.failed.count() }})
-	    </a>
-            {% if bpo.config.const.branches_ignore_errors %}
-            <p style="font-size: 80%; font-style: italic">
-              Note: failures on branch(es) {{", ".join(bpo.config.const.branches_ignore_errors)}} are ignored for the overall status badge on the top right, as these branch(es) are building for the first time and are not used by anybody. The badge is supposed to display the status for the branches that we are actually using.
-            </p>
-            {% endif %}
-            <ul>
-                {% for package in pkgs.failed %}
-                <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
-                    (try {{package.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
-                    <a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
-                {% endfor %}
-            </ul>
+	<a class="h" name="queued" href="#queued">
+		Queued ({{ pkgs.queued.count() }})
+	</a>
+	<ul>
+		{% for package in pkgs.queued %}
+		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+			{% if not package.depends_built() %}
+			(missing depends:
+			{% for depend in package.depends_missing_list()
+			%}{{depend.pkgname}}{{", " if not loop.last}}{%
+			endfor %})
+			{% endif %}
+		{% endfor %}
+	</ul>
 
-	    <a class="h" name="queued" href="#queued">
-                Queued ({{ pkgs.queued.count() }})
-            </a>
-            <ul>
-                {% for package in pkgs.queued %}
-                <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
-                        {% if not package.depends_built() %}
-                            (missing depends:
-                            {% for depend in package.depends_missing_list()
-                                %}{{depend.pkgname}}{{", " if not loop.last}}{%
-                            endfor %})
-                        {% endif %}
-                {% endfor %}
-            </ul>
+	<a class="h" name="built" href="#built">
+		Built ({{ pkgs.built.count() }})
+	</a>
+	<p style="font-size: 80%; font-style: italic">
+		Note: these packages get published, after there are no more
+		queued and failing packages for the same arch and branch. This
+		is to prevent half-baked updates
+		(<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/#repositories">more</a>).
+	</p>
+	<ul>
+		{% for package in pkgs.built %}
+		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+			<a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
+		{% endfor %}
+	</ul>
 
-	    <a class="h" name="built" href="#built">
-                Built ({{ pkgs.built.count() }})
-            </a>
-            <p style="font-size: 80%; font-style: italic">
-                Note: these packages get published, after there are no more queued and failing packages for the same arch and branch. This is to prevent half-baked updates (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org/#repositories">more</a>).
-            </p>
-
-            <ul>
-                {% for package in pkgs.built %}
-                <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
-                    <a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
-                {% endfor %}
-            </ul>
-
-	    <a class="h" name="published" href="#published">
-                Published ({{ pkgs.published.count() }})
-            </a>
-            <ul>
-                {% for package in pkgs.published %}
-                <li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
-                    <a class="job-log" href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
-                {% endfor %}
-            </ul>
-        </main>
-        <footer>
-            <div class="source">
-                AGPL-3.0
-                (<a href="https://gitlab.com/postmarketOS/build.postmarketos.org"
-                    >source</a>)
-            </div>
-            <div class="copyright">
-                &copy; 2020 postmarketOS contributors
-            </div>
-        </footer>
-    </body>
+	<a class="h" name="published" href="#published">
+		Published ({{ pkgs.published.count() }})
+	</a>
+	<ul>
+		{% for package in pkgs.published %}
+		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
+			<a class="job-log" href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
+		{% endfor %}
+	</ul>
+</main>
+<footer>
+	<div class="source">
+		AGPL-3.0
+		(<a href="https://gitlab.com/postmarketOS/build.postmarketos.org"
+		>source</a>)
+	</div>
+	<div class="copyright">
+		&copy; 2020 postmarketOS contributors
+	</div>
+</footer>
+</body>
 </html>
