@@ -77,8 +77,8 @@ def get_manifest(name, tasks, branch):
 
            # Switch branch and release channel
            mkdir -p ~/.config
-           echo "[pmbootstrap]\\nis_default_channel = False\\n" \\
-               > ~/.config/pmbootstrap.cfg
+           ( echo "[pmbootstrap]"
+             echo "is_default_channel = False" ) > ~/.config/pmbootstrap.cfg
            git -C pmaports checkout """ + shlex.quote(branch) + """
 
            yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
