@@ -25,6 +25,8 @@ branches["master"] = {"arches": ["x86_64",
                                  "armv7",
                                  "x86"],
                       "ignore_errors": False}
+branches["v20.05"] = {"arches": ["x86_64"],
+                      "ignore_errors": True}
 
 # Omit the --strict argument for pmbootstrap build for these packages (fnmatch)
 # gcc*-*: https://gitlab.alpinelinux.org/alpine/apk-tools/issues/10649
