@@ -50,12 +50,7 @@ def run(arch, pkgname, branch):
                                                  branch, arch)
     mirror_final = bpo.config.args.mirror
     if mirror_final:
-        if branch == "master":
-            # Old code path, until pmbootstrap!1912 is merged, remove after-
-            # wards and always add "/".
-            mirror_final += "/master"
-        else:
-            mirror_final += "/"
+        mirror_final += "/"
     mirrors = "-mp " + shlex.quote(mirror_final)
     if os.path.exists(wip_path):
         mirrors = '$BPO_WIP_REPO_ARG ' + mirrors
