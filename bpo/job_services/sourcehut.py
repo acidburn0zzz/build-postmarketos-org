@@ -84,6 +84,12 @@ def get_manifest(name, tasks, branch):
            yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
            sudo modprobe binfmt_misc
            sudo mount -t binfmt_misc none /proc/sys/fs/binfmt_misc
+
+           branch="$(git -C pmaports rev-parse --abbrev-ref HEAD)"
+           if [ "$branch" != """ + shlex.quote(branch) + """ ]; then
+               echo "ERROR: pmbootstrap switched to the wrong branch: $branch"
+               exit 1
+           fi
     """
 
     ret = bpo.helpers.job.remove_additional_indent(ret, 8)[:-1]
