@@ -5,6 +5,7 @@
 import logging
 import requests
 import shlex
+import re
 
 import bpo.config.args
 import bpo.config.tokens
@@ -38,6 +39,12 @@ def get_secrets_by_job_name(name):
     for secret in secrets:
         ret += "- " + str(secret) + "\n"
     return ret
+
+
+def sanitize_task_name(name):
+    """ Replace characters that are not allowed in sr.ht task names """
+    name = name.lower()
+    return re.sub(r'[^a-z0-9_\-]+', '_', name)
 
 
 def get_manifest(name, tasks, branch):
@@ -85,6 +92,7 @@ def get_manifest(name, tasks, branch):
     for name, script in tasks.items():
         script_indented = ("   export BPO_JOB_ID=\"$JOB_ID\"\n"
                            "   " + script[:-1].replace("\n", "\n   "))
+        name = sanitize_task_name(name)
         ret += "\n- {}: |\n{}".format(name, script_indented)
     return ret
 
