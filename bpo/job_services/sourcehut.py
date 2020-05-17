@@ -49,7 +49,7 @@ def sanitize_task_name(name):
 
 def get_manifest(name, tasks, branch):
     url_api = bpo.config.args.url_api
-    url_repo_wip = bpo.config.args.url_repo_wip
+    url_repo_wip = bpo.config.args.url_repo_wip + "/"
     ret = """
         image: alpine/latest
         packages:
