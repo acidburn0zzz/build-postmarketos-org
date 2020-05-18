@@ -9,8 +9,7 @@ import bpo.helpers.job
 
 
 def run(arch, branch):
-    web_path = arch + "/APKINDEX-symlink-repo.tar.gz"
-    local_path = branch + "/" + web_path
+    unsigned = "{}/{}/APKINDEX-symlink-repo.tar.gz".format(branch, arch)
     uid = bpo.config.const.pmbootstrap_chroot_uid_user
     rsa = bpo.config.const.final_repo_key_name
     note = "Sign index: `{}/{}`".format(branch, arch)
@@ -18,10 +17,10 @@ def run(arch, branch):
     bpo.helpers.job.run("sign_index", note, collections.OrderedDict([
         ("download_unsigned_index", """
             if [ -n "$BPO_WIP_REPO_PATH" ]; then
-                cp "$BPO_WIP_REPO_PATH"/""" + shlex.quote(local_path) + """ \\
+                cp "$BPO_WIP_REPO_PATH"/""" + shlex.quote(unsigned) + """ \\
                     APKINDEX.tar.gz
             else
-                wget "$BPO_WIP_REPO_URL"/""" + shlex.quote(web_path) + """ \\
+                wget "$BPO_WIP_REPO_URL"/""" + shlex.quote(unsigned) + """ \\
                     -O APKINDEX.tar.gz
             fi
             """),
