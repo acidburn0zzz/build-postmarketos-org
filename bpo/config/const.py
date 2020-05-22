@@ -25,7 +25,7 @@ branches["master"] = {"arches": ["x86_64",
                                  "armv7",
                                  "x86"],
                       "ignore_errors": False}
-branches["v20.05"] = {"arches": ["x86_64"],
+branches["v20.05"] = {"arches": ["x86_64", "aarch64", "armv7"],
                       "ignore_errors": True}
 
 # Omit the --strict argument for pmbootstrap build for these packages (fnmatch)
