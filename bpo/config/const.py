@@ -22,9 +22,9 @@ branches = collections.OrderedDict()
 branches["v20.05"] = {"arches": ["x86_64", "aarch64", "armv7"],
                       "ignore_errors": False}
 branches["master"] = {"arches": ["x86_64",
-                                 "armhf",
                                  "aarch64",
                                  "armv7",
+                                 "armhf",
                                  "x86"],
                       "ignore_errors": False}
 
