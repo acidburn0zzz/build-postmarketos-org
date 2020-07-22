@@ -46,6 +46,7 @@ def run(arch, pkgname, branch):
         pubkey = handle.read()
 
     # Set mirror args (either primary mirror, or WIP + primary)
+    mirror_alpine = shlex.quote(bpo.config.const.mirror_alpine)
     wip_path = "{}/{}/{}/APKINDEX.tar.gz".format(bpo.config.args.repo_wip_path,
                                                  branch, arch)
     mirror_final = bpo.config.args.mirror
@@ -68,6 +69,7 @@ def run(arch, pkgname, branch):
             """),
         ("pmbootstrap_build", """
             ./pmbootstrap/pmbootstrap.py \\
+                -m """ + mirror_alpine + """ \
                 """ + mirrors + """ \\
                 --aports=$PWD/pmaports \\
                 --no-ccache \\
