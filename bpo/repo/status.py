@@ -113,18 +113,21 @@ def fix_db_vs_disk(arch, branch):
             bpo.ui.log_package(package, "missing_built_apk")
 
 
-def fix(arch=None, branch=None):
+def fix(limit_arch=None, limit_branch=None):
     """" Fix all inconsistencies between the database, the apk files on disk
          and the running jobs.
-        :param arch: architecture, e.g. "x86_64" (default: all)
-        :param branch: pmaports.git branch, e.g. "master" (default: all) """
-    branches = [branch] if branch else bpo.config.const.branches.keys()
+        :param limit_arch: architecture, e.g. "x86_64" (default: all)
+        :param limit_branch: pmaports.git branch, e.g. "master"
+                             (default: all) """
+    branches = bpo.config.const.branches.keys()
+    if limit_branch:
+        branches = [limit_branch]
 
     logging.info("Fixing inconsistencies between DB and files on disk")
     for branch in branches:
-        arches = [arch]
-        if not arch:
-            arches = bpo.config.const.branches[branch]["arches"]
+        arches = bpo.config.const.branches[branch]["arches"]
+        if limit_arch:
+            arches = [limit_arch]
         for arch in arches:
             path_final = bpo.repo.final.get_path(arch, branch)
             path_wip = bpo.repo.wip.get_path(arch, branch)
