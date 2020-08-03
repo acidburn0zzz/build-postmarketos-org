@@ -1,6 +1,22 @@
 ---
+image: "alpine:latest"
+.only-default: &only-default
+  only:
+    - master
+    - wip
+    - merge_requests
+
+mr-settings:
+  only:
+    - merge_requests
+  before_script:
+    - apk -q add python3
+  script:
+    - wget -q "https://gitlab.com/postmarketOS/ci-common/-/raw/master/check_mr_settings.py"
+    - python3 ./check_mr_settings.py
+
 flake8:
-  image: "alpine:latest"
+  <<: *only-default
   before_script:
   - "apk -q add py3-pip"
   - "pip3 -q --disable-pip-version-check install flake8"
@@ -8,7 +24,7 @@ flake8:
   - ".ci/flake8.sh"
 
 vermin:
-  image: "alpine:latest"
+  <<: *only-default
   before_script:
   - "apk -q add py3-pip"
   - "pip3 -q --disable-pip-version-check install vermin"
@@ -19,6 +35,7 @@ vermin:
 # production environment. Redirect apt-get stdout to /dev/null, because -qq
 # isn't quiet enough (https://askubuntu.com/a/258226).
 pytest:
+  <<: *only-default
   image: "debian:stretch"
   before_script:
   - ".ci/setup_pytest.sh"
