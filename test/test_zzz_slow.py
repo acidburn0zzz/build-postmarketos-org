@@ -18,8 +18,8 @@ import bpo.repo
 import bpo.repo.final
 
 
-@pytest.mark.timeout(20)
-def test_remove_deleted_package_SLOW_20s(monkeypatch):
+@pytest.mark.timeout(40)
+def test_remove_deleted_package_SLOW_40s(monkeypatch):
     # Only one arch, so the bpo server doesn't attempt to run multiple repo
     # indexing jobs at once.
     branches = collections.OrderedDict()
