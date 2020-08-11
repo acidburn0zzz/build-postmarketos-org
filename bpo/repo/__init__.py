@@ -50,10 +50,12 @@ def count_running_builds(session):
     return session.query(bpo.db.Package).filter_by(status=building).count()
 
 
-def count_failed_builds(session, arch, branch):
-    failed = bpo.db.PackageStatus.failed
-    return session.query(bpo.db.Package).filter_by(status=failed, arch=arch,
-                                                   branch=branch).count()
+def has_unfinished_builds(session, arch, branch):
+    for status in bpo.db.PackageStatus.failed, bpo.db.PackageStatus.building:
+        if session.query(bpo.db.Package).filter_by(status=status, arch=arch,
+                                                   branch=branch).count():
+            return True
+    return False
 
 
 def set_stuck(arch, branch):
@@ -76,7 +78,7 @@ def build_arch_branch(session, slots_available, arch, branch,
         pkgname = next_package_to_build(session, arch, branch)
         if not pkgname:
             if not started:
-                if count_failed_builds(session, arch, branch):
+                if has_unfinished_builds(session, arch, branch):
                     set_stuck(arch, branch)
                 else:
                     logging.info(branch + "/" + arch + ": WIP repo complete")

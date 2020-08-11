@@ -143,6 +143,19 @@ def test_build_arch_branch(monkeypatch):
     assert bpo_symlink_create_called is False
     assert build_repo_stuck is True
 
+    # *** Test repo being stuck (depend is building) ***
+    # Change "hello-world" to building
+    package = bpo.db.get_package(session, "hello-world", arch, branch)
+    bpo.db.set_package_status(session, package, bpo.db.PackageStatus.building)
+
+    # Expect build_repo_stuck log message
+    build_package_run_called = False
+    bpo_symlink_create_called = False
+    assert func(session, slots_available, arch, branch) == 0
+    assert build_package_run_called is False
+    assert bpo_symlink_create_called is False
+    assert build_repo_stuck is True
+
 
 def test_repo_next_package_to_build(monkeypatch):
     # Disable retry_count code path (tested separately)
