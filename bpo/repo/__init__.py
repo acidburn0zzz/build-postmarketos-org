@@ -71,11 +71,11 @@ def build_arch_branch(session, slots_available, arch, branch,
                                   after deleting packages in the database, so
                                   the apks get removed from the final repo. """
     logging.info(branch + "/" + arch + ": starting new package build job(s)")
-    running = 0
+    started = 0
     while True:
         pkgname = next_package_to_build(session, arch, branch)
         if not pkgname:
-            if not running:
+            if not started:
                 if count_failed_builds(session, arch, branch):
                     set_stuck(arch, branch)
                 else:
@@ -85,11 +85,11 @@ def build_arch_branch(session, slots_available, arch, branch,
 
         if slots_available > 0:
             if bpo.jobs.build_package.run(arch, pkgname, branch):
-                running += 1
+                started += 1
                 slots_available -= 1
         else:
             break
-    return running
+    return started
 
 
 def build(force_repo_update=False):
