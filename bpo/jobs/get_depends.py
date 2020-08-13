@@ -11,7 +11,7 @@ def run(branch):
     tasks = collections.OrderedDict()
     mirror_final = bpo.config.args.mirror
     if mirror_final:
-        mirror_final += "/" + branch
+        mirror_final += "/"
 
     for arch in bpo.config.const.branches[branch]["arches"]:
         tasks[branch + "_" + arch] = """
