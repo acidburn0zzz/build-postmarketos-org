@@ -18,8 +18,8 @@ import bpo.repo
 import bpo.repo.final
 
 
-@pytest.mark.timeout(120)
-def test_remove_deleted_package_SLOW_120s(monkeypatch):
+@pytest.mark.timeout(40)
+def test_remove_deleted_package_SLOW_40s(monkeypatch):
     # Only one arch, so the bpo server doesn't attempt to run multiple repo
     # indexing jobs at once.
     branches = collections.OrderedDict()
@@ -68,8 +68,8 @@ def test_remove_deleted_package_SLOW_120s(monkeypatch):
     assert os.path.exists(final_path + "/APKINDEX.tar.gz")
 
 
-@pytest.mark.timeout(180)
-def test_depends_SLOW_180s(monkeypatch):
+@pytest.mark.timeout(40)
+def test_depends_SLOW_40s(monkeypatch):
     """ Trigger the api push hook, then let bpo run the depends job.
         Monkeypatch bpo.repo.build, so it stops after receiving depends
         and does not try to build the repo. """
@@ -85,8 +85,8 @@ def test_depends_SLOW_180s(monkeypatch):
         bpo_test.trigger.push_hook_gitlab()
 
 
-@pytest.mark.timeout(180)
-def test_build_final_repo_with_two_pkgs_SLOW_180s(monkeypatch, tmpdir):
+@pytest.mark.timeout(60)
+def test_build_final_repo_with_two_pkgs_SLOW_60s(monkeypatch, tmpdir):
     # Prepare job-callback/get-depends payload
     payload_path = str(tmpdir) + "/payload.json"
     v_hello = bpo_test.const.version_hello_world
