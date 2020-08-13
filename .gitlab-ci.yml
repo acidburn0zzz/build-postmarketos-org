@@ -31,14 +31,17 @@ vermin:
   script:
   - ".ci/vermin.sh"
 
-# Run pytest testsuite with debian stretch (python 3.5), which matches the
-# production environment. Redirect apt-get stdout to /dev/null, because -qq
-# isn't quiet enough (https://askubuntu.com/a/258226).
+# Run same Alpine version as real bpo server
 pytest:
   <<: *only-default
-  image: "debian:stretch"
+  image: "alpine:3.12"
   before_script:
-  - ".ci/setup_pytest.sh"
+  - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
+  - sh ./install_pmbootstrap.sh py3-pip
+  - pip3 -q --disable-pip-version-check install -r requirements.txt \
+      pytest pytest-cov pytest-timeout
+  - ln -s /tmp/pmbootstrap ../pmbootstrap
+  - ln -s /home/pmos/.local/var/pmbootstrap/cache_git/pmaports ../pmbootstrap/aports
   script:
   - "su pmos -c '.ci/pytest.sh'"
   artifacts:
