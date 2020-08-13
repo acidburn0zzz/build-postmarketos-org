@@ -37,9 +37,14 @@ pytest:
   image: "alpine:3.12"
   before_script:
   - wget "https://gitlab.com/postmarketOS/ci-common/-/raw/master/install_pmbootstrap.sh"
-  - sh ./install_pmbootstrap.sh py3-pip
-  - pip3 -q --disable-pip-version-check install -r requirements.txt \
-      pytest pytest-cov pytest-timeout
+  # Install all python depends natively on Alpine for best performance, not with pip
+  - sh ./install_pmbootstrap.sh \
+        py3-flask \
+        py3-pytest \
+        py3-pytest-cov \
+        py3-pytest-timeout \
+        py3-requests \
+        py3-sqlalchemy
   - ln -s /tmp/pmbootstrap ../pmbootstrap
   - ln -s /home/pmos/.local/var/pmbootstrap/cache_git/pmaports ../pmbootstrap/aports
   script:
