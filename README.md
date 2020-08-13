@@ -2,7 +2,7 @@
 
 ## Installation
 
-Requires python 3.5 or higher.
+Requires python 3.7 or higher.
 
 ```
 $ git clone https://gitlab.com/postmarketOS/build.postmarketos.org

@@ -8,7 +8,7 @@ _vermin() {
 }
 
 _vermin \
-	-t=3.5- \
+	-t=3.7- \
 	--backport argparse \
 	--backport configparser \
 	--backport enum \
