@@ -49,7 +49,8 @@ def sanitize_task_name(name):
 
 def get_manifest(name, tasks, branch):
     url_api = bpo.config.args.url_api
-    url_repo_wip = bpo.config.args.url_repo_wip + "/"
+    url_repo_wip_http = bpo.config.args.url_repo_wip_http + "/"
+    url_repo_wip_https = bpo.config.args.url_repo_wip_https + "/"
     ret = """
         image: alpine/latest
         packages:
@@ -64,8 +65,8 @@ def get_manifest(name, tasks, branch):
           BPO_TOKEN_FILE: "/home/build/.token"
           BPO_API_HOST: """ + shlex.quote(url_api) + """
           BPO_JOB_NAME: """ + shlex.quote(name) + """
-          BPO_WIP_REPO_URL: """ + shlex.quote(url_repo_wip) + """
-          BPO_WIP_REPO_ARG: '-mp """ + shlex.quote(url_repo_wip) + """'
+          BPO_WIP_REPO_URL: """ + shlex.quote(url_repo_wip_https) + """
+          BPO_WIP_REPO_ARG: '-mp """ + shlex.quote(url_repo_wip_http) + """'
         """ + get_secrets_by_job_name(name) + """
         triggers:
         - action: webhook

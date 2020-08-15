@@ -19,7 +19,8 @@ repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
 html_out = bpo.config.const.top_dir + "/_html_out"
 auto_get_depends = False
 url_api = "https://build.postmarketos.org"
-url_repo_wip = "https://build.postmarketos.org/wip"
+url_repo_wip_http = "http://build.postmarketos.org/wip"
+url_repo_wip_https = "https://build.postmarketos.org/wip"
 force_final_repo_sign = False
 
 
@@ -91,8 +92,15 @@ def init():
                              " get wiped!)")
     parser.add_argument("--url-api", help="external URL to the bpo server for"
                         " accessing the API (ignored with local job service)")
-    parser.add_argument("--url-repo-wip", help="external URL to the WIP repo"
-                        " dir (--repo-wip-path)")
+    parser.add_argument("--url-repo-wip-http",
+                        help="external URL to the WIP repo dir"
+                             " (--repo-wip-path), HTTP protocol"
+                             " (used for packages signed with WIP key)")
+    parser.add_argument("--url-repo-wip-https",
+                        help="external URL to the WIP repo dir"
+                             " (--repo-wip-path), HTTPS protocol"
+                             " (used for downloading the unsigned index, job"
+                             " sign_index)")
 
     # Job service subparsers
     job_service = parser.add_subparsers(title="job service",
