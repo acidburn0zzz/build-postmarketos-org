@@ -35,8 +35,7 @@ mirror_alpine = "http://dl-2.alpinelinux.org/alpine/"
 # Omit the --strict argument for pmbootstrap build for these packages (fnmatch)
 # gcc*-*: https://gitlab.alpinelinux.org/alpine/apk-tools/issues/10649
 #         (fix is merged to abuild master, not yet in latest abuild release)
-# phosh: https://gitlab.com/postmarketOS/pmbootstrap/-/issues/1958
-no_build_strict = ["gcc*-*", "phosh"]
+no_build_strict = ["gcc*-*"]
 
 # How many build jobs can run in parallel (across all arches)
 max_parallel_build_jobs = 1
