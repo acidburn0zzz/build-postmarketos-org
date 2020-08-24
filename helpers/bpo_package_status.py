@@ -132,11 +132,17 @@ def main():
     if not pkgnames:
         pkgnames = get_all_pkgnames(session, arch, branch, args.filter_status)
 
+    # List all pkgs before change
+    get_status(session, pkgnames, arch, branch)
+    print()
+
+    # Ask for confirmation, apply change
     if args.job_id:
         set_job_id(session, pkgnames, arch, branch, args.job_id)
     if args.status:
         set_status(session, pkgnames, arch, branch, args.status)
 
+    # List result
     get_status(session, pkgnames, arch, branch)
 
 
