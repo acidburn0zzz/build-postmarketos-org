@@ -39,10 +39,12 @@ def parse_arguments():
 
     # Get or set
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("-g", help="get current status value", dest="get",
+    group.add_argument("-g", help="get pkgs and list them", dest="get",
                        action="store_true")
     group.add_argument("-s", help="set new status value", dest="status",
                        choices=status_choices())
+    group.add_argument("-j", help="set new job ID", dest="job_id",
+                       type=int)
 
     return parser.parse_args()
 
@@ -84,13 +86,32 @@ def set_status(session, pkgnames, arch, branch, status):
     print()
 
 
-def get_status(session, pkgnames, arch, branch):
-    format_str = "{:8s} | {}"
-    print(format_str.format("status", "pkgname"))
-    print("-" * 20)
+def set_job_id(session, pkgnames, arch, branch, job_id):
+    if len(pkgnames) != 1:
+        # We don't want to set the same ID for multiple pkgs by accident
+        print("ERROR: changing job id is only allowed for one package at"
+              " the same time.")
+        sys.exit(1)
+
+    confirm(f"Will set job_id '{job_id}' for the following package:"
+            f" {pkgnames}")
+
     for pkgname in pkgnames:
         package = bpo.db.get_package(session, pkgname, arch, branch)
-        print(format_str.format(package.status.name, package.pkgname))
+        bpo.db.set_package_status(session, package, package.status, job_id)
+
+    print("done!")
+    print()
+
+
+def get_status(session, pkgnames, arch, branch):
+    format_str = "{:10s} | {:9} | {}"
+    print(format_str.format("status", "job id", "pkgname"))
+    print("-" * 40)
+    for pkgname in pkgnames:
+        package = bpo.db.get_package(session, pkgname, arch, branch)
+        print(format_str.format(package.status.name, package.job_id,
+                                package.pkgname))
 
 
 def main():
@@ -111,6 +132,8 @@ def main():
     if not pkgnames:
         pkgnames = get_all_pkgnames(session, arch, branch, args.filter_status)
 
+    if args.job_id:
+        set_job_id(session, pkgnames, arch, branch, args.job_id)
     if args.status:
         set_status(session, pkgnames, arch, branch, args.status)
 
