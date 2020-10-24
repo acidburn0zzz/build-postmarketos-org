@@ -4,4 +4,4 @@
 
 # Versions of test packages in pmaports.git
 version_hello_world = "1-r5"
-version_hello_world_wrapper = "1-r3"
+version_hello_world_wrapper = "1-r4"
