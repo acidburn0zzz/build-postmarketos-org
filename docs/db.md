@@ -24,7 +24,7 @@ def upgrade():
         version_set(2)
 ```
 
-2. Extend the table's class in `bpo_db/__init_.py`. Use `system=True` so
+2. Extend the table's class in `bpo/db/__init_.py`. Use `system=True` so
    sqlalchemy will not attempt to create the column. Add a comment indicating
    the migration version that will create the table.
 
@@ -52,7 +52,7 @@ def upgrade():
         version_set(3)
 ```
 
-2. Extend the table's class in `bpo_db/__init_.py` with an commented out entry
+2. Extend the table's class in `bpo/db/__init_.py` with an commented out entry
    of the new index, and the migration version that creates it.
 
 ```py
