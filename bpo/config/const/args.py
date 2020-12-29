@@ -16,6 +16,7 @@ mirror = "http://mirror.postmarketos.org/postmarketos"
 temp_path = bpo.config.const.top_dir + "/_temp"
 repo_final_path = bpo.config.const.top_dir + "/_repo_final"
 repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
+images_path = bpo.config.const.top_dir + "/_images"
 html_out = bpo.config.const.top_dir + "/_html_out"
 auto_get_depends = False
 url_api = "https://build.postmarketos.org"

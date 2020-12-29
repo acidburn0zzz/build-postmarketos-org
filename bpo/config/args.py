@@ -59,6 +59,8 @@ def init():
                              " pmaports.git push (of one or more commits) is"
                              " built, then all WIP apks are moved to the final"
                              " repo path")
+    parser.add_argument("-i", "--images-path",
+                        help="location of generated postmarketOS images")
     parser.add_argument("-o", "--html-out", help="directory, to which the html"
                         " status pages will be written while the bpo server"
                         " is running")

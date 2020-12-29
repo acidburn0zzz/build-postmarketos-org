@@ -6,6 +6,7 @@ _temp
 _html_out
 bpo_sourcehut.sh
 pytest.log
+/_images
 
 /public
 

@@ -30,34 +30,66 @@
 </header>
 <main class="main">
 	<a class="h" name="toc" href="#toc">Overview</a><br>
-	<a class="h3" name="pkgs" href="#pkgs">Packages</a><br>
-	<table class="toc">
-		<tr>
-			<td>{{ pkgs.building.count() }}</td>
-			<td><a href="#building">building</a></td>
-		</tr>
-		<tr>
-			<td>{{ pkgs.failed.count() }}</td>
-			<td><a href="#failed">failed</a></td>
-		</tr>
-		<tr>
-			<td>{{ pkgs.queued.count() }}</td>
-			<td><a href="#queued">queued</a></td>
-		</tr>
-		<tr>
-			<td>{{ pkgs.built.count() }}</td>
-			<td><a href="#built">built</a></td>
-		</tr>
-		<tr>
-			<td>{{ pkgs.published.count() }}</td>
-			<td><a href="#published">published</a></td>
-		</tr>
-		<tr>
-			<td>{{ pkgcount }}</td>
-			<td>packages total</td>
-		</tr>
-	</table>
-
+	<div class="toc-grid">
+		<div class="toc-grid-pkgs">
+			<a class="h3" name="pkgs" href="#pkgs">Packages</a><br>
+			<table class="toc">
+				<tr>
+					<td>{{ pkgs.building.count() }}</td>
+					<td><a href="#building">
+						building</a></td>
+				</tr>
+				<tr>
+					<td>{{ pkgs.failed.count() }}</td>
+					<td><a href="#failed">failed</a></td>
+				</tr>
+				<tr>
+					<td>{{ pkgs.queued.count() }}</td>
+					<td><a href="#queued">queued</a></td>
+				</tr>
+				<tr>
+					<td>{{ pkgs.built.count() }}</td>
+					<td><a href="#built">built</a></td>
+				</tr>
+				<tr>
+					<td>{{ pkgs.published.count() }}</td>
+					<td><a href="#published-pkgs">
+						published</a></td>
+				</tr>
+				<tr>
+					<td>{{ pkgcount }}</td>
+					<td>total</td>
+				</tr>
+			</table>
+		</div>
+		<div class="toc-grid-imgs">
+			<a class="h3" name="imgs" href="#imgs">Images</a><br>
+			<table class="toc">
+				<tr>
+					<td>{{ imgs.building.count() }}</td>
+					<td><a href="#building">
+						building</a></td>
+				</tr>
+				<tr>
+					<td>{{ imgs.failed.count() }}</td>
+					<td><a href="#failed">failed</a></td>
+				</tr>
+				<tr>
+					<td>{{ imgs.queued.count() }}</td>
+					<td><a href="#queued">queued</a></td>
+				</tr>
+				<tr>
+					<td>{{ imgs.published.count() }}</td>
+					<td><a href="#published-imgs">
+						published</a></td>
+				</tr>
+				<tr>
+					<td>{{ imgcount }}</td>
+					<td>total</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 	<br>
 	<a class="h3" name="branches" href="#branches">Branches</a><br>
 	<ul>
@@ -82,20 +114,32 @@
 			<li> <span class="time">{{ entry.date.strftime("%H:%M:%S") }}</span>
 			{% if entry.branch
 			%}<span class="branch">{{ entry.branch }}</span>{%
-			endif %}{% if entry.arch
+			endif %}{#
+
+			* package related properties *
+			#}{% if entry.arch
 			%}/<span class="arch">{{ entry.arch }}</span>{%
 			endif %}{% if entry.pkgname
 			%}/<span class="pkgname">{{ entry.pkgname }}</span>{%
 			endif %}{% if entry.version
 			%}-<span class="version">{{ entry.version }}</span>{%
+			endif %}{#
+
+			* image related properties *
+			#}{% if entry.device
+			%}:<span class="device">{{ entry.device }}</span>{%
+			endif %}{% if entry.ui
+			%}:<span class="ui">{{ entry.ui }}</span>{%
 			endif %}
 
 			{% if entry.action == "restart" %}
 			build.postmarketos.org server restart initiated, doing
 			integrity checks...
 			{% elif entry.action == "restart_done" %}
-			build.postmarketos.org server restart completed
-			{% elif entry.action == "api_push_hook_gitlab" %}
+			build.postmarketos.org server restart completed{#
+
+			* package related actions *
+			#}{% elif entry.action == "api_push_hook_gitlab" %}
 			new commit(s) pushed to pmaports.git
 			{% elif entry.action == "job_get_depends" %}
 			calculating missing binary packages
@@ -142,13 +186,37 @@
 			changing status back to "queued" after apk was removed
 			{% elif entry.action == "remove_broken_apk_reset_failed" %}
 			changing status back from "failed" to "queued", because
-			the broken apk of a dependency was removed
-			{% else %}
+			the broken apk of a dependency was removed{#
+
+			* image related actions *
+			#}{% elif entry.action == "add_image_to_queue" %}
+			added to queue
+			{% elif entry.action == "job_build_image" %}
+			building
+			{% elif entry.action == "job_update_image_status_failed" %}
+			<b>build failed</b>
+			(try {{entry.retry_count + 1
+				}}/{{bpo.config.const.retry_count_max + 1}})
+			{% elif entry.action == "api_job_callback_build_image" %}
+			built and published
+			{% elif entry.action == "image_removed_from_config" %}
+			removed from config
+			{% elif entry.action == "remove_old_image" %}
+			remove old image dir {{ entry.dir_name }}
+			{#
+
+			* unknown action *
+			#}{% else %}
 			(unknown action: {{ entry.action }})
 			{% endif %}
 			<!-- action: {{ entry.action }} -->
 			{% if entry.job_id %}
 			<a class="job-log" href="{{ bpo.helpers.job.get_link(entry.job_id) }}">[log]</a>
+			{% endif %}
+			{% if entry.dir_name %}
+			<a class="img-dir" href="{{
+				bpo.images.path_db_obj(entry)
+				}}">[dir]</a>
 			{% endif %}
 			{% endfor %}
 		</ul>
@@ -156,17 +224,21 @@
 	</div>
 
 	<a class="h" name="building" href="#building">
-		Building ({{ pkgs.building.count() }})
+		Building ({{ pkgs.building.count() + imgs.building.count() }})
 	</a>
 	<ul>
 		{% for package in pkgs.building %}
 		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
 			<a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
 		{% endfor %}
+		{% for img in imgs.building %}
+		<li> {{img.branch}}:{{img.device}}:{{img.ui}}
+			<a href="{{ bpo.helpers.job.get_link(img.job_id) }}">[log]</a>
+		{% endfor %}
 	</ul>
 
 	<a class="h" name="failed" href="#failed">
-		Failed ({{ pkgs.failed.count() }})
+		Failed ({{ pkgs.failed.count() + imgs.failed.count() }})
 	</a>
 
 	<p style="font-size: 80%; font-style: italic">
@@ -178,10 +250,14 @@
 			(try {{package.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
 			<a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
 		{% endfor %}
+		{% for img in imgs.failed %}
+		<li> {{img.branch}}:{{img.device}}:{{img.ui}}
+			<a href="{{ bpo.helpers.job.get_link(img.job_id) }}">[log]</a>
+		{% endfor %}
 	</ul>
 
 	<a class="h" name="queued" href="#queued">
-		Queued ({{ pkgs.queued.count() }})
+		Queued ({{ pkgs.queued.count() + imgs.queued.count() }})
 	</a>
 	<ul>
 		{% for package in pkgs.queued %}
@@ -192,6 +268,10 @@
 			%}{{depend.pkgname}}{{", " if not loop.last}}{%
 			endfor %})
 			{% endif %}
+		{% endfor %}
+		{% for img in imgs.queued %}
+		<li> {{img.branch}}:{{img.device}}:{{img.ui}}
+			<a href="{{ bpo.helpers.job.get_link(img.job_id) }}">[log]</a>
 		{% endfor %}
 	</ul>
 
@@ -211,8 +291,9 @@
 		{% endfor %}
 	</ul>
 
-	<a class="h" name="published" href="#published">
-		Published ({{ pkgs.published.count() }})
+	<a class="h" name="published" href="#published">Published</a><br>
+	<a class="h3" name="published-pkgs" href="#published-pkgs">
+		Packages ({{ pkgs.published.count() }})
 	</a>
 	<ul>
 		{% for package in pkgs.published %}
@@ -221,6 +302,22 @@
 			class="pkgname">{{package.pkgname}}</span>-<span
 			class="version">{{package.version}}</span>.apk
 			<a class="job-log" href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
+		{% endfor %}
+	</ul>
+	<a class="h3" name="published-imgs" href="#published-imgs">
+		Images ({{ imgs.published.count() }})
+	</a>
+	<ul>
+		{% for img in imgs.published %}
+		<li> <span class="time">{{ img.dir_name }}</span>
+			{{img.branch}}:{{img.device}}:{{img.ui}}
+			<a class="job-log" href="{{
+				bpo.helpers.job.get_link(img.job_id)
+				}}">[log]</a>
+			<a class="img-dir" href="{{
+				bpo.images.path(img.branch, img.device, img.ui,
+						img.dir_name)
+				}}">[dir]</a>
 		{% endfor %}
 	</ul>
 </main>

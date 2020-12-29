@@ -146,6 +146,18 @@ main {
     text-decoration: underline;
 }
 
+.toc-grid {
+    display: grid;
+    grid-template-areas: "pkgs imgs";
+    grid-template-columns: auto auto;
+}
+.toc-grid-pkgs {
+    grid-area: pkgs;
+}
+.toc-grid-imgs {
+    grid-area: imgs;
+}
+
 .time {
     color: gray
 }
@@ -161,8 +173,14 @@ main {
 .version {
     color: purple;
 }
+.device {
+    color: darkblue;
+}
+.ui {
+    color: purple;
+}
 
-.job-log {
+.job-log, .img-dir {
     color: gray;
 }
 
@@ -203,5 +221,15 @@ footer .copyright {
     }
     .powered-by, .nav {
         text-align: center;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .toc-grid {
+	    grid-template-areas: "pkgs"
+	    			 "imgs";
+    }
+    .toc-grid-imgs {
+            margin-top: 20px;
     }
 }

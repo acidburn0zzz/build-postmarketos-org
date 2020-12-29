@@ -31,6 +31,7 @@ def reset():
     """
     paths = [bpo.config.const.args.db_path,
              bpo.config.const.args.html_out,
+             bpo.config.const.args.images_path,
              bpo.config.const.args.temp_path,
              bpo.config.const.args.repo_final_path,
              bpo.config.const.args.repo_wip_path,
@@ -72,6 +73,7 @@ def stop_server(*args, **kwargs):
     logging.info("Thread stops bpo server: " + threading.current_thread().name)
     result_queue.put(True)
     bpo.job_services.local.stop_thread()
+    bpo.stop()
 
 
 def stop_server_nok(*args, **kwargs):
@@ -97,19 +99,22 @@ class BPOServer():
 
     class BPOServerThread(threading.Thread):
 
-        def __init__(self, disable_pmos_mirror=True):
+        def __init__(self, disable_pmos_mirror=True, fill_image_queue=False):
             """ :param disable_pmos_mirror: set postmarketOS mirror to "". This
                     is useful to test package building, to ensure that
                     pmbootstrap won't refuse to build the package because a
                     binary package has been built already. Set to False to test
-                    building images. """
+                    building images.
+                :param fill_image_queue: add new images to the "image" table
+                    and start building them immediatelly.
+                    """
             threading.Thread.__init__(self)
             os.environ["FLASK_ENV"] = "development"
             sys.argv = ["bpo.py", "-t", "test/test_tokens.cfg"]
             if disable_pmos_mirror:
                 sys.argv += ["--mirror", ""]
             sys.argv += ["local"]
-            app = bpo.main(True)
+            app = bpo.main(True, fill_image_queue=fill_image_queue)
             self.srv = werkzeug.serving.make_server("127.0.0.1", 5000, app,
                                                     threaded=False)
             self.ctx = app.app_context()
@@ -118,12 +123,13 @@ class BPOServer():
         def run(self):
             self.srv.serve_forever()
 
-    def __init__(self, disable_pmos_mirror=True):
-        """ :param disable_pmos_mirror: see BPOServerThread """
+    def __init__(self, disable_pmos_mirror=True, fill_image_queue=False):
+        """ parameters: see BPOServerThread """
         global result_queue
         reset()
         result_queue = queue.Queue()
-        self.thread = self.BPOServerThread(disable_pmos_mirror)
+        self.thread = self.BPOServerThread(disable_pmos_mirror,
+                                           fill_image_queue)
 
     def __enter__(self):
         self.thread.start()
@@ -180,3 +186,22 @@ def assert_package(pkgname, arch="x86_64", branch="master", status=None,
 
     if job_id is not False and package.job_id != job_id:
         raise RuntimeError("Expected job_id {}: {}".format(job_id, package))
+
+
+def assert_image(device, branch, ui, status=None, count=1):
+    session = bpo.db.session()
+    image_str = f"{branch}:{device}:{ui}"
+
+    # Do not use bpo.db.get_image, because we want finished entries too.
+    result = session.query(bpo.db.Image).\
+        filter_by(device=device, branch=branch, ui=ui).all()
+    if len(result) != count:
+        raise RuntimeError(f"{image_str}: expected {count} entries in db, got"
+                           f" {len(result)}")
+
+    for image in result:
+        if status:
+            status_value = bpo.db.ImageStatus[status]
+            if image.status != status_value:
+                raise RuntimeError(f"Expected status {status}, but has"
+                                   f" {image.status.name}: {image}")

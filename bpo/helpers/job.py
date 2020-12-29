@@ -48,7 +48,7 @@ def remove_additional_indent(script, spaces=12):
 
 
 def run(name, note, tasks, branch=None, arch=None, pkgname=None,
-        version=None):
+        version=None, device=None, ui=None):
     """ :param note: what to send to the job service as description, rendered
                      as markdown in sourcehut
         :param branch: of pmaports to check out before running the job
@@ -66,7 +66,7 @@ def run(name, note, tasks, branch=None, arch=None, pkgname=None,
     job_id = js.run_job(name, note, tasks_formatted, branch)
 
     bpo.ui.log("job_" + name, arch=arch, branch=branch, pkgname=pkgname,
-               version=version, job_id=job_id)
+               version=version, job_id=job_id, device=device, ui=ui)
 
     return job_id
 
@@ -103,8 +103,41 @@ def update_status_package():
     session.commit()
 
 
+def get_status_image(image):
+    result = get_job_service().get_status(image.job_id)
+    status = bpo.job_services.base.JobStatus
+
+    if result in [status.pending, status.queued, status.running]:
+        return bpo.db.ImageStatus.building
+
+    if result == status.success:
+        return bpo.db.ImageStatus.published
+
+    if result == status.failed:
+        return bpo.db.ImageStatus.failed
+
+    raise RuntimeError(f"get_status_image: failed on job status: {result}")
+
+
+def update_status_image():
+    logging.info("Checking if 'building' images have failed or finished")
+    building = bpo.db.ImageStatus.building
+
+    session = bpo.db.session()
+    result = session.query(bpo.db.Image).filter_by(status=building).all()
+    for image in result:
+        status_new = get_status_image(image)
+        if status_new == building:
+            continue
+        bpo.db.set_image_status(session, image, status_new)
+        action = f"job_update_image_status_{status_new.name}"
+        bpo.ui.log_image(image, action)
+    session.commit()
+
+
 def update_status():
     update_status_package()
+    update_status_image()
 
 
 def get_link(job_id):

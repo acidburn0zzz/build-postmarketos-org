@@ -44,7 +44,8 @@ pytest:
         py3-pytest-cov \
         py3-pytest-timeout \
         py3-requests \
-        py3-sqlalchemy
+        py3-sqlalchemy \
+        xz
   - ln -s /tmp/pmbootstrap ../pmbootstrap
   - ln -s /home/pmos/.local/var/pmbootstrap/cache_git/pmaports ../pmbootstrap/aports
   script:

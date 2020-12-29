@@ -8,6 +8,7 @@ import os
 import bpo.config.const
 import bpo.db
 import bpo.helpers.apk
+import bpo.jobs.build_image
 import bpo.jobs.build_package
 import bpo.jobs.sign_index
 import bpo.repo.symlink
@@ -45,9 +46,46 @@ def next_package_to_build(session, arch, branch):
     return None
 
 
-def count_running_builds(session):
+def next_image_to_build(session, branch):
+    """ :returns: image db object """
+    # Check images where status = failed and retries left
+    failed = bpo.db.ImageStatus.failed
+    retry_count_max = bpo.config.const.retry_count_max
+    result = session.query(bpo.db.Image)\
+        .filter_by(branch=branch, status=failed)\
+        .filter(bpo.db.Image.retry_count < retry_count_max)\
+        .all()
+    if len(result):
+        return result[0]
+
+    # Check images in queue
+    queued = bpo.db.ImageStatus.queued
+    result = session.query(bpo.db.Image)\
+        .filter_by(branch=branch, status=queued)\
+        .all()
+    return result[0] if len(result) else None
+
+
+def count_running_builds_packages(session):
     building = bpo.db.PackageStatus.building
     return session.query(bpo.db.Package).filter_by(status=building).count()
+
+
+def count_running_builds_images(session):
+    building = bpo.db.ImageStatus.building
+    return session.query(bpo.db.Image).filter_by(status=building).count()
+
+
+def count_running_builds(session):
+    return (count_running_builds_packages(session) +
+            count_running_builds_images(session))
+
+
+def count_unpublished_packages(session, branch):
+    return session.query(bpo.db.Package).\
+            filter_by(branch=branch).\
+            filter(bpo.db.Package.status != bpo.db.PackageStatus.published).\
+            count()
 
 
 def has_unfinished_builds(session, arch, branch):
@@ -94,9 +132,28 @@ def build_arch_branch(session, slots_available, arch, branch,
     return started
 
 
+def build_images_branch(session, slots_available, branch):
+    """ :returns: amount of jobs that were started """
+    logging.info(f"{branch}: starting new image build jobs")
+    started = 0
+
+    while slots_available:
+        image = next_image_to_build(session, branch)
+        if not image:
+            break
+
+        bpo.jobs.build_image.run(image.device, image.branch, image.ui)
+        started += 1
+        slots_available -= 1
+
+    return started
+
+
 def build(force_repo_update=False):
-    """ Start as many parallel build package jobs, as configured. When all
-        packages are built, publish the packages.
+    """ Start as many parallel build jobs, as configured. When all packages are
+        built, publish the packages. (Images get published right after they
+        get submitted to the server in bpo/api/job_callback/build_image.py, not
+        here.)
         :param force_repo_update: rebuild the symlink and final repo, even if
                                   no new packages were built. Set this to True
                                   after deleting packages in the database, so
@@ -112,6 +169,19 @@ def build(force_repo_update=False):
             slots_available -= build_arch_branch(session, slots_available,
                                                  arch, branch,
                                                  force_repo_update)
+    if slots_available <= 0:
+        return
+
+    # Iterate over branches and build images
+    for branch in bpo.config.const.branches:
+        # Only build images on branches where all packages are published
+        if count_unpublished_packages(session, branch):
+            continue
+
+        slots_available -= build_images_branch(session, slots_available,
+                                               branch)
+        if slots_available <= 0:
+            break
 
 
 def get_apks(cwd):

@@ -57,6 +57,7 @@ def get_manifest(name, tasks, branch):
         - coreutils
         - procps
         - py3-requests
+        - xz
         sources:
         - "https://gitlab.com/postmarketOS/pmaports.git/"
         - "https://gitlab.com/postmarketOS/pmbootstrap.git/"

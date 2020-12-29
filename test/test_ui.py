@@ -29,23 +29,27 @@ def test_update_badge(monkeypatch):
     session = bpo.db.session()
     func = bpo.ui.update_badge
     func_pkgs = bpo.db.get_all_packages_by_status
+    func_imgs = bpo.db.get_all_images_by_status
     arch = "x86_64"
     branch = "master"
 
     # Building
-    assert func(session, func_pkgs(session)) == "building"
+    badge = func(session, func_pkgs(session), func_imgs(session))
+    assert badge == "building"
 
     # Failed
     pkg_hello = bpo.db.get_package(session, "hello-world", arch, branch)
     bpo.db.set_package_status(session, pkg_hello, bpo.db.PackageStatus.failed)
-    assert func(session, func_pkgs(session)) == "failed"
+    badge = func(session, func_pkgs(session), func_imgs(session))
+    assert badge == "failed"
 
     # Up-to-date
     pkg_wrapper = bpo.db.get_package(session, "hello-world-wrapper", arch,
                                      branch)
     bpo.db.set_package_status(session, pkg_hello, bpo.db.PackageStatus.built)
     bpo.db.set_package_status(session, pkg_wrapper, bpo.db.PackageStatus.built)
-    assert func(session, func_pkgs(session)) == "up-to-date"
+    badge = func(session, func_pkgs(session), func_imgs(session))
+    assert badge == "up-to-date"
 
     # hello-world-wrapper: change branch, set to failed
     pkg_wrapper.branch = "v20.05"
@@ -54,12 +58,15 @@ def test_update_badge(monkeypatch):
     session.commit()
 
     # Branch is not in config: still up-to-date
-    assert func(session, func_pkgs(session)) == "up-to-date"
+    badge = func(session, func_pkgs(session), func_imgs(session))
+    assert badge == "up-to-date"
 
     # Branch is in config: failed
     branches["v20.05"] = {"arches": ["x86_64"], "ignore_errors": False}
-    assert func(session, func_pkgs(session)) == "failed"
+    badge = func(session, func_pkgs(session), func_imgs(session))
+    assert badge == "failed"
 
     # Branch is ignored: up-to-date
     branches["v20.05"]["ignore_errors"] = True
-    assert func(session, func_pkgs(session)) == "up-to-date"
+    badge = func(session, func_pkgs(session), func_imgs(session))
+    assert badge == "up-to-date"

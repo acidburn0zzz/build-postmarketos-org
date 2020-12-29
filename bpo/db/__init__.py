@@ -158,6 +158,57 @@ class Log(base):
         return ret
 
 
+class ImageStatus(enum.Enum):
+    # Same as PackageStatus, except that "built" is missing. Unlike packages,
+    # we don't need to hold images back at the "built" stage until other
+    # packages from the same commit are built. However, we could use the
+    # "built" stage in the future if we decide to sign the OS images with a
+    # separate job that would have the sign keys available. Right now, the
+    # images are not signed, but a checksum is generated at the end of the
+    # build job for manual verification (build log is on sourcehut builds).
+    queued = 0
+    building = 1
+    published = 3
+    failed = 4
+
+
+class Image(base):
+    __tablename__ = "image"
+
+    # === DATABASE LAYOUT, DO NOT CHANGE! (read docs/db.md) ===
+    id = Column(Integer, primary_key=True)
+    date = Column(DateTime(timezone=True),
+                  server_default=sqlalchemy.sql.func.now())
+    last_update = Column(DateTime(timezone=True),
+                         onupdate=sqlalchemy.sql.func.now())
+    device = Column(String)
+    branch = Column(String)
+    ui = Column(String)
+    status = Column(Enum(ImageStatus))
+    job_id = Column(Integer)
+    dir_name = Column(String)
+    retry_count = Column(Integer, default=0)
+
+    Index("image:branch-device-ui", branch, device, ui)
+    Index("image:status", status)
+    Index("image:date", status)
+    # === END OF DATABASE LAYOUT ===
+
+    def __init__(self, device, branch, ui):
+        self.device = device
+        self.branch = branch
+        self.ui = ui
+        self.status = ImageStatus.queued
+
+    def __repr__(self):
+        ret = f"({self.id}){self.branch}:{self.device}:{self.ui}"
+        if self.job_id:
+            ret += f", job: {self.job_id}"
+        if self.dir_name:
+            ret += f", dir: {self.dir_name}"
+        return ret
+
+
 def init_relationships():
     # Only run this once!
     self = sys.modules[__name__]
@@ -214,12 +265,33 @@ def get_package(session, pkgname, arch, branch):
     return result[0] if len(result) else None
 
 
+def get_image(session, branch, device, ui):
+    """ Get a branch:device:ui specific image, that is currently being
+        processed (status is not finished). Unlike packages, we keep more than
+        just the latest entry in the database. """
+    result = session.query(bpo.db.Image).\
+        filter_by(branch=branch, device=device, ui=ui).\
+        filter(bpo.db.Image.status != bpo.db.ImageStatus.published).\
+        all()
+    return result[0] if len(result) else None
+
+
 def get_all_packages_by_status(session):
     """ :returns: {"failed": pkglist1, "building": pkglist2, ...},
                   pkglist is a list of bpo.db.Package objects """
     ret = {}
     for status in bpo.db.PackageStatus:
         ret[status.name] = session.query(bpo.db.Package).\
+            filter_by(status=status)
+    return ret
+
+
+def get_all_images_by_status(session):
+    """ :returns: {"failed": imglist1, "building": imglist2, ...},
+                  imglist is a list of bpo.db.Image objects """
+    ret = {}
+    for status in bpo.db.ImageStatus:
+        ret[status.name] = session.query(bpo.db.Image).\
             filter_by(status=status)
     return ret
 
@@ -244,6 +316,27 @@ def set_package_status(session, package, status, job_id=None):
     if job_id:
         package.job_id = job_id
     session.merge(package)
+    session.commit()
+
+
+def set_image_status(session, image, status, job_id=None, dir_name=None,
+                     date=None):
+    """ :param image: bpo.db.Image object
+        :param status: bpo.db.ImageStatus value
+        :param job_id: job ID (i.e. job number from sourcehut builds)
+        :param dir_name: directory that holds the image files
+        :param date: new date (once the image is built, the previous date from
+                     when the image was queued gets updated to the date when
+                     the image was published)
+        """
+    image.status = status
+    if job_id:
+        image.job_id = job_id
+    if dir_name:
+        image.dir_name = dir_name
+    if date:
+        image.date = date
+    session.merge(image)
     session.commit()
 
 

@@ -15,16 +15,21 @@ import bpo.db
 env = None
 
 
-def update_badge(session, pkgs):
+def update_badge(session, pkgs, imgs):
     """ Update html_out/badge.svg
         :param session: return value of bpo.db.session()
         :param pkgs: return value of bpo.db.get_all_packages_by_status()
+        :param imgs: return value of bpo.db.get_all_images_by_status()
         :returns: one of: "up-to-date", "failed", "building" """
     # Get new name
     new = "up-to-date"
-    if bpo.db.get_failed_packages_count_relevant(session):
+    if bpo.db.get_failed_packages_count_relevant(session) \
+            or imgs["failed"].count():
         new = "failed"
-    elif pkgs["building"].count() or pkgs["queued"].count():
+    elif pkgs["building"].count() \
+            or imgs["building"].count() \
+            or pkgs["queued"].count() \
+            or imgs["queued"].count():
         new = "building"
 
     # Copy to output dir
@@ -52,13 +57,15 @@ def log_entries_by_day(session):
     return ret
 
 
-def update_index(session, pkgs):
+def update_index(session, pkgs, imgs):
     """ Update html_out/index.html
         :param session: return value of bpo.db.session()
-        :param pkgs: return value of bpo.db.get_all_packages_by_status() """
+        :param pkgs: return value of bpo.db.get_all_packages_by_status()
+        :param imgs: return value of bpo.db.get_all_images_by_status() """
     # Query information from DB
     log_entries_days = log_entries_by_day(session)
     pkgcount = session.query(func.count(bpo.db.Package.id)).scalar()
+    imgcount = session.query(func.count(bpo.db.Image.id)).scalar()
 
     # Fill template
     global env
@@ -66,6 +73,8 @@ def update_index(session, pkgs):
     html = template.render(bpo=bpo,
                            pkgcount=pkgcount,
                            pkgs=pkgs,
+                           imgcount=imgcount,
+                           imgs=imgs,
                            len=len,
                            log_entries_days=log_entries_days)
 
@@ -80,8 +89,9 @@ def update_index(session, pkgs):
 def update(session):
     """ Update everything in html_out """
     pkgs = bpo.db.get_all_packages_by_status(session)
-    update_index(session, pkgs)
-    update_badge(session, pkgs)
+    imgs = bpo.db.get_all_images_by_status(session)
+    update_index(session, pkgs, imgs)
+    update_badge(session, pkgs, imgs)
 
 
 def copy_static():
@@ -101,6 +111,23 @@ def copy_static():
     if os.path.exists(target):
         shutil.rmtree(target)
     shutil.move(temp, target)
+
+
+def generate_image_readme(image, path):
+    """ Generate a readme.html for one image directory (which contains one or
+        more postmarketOS images for a specific branch:device:ui combination).
+        The readme.html links to the job that built the image etc.
+
+        :param image: bpo.db.Image object
+        :param path: full path to the readme.html to be generated """
+    global env
+
+    template = env.get_template("image_readme.html")
+    html = template.render(image=image,
+                           job_link=bpo.helpers.job.get_link(image.job_id))
+
+    with open(path, "w") as handle:
+        handle.write(html)
 
 
 def init():
@@ -135,3 +162,15 @@ def log_package(package, action):
     log(action=action, arch=package.arch, branch=package.branch,
         pkgname=package.pkgname, version=package.version,
         job_id=package.job_id, retry_count=package.retry_count)
+
+
+def log_image(image, action):
+    """ Convenience wrapper
+        :param image: bpo.db.Image object """
+    log(action=action,
+        device=image.device,
+        branch=image.branch,
+        ui=image.ui,
+        job_id=image.job_id,
+        retry_count=image.retry_count,
+        dir_name=image.dir_name)
