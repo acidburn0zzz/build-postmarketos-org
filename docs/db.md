@@ -64,3 +64,29 @@ class Log(base):
     # [v3]: Index("status", Package.status)
     # === END OF DATABASE LAYOUT ===
 ```
+
+#### New table
+
+1. Add the table in `bpo/db/__init__.py` as new class, with the initial db
+   layout. sqlalchemy will just create the table if it is missing, so there is
+   no need to extend `bpo/db/migrate.py` for the initial version. Remember to
+   add the "DATABASE LAYOUT" comments, just like in the other tables.
+
+```py
+class Images(base):
+    __tablename__ = "images"
+
+    # === DATABASE LAYOUT, DO NOT CHANGE! (read docs/db.md) ===
+    id = Column(Integer, primary_key=True)
+    date = Column(DateTime(timezone=True),
+                  server_default=sqlalchemy.sql.func.now())
+    ...
+    # === END OF DATABASE LAYOUT ===
+
+    def __init__(self, device, branch, ui, kernel=None):
+        self.device = device
+	...
+
+    def __repr__(self):
+    	...
+```
