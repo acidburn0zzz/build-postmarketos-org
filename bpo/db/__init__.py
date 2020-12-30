@@ -116,10 +116,14 @@ class Log(base):
     job_id = Column(Integer)
     commit = Column(String, system=True)  # [v2]
     retry_count = Column(Integer, default=0, system=True)  # [v5]
+    device = Column(String, system=True)  # [v6]
+    ui = Column(String, system=True)  # [v6]
+    dir_name = Column(String, system=True)  # [v6]
     # === END OF DATABASE LAYOUT ===
 
     def __init__(self, action, payload=None, arch=None, branch=None,
-                 pkgname=None, version=None, job_id=None, retry_count=None):
+                 pkgname=None, version=None, job_id=None, retry_count=None,
+                 device=None, ui=None, dir_name=None):
         self.action = action
         self.payload = json.dumps(payload, indent=4) if payload else None
         self.arch = arch
@@ -128,6 +132,9 @@ class Log(base):
         self.version = version
         self.job_id = job_id
         self.retry_count = retry_count
+        self.device = device
+        self.ui = ui
+        self.dir_name = dir_name
         logging.info("### " + str(self) + " ###")
 
     def __repr__(self):
@@ -142,6 +149,12 @@ class Log(base):
                 ret += "-" + self.version
         if self.job_id:
             ret += ", job: " + str(self.job_id)
+        if self.device:
+            ret += f", device: {self.device}"
+        if self.ui:
+            ret += f", ui: {self.ui}"
+        if self.dir_name:
+            ret += f", dir: {self.dir_name}"
         return ret
 
 

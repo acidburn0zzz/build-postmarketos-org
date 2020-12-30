@@ -57,3 +57,16 @@ def upgrade():
                        " ADD COLUMN 'retry_count'"
                        " INT DEFAULT(0)")
         version_set(5)
+
+    # Log: add columns "device", "ui", "dir_name"
+    if version_get() == 5:
+        engine.execute("ALTER TABLE 'log'"
+                       " ADD COLUMN 'device'"
+                       " VARCHAR")
+        engine.execute("ALTER TABLE 'log'"
+                       " ADD COLUMN 'ui'"
+                       " VARCHAR")
+        engine.execute("ALTER TABLE 'log'"
+                       " ADD COLUMN 'dir_name'"
+                       " VARCHAR")
+        version_set(6)
