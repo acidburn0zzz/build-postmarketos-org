@@ -94,11 +94,18 @@ class BPOServer():
 
     class BPOServerThread(threading.Thread):
 
-        def __init__(self):
+        def __init__(self, disable_pmos_mirror=True):
+            """ :param disable_pmos_mirror: set postmarketOS mirror to "". This
+                    is useful to test package building, to ensure that
+                    pmbootstrap won't refuse to build the package because a
+                    binary package has been built already. Set to False to test
+                    building images. """
             threading.Thread.__init__(self)
             os.environ["FLASK_ENV"] = "development"
-            sys.argv = ["bpo.py", "-t", "test/test_tokens.cfg", "--mirror", "",
-                        "local"]
+            sys.argv = ["bpo.py", "-t", "test/test_tokens.cfg"]
+            if disable_pmos_mirror:
+                sys.argv += ["--mirror", ""]
+            sys.argv += ["local"]
             app = bpo.main(True)
             self.srv = werkzeug.serving.make_server("127.0.0.1", 5000, app,
                                                     threaded=False)
@@ -108,11 +115,12 @@ class BPOServer():
         def run(self):
             self.srv.serve_forever()
 
-    def __init__(self):
+    def __init__(self, disable_pmos_mirror=True):
+        """ :param disable_pmos_mirror: see BPOServerThread """
         global result_queue
         reset()
         result_queue = queue.Queue()
-        self.thread = self.BPOServerThread()
+        self.thread = self.BPOServerThread(disable_pmos_mirror)
 
     def __enter__(self):
         self.thread.start()
