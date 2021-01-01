@@ -47,9 +47,11 @@ def run(arch, branch):
             export BPO_API_ENDPOINT="sign-index"
             export BPO_ARCH=""" + shlex.quote(arch) + """
             export BPO_BRANCH=""" + shlex.quote(branch) + """
+            export BPO_DEVICE=""
             export BPO_PAYLOAD_FILES="APKINDEX.tar.gz"
             export BPO_PAYLOAD_IS_JSON="0"
             export BPO_PKGNAME=""
+            export BPO_UI=""
             export BPO_VERSION=""
 
             # Always run submit.py with exec, because when running locally, the
