@@ -31,9 +31,10 @@ def test_sourcehut_get_status(monkeypatch):
 
     # Get the job service
     js = bpo.helpers.job.get_job_service()
+    status = bpo.job_services.base.JobStatus
 
     # https://builds.sr.ht/~ollieparanoid/job/94567
-    assert js.get_status(94567) == bpo.db.PackageStatus.failed
+    assert js.get_status(94567) == status.failed
 
     # https://builds.sr.ht/~ollieparanoid/job/94499
-    assert js.get_status(94499) == bpo.db.PackageStatus.built
+    assert js.get_status(94499) == status.success

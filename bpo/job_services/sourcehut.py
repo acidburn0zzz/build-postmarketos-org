@@ -104,21 +104,6 @@ def get_manifest(name, tasks, branch):
     return ret
 
 
-def convert_status(status):
-    """ Convert sourchut status enum value to bpo.db.PackageStatus.
-        Reference: https://man.sr.ht/builds.sr.ht/api.md#job-status-enum """
-    if status in ["pending", "queued", "running"]:
-        return bpo.db.PackageStatus.building
-    if status == "success":
-        return bpo.db.PackageStatus.built
-    if status == "failed":
-        return bpo.db.PackageStatus.failed
-
-    # Fallback
-    logging.critical("ERROR: can't convert sourcehut status: " + status)
-    return bpo.db.PackageStatus.failed
-
-
 class SourcehutJobService(JobService):
 
     def run_job(self, name, note, tasks, branch):
@@ -135,7 +120,7 @@ class SourcehutJobService(JobService):
 
     def get_status(self, job_id):
         result = api_request("jobs/" + str(job_id), method="GET")
-        status = convert_status(result.json()["status"])
+        status = bpo.job_services.base.JobStatus[result.json()["status"]]
         logging.info("=> status: " + status.name)
         return status
 

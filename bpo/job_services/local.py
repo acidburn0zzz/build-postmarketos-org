@@ -263,19 +263,15 @@ class LocalJobService(JobService):
         global jobs
         global jobs_cond
 
+        status = bpo.job_services.base.JobStatus
+
         # Job from previous bpo instance
         if job_id_check > job_id:
-            return bpo.db.PackageStatus.failed
+            return status.failed
 
         with jobs_cond:
-            status = jobs[job_id_check]["status"]
-
-        # Convert the status string
-        if status == "success":
-            return bpo.db.PackageStatus.built
-        if status == "failed":
-            return bpo.db.PackageStatus.failed
-        return bpo.db.PackageStatus.building
+            result = jobs[job_id_check]["status"]
+        return status[result]
 
     def get_link(self, job_id):
         return ("file://" + bpo.config.args.temp_path + "/local_job_logs/" +

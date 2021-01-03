@@ -71,15 +71,30 @@ def run(name, note, tasks, branch=None, arch=None, pkgname=None,
     return job_id
 
 
+def get_status_package(package):
+    result = get_job_service().get_status(package.job_id)
+    status = bpo.job_services.base.JobStatus
+
+    if result in [status.pending, status.queued, status.running]:
+        return bpo.db.PackageStatus.building
+
+    if result == status.success:
+        return bpo.db.PackageStatus.built
+
+    if result == status.failed:
+        return bpo.db.PackageStatus.failed
+
+    raise RuntimeError(f"get_status_package: failed on job status: {result}")
+
+
 def update_status_package():
     logging.info("Checking if 'building' packages have failed or finished")
     building = bpo.db.PackageStatus.building
-    js = get_job_service()
 
     session = bpo.db.session()
     result = session.query(bpo.db.Package).filter_by(status=building).all()
     for package in result:
-        status_new = js.get_status(package.job_id)
+        status_new = get_status_package(package)
         if status_new == building:
             continue
         bpo.db.set_package_status(session, package, status_new)
