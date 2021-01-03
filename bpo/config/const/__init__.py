@@ -5,6 +5,7 @@
 # like pmb/config/__init__.py).
 import collections
 import os
+import re
 
 # Directory containing bpo.py and the bpo module
 top_dir = os.path.normpath(os.path.realpath(__file__) + "/../../../..")
@@ -65,3 +66,5 @@ test_tokens = {"push_hook_gitlab": "iptTdfRNwSvg8ycZqiEdNhMqGalvsgvSXp91SIk2du"
 # abuild-sign embeds this key name into the APKINDEX. The name of the .pub file
 # in pmbootstrap.git's pmb/data/keys dir must match it.
 final_repo_key_name = "build.postmarketos.org.rsa"
+
+pattern_apk_name = re.compile("^[a-z0-9._+-]+\\.apk$")

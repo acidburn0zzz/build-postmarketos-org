@@ -3,7 +3,6 @@
 
 import logging
 import os
-import re
 
 from flask import request
 from bpo.helpers.headerauth import header_auth
@@ -17,7 +16,7 @@ blueprint = bpo.api.blueprint
 
 def get_apks(request):
     """ Get all attached apks and verify the file names. """
-    pattern = re.compile("^[a-z0-9._+-]+.apk$")
+    pattern = bpo.config.const.pattern_apk_name
     ret = request.files.getlist("file[]")
 
     for apk in ret:
