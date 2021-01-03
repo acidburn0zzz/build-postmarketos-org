@@ -9,6 +9,6 @@ blueprint = bpo.api.blueprint
 
 @blueprint.route("/api/public/update-job-status", methods=["POST"])
 def public_update_job_status():
-    bpo.helpers.job.update_package_status()
+    bpo.helpers.job.update_status()
     bpo.repo.build()
     return "done"

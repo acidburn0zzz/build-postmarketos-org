@@ -146,4 +146,4 @@ def fix(limit_arch=None, limit_branch=None):
             fix_db_vs_disk(arch, branch)
 
     # Fix running job status
-    bpo.helpers.job.update_package_status()
+    bpo.helpers.job.update_status()

@@ -58,7 +58,7 @@ def test_retry_build(monkeypatch):
 
         # Pretend that the build failed: call api/public/update-job-status,
         # just like sourcehut would do it. The bpo server then calls
-        # bpo.helpers.jobs.update_package_status(), which reports a job
+        # bpo.helpers.jobs.update_status(), which reports a job
         # failure for the local job service. The bpo server starts the next
         # build. job_run_fake() gets called again and stops the bpo server.
         bpo_test.trigger.public_update_job_status()

@@ -71,7 +71,7 @@ def run(name, note, tasks, branch=None, arch=None, pkgname=None,
     return job_id
 
 
-def update_package_status():
+def update_status_package():
     logging.info("Checking if 'building' packages have failed or finished")
     building = bpo.db.PackageStatus.building
     js = get_job_service()
@@ -86,6 +86,10 @@ def update_package_status():
         action = "job_update_package_status_" + status_new.name
         bpo.ui.log_package(package, action)
     session.commit()
+
+
+def update_status():
+    update_status_package()
 
 
 def get_link(job_id):

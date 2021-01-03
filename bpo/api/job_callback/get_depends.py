@@ -136,7 +136,7 @@ def job_callback_get_depends():
                job_id=job_id)
 
     # Make sure that we did not miss any job status changes
-    bpo.helpers.job.update_package_status()
+    bpo.helpers.job.update_status()
 
     bpo.repo.build(force_repo_update)
     return "warming up build servers..."
