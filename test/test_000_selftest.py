@@ -10,6 +10,7 @@ import bpo_test.trigger
 import bpo.repo
 
 
+@pytest.mark.timeout(10)
 def test_assert_package(monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():

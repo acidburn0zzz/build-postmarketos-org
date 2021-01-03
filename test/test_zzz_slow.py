@@ -68,8 +68,8 @@ def test_remove_deleted_package_SLOW_40s(monkeypatch):
     assert os.path.exists(final_path + "/APKINDEX.tar.gz")
 
 
-@pytest.mark.timeout(40)
-def test_depends_SLOW_40s(monkeypatch):
+@pytest.mark.timeout(60)
+def test_depends_SLOW_60s(monkeypatch):
     """ Trigger the api push hook, then let bpo run the depends job.
         Monkeypatch bpo.repo.build, so it stops after receiving depends
         and does not try to build the repo. """
