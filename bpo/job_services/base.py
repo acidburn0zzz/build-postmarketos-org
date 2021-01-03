@@ -11,8 +11,5 @@ class JobService:
     def run_job(self, name, note, tasks):
         pass
 
-    def update_package_status_after_restart(self):
-        pass
-
     def get_link(self, job_id):
         pass
