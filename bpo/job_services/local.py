@@ -27,7 +27,7 @@ job_id = 0
 #             "note": ...,
 #             "tasks": [...],
 #             "branch": ...,
-#             "status": "queued" | "building" | "built" | "failed"}
+#             "status": "queued" | "running" | "success" | "failed"}
 # Set jobs to None to exit the LocalJobServiceThread (used in testsuite).
 jobs = {}
 jobs_cond = threading.Condition()
