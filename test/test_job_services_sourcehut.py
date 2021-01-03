@@ -1,6 +1,7 @@
 # Copyright 2020 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Testing bpo/job_services/sourcehut.py """
+import os
 import pytest
 import sys
 
@@ -25,9 +26,16 @@ def test_sourcehut_get_secrets_by_job(monkeypatch):
 
 @pytest.mark.sourcehut
 def test_sourcehut_get_status(monkeypatch):
+    """ This test is disabled in .ci/pytest.sh. Run it manually as follows:
+        $ export SOURCEHUT_TOKEN=...
+        $ pytest -xvv test/test_job_services_sourcehut.py
+    """
     # Initialize enough of bpo server, so get_job_service() works
     monkeypatch.setattr(sys, "argv", ["bpo.py", "sourcehut"])
     bpo.init_components()
+
+    monkeypatch.setattr(bpo.config.tokens, "sourcehut",
+                        os.environ["SOURCEHUT_TOKEN"])
 
     # Get the job service
     js = bpo.helpers.job.get_job_service()
