@@ -141,8 +141,8 @@ class LocalJobServiceThread(threading.Thread):
             export BPO_WIP_REPO_PATH=""" + shlex.quote(wip_repo_path) + """
             export BPO_WIP_REPO_URL="" # empty, because we copy it instead
             export BPO_WIP_REPO_ARG="" # empty, because we copy it instead
-            export BPO_TIMEOUT="0.1"
-            export BPO_TIMEOUT_IGNORE="1"
+            export BPO_TIMEOUT_READ="0.1"
+            export BPO_TIMEOUT_READ_IGNORE="1"
         """
 
         # Write each task's script into a temp file and run it

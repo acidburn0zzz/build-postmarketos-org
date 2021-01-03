@@ -58,9 +58,9 @@ headers = {"X-BPO-Arch": os.environ["BPO_ARCH"],
 
 # The server may take long to answer (#49). Hack for the testsuite until this
 # is resolved: set a timeout and ignore the ReadTimeout exception
-timeout = None
-if "BPO_TIMEOUT" in os.environ:
-    timeout = float(os.environ["BPO_TIMEOUT"])
+timeout_connect = float(os.environ.get("BPO_TIMEOUT_CONNECT", 0)) or None
+timeout_read = float(os.environ.get("BPO_TIMEOUT_READ", 0)) or None
+timeout = (timeout_connect, timeout_read)
 
 # Submit JSON
 if is_json:
@@ -78,8 +78,8 @@ if is_json:
         response = requests.post(url, json=data, headers=headers,
                                  timeout=timeout)
     except requests.exceptions.ReadTimeout:
-        if "BPO_TIMEOUT_IGNORE" in os.environ:
-            print("hack for testsuite: ignore timeout")
+        if "BPO_TIMEOUT_READ_IGNORE" in os.environ:
+            print("hack for testsuite: ignore read timeout")
             exit(0)
         raise
 
@@ -98,8 +98,8 @@ else:  # Submit blobs
         response = requests.post(url, files=blobs, headers=headers,
                                  timeout=timeout)
     except requests.exceptions.ReadTimeout:
-        if "BPO_TIMEOUT_IGNORE" in os.environ:
-            print("hack for testsuite: ignore timeout")
+        if "BPO_TIMEOUT_READ_IGNORE" in os.environ:
+            print("hack for testsuite: ignore read timeout")
             exit(0)
         raise
 
