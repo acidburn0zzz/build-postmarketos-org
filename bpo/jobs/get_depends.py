@@ -18,7 +18,7 @@ def run(branch):
             export ARCH=""" + shlex.quote(arch) + """
             export JSON="depends.$ARCH.json"
 
-            ./pmbootstrap/pmbootstrap.py \\
+            pmbootstrap \\
                 --aports=$PWD/pmaports \\
                 -mp """ + shlex.quote(mirror_final) + """ \\
                 repo_missing --built --arch "$ARCH" \\

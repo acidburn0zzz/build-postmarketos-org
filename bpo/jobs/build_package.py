@@ -68,7 +68,7 @@ def run(arch, pkgname, branch):
                 > pmbootstrap/pmb/data/keys/wip.rsa.pub
             """),
         ("pmbootstrap_build", """
-            ./pmbootstrap/pmbootstrap.py \\
+            pmbootstrap \\
                 -m """ + mirror_alpine + """ \
                 """ + mirrors + """ \\
                 --aports=$PWD/pmaports \\
@@ -83,7 +83,7 @@ def run(arch, pkgname, branch):
                 """ + shlex.quote(pkgname) + """
             """),
         ("checksums", """
-            cd "$(pmbootstrap/pmbootstrap.py -q config work)/packages/"
+            cd "$(pmbootstrap -q config work)/packages/"
             sha512sum $(find . -name '*.apk')
         """),
         ("submit", """
@@ -91,7 +91,7 @@ def run(arch, pkgname, branch):
             export BPO_ARCH=""" + shlex.quote(arch) + """
             export BPO_BRANCH=""" + shlex.quote(branch) + """
             export BPO_DEVICE=""
-            packages="$(pmbootstrap/pmbootstrap.py -q config work)/packages"
+            packages="$(pmbootstrap -q config work)/packages"
             export BPO_PAYLOAD_FILES="$(find "$packages" -name '*.apk')"
             export BPO_PAYLOAD_IS_JSON="0"
             export BPO_PKGNAME=""" + shlex.quote(pkgname) + """

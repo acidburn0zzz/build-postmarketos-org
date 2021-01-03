@@ -25,16 +25,16 @@ def run(arch, branch):
             fi
             """),
         ("sign", """
-            ./pmbootstrap/pmbootstrap.py \\
+            pmbootstrap \\
                 --aports=$PWD/pmaports \\
                 --no-ccache \\
                 build_init
-            work_dir="$(./pmbootstrap/pmbootstrap.py -q config work)"
+            work_dir="$(pmbootstrap -q config work)"
             chroot_target="$work_dir/chroot_native/home/pmos/"
             sudo cp APKINDEX.tar.gz "$chroot_target"
             sudo cp .final.rsa "$chroot_target"/""" + shlex.quote(rsa) + """
             sudo chown -R """ + shlex.quote(uid) + """ "$chroot_target"
-            ./pmbootstrap/pmbootstrap.py \\
+            pmbootstrap \\
                 --aports=$PWD/pmaports \\
                 --details-to-stdout \\
                 chroot --user -- \\

@@ -82,7 +82,8 @@ def get_manifest(name, tasks, branch):
              echo "is_default_channel = False" ) > ~/.config/pmbootstrap.cfg
            git -C pmaports checkout """ + shlex.quote(branch) + """
 
-           yes "" | ./pmbootstrap/pmbootstrap.py --aports=$PWD/pmaports -q init
+           sudo ln -s "$PWD"/pmbootstrap/pmbootstrap.py /usr/bin/pmbootstrap
+           yes "" | pmbootstrap --aports=$PWD/pmaports -q init
            sudo modprobe binfmt_misc
            sudo mount -t binfmt_misc none /proc/sys/fs/binfmt_misc
 

@@ -91,7 +91,7 @@ class LocalJobServiceThread(threading.Thread):
             cp -r """ + shlex.quote(bpo.config.const.top_dir) + """/helpers \
                     build.postmarketos.org
             echo """ + shlex.quote(token) + """ > ./token
-            ./pmbootstrap/pmbootstrap.py -q -y zap -p
+            pmbootstrap -q -y zap -p
 
             # Switch branch and release channel
             git -C pmaports checkout """ + shlex.quote(branch) + """
@@ -99,7 +99,7 @@ class LocalJobServiceThread(threading.Thread):
 
             # Copy WIP repo
             branch=""" + shlex.quote(branch) + """
-            work_path="$(./pmbootstrap/pmbootstrap.py -q config work)"
+            work_path="$(pmbootstrap -q config work)"
             packages_path="$work_path/packages"
             repo_wip_path=""" + shlex.quote(repo_wip_path) + """
             if [ -n "$branch" ] && [ -d "$repo_wip_path/$branch" ]; then
@@ -153,6 +153,8 @@ class LocalJobServiceThread(threading.Thread):
             with open(temp_script, "w", encoding="utf-8") as handle:
                 handle.write("cd " + shlex.quote(temp_path) + "\n" +
                              env_vars + "\n" +
+                             'alias pmbootstrap="$PWD/pmbootstrap/' +
+                             'pmbootstrap.py"\n' +
                              script)
             if not self.run_print_try(["sh", "-ex", temp_script]):
                 logging.info("Job failed!")
