@@ -129,33 +129,39 @@ class LocalJobServiceThread(threading.Thread):
         temp_path = bpo.config.args.temp_path + "/local_job"
         os.makedirs(temp_path, exist_ok=True)
 
-        # Common env vars for each task
+        # Common header for each task
         host = ("http://" + bpo.config.args.host + ":" +
                 str(bpo.config.args.port))
         wip_repo_path = bpo.config.args.repo_wip_path
-        env_vars = """
+        task_header = f"""
             export BPO_TOKEN_FILE="./token"
-            export BPO_API_HOST=""" + shlex.quote(host) + """
-            export BPO_JOB_ID=""" + str(job_id) + """
-            export BPO_JOB_NAME=""" + shlex.quote(name) + """
-            export BPO_WIP_REPO_PATH=""" + shlex.quote(wip_repo_path) + """
+            export BPO_API_HOST={shlex.quote(host)}
+            export BPO_JOB_ID={job_id}
+            export BPO_JOB_NAME={shlex.quote(name)}
+            export BPO_WIP_REPO_PATH={shlex.quote(wip_repo_path)}
             export BPO_WIP_REPO_URL="" # empty, because we copy it instead
             export BPO_WIP_REPO_ARG="" # empty, because we copy it instead
             export BPO_TIMEOUT_READ="0.1"
             export BPO_TIMEOUT_READ_IGNORE="1"
+
+            cd {shlex.quote(temp_path)}
+
+            alias pmbootstrap="$PWD/pmbootstrap/pmbootstrap.py"
         """
 
         # Write each task's script into a temp file and run it
         temp_script = temp_path + "/current_task.sh"
+
         for task, script in tasks.items():
             print("### Task: " + task + " ###")
 
             with open(temp_script, "w", encoding="utf-8") as handle:
-                handle.write("cd " + shlex.quote(temp_path) + "\n" +
-                             env_vars + "\n" +
-                             'alias pmbootstrap="$PWD/pmbootstrap/' +
-                             'pmbootstrap.py"\n' +
-                             script)
+                handle.write("#!/bin/sh -ex\n")
+                handle.write(f"# Task: {task}\n\n")
+                handle.write("# Header\n")
+                handle.write(task_header)
+                handle.write("# Script\n")
+                handle.write(script)
             if not self.run_print_try(["sh", "-ex", temp_script]):
                 logging.info("Job failed!")
                 return False
