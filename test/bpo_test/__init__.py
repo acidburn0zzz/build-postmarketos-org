@@ -16,6 +16,7 @@ sys.path.insert(0, topdir)
 # Use "noqa" to ignore "E402 module level import not at top of file"
 import bpo  # noqa
 import bpo.config.const  # noqa
+import bpo.config.const.args  # noqa
 import bpo.config.args  # noqa
 import bpo.job_services.local  # noqa
 
@@ -25,12 +26,14 @@ result_queue = None
 
 def reset():
     """ Remove the database, generated binary packages and temp dirs. To be
-        used at the start of test cases. """
-    paths = [bpo.config.args.db_path,
-             bpo.config.args.html_out,
-             bpo.config.args.temp_path,
-             bpo.config.args.repo_final_path,
-             bpo.config.args.repo_wip_path,
+        used at the start of test cases. Using bpo.config.const.args instead
+        of bpo.config.args, because this runs before bpo.config.args.init().
+    """
+    paths = [bpo.config.const.args.db_path,
+             bpo.config.const.args.html_out,
+             bpo.config.const.args.temp_path,
+             bpo.config.const.args.repo_final_path,
+             bpo.config.const.args.repo_wip_path,
              bpo.config.const.repo_wip_keys]
 
     logging.info("Removing all BPO data")

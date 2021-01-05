@@ -1,37 +1,13 @@
 # Copyright 2020 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
+""" Default values are stored in bpo/config/const/args.py. After
+    bpo.config.args.init() ran, all values are available in bpo.config.args
+    (e.g. bpo.config.args.job_service). """
 
 import argparse
 import sys
-import os
 import bpo.config.const
-
-# Defaults (common)
-tokens = bpo.config.const.top_dir + "/.tokens.cfg"
-host = "127.0.0.1"
-port = 5000
-db_path = bpo.config.const.top_dir + "/bpo.db"
-job_service = "local"
-mirror = "http://mirror.postmarketos.org/postmarketos"
-temp_path = bpo.config.const.top_dir + "/_temp"
-repo_final_path = bpo.config.const.top_dir + "/_repo_final"
-repo_wip_path = bpo.config.const.top_dir + "/_repo_wip"
-html_out = bpo.config.const.top_dir + "/_html_out"
-auto_get_depends = False
-url_api = "https://build.postmarketos.org"
-url_repo_wip_http = "http://build.postmarketos.org/wip"
-url_repo_wip_https = "https://build.postmarketos.org/wip"
-force_final_repo_sign = False
-
-
-# Defaults (local)
-local_pmaports = os.path.realpath(bpo.config.const.top_dir +
-                                  "/../pmbootstrap/aports")
-local_pmbootstrap = os.path.realpath(bpo.config.const.top_dir +
-                                     "/../pmbootstrap")
-
-# Defaults (sourcehut)
-sourcehut_user = "postmarketos"
+import bpo.config.const.args
 
 
 def job_service_local(parser):
@@ -110,16 +86,16 @@ def init():
                   job_service_sourcehut(job_service)]
 
     # Set defaults from module attributes
-    self = sys.modules[__name__]
     for subparser in [parser] + subparsers:
         for action in subparser._actions:
             if action.dest == "help" or not action.help:
                 continue
-            default = getattr(self, action.dest)
+            default = getattr(bpo.config.const.args, action.dest)
             action.default = default
             action.help += " (default: {})".format(default)
 
-    # Overwrite module attributes with result
+    # Store result as module attributs (bpo.config.args.job_service etc.)
     args = parser.parse_args()
+    self = sys.modules[__name__]
     for arg in vars(args):
         setattr(self, arg, getattr(args, arg))

@@ -31,7 +31,7 @@ def parse_arguments():
     parser.add_argument("-b", "--branch", default="master",
                         help="pmaports.git branch (default: master)")
     parser.add_argument("-d", "--db-path", help="path to sqlite3 database",
-                        default=bpo.config.args.db_path)
+                        default=bpo.config.const.args.db_path)
     parser.add_argument("-f", help="when not specifying any pkgnames, instead"
                         " of considering all packages, only look at those with"
                         " a certain status", choices=status_choices(),
