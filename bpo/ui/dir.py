@@ -3,13 +3,14 @@
 import bpo.helpers.job
 
 
-def write_readme_image(image, path):
+def write_readme_image(path, image):
     """ Generate a readme.html for one image directory (which contains one or
         more postmarketOS images for a specific branch:device:ui combination).
         The readme.html links to the job that built the image etc.
 
-        :param image: bpo.db.Image object
-        :param path: full path to the readme.html to be generated """
+        :param path: full path to the readme.html to be generated
+        :param image: bpo.db.Image object """
+
     template = bpo.ui.env.get_template("dir_readme_image.html")
     html = template.render(image=image,
                            job_link=bpo.helpers.job.get_link(image.job_id))
