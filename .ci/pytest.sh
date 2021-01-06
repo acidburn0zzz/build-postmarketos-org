@@ -4,4 +4,4 @@ cd "$topdir"
 
 ../pmbootstrap/pmbootstrap.py work_migrate
 
-pytest -vv -x --cov=bpo test -m "not sourcehut" "$@"
+pytest -vv -x --cov=bpo test -m "not skip_ci" "$@"

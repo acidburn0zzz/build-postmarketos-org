@@ -24,7 +24,7 @@ def test_sourcehut_get_secrets_by_job(monkeypatch):
     assert func("sign_index") == "secrets:\n- f00d\n- c4f3\n"
 
 
-@pytest.mark.sourcehut
+@pytest.mark.skip_ci
 def test_sourcehut_get_status(monkeypatch):
     """ This test is disabled in .ci/pytest.sh. Run it manually as follows:
         $ export SOURCEHUT_TOKEN=...
