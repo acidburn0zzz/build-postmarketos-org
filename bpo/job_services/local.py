@@ -144,9 +144,16 @@ class LocalJobServiceThread(threading.Thread):
             export BPO_TIMEOUT_READ="0.1"
             export BPO_TIMEOUT_READ_IGNORE="1"
 
+            export PMBOOTSTRAP_DIR={shlex.quote(temp_path)}"/pmbootstrap"
+            export PMAPORTS_DIR={shlex.quote(temp_path)}"/pmaports"
+
             cd {shlex.quote(temp_path)}
 
-            alias pmbootstrap="$PWD/pmbootstrap/pmbootstrap.py"
+            pmbootstrap() {{
+                "$PMBOOTSTRAP_DIR"/pmbootstrap.py \\
+                        --aports "$PMAPORTS_DIR" \\
+                        "$@"
+            }}
         """
 
         # Write each task's script into a temp file and run it
