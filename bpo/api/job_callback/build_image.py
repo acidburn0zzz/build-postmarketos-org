@@ -12,6 +12,7 @@ import bpo.config.args
 import bpo.db
 import bpo.images
 import bpo.ui
+import bpo.ui.dir
 
 blueprint = bpo.api.blueprint
 
@@ -72,7 +73,7 @@ def job_callback_build_image():
 
     # Generate readme.html
     path_readme = os.path.join(path, "readme.html")
-    bpo.ui.generate_image_readme(image, path_readme)
+    bpo.ui.dir.write_readme_image(image, path_readme)
 
     # Update database (status, job_id, dir_name, date)
     bpo.db.set_image_status(session, image, bpo.db.ImageStatus.published,

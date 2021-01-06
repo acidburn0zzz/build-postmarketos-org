@@ -113,23 +113,6 @@ def copy_static():
     shutil.move(temp, target)
 
 
-def generate_image_readme(image, path):
-    """ Generate a readme.html for one image directory (which contains one or
-        more postmarketOS images for a specific branch:device:ui combination).
-        The readme.html links to the job that built the image etc.
-
-        :param image: bpo.db.Image object
-        :param path: full path to the readme.html to be generated """
-    global env
-
-    template = env.get_template("image_readme.html")
-    html = template.render(image=image,
-                           job_link=bpo.helpers.job.get_link(image.job_id))
-
-    with open(path, "w") as handle:
-        handle.write(html)
-
-
 def init():
     global env
     templates_dir = bpo.config.const.top_dir + "/data/templates"

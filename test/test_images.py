@@ -8,6 +8,7 @@ import bpo_test  # noqa
 import bpo.config.args
 import bpo.config.const.images
 import bpo.images
+import bpo.ui.dir
 
 
 def test_pmos_ver():
@@ -56,7 +57,7 @@ def test_remove_old(monkeypatch):
         # Create dir with readme.html
         path_img = bpo.images.path_db_obj(image)
         os.makedirs(path_img)
-        bpo.ui.generate_image_readme(image, f"{path_img}/readme.html")
+        bpo.ui.dir.write_readme_image(image, f"{path_img}/readme.html")
 
     # Verify that image dirs were created
     dir_ui = f"{bpo.config.args.images_path}/edge/qemu-amd64/sxmo"
