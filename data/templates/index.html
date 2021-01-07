@@ -314,9 +314,7 @@
 			<a class="job-log" href="{{
 				bpo.helpers.job.get_link(img.job_id)
 				}}">[log]</a>
-			<a class="img-dir" href="{{
-				bpo.images.path(img.branch, img.device, img.ui,
-						img.dir_name)
+			<a class="img-dir" href="{{bpo.images.url_db_obj(img)
 				}}">[dir]</a>
 		{% endfor %}
 	</ul>
