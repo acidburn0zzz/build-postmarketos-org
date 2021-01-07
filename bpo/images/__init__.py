@@ -14,6 +14,13 @@ def pmos_ver(branch):
     return branch
 
 
+def branch_from_pmos_ver(pmos_ver):
+    """ Invert of pmos_ver(). """
+    if pmos_ver == "edge":
+        return "master"
+    return pmos_ver
+
+
 def path(branch, device, ui, dir_name):
     """ :returns: absolute path to where the files for a certain image are
                   stored. """
@@ -31,6 +38,24 @@ def path(branch, device, ui, dir_name):
 def path_db_obj(obj):
     """ Shortcut for path() with a suitable database object (Log, Image). """
     return path(obj.branch, obj.device, obj.ui, obj.dir_name)
+
+
+def db_obj_from_path(path):
+    """ Invert of path_db_obj().
+        :param path: full path to an image directory, as returned by path()
+                     (without trailing slash)
+        :returns: bpo.db.Image object or None """
+    relpath = os.path.relpath(path, bpo.config.args.images_path)
+    pmos_ver, device, ui, dir_name = relpath.split("/")
+    branch = branch_from_pmos_ver(pmos_ver)
+
+    session = bpo.db.session()
+    result = session.query(bpo.db.Image).\
+        filter_by(branch=branch, device=device, ui=ui, dir_name=dir_name).all()
+    if not len(result):
+        logging.warning(f"{path}: couldn't find related image in database")
+        return None
+    return result[0]
 
 
 def remove_old():

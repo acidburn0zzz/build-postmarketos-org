@@ -21,6 +21,7 @@ import bpo.repo
 import bpo.repo.tools
 import bpo.repo.wip
 import bpo.ui
+import bpo.ui.dir
 
 
 def logging_init():
@@ -54,6 +55,7 @@ def main(return_app=False, fill_image_queue=True):
     bpo.repo.status.fix()
     bpo.images.queue.remove_not_in_config()
     bpo.images.remove_old()
+    bpo.ui.dir.write_all()
 
     if bpo.config.args.force_final_repo_sign:
         # Force final repo sign

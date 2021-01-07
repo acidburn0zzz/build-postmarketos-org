@@ -71,10 +71,6 @@ def job_callback_build_image():
         logging.info(f"Saving {path_img}")
         img.save(path_img)
 
-    # Generate readme.html
-    path_readme = os.path.join(path, "readme.html")
-    bpo.ui.dir.write_readme_image(path_readme, image)
-
     # Update database (status, job_id, dir_name, date)
     bpo.db.set_image_status(session, image, bpo.db.ImageStatus.published,
                             job_id, dir_name, datetime.datetime.now())
@@ -82,6 +78,10 @@ def job_callback_build_image():
 
     # Remove old image
     bpo.images.remove_old()
+
+    # Generate HTML files (for all dirs in the images path, including the path
+    # of this image and its potentially new parent directories)
+    bpo.ui.dir.write_all()
 
     # Start next build job
     bpo.repo.build()
