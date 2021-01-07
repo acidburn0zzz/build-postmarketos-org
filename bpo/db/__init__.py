@@ -292,7 +292,8 @@ def get_all_images_by_status(session):
     ret = {}
     for status in bpo.db.ImageStatus:
         ret[status.name] = session.query(bpo.db.Image).\
-            filter_by(status=status)
+            filter_by(status=status).\
+            order_by(bpo.db.Image.date.desc())
     return ret
 
 
