@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2020 Oliver Smith
+# Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Change status of all failed packages and images back to queued. """
 import argparse

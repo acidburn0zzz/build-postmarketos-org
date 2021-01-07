@@ -1,4 +1,4 @@
-# Copyright 2020 Oliver Smith
+# Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Default values for command-line arguments. After pmb.config.init() ran,
     these can be accessed in bpo.config.args (e.g.
