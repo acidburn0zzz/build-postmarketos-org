@@ -40,6 +40,18 @@ def path_db_obj(obj):
     return path(obj.branch, obj.device, obj.ui, obj.dir_name)
 
 
+def url_db_obj(obj):
+    """ Get the URL pointing to the files for a given image.
+    :param obj: suitable database object (Log, Image)
+    :returns: url like "https://images.postmarketos.org/bpo/edge/qemu-..."
+    """
+    return os.path.join(bpo.config.args.url_images,
+                        pmos_ver(obj.branch),
+                        obj.device,
+                        obj.ui,
+                        obj.dir_name)
+
+
 def db_obj_from_path(path):
     """ Invert of path_db_obj().
         :param path: full path to an image directory, as returned by path()

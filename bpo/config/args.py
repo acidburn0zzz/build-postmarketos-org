@@ -79,6 +79,8 @@ def init():
                              " (--repo-wip-path), HTTPS protocol"
                              " (used for downloading the unsigned index, job"
                              " sign_index)")
+    parser.add_argument("--url-images",
+                        help="external URL to the images dir")
 
     # Job service subparsers
     job_service = parser.add_subparsers(title="job service",
