@@ -229,11 +229,11 @@
 	<ul>
 		{% for package in pkgs.building %}
 		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
-			<a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
+			<a class="job-log" href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
 		{% endfor %}
 		{% for img in imgs.building %}
 		<li> {{img.branch}}:{{img.device}}:{{img.ui}}
-			<a href="{{ bpo.helpers.job.get_link(img.job_id) }}">[log]</a>
+			<a class="job-log" href="{{ bpo.helpers.job.get_link(img.job_id) }}">[log]</a>
 		{% endfor %}
 	</ul>
 
@@ -248,11 +248,11 @@
 		{% for package in pkgs.failed %}
 		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
 			(try {{package.retry_count + 1}}/{{bpo.config.const.retry_count_max + 1}})
-			<a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
+			<a class="job-log" href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
 		{% endfor %}
 		{% for img in imgs.failed %}
 		<li> {{img.branch}}:{{img.device}}:{{img.ui}}
-			<a href="{{ bpo.helpers.job.get_link(img.job_id) }}">[log]</a>
+			<a class="job-log" href="{{ bpo.helpers.job.get_link(img.job_id) }}">[log]</a>
 		{% endfor %}
 	</ul>
 
@@ -271,7 +271,7 @@
 		{% endfor %}
 		{% for img in imgs.queued %}
 		<li> {{img.branch}}:{{img.device}}:{{img.ui}}
-			<a href="{{ bpo.helpers.job.get_link(img.job_id) }}">[log]</a>
+			<a class="job-log" href="{{ bpo.helpers.job.get_link(img.job_id) }}">[log]</a>
 		{% endfor %}
 	</ul>
 
@@ -287,7 +287,7 @@
 	<ul>
 		{% for package in pkgs.built %}
 		<li> {{package.branch}}/{{package.arch}}/{{package.pkgname}}-{{package.version}}.apk
-			<a href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
+			<a class="job-log" href="{{ bpo.helpers.job.get_link(package.job_id) }}">[log]</a>
 		{% endfor %}
 	</ul>
 
