@@ -9,6 +9,8 @@ class JobStatus(enum.Enum):
     running = 2
     success = 3
     failed = 4
+    timeout = 5
+    cancelled = 6
 
 
 class JobService:
