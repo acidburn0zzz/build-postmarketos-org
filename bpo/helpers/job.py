@@ -81,7 +81,7 @@ def get_status_package(package):
     if result == status.success:
         return bpo.db.PackageStatus.built
 
-    if result in [status.failed, status.timeout]:
+    if result in [status.failed, status.timeout, status.cancelled]:
         return bpo.db.PackageStatus.failed
 
     raise RuntimeError(f"get_status_package: failed on job status: {result}")
@@ -113,7 +113,7 @@ def get_status_image(image):
     if result == status.success:
         return bpo.db.ImageStatus.published
 
-    if result in [status.failed, status.timeout]:
+    if result in [status.failed, status.timeout, status.cancelled]:
         return bpo.db.ImageStatus.failed
 
     raise RuntimeError(f"get_status_image: failed on job status: {result}")
