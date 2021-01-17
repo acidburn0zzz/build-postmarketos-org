@@ -45,6 +45,8 @@ branch_config_default = {
 # https://wiki.postmarketos.org/wiki/<codename>. That is what will show up in
 # the generated readme.html!
 images = {
+    "bq-paella": {},
+    "motorola-harpia": {},
     "nokia-n900": {
         "branch_configs": {
             "all": {
@@ -77,4 +79,23 @@ images = {
             },
         },
     },
+    "pine64-pinetab": {
+        "branch_configs": {
+            "all": {
+                "installer": True,
+            },
+        },
+    },
+    "purism-librem5": {
+        "branch_configs": {
+            "all": {
+                "installer": True,
+            },
+        },
+    },
+    "samsung-a3ulte": {},
+    "samsung-a5lte": {},
+    "samsung-a5ulte": {},
+    "samsung-serranovelte": {},
+    "wileyfox-crackling": {},
 }
