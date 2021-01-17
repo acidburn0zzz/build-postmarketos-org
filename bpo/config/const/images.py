@@ -21,7 +21,10 @@ branch_config_default = {
 
     # User interfaces to build. At least one UI must be set for each device,
     # otherwise no image for that device will be built.
-    "ui": [],
+    "ui": [
+        "phosh",
+        "plasma-mobile",
+    ],
 
     # Build images with the on-device installer. If set to False, build one
     # image without the installer. If set to True, build another image, which
