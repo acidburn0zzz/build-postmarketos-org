@@ -45,8 +45,24 @@ branch_config_default = {
 # https://wiki.postmarketos.org/wiki/<codename>. That is what will show up in
 # the generated readme.html!
 images = {
-    "bq-paella": {},
-    "motorola-harpia": {},
+    "bq-paella": {
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
+    "motorola-harpia": {
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
     "nokia-n900": {
         "branch_configs": {
             "all": {
@@ -83,6 +99,10 @@ images = {
         "branch_configs": {
             "all": {
                 "installer": True,
+                "kernels": [
+                    "allwinner",
+                    "allwinner-dev",
+                ],
             },
         },
     },
@@ -93,9 +113,49 @@ images = {
             },
         },
     },
-    "samsung-a3ulte": {},
-    "samsung-a5lte": {},
-    "samsung-a5ulte": {},
-    "samsung-serranovelte": {},
-    "wileyfox-crackling": {},
+    "samsung-a3ulte": {
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
+    "samsung-a5lte": {
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
+    "samsung-a5ulte": {
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
+    "samsung-serranovelte": {
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
+    "wileyfox-crackling": {
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
 }
