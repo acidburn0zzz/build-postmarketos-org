@@ -101,7 +101,6 @@ images = {
                 "installer": True,
                 "kernels": [
                     "allwinner",
-                    "allwinner-dev",
                 ],
             },
         },
