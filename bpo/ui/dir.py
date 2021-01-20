@@ -9,13 +9,13 @@ import bpo.helpers.job
 import bpo.images
 
 
-def write_header(path, title):
+def write_header(path, title, dirname):
     """ Write a header.html, as our nginx configuration expects it to exist for
         each directory.
         :param path: full path to where it will get saved
         :title: what to put in the <title> tag """
     template = bpo.ui.env.get_template("dir_header.html")
-    html = template.render(title=title)
+    html = template.render(title=title, dirname=dirname)
 
     with open(path, "w") as handle:
         handle.write(html)
@@ -77,7 +77,7 @@ def write_header_if_outdated(path):
     title += "images.postmarketos.org"
 
     logging.info(f"Generate from {template}: {path} (title: {title})")
-    write_header(path, title)
+    write_header(path, title, relpath_dir)
 
 
 def write_readme_if_outdated(path):
