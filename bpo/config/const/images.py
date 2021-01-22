@@ -87,6 +87,7 @@ images = {
                 "installer": True,
             },
             "v20.05": {
+                "date-start": "2021-01-22",
                 "ui": [
                     "phosh",
                 ],
