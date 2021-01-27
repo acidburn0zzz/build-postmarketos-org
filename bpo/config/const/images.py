@@ -86,6 +86,9 @@ images = {
                 ],
                 "installer": True,
             },
+            "master": {
+                "date-start": "2021-01-27",
+            },
             "v20.05": {
                 "date-start": "2021-01-22",
                 "ui": [
