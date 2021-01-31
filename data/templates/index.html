@@ -213,7 +213,8 @@
 			{% if entry.job_id %}
 			<a class="job-log" href="{{ bpo.helpers.job.get_link(entry.job_id) }}">[log]</a>
 			{% endif %}
-			{% if entry.dir_name %}
+			{% if entry.dir_name and
+				entry.action != 'remove_old_image' %}
 			<a class="img-dir" href="{{
 				bpo.images.url_db_obj(entry)
 				}}">[dir]</a>
