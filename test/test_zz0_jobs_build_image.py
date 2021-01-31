@@ -41,16 +41,23 @@ def test_build_image_stub(monkeypatch):
 
     def pmbootstrap_install_stub():
         arg_work = "$(pmbootstrap config work)"
+        arg_work_boot = f"{arg_work}/chroot_rootfs_qemu-amd64/boot"
         arg_work_rootfs = f"{arg_work}/chroot_native/home/pmos/rootfs"
 
         # "true" is where we let the printf password pipe end
         return f"""true # pmbootstrap install stub from testsuite
-                mkdir -p {arg_work_rootfs}
+                rootfs="{arg_work_rootfs}/qemu-amd64.img"
+                bootimg="{arg_work_boot}/boot.img-qemu-amd64"
+
+                mkdir -p {arg_work_rootfs} {arg_work_boot}
                 dd \\
                     if=/dev/zero \\
-                    of={arg_work_rootfs}/qemu-amd64.img \\
+                    of="$rootfs" \\
                     bs=1M \\
                     count=1
+
+                # Pretent to have a boot.img too, to test that code path
+                cp -v "$rootfs" "$bootimg"
 
                 echo pmbootstrap install"""
 

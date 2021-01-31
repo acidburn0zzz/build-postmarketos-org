@@ -39,6 +39,7 @@ def run(device, branch, ui):
     arg_ui = shlex.quote(ui)
     arg_ui_apkbuild = shlex.quote(ui_apkbuild)
     arg_work = "$(pmbootstrap config work)"
+    arg_work_boot = f"{arg_work}/chroot_rootfs_{arg_device}/boot"
     arg_work_rootfs = f"{arg_work}/chroot_native/home/pmos/rootfs"
 
     # Task: img_prepare (generate image prefix, configure pmb, create tmpdir)
@@ -85,6 +86,23 @@ def run(device, branch, ui):
 
             sudo mv {arg_work_rootfs}/{arg_device}.img \\
                     "out/$IMG_PREFIX.img"
+            ls -lh out
+        """
+
+        # Task: img_bootimg
+        # For Android devices, postmarketos-mkinitfs generates a boot.img
+        # inside the rootfs img (above). Make it available as separate file, to
+        # make flashing easier. 'boot.img-*', because the kernel name is
+        # appended (e.g. boot.img-postmarketos-qcom-msm8916).
+        tasks[f"{task_name}_bootimg"] = f"""
+            IMG_PREFIX={arg_img_prefix}
+
+            for i in {arg_work_boot}/boot.img-*; do
+                if [ -e "$i" ]; then
+                    sudo mv "$i" "out/$IMG_PREFIX-boot.img"
+                fi
+            done
+
             ls -lh out
         """
 
