@@ -85,8 +85,8 @@ def test_depends_SLOW_60s(monkeypatch):
         bpo_test.trigger.push_hook_gitlab()
 
 
-@pytest.mark.timeout(60)
-def test_build_final_repo_with_two_pkgs_SLOW_60s(monkeypatch, tmpdir):
+@pytest.mark.timeout(120)
+def test_build_final_repo_with_two_pkgs_SLOW_120s(monkeypatch, tmpdir):
     # Prepare job-callback/get-depends payload
     payload_path = str(tmpdir) + "/payload.json"
     v_hello = bpo_test.const.version_hello_world
