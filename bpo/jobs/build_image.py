@@ -38,8 +38,8 @@ def run(device, branch, ui):
     arg_pmos_ver = shlex.quote(bpo.images.pmos_ver(branch))
     arg_ui = shlex.quote(ui)
     arg_ui_apkbuild = shlex.quote(ui_apkbuild)
-    arg_work_rootfs = '"$(pmbootstrap config work)"/chroot_native/home/pmos' \
-                      "/rootfs"
+    arg_work = "$(pmbootstrap config work)"
+    arg_work_rootfs = f"{arg_work}/chroot_native/home/pmos/rootfs"
 
     # Task: img_prepare (generate image prefix, configure pmb, create tmpdir)
     tasks = collections.OrderedDict()

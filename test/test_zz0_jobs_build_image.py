@@ -40,8 +40,8 @@ def test_build_image_stub(monkeypatch):
         gitlab CI (which would fail on 'modprobe loop' error). """
 
     def pmbootstrap_install_stub():
-        arg_work_rootfs = '"$(pmbootstrap config work)"/chroot_native/home/' \
-                          "/pmos/rootfs"
+        arg_work = "$(pmbootstrap config work)"
+        arg_work_rootfs = f"{arg_work}/chroot_native/home/pmos/rootfs"
         return f"""# pmbootstrap install stub from testsuite
                 mkdir -p {arg_work_rootfs}
                 dd \\
