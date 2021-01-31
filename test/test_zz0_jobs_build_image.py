@@ -42,7 +42,9 @@ def test_build_image_stub(monkeypatch):
     def pmbootstrap_install_stub():
         arg_work = "$(pmbootstrap config work)"
         arg_work_rootfs = f"{arg_work}/chroot_native/home/pmos/rootfs"
-        return f"""# pmbootstrap install stub from testsuite
+
+        # "true" is where we let the printf password pipe end
+        return f"""true # pmbootstrap install stub from testsuite
                 mkdir -p {arg_work_rootfs}
                 dd \\
                     if=/dev/zero \\
