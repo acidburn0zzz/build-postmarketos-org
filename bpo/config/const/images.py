@@ -87,7 +87,7 @@ images = {
                 "installer": True,
             },
             "master": {
-                "date-start": "2021-02-02",
+                "date-start": "2021-02-03",
             },
             "v20.05": {
                 "date-start": "2021-01-22",
@@ -108,7 +108,7 @@ images = {
                 ],
             },
             "master": {
-                "date-start": "2021-02-02",
+                "date-start": "2021-02-03",
             }
         },
     },
@@ -118,7 +118,7 @@ images = {
                 "installer": True,
             },
             "master": {
-                "date-start": "2021-02-02",
+                "date-start": "2021-02-03",
             }
         },
     },
