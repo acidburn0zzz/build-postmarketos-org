@@ -87,7 +87,7 @@ images = {
                 "installer": True,
             },
             "master": {
-                "date-start": "2021-01-27",
+                "date-start": "2021-02-02",
             },
             "v20.05": {
                 "date-start": "2021-01-22",
@@ -107,6 +107,9 @@ images = {
                     "allwinner",
                 ],
             },
+            "master": {
+                "date-start": "2021-02-02",
+            }
         },
     },
     "purism-librem5": {
@@ -114,6 +117,9 @@ images = {
             "all": {
                 "installer": True,
             },
+            "master": {
+                "date-start": "2021-02-02",
+            }
         },
     },
     "samsung-a3ulte": {
