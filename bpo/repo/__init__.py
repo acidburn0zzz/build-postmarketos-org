@@ -4,6 +4,7 @@
 import glob
 import logging
 import os
+import threading
 
 import bpo.config.const
 import bpo.db
@@ -14,6 +15,10 @@ import bpo.jobs.sign_index
 import bpo.repo.symlink
 import bpo.repo.tools
 import bpo.repo.wip
+
+
+# Let bpo.repo.build() only run from one thread at once (#79)
+build_cond = threading.Condition()
 
 
 def next_package_to_build(session, arch, branch):
@@ -149,11 +154,15 @@ def build_images_branch(session, slots_available, branch):
     return started
 
 
-def build(force_repo_update=False):
+def _build(force_repo_update=False):
     """ Start as many parallel build jobs, as configured. When all packages are
         built, publish the packages. (Images get published right after they
         get submitted to the server in bpo/api/job_callback/build_image.py, not
         here.)
+
+        Always use bpo.repo.build() wrapper below, to make sure that this only
+        runs in one thread at once!
+
         :param force_repo_update: rebuild the symlink and final repo, even if
                                   no new packages were built. Set this to True
                                   after deleting packages in the database, so
@@ -182,6 +191,16 @@ def build(force_repo_update=False):
                                                branch)
         if slots_available <= 0:
             break
+
+
+def build(force_repo_update=False):
+    """ Run build() with a threading.Condition(), so it runs at most in one
+        thread at once. Otherwise it will lead to corrupt indexes being
+        generated. """
+    global build_cond
+
+    with build_cond:
+        return _build(force_repo_update)
 
 
 def get_apks(cwd):

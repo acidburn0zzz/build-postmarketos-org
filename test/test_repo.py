@@ -1,10 +1,63 @@
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Testing bpo/repo/__init__.py """
+import logging
+import threading
+import time
+
 import bpo_test
 import bpo_test.trigger
 import bpo.db
 import bpo.repo
+
+
+def test_build_thread_safety(monkeypatch):
+    """
+    Verify that bpo.repo.build doesn't run more than once at a time, even if
+    both MainThread and ImageTimerThread happen to call it at the same time.
+    Expected timeline:
+
+    ImageTimerThread |..|bb|bb|bb|..|ww|ww|bb|bb|bb|..|ww|ww|
+    MainThread       |..|..|ww|ww|bb|bb|bb|..|..|ww|bb|bb|bb|
+                     |--|--|--|--|--|--|--|--|--|--|--|--|--|>time in 0.01s
+                     00 01 02 03 04 05 06 07 08 09 10 11 12 13
+
+    |..|: time.sleep in MainThread / timer interval sleep in ImageTimerThread
+    |bb|: running bpo.repo.build (build_dummy below)
+    |ww|: waiting for bpo.repo.build due to lock
+
+    If the lock did not work, the ImageTimerThread would run not just two, but
+    three times (take out the |ww| blocks). Therefore the test shows that the
+    function is thread safe.
+    """
+    bpo_test.BPOServer()
+
+    # The order in which the threads run bpo.repo.build
+    threads_expected = [
+        "ImageTimerThread",
+        "MainThread",
+        "ImageTimerThread",
+        "MainThread"
+    ]
+    threads = []
+
+    def build_dummy(force_repo_update=False):
+        logging.info("build_dummy called")
+        threads.append(threading.current_thread().name)
+        time.sleep(0.03)
+
+    monkeypatch.setattr(bpo.repo, "_build", build_dummy)
+    monkeypatch.setattr(bpo.images.queue, "fill", bpo_test.nop)
+
+    bpo.images.queue.timer_iterate(next_interval=0.01, repo_build=False)
+    time.sleep(0.02)
+    bpo.repo.build()
+    time.sleep(0.02)
+    bpo.repo.build()
+
+    assert threads == threads_expected
+
+    bpo.images.queue.timer_stop()
 
 
 def test_repo_is_apk_origin_in_db(monkeypatch):

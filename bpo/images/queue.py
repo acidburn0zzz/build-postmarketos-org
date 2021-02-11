@@ -83,6 +83,10 @@ def timer_stop():
 
 def timer_iterate(next_interval=3600, repo_build=True):
     """ Run fill() and schedule a timer to do it again.
+
+        All functions called in this thread need to be thread safe, or else we
+        have bugs like #79!
+
         :param next_interval: when to check again (in seconds, gets passed to
                               the next iteration)
         :param repo_build: set to False to skip running bpo.repo.build() after

@@ -6,6 +6,7 @@ import jinja2
 import os
 import logging
 import shutil
+import threading
 from sqlalchemy import func
 
 import bpo.config.const
@@ -13,6 +14,7 @@ import bpo.config.args
 import bpo.db
 
 env = None
+ui_update_cond = threading.Condition()
 
 
 def update_badge(session, pkgs, imgs):
@@ -88,10 +90,14 @@ def update_index(session, pkgs, imgs):
 
 def update(session):
     """ Update everything in html_out """
+    global ui_update_cond
+
     pkgs = bpo.db.get_all_packages_by_status(session)
     imgs = bpo.db.get_all_images_by_status(session)
-    update_index(session, pkgs, imgs)
-    update_badge(session, pkgs, imgs)
+
+    with ui_update_cond:
+        update_index(session, pkgs, imgs)
+        update_badge(session, pkgs, imgs)
 
 
 def copy_static():
