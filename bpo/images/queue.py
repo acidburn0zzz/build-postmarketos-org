@@ -94,4 +94,5 @@ def timer_iterate(next_interval=3600, repo_build=True):
 
     timer = threading.Timer(next_interval, timer_iterate, [next_interval])
     timer.daemon = True
+    timer.name = "ImageTimerThread"
     timer.start()
