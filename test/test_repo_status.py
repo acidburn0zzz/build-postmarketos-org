@@ -6,6 +6,7 @@ import bpo_test.trigger
 import bpo.config.const
 import bpo.jobs.build_package
 import os
+import pytest
 import shutil
 
 
@@ -16,6 +17,7 @@ def test_is_apk_broken():
     assert func({"abuild_version": "3.5.0_rc1-r0"}) is True
 
 
+@pytest.mark.timeout(5)
 def test_remove_broken_apk_db(tmpdir, monkeypatch):
     # Fill the db with "hello-world", "hello-world-wrapper"
     with bpo_test.BPOServer():
