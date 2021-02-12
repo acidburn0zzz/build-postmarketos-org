@@ -8,6 +8,7 @@ import bpo.images.config
 import bpo.repo
 
 timer = None
+timer_cond = threading.Condition()
 
 
 def remove_not_in_config():
@@ -65,17 +66,19 @@ def fill(now=None):
 
 def timer_stop():
     global timer
+    global timer_cond
 
-    if not timer:
-        return
+    with timer_cond:
+        if not timer:
+            return
 
-    # If the thread is not running, cancel it
-    timer.cancel()
+        # If the thread is not running, cancel it
+        timer.cancel()
 
-    # If it is running, wait until finished
-    timer.join()
+        # If it is running, wait until finished
+        timer.join()
 
-    timer = None
+        timer = None
 
 
 def timer_iterate(next_interval=3600, repo_build=True):
@@ -86,13 +89,20 @@ def timer_iterate(next_interval=3600, repo_build=True):
                            filling the queue (does *not* get passed to the next
                            iteration) """
     global timer
+    global timer_cond
 
     fill()
 
     if repo_build:
         bpo.repo.build()
 
+    if not timer_cond.acquire(False):
+        # timer_stop() is running
+        return
+
     timer = threading.Timer(next_interval, timer_iterate, [next_interval])
     timer.daemon = True
     timer.name = "ImageTimerThread"
     timer.start()
+
+    timer_cond.release()
