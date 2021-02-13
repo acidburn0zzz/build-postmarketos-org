@@ -66,6 +66,37 @@ def test_build_image_stub(monkeypatch):
     build_image(monkeypatch)
 
 
+@pytest.mark.timeout(20)
+def test_build_image_stub_split_boot_root(monkeypatch):
+    """ Like test_build_image_stub_split, but emulate pmbootstrap generating
+        split -boot and -root partitions, as it would do with
+        deviceinfo_flasher="fastboot-bootpart". See also: pmb!1871 """
+
+    def pmbootstrap_install_stub():
+        arg_work = "$(pmbootstrap config work)"
+        arg_work_rootfs = f"{arg_work}/chroot_native/home/pmos/rootfs"
+
+        # "true" is where we let the printf password pipe end
+        return f"""true # pmbootstrap install stub from testsuite
+                rootfs_root_part="{arg_work_rootfs}/qemu-amd64-root.img"
+                rootfs_boot_part="{arg_work_rootfs}/qemu-amd64-boot.img"
+
+                mkdir -p {arg_work_rootfs}
+                dd \\
+                    if=/dev/zero \\
+                    of="$rootfs_root_part" \\
+                    bs=1M \\
+                    count=1
+
+                cp -v "$rootfs_root_part" "$rootfs_boot_part"
+
+                echo pmbootstrap install"""
+
+    monkeypatch.setattr(bpo.jobs.build_image, "get_pmbootstrap_install_cmd",
+                        pmbootstrap_install_stub)
+    build_image(monkeypatch)
+
+
 @pytest.mark.skip_ci
 @pytest.mark.timeout(300)
 def test_build_image_SLOW_300s(monkeypatch):

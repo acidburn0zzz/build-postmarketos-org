@@ -84,8 +84,18 @@ def run(device, branch, ui):
 
             printf "%s\\n%s\\n" {arg_pass} {arg_pass} | {pmbootstrap_install}
 
-            sudo mv {arg_work_rootfs}/{arg_device}.img \\
-                    "out/$IMG_PREFIX.img"
+            if [ -e {arg_work_rootfs}/{arg_device}.img ]; then
+                sudo mv {arg_work_rootfs}/{arg_device}.img \\
+                        "out/$IMG_PREFIX.img"
+            else
+                # Boot and root partitions in separate files (pmbootstrap!1871)
+                # Name the second file -bootpart.img instead of -boot.img to
+                # avoid confusion with Android boot.img files.
+                sudo mv {arg_work_rootfs}/{arg_device}-root.img \\
+                        "out/$IMG_PREFIX.img"
+                sudo mv {arg_work_rootfs}/{arg_device}-boot.img \\
+                        "out/$IMG_PREFIX-bootpart.img"
+            fi
             ls -lh out
         """
 
@@ -120,8 +130,17 @@ def run(device, branch, ui):
                 --no-rootfs \\
                 --cp "out/$IMG_PREFIX.img":/var/lib/rootfs.img
 
-            sudo mv {arg_work_rootfs}/{arg_device}.img \\
+            if [ -e {arg_work_rootfs}/{arg_device}.img ]; then
+                sudo mv {arg_work_rootfs}/{arg_device}.img \\
                     "out/$IMG_PREFIX-installer.img"
+            else
+                # Boot and root partitions in separate files (pmbootstrap!1871)
+                # Move the root partition to -installer.img and ignore the boot
+                # partition (it's the same as the -bootpart.img saved in the
+                # img task above).
+                sudo mv {arg_work_rootfs}/{arg_device}-root.img \\
+                    "out/$IMG_PREFIX-installer.img"
+            fi
             ls -lh out
         """
 
