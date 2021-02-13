@@ -45,6 +45,15 @@ branch_config_default = {
 # https://wiki.postmarketos.org/wiki/<codename>. That is what will show up in
 # the generated readme.html!
 images = {
+    "asus-me176c": {
+        "branch_configs": {
+            "all": {
+                "ui": [
+                    "sway",
+                ],
+            },
+        },
+    },
     "bq-paella": {
         "branch_configs": {
             "all": {
