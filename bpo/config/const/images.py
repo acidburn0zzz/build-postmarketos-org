@@ -49,7 +49,7 @@ images = {
         "branch_configs": {
             "all": {
                 "ui": [
-                    "sway",
+                    "phosh",
                 ],
             },
         },
