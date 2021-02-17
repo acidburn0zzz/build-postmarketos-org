@@ -21,6 +21,7 @@ def get_pmbootstrap_install_cmd():
                 -mp {arg_mirror_pmos} \\
                 --details-to-stdout \\
                 install \\
+                --no-sshd \\
                 --no-local-pkgs"""
 
 
