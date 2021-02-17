@@ -132,6 +132,15 @@ images = {
             }
         },
     },
+    "samsung-a3lte": {
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
     "samsung-a3ulte": {
         "branch_configs": {
             "all": {
