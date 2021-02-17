@@ -5,7 +5,8 @@ import re
 # Regular expressions for resulting dir and file names
 pattern_dir = re.compile("^[0-9]{8}-[0-9]{4}$")
 pattern_file = re.compile(
-        "^[0-9]{8}-[0-9]{4}-postmarketOS-[a-z0-9._+-]+\\.img\\.xz$")
+        "^[0-9]{8}-[0-9]{4}-postmarketOS-[a-z0-9._+-]+\\.img\\.xz"
+        "(\\.sha(256|512))?$")
 
 # Default password for regular (non-installer) images
 password = "147147"

@@ -156,7 +156,10 @@ def run(device, branch, ui):
 
     tasks["checksums"] = """
             cd out
-            sha512sum *
+            for i in *; do
+                sha256sum "$i" | tee "$i.sha256"
+                sha512sum "$i" | tee "$i.sha512"
+            done
     """
 
     tasks["submit"] = f"""
