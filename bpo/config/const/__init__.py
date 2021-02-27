@@ -29,7 +29,7 @@ branches["master"] = {"arches": ["x86_64",
                                  "x86"],
                       "ignore_errors": False}
 branches["v21.03"] = {"arches": ["x86_64", "aarch64", "armv7"],
-                      "ignore_errors": True}
+                      "ignore_errors": False}
 
 # Have a predictable Alpine mirror instead of dl-cdn to avoid caching errors.
 # https://mirrors.alpinelinux.org/
