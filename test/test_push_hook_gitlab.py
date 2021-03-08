@@ -15,7 +15,3 @@ def test_push_hook_gitlab_to_nop(monkeypatch):
         monkeypatch.setattr(bpo.jobs.get_depends, "run",
                             bpo_test.stop_server)
         bpo_test.trigger.push_hook_gitlab()
-
-
-# FIXME: add test that provokes an error from server, e.g. by passing an
-# invalid ref
