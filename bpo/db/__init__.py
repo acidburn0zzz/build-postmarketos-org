@@ -119,11 +119,12 @@ class Log(base):
     device = Column(String, system=True)  # [v6]
     ui = Column(String, system=True)  # [v6]
     dir_name = Column(String, system=True)  # [v6]
+    depend_pkgname = Column(String, system=True)  # [v7]
     # === END OF DATABASE LAYOUT ===
 
     def __init__(self, action, payload=None, arch=None, branch=None,
                  pkgname=None, version=None, job_id=None, retry_count=None,
-                 device=None, ui=None, dir_name=None):
+                 device=None, ui=None, dir_name=None, depend_pkgname=None):
         self.action = action
         self.payload = json.dumps(payload, indent=4) if payload else None
         self.arch = arch
@@ -135,6 +136,7 @@ class Log(base):
         self.device = device
         self.ui = ui
         self.dir_name = dir_name
+        self.depend_pkgname = depend_pkgname
         logging.info("### " + str(self) + " ###")
 
     def __repr__(self):
@@ -155,6 +157,8 @@ class Log(base):
             ret += f", ui: {self.ui}"
         if self.dir_name:
             ret += f", dir: {self.dir_name}"
+        if self.depend_pkgname:
+            ret += f", depend_pkgname: {self.depend_pkgname}"
         return ret
 
 

@@ -70,3 +70,10 @@ def upgrade():
                        " ADD COLUMN 'dir_name'"
                        " VARCHAR")
         version_set(6)
+
+    # Log: add column "depend_pkgname"
+    if version_get() == 6:
+        engine.execute("ALTER TABLE 'log'"
+                       " ADD COLUMN 'depend_pkgname'"
+                       " VARCHAR")
+        version_set(7)
