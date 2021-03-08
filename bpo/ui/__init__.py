@@ -59,6 +59,12 @@ def log_entries_by_day(session):
     return ret
 
 
+def commit_link(commit):
+    short = commit[0:6]
+    url = f"{bpo.config.const.commit_url}/{commit}"
+    return f"<a href='{url}' class='commit'>{short}</a>"
+
+
 def update_index(session, pkgs, imgs):
     """ Update html_out/index.html
         :param session: return value of bpo.db.session()
@@ -73,6 +79,7 @@ def update_index(session, pkgs, imgs):
     global env
     template = env.get_template("index.html")
     html = template.render(bpo=bpo,
+                           commit_link=commit_link,
                            pkgcount=pkgcount,
                            pkgs=pkgs,
                            imgcount=imgcount,

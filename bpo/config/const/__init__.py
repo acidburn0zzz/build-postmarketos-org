@@ -70,3 +70,7 @@ test_tokens = {"push_hook_gitlab": "iptTdfRNwSvg8ycZqiEdNhMqGalvsgvSXp91SIk2du"
 final_repo_key_name = "build.postmarketos.org.rsa"
 
 pattern_apk_name = re.compile("^[a-z0-9._+-]+\\.apk$")
+
+# Where log messages should link to when displaying commits. The commit will be
+# appended to the URL.
+commit_url = "https://gitlab.com/postmarketOS/pmaports/-/commit"

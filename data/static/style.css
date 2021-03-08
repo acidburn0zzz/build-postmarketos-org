@@ -184,6 +184,10 @@ main {
     color: gray;
 }
 
+.commit {
+    font-family: monospace;
+}
+
 /* FOOTER */
 footer {
     grid-area: footer;

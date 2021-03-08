@@ -35,7 +35,7 @@ def push_hook_gitlab():
                  "url": "https://gitlab.com/...d91164de15fd209af628b42",
                  "author": {"name": "John Doe", "email": "john@localhost"},
                  "added": [],
-                 "modified": ["main/postmarketos-ui-phosh/APKBUILD"],
+                 "modified": ["main/hello-world/APKBUILD"],
                  "removed": []}]}
     api_request("push-hook/gitlab", headers, payload)
 

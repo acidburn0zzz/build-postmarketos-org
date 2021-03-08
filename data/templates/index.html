@@ -186,7 +186,17 @@
 			changing status back to "queued" after apk was removed
 			{% elif entry.action == "remove_broken_apk_reset_failed" %}
 			changing status back from "failed" to "queued", because
-			the broken apk of a dependency was removed{#
+			the broken apk of a dependency was removed
+			{% elif entry.action == "api_push_reset_failed" %}
+			changing status back from "failed" to "queued"
+			<small>(modified in {{ commit_link(entry.commit)|safe
+				}})</small>
+			{% elif entry.action == "api_push_reset_failed_depend" %}
+			changing status back from "failed" to "queued"
+			<small>(dependency "{{ entry.depend_pkgname }}"
+				modified in {{ commit_link(entry.commit)|safe
+				}})</small>
+			{#
 
 			* image related actions *
 			#}{% elif entry.action == "add_image_to_queue" %}
