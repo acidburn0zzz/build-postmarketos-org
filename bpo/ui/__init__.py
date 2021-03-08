@@ -145,13 +145,13 @@ def log(*args, **kwargs):
     update(session)
 
 
-def log_package(package, action, depend_pkgname=None):
+def log_package(package, action, depend_pkgname=None, commit=None):
     """ Convenience wrapper
         :param package: bpo.db.Package object """
     log(action=action, arch=package.arch, branch=package.branch,
         pkgname=package.pkgname, version=package.version,
         job_id=package.job_id, retry_count=package.retry_count,
-        depend_pkgname=depend_pkgname)
+        depend_pkgname=depend_pkgname, commit=commit)
 
 
 def log_image(image, action):

@@ -124,7 +124,8 @@ class Log(base):
 
     def __init__(self, action, payload=None, arch=None, branch=None,
                  pkgname=None, version=None, job_id=None, retry_count=None,
-                 device=None, ui=None, dir_name=None, depend_pkgname=None):
+                 device=None, ui=None, dir_name=None, depend_pkgname=None,
+                 commit=None):
         self.action = action
         self.payload = json.dumps(payload, indent=4) if payload else None
         self.arch = arch
@@ -137,6 +138,7 @@ class Log(base):
         self.ui = ui
         self.dir_name = dir_name
         self.depend_pkgname = depend_pkgname
+        self.commit = commit
         logging.info("### " + str(self) + " ###")
 
     def __repr__(self):
