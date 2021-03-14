@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ bpo_url }}/static/style.css">
+    <link rel="stylesheet" href="{{ bpo_url }}/static/images.css">
+    <link rel="shortcut icon" href="{{ bpo_url }}/static/favicon_images.ico">
+</head>
+<body>
+    <header class="header">
+        <a class="logo" name="^" href="{{ img_url }}">
+            <img src="{{ bpo_url }}/static/logo.svg">
+            <span>postmarketOS</span>
+        </a>
+        <div class="badge">
+            Official Images
+        </div>
+        <span class="nav header-bottom">
+            {% for url, dirname in navigation %}
+            <a href="{{ url }}">{{ dirname }}</a>
+            {% endfor %}
+        </span>
+        <span class="powered-by header-bottom">
+            <a href="{{ bpo_url }}">build status</a>
+        </span>
+    </header>
+    <main class="main">
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <div class="source">
+            <a href="https://postmarketos.org/source-code/">source</a>
+        </div>
+        <div class="copyright">
+            &copy; 2021 postmarketOS contributors
+        </div>
+    </footer>
+</body>
+</html>

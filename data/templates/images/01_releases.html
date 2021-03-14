@@ -1,0 +1,19 @@
+{% extends "images/00_base.html" %}
+
+{% block content %}
+<ul>
+    {% for entry in entries %}
+    <li class="dir"><a href="{{ entry }}/">{{ entry }}</a></li>
+    {% endfor %}
+</ul>
+<hr>
+<p>
+    This is a directory listing of the official
+    <a href="https://postmarketos.org">postmarketOS</a> images. If you know
+    what you are doing, you can use this page to select specific images to
+    download and install.
+    <br><br>
+    Find important information about the images on the
+    <a href="https://postmarketos.org/download/">download</a> page.
+</p>
+{% endblock %}}

@@ -79,3 +79,7 @@ commit_url = "https://gitlab.com/postmarketOS/pmaports/-/commit"
 # rootfs.img into the installer chroot. The gitlab testsuite needs to override
 # this with 'cp' to work around a "Cross-device link" error.
 build_image_ln = os.getenv("BPO_BUILD_IMAGE_LN", "ln")
+
+# Directory listings generated for images.postmarketos.org/bpo use this URL to
+# set the path to BPO's style.css. Override it for development (see README).
+url = os.getenv("BPO_URL", "https://build.postmarketos.org")

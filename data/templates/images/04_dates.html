@@ -1,0 +1,15 @@
+{% extends "images/00_base.html" %}
+
+{% block content %}
+<ul>
+    <li class="up"><a href="..">Parent directory</a></li>
+    {% for entry in entries %}
+    <li class="dir"><a href="{{ entry }}/">{{ entry }}</a></li>
+    {% endfor %}
+</ul>
+<hr>
+<p>
+    Use the links above to select the image of a specific date. Pick the most
+    recent one unless you have a special use case (e.g. testing a regression).
+</p>
+{% endblock %}

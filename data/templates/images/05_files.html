@@ -1,0 +1,35 @@
+{% extends "images/00_base.html" %}
+
+{% block content %}
+<ul>
+    <li class="up"><a href="..">Parent directory</a></li>
+    {% for entry in entries %}
+    <li class="file"><a href="{{ entry["name"] }}">{{ entry["name"] }}</a>
+        <ul class="metadata">
+            <li class="size">size: {{ entry["size"] }}</li>
+            {% for checksum in ["sha256", "sha512"] %}
+                {% if checksum in entry %}
+                    <li class="hash">
+                        <a href="{{ entry["name"] }}.{{ checksum }}"
+                           >{{ checksum }}</a>: {{ entry[checksum] }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </li>
+    {% endfor %}
+</ul>
+<hr>
+<p>
+    Read the installation instructions on the
+    <a href="https://wiki.postmarketos.org/wiki/{{ codename }}">
+    {{ codename }}</a> wiki page carefully.<br>
+    <br>
+    Join the #postmarketOS channel in the
+    <a href="https://postmarketos.org/chat">IRC/matrix chat</a> if
+    you have questions.<br>
+    <br>
+    <a href="{{ job_link }}">build log</a>
+</p>
+
+{% endblock %}

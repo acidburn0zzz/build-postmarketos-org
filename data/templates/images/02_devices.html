@@ -1,0 +1,16 @@
+{% extends "images/00_base.html" %}
+
+{% block content %}
+<ul>
+    <li class="up"><a href="..">Parent directory</a></li>
+    {% for entry in entries %}
+    <li class="dir"><a href="{{ entry }}/">{{ entry }}</a></li>
+    {% endfor %}
+</ul>
+<hr>
+<p>
+    Use the links above to select a device. See the
+    <a href="https://wiki.postmarketos.org/wiki/Devices">devices</a>
+    wiki page for more information.
+</p>
+{% endblock %}

@@ -1,6 +1,8 @@
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Testing bpo/jobs/build_image.py """
+import glob
+import os
 import pytest
 
 import bpo_test  # noqa
@@ -64,6 +66,12 @@ def test_build_image_stub(monkeypatch):
     monkeypatch.setattr(bpo.jobs.build_image, "get_pmbootstrap_install_cmd",
                         pmbootstrap_install_stub)
     build_image(monkeypatch)
+
+    assert os.path.exists("_images/index.html")
+    assert os.path.exists("_images/edge/index.html")
+    assert os.path.exists("_images/edge/qemu-amd64/index.html")
+    assert os.path.exists("_images/edge/qemu-amd64/none/index.html")
+    assert len(glob.glob("_images/edge/qemu-amd64/none/20*-*/index.html")) == 1
 
 
 @pytest.mark.timeout(20)

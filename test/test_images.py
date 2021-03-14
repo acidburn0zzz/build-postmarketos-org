@@ -8,7 +8,7 @@ import bpo_test  # noqa
 import bpo.config.args
 import bpo.config.const.images
 import bpo.images
-import bpo.ui.dir
+import bpo.ui.images
 
 
 def test_pmos_ver():
@@ -54,17 +54,17 @@ def test_remove_old(monkeypatch):
         bpo.db.set_image_status(session, image, bpo.db.ImageStatus.published,
                                 job_id=i, dir_name=dir_name, date=date)
 
-        # Create dir with readme.html
+        # Create dir with index.html
         path_img = bpo.images.path_db_obj(image)
         os.makedirs(path_img)
-        bpo.ui.dir.write_readme_image(f"{path_img}/readme.html", image)
+        bpo.ui.images.write_index_file_list(path_img, "05_files.html")
 
     # Verify that image dirs were created
     dir_ui = f"{bpo.config.args.images_path}/edge/qemu-amd64/sxmo"
-    assert os.path.exists(f"{dir_ui}/20210101-1337/readme.html")
-    assert os.path.exists(f"{dir_ui}/20210102-1337/readme.html")
-    assert os.path.exists(f"{dir_ui}/20210103-1337/readme.html")
-    assert os.path.exists(f"{dir_ui}/20210104-1337/readme.html")
+    assert os.path.exists(f"{dir_ui}/20210101-1337/index.html")
+    assert os.path.exists(f"{dir_ui}/20210102-1337/index.html")
+    assert os.path.exists(f"{dir_ui}/20210103-1337/index.html")
+    assert os.path.exists(f"{dir_ui}/20210104-1337/index.html")
 
     # Run remove_old with keep=2
     bpo.images.remove_old()
@@ -72,5 +72,5 @@ def test_remove_old(monkeypatch):
     # Verify that the two oldest image dir were removed
     assert not os.path.exists(f"{dir_ui}/20210101-1337")
     assert not os.path.exists(f"{dir_ui}/20210102-1337")
-    assert os.path.exists(f"{dir_ui}/20210103-1337/readme.html")
-    assert os.path.exists(f"{dir_ui}/20210104-1337/readme.html")
+    assert os.path.exists(f"{dir_ui}/20210103-1337/index.html")
+    assert os.path.exists(f"{dir_ui}/20210104-1337/index.html")

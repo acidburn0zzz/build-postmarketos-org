@@ -12,7 +12,7 @@ import bpo.config.args
 import bpo.db
 import bpo.images
 import bpo.ui
-import bpo.ui.dir
+import bpo.ui.images
 
 blueprint = bpo.api.blueprint
 
@@ -81,7 +81,7 @@ def job_callback_build_image():
 
     # Generate HTML files (for all dirs in the images path, including the path
     # of this image and its potentially new parent directories)
-    bpo.ui.dir.write_all()
+    bpo.ui.images.write_index_all()
 
     # Start next build job
     bpo.repo.build()
