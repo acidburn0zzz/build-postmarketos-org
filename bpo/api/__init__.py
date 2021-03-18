@@ -34,12 +34,17 @@ def get_branch(request):
 
 def get_package(session, request):
     pkgname = get_header(request, "Pkgname")
+    version = get_header(request, "Version")
     branch = get_branch(request)
     arch = get_arch(request, branch)
     ret = bpo.db.get_package(session, pkgname, arch, branch)
     if not ret:
         raise ValueError("no package found with: pkgname=" + pkgname +
                          ", arch=" + arch)
+    if ret.version != version:
+        raise ValueError(f"unexpected version {version} instead of"
+                         f" {ret.version} in package {ret} - old build job"
+                         " that should have been stopped (#93)?")
     return ret
 
 
