@@ -26,7 +26,8 @@ import bpo.ui.dir
 
 def logging_init():
     logging.basicConfig(level=logging.DEBUG, stream=sys.stdout,
-                        format="[%(asctime)s] %(message)s", datefmt="%H:%M:%S")
+                        format="[%(asctime)s] %(message)s",
+                        datefmt="%Y-%m-%d %H:%M:%S")
 
 
 def init_components():
