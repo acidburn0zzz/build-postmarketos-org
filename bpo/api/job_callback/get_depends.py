@@ -51,6 +51,7 @@ def update_or_insert_packages(session, payload, arch, branch):
             if package_db.version != version:
                 bpo.jobs.build_package.abort(package_db)
                 package_db.status = bpo.db.PackageStatus.queued
+                package_db.retry_count = 0
             package_db.version = version
             package_db.repo = repo
         else:
