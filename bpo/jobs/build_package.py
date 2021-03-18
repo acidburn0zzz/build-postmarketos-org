@@ -123,4 +123,4 @@ def abort(package):
     """ Stop a single package build job.
         :param package: bpo.db.Package object """
     # FIXME
-    logging.info("STUB")
+    logging.info(f"STUB: bpo.jobs.build_package (#93): {package}")
