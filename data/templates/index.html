@@ -188,11 +188,11 @@
 			changing status back from "failed" to "queued", because
 			the broken apk of a dependency was removed
 			{% elif entry.action == "api_push_reset_failed" %}
-			changing status back from "failed" to "queued"
+			changing status back to "queued"
 			<small>(modified in {{ commit_link(entry.commit)|safe
 				}})</small>
 			{% elif entry.action == "api_push_reset_failed_depend" %}
-			changing status back from "failed" to "queued"
+			changing status back to "queued"
 			<small>(dependency "{{ entry.depend_pkgname }}"
 				modified in {{ commit_link(entry.commit)|safe
 				}})</small>

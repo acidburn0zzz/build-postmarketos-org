@@ -70,7 +70,9 @@ def reset_failed_packages(pkgnames_commits, branch):
         that depend on them.
         :param pkgnames_commits: from get_pkgnames_commits()
     """
-    def reset_failed_package(package, action, commit, depend_pkgname=None):
+    def reset_package(package, action, commit, depend_pkgname=None):
+        if package.status == bpo.db.PackageStatus.building:
+            bpo.jobs.build_package.abort(package)
         package.status = bpo.db.PackageStatus.queued
         package.retry_count = 0
         session.merge(package)
@@ -82,19 +84,23 @@ def reset_failed_packages(pkgnames_commits, branch):
     failed = session.query(bpo.db.Package).\
         filter_by(status=bpo.db.PackageStatus.failed).\
         filter_by(branch=branch)
+    building = session.query(bpo.db.Package).\
+        filter_by(status=bpo.db.PackageStatus.building).\
+        filter_by(branch=branch)
 
-    for package in failed:
-        if package.pkgname in pkgnames_commits:
-            commit = pkgnames_commits[package.pkgname]
-            reset_failed_package(package, "api_push_reset_failed", commit)
-            continue
+    for package_status in [failed, building]:
+        for package in package_status:
+            if package.pkgname in pkgnames_commits:
+                commit = pkgnames_commits[package.pkgname]
+                reset_package(package, "api_push_reset_failed", commit)
+                continue
 
-        for pkg_depend in package.depends:
-            if pkg_depend.pkgname in pkgnames_commits:
-                commit = pkgnames_commits[pkg_depend.pkgname]
-                reset_failed_package(package, "api_push_reset_failed_depend",
-                                     commit, depend_pkgname=pkg_depend.pkgname)
-                break
+            for pkg_depend in package.depends:
+                if pkg_depend.pkgname in pkgnames_commits:
+                    commit = pkgnames_commits[pkg_depend.pkgname]
+                    reset_package(package, "api_push_reset_failed_depend",
+                                  commit, depend_pkgname=pkg_depend.pkgname)
+                    break
 
 
 @blueprint.route("/api/push-hook/gitlab", methods=["POST"])
