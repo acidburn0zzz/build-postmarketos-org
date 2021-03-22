@@ -18,7 +18,7 @@ branches_default = ["master"]
 branch_config_default = {
     # Schedule a new image each {date-interval} days, start at {date-start}.
     "date-interval": 7,
-    "date-start": "2020-12-29",
+    "date-start": "2020-12-29",  # Tuesday
 
     # User interfaces to build. At least one UI must be set for each device,
     # otherwise no image for that device will be built.
@@ -97,10 +97,10 @@ images = {
                 "installer": True,
             },
             "master": {
-                "date-start": "2021-02-03",
+                "date-start": "2021-02-03",  # Wednesday
             },
             "v20.05": {
-                "date-start": "2021-01-22",
+                "date-start": "2021-01-22",  # Friday
                 "ui": [
                     "phosh",
                 ],
@@ -118,7 +118,7 @@ images = {
                 ],
             },
             "master": {
-                "date-start": "2021-02-03",
+                "date-start": "2021-02-03",  # Wednesday
             }
         },
     },
@@ -128,7 +128,7 @@ images = {
                 "installer": True,
             },
             "master": {
-                "date-start": "2021-02-03",
+                "date-start": "2021-02-03",  # Wednesday
             }
         },
     },
