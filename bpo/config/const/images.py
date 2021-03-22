@@ -12,7 +12,10 @@ pattern_file = re.compile(
 password = "147147"
 
 # Branches to build images for, can be overridden per device in 'images' below
-branches_default = ["master"]
+branches_default = [
+        "master",
+        "v21.03",
+    ]
 
 # Build configuration, can be overridden per device/branch in 'images' below
 branch_config_default = {
@@ -53,6 +56,9 @@ images = {
                     "phosh",
                 ],
             },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
+            },
         },
     },
     "bq-paella": {
@@ -61,6 +67,9 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
+            },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
             },
         },
     },
@@ -71,6 +80,9 @@ images = {
                     "mainline-modem",
                 ],
             },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
+            },
         },
     },
     "nokia-n900": {
@@ -80,12 +92,16 @@ images = {
                     "i3wm",
                 ],
             },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
+            },
          },
     },
     "pine64-pinephone": {
         "branches": [
             "master",
             "v20.05",
+            "v21.03",
         ],
         "branch_configs": {
             "all": {
@@ -107,6 +123,9 @@ images = {
                 # Needs postmarketos-ondev 0.3.x or higher backported
                 "installer": False,
             },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
+            },
         },
     },
     "pine64-pinetab": {
@@ -119,7 +138,10 @@ images = {
             },
             "master": {
                 "date-start": "2021-02-03",  # Wednesday
-            }
+            },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
+            },
         },
     },
     "purism-librem5": {
@@ -129,7 +151,10 @@ images = {
             },
             "master": {
                 "date-start": "2021-02-03",  # Wednesday
-            }
+            },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
+            },
         },
     },
     "samsung-a3lte": {
@@ -138,6 +163,9 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
+            },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
             },
         },
     },
@@ -148,6 +176,9 @@ images = {
                     "mainline-modem",
                 ],
             },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
+            },
         },
     },
     "samsung-a5lte": {
@@ -156,6 +187,9 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
+            },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
             },
         },
     },
@@ -166,6 +200,9 @@ images = {
                     "mainline-modem",
                 ],
             },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
+            },
         },
     },
     "samsung-serranovelte": {
@@ -175,6 +212,9 @@ images = {
                     "mainline-modem",
                 ],
             },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
+            },
         },
     },
     "wileyfox-crackling": {
@@ -183,6 +223,9 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
+            },
+            "v21.03": {
+                "date-start": "2021-03-22",  # Monday
             },
         },
     },
