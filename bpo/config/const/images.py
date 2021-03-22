@@ -97,6 +97,20 @@ images = {
             },
          },
     },
+    "pine64-pinebookpro": {
+        "branch_configs": {
+            "master": {
+                "ui": [
+                    "none",
+                    "gnome",
+                    "plasma-desktop",
+                    "sway",
+                    "phosh",
+                ],
+                "installer": True,
+            },
+        },
+    },
     "pine64-pinephone": {
         "branches": [
             "master",
