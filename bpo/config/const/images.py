@@ -98,8 +98,11 @@ images = {
          },
     },
     "pine64-pinebookpro": {
+        "branches": [
+            "master",
+        ],
         "branch_configs": {
-            "master": {
+            "all": {
                 "ui": [
                     "none",
                     "gnome",
