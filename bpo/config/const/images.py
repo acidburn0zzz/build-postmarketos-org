@@ -51,11 +51,6 @@ branch_config_default = {
 images = {
     "asus-me176c": {
         "branch_configs": {
-            "all": {
-                "ui": [
-                    "phosh",
-                ],
-            },
             "v21.03": {
                 "date-start": "2021-03-22",  # Monday
             },
