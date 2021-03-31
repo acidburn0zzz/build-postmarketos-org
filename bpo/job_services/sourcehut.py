@@ -81,7 +81,7 @@ def get_manifest(name, tasks, branch):
            mkdir -p ~/.config
            ( echo "[pmbootstrap]"
              echo "is_default_channel = False"
-             echo "extra_space = 500" ) > ~/.config/pmbootstrap.cfg
+             echo "extra_space = 400" ) > ~/.config/pmbootstrap.cfg
            git -C pmaports checkout """ + shlex.quote(branch) + """
 
            sudo ln -s "$PWD"/pmbootstrap/pmbootstrap.py /usr/bin/pmbootstrap
