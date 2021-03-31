@@ -136,7 +136,7 @@ images = {
                 "installer": False,
             },
             "v21.03": {
-                "date-start": "2021-03-31",  # Wednesday
+                "date-start": "2021-03-31 15:00",  # Wednesday
             },
         },
     },
