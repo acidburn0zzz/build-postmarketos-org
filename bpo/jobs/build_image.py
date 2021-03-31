@@ -81,6 +81,7 @@ def run(device, branch, ui):
             IMG_PREFIX={arg_img_prefix}
 
             pmbootstrap config kernel {arg_kernel}
+            pmbootstrap config extra_space 0
             pmbootstrap -q -y zap -p
 
             printf "%s\\n%s\\n" {arg_pass} {arg_pass} | {pmbootstrap_install}
@@ -124,6 +125,7 @@ def run(device, branch, ui):
         tasks[task_name] = f"""
             IMG_PREFIX={arg_img_prefix}
 
+            pmbootstrap config extra_space 50
             pmbootstrap -q -y zap -p
 
             {pmbootstrap_install} \\
