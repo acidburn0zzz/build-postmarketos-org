@@ -28,6 +28,7 @@ branch_config_default = {
     "ui": [
         "phosh",
         "plasma-mobile",
+        "sxmo",
     ],
 
     # Build images with the on-device installer. If set to False, build one
@@ -117,11 +118,6 @@ images = {
         ],
         "branch_configs": {
             "all": {
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
                 "installer": True,
             },
             "master": {
