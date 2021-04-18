@@ -109,12 +109,14 @@ def set_stuck(arch, branch):
 
 
 def build_arch_branch(session, slots_available, arch, branch,
-                      force_repo_update=False):
+                      force_repo_update=False, no_repo_update=False):
     """ :returns: amount of jobs that were started
         :param force_repo_update: rebuild the symlink and final repo, even if
                                   no new packages were built. Set this to True
                                   after deleting packages in the database, so
-                                  the apks get removed from the final repo. """
+                                  the apks get removed from the final repo.
+        :param no_repo_update: never update symlink and final repo (used from
+                               the images timer thread, see #98) """
     logging.info(branch + "/" + arch + ": starting new package build job(s)")
     started = 0
     while True:
@@ -125,7 +127,13 @@ def build_arch_branch(session, slots_available, arch, branch,
                     set_stuck(arch, branch)
                 else:
                     logging.info(branch + "/" + arch + ": WIP repo complete")
-                    bpo.repo.symlink.create(arch, branch, force_repo_update)
+                    if no_repo_update:
+                        logging.info(f"{branch}/{arch}: build_arch_branch:"
+                                     " skipping bpo.repo.symlink.create"
+                                     " (no_repo_update=True)")
+                    else:
+                        bpo.repo.symlink.create(arch, branch,
+                                                force_repo_update)
             break
 
         if slots_available > 0:
@@ -154,7 +162,7 @@ def build_images_branch(session, slots_available, branch):
     return started
 
 
-def _build(force_repo_update=False):
+def _build(force_repo_update=False, no_repo_update=False):
     """ Start as many parallel build jobs, as configured. When all packages are
         built, publish the packages. (Images get published right after they
         get submitted to the server in bpo/api/job_callback/build_image.py, not
@@ -166,7 +174,9 @@ def _build(force_repo_update=False):
         :param force_repo_update: rebuild the symlink and final repo, even if
                                   no new packages were built. Set this to True
                                   after deleting packages in the database, so
-                                  the apks get removed from the final repo. """
+                                  the apks get removed from the final repo.
+        :param no_repo_update: never update symlink and final repo (used from
+                               the images timer thread, see #98) """
     session = bpo.db.session()
     running = count_running_builds(session)
     slots_available = bpo.config.const.max_parallel_build_jobs - running
@@ -177,7 +187,8 @@ def _build(force_repo_update=False):
         for arch in branch_data["arches"]:
             slots_available -= build_arch_branch(session, slots_available,
                                                  arch, branch,
-                                                 force_repo_update)
+                                                 force_repo_update,
+                                                 no_repo_update)
     if slots_available <= 0:
         return
 
@@ -193,14 +204,14 @@ def _build(force_repo_update=False):
             break
 
 
-def build(force_repo_update=False):
+def build(force_repo_update=False, no_repo_update=False):
     """ Run build() with a threading.Condition(), so it runs at most in one
         thread at once. Otherwise it will lead to corrupt indexes being
         generated. """
     global build_cond
 
     with build_cond:
-        return _build(force_repo_update)
+        return _build(force_repo_update, no_repo_update)
 
 
 def get_apks(cwd):

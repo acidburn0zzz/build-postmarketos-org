@@ -98,7 +98,7 @@ def timer_iterate(next_interval=3600, repo_build=True):
     fill()
 
     if repo_build:
-        bpo.repo.build()
+        bpo.repo.build(no_repo_update=True)
 
     if not timer_cond.acquire(False):
         # timer_stop() is running

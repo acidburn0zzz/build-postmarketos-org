@@ -41,7 +41,7 @@ def test_build_thread_safety(monkeypatch):
     ]
     threads = []
 
-    def build_dummy(force_repo_update=False):
+    def build_dummy(force_repo_update=False, no_repo_update=False):
         logging.info("build_dummy called")
         threads.append(threading.current_thread().name)
         time.sleep(0.03)
