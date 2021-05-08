@@ -53,7 +53,7 @@ images = {
     "asus-me176c": {
         "branch_configs": {
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -65,7 +65,7 @@ images = {
                 ],
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -77,7 +77,7 @@ images = {
                 ],
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -89,7 +89,7 @@ images = {
                 ],
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
          },
     },
@@ -132,7 +132,7 @@ images = {
                 "installer": False,
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -148,7 +148,7 @@ images = {
                 "date-start": "2021-02-03",  # Wednesday
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -161,7 +161,7 @@ images = {
                 "date-start": "2021-02-03",  # Wednesday
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -173,7 +173,7 @@ images = {
                 ],
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -185,7 +185,7 @@ images = {
                 ],
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -197,7 +197,7 @@ images = {
                 ],
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -209,7 +209,7 @@ images = {
                 ],
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -221,7 +221,7 @@ images = {
                 ],
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
@@ -233,7 +233,7 @@ images = {
                 ],
             },
             "v21.03": {
-                "date-start": "2021-04-01",  # Thursday
+                "date-start": "2021-05-08",  # Saturday
             },
         },
     },
