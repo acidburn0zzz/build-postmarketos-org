@@ -97,6 +97,7 @@ def test_build_image_stub_split_boot_root(monkeypatch):
     build_image(monkeypatch)
 
 
+# Run with: test/manual/test_build_installer_run_in_qemu.sh
 @pytest.mark.skip_ci
 @pytest.mark.timeout(300)
 def test_build_image_SLOW_300s(monkeypatch):
