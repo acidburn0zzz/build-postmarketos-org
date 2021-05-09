@@ -74,3 +74,8 @@ pattern_apk_name = re.compile("^[a-z0-9._+-]+\\.apk$")
 # Where log messages should link to when displaying commits. The commit will be
 # appended to the URL.
 commit_url = "https://gitlab.com/postmarketOS/pmaports/-/commit"
+
+# Program to use in bpo/jobs/build_image.py for creating the hardlink from the
+# rootfs.img into the installer chroot. The gitlab testsuite needs to override
+# this with 'cp' to work around a "Cross-device link" error.
+build_image_ln = os.getenv("BPO_BUILD_IMAGE_LN", "ln")

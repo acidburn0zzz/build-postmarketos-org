@@ -49,6 +49,8 @@ pytest:
   - ln -s /tmp/pmbootstrap ../pmbootstrap
   - ln -s /home/pmos/.local/var/pmbootstrap/cache_git/pmaports ../pmbootstrap/aports
   script:
+  # Avoid "Cross-device link" error
+  - "export BPO_BUILD_IMAGE_LN=cp"
   - "su pmos -c '.ci/pytest.sh'"
   artifacts:
     when: "on_failure"

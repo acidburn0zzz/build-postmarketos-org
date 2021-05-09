@@ -35,6 +35,7 @@ def run(device, branch, ui):
     # Shell arguments
     arg_branch = shlex.quote(branch)
     arg_device = shlex.quote(device)
+    arg_ln = shlex.quote(bpo.config.const.build_image_ln)
     arg_pass = shlex.quote(bpo.config.const.images.password)
     arg_pmos_ver = shlex.quote(bpo.images.pmos_ver(branch))
     arg_ui = shlex.quote(ui)
@@ -42,6 +43,7 @@ def run(device, branch, ui):
     arg_work = "$(pmbootstrap config work)"
     arg_work_boot = f"{arg_work}/chroot_rootfs_{arg_device}/boot"
     arg_work_rootfs = f"{arg_work}/chroot_native/home/pmos/rootfs"
+    arg_work_installer = f"{arg_work}/chroot_installer_{arg_device}"
 
     # Task: img_prepare (generate image prefix, configure pmb, create tmpdir)
     tasks = collections.OrderedDict()
@@ -128,10 +130,17 @@ def run(device, branch, ui):
             pmbootstrap config extra_space 50
             pmbootstrap -q -y zap -p
 
+            # Use less space by hardlinking rootfs.img instead of copying
+            sudo mkdir -p {arg_work_installer}/var/lib
+            sudo {arg_ln} "out/$IMG_PREFIX.img" \
+                    {arg_work_installer}/var/lib/rootfs.img
+
             {pmbootstrap_install} \\
                 --ondev \\
-                --no-rootfs \\
-                --cp "out/$IMG_PREFIX.img":/var/lib/rootfs.img
+                --no-rootfs
+
+            # Remove hardlink again, so we can compress the file in-place
+            sudo rm {arg_work_installer}/var/lib/rootfs.img
 
             if [ -e {arg_work_rootfs}/{arg_device}.img ]; then
                 sudo mv {arg_work_rootfs}/{arg_device}.img \\
