@@ -93,6 +93,16 @@ images = {
             },
          },
     },
+    "oneplus-enchilada": {
+        "branches": [
+            "master",
+        ],
+    },
+    "oneplus-fajita": {
+        "branches": [
+            "master",
+        ],
+    },
     "pine64-pinebookpro": {
         "branches": [
             "master",
