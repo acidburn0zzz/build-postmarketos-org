@@ -59,7 +59,7 @@ $ ./bpo_sourcehut.sh
 ### Running tests
 
 ```
-$ pip install pytest pytest-cov pytest-timeout
+$ pip install -r requirements-test.txt
 $ .ci/pytest.sh
 ```
 
