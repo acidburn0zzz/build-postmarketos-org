@@ -111,25 +111,12 @@ images = {
         },
     },
     "pine64-pinephone": {
-        "branches": [
-            "master",
-            "v20.05",
-            "v21.03",
-        ],
         "branch_configs": {
             "all": {
                 "installer": True,
             },
             "master": {
                 "date-start": "2021-02-03",  # Wednesday
-            },
-            "v20.05": {
-                "date-start": "2021-01-22",  # Friday
-                "ui": [
-                    "phosh",
-                ],
-                # Needs postmarketos-ondev 0.3.x or higher backported
-                "installer": False,
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
