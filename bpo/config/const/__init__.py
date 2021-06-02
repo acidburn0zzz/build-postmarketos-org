@@ -33,7 +33,7 @@ branches["master"] = {"arches": ["x86_64",
 
 # Have a predictable Alpine mirror instead of dl-cdn to avoid caching errors.
 # https://mirrors.alpinelinux.org/
-mirror_alpine = "http://dl-2.alpinelinux.org/alpine/"
+mirror_alpine = "http://dl-4.alpinelinux.org/alpine/"
 
 # Omit the --strict argument for pmbootstrap build for these packages (fnmatch)
 # gcc*-*: https://gitlab.alpinelinux.org/alpine/apk-tools/issues/10649
