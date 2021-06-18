@@ -30,7 +30,7 @@ branches["master"] = {"arches": ["x86_64",
                                  "armhf",
                                  "x86"],
                       "ignore_errors": False}
-branches["v21.06"] = {"arches": ["x86_64"],
+branches["v21.06"] = {"arches": ["x86_64", "aarch64", "armv7"],
                       "ignore_errors": True}
 
 # Have a predictable Alpine mirror instead of dl-cdn to avoid caching errors.
