@@ -234,4 +234,9 @@ images = {
             },
         },
     },
+    "xiaomi-scorpio": {
+        "branches": [
+            "master",
+        ],
+    },
 }
