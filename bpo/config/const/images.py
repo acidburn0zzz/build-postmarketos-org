@@ -15,6 +15,7 @@ password = "147147"
 branches_default = [
         "master",
         "v21.03",
+        "v21.06",
     ]
 
 # Build configuration, can be overridden per device/branch in 'images' below
@@ -53,12 +54,21 @@ images = {
     "arrow-db410c": {
         "branches": [
             "master",
+            "v21.06",
         ],
+        "branch_configs": {
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
+        },
     },
     "asus-me176c": {
         "branch_configs": {
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
+            },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
             },
         },
     },
@@ -72,6 +82,9 @@ images = {
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
             },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
         },
     },
     "motorola-harpia": {
@@ -83,6 +96,9 @@ images = {
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
+            },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
             },
         },
     },
@@ -96,21 +112,37 @@ images = {
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
             },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
          },
     },
     "oneplus-enchilada": {
         "branches": [
             "master",
+            "v21.06",
         ],
+        "branch_configs": {
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
+        },
     },
     "oneplus-fajita": {
         "branches": [
             "master",
+            "v21.06",
         ],
+        "branch_configs": {
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
+        },
     },
     "pine64-pinebookpro": {
         "branches": [
             "master",
+            "v21.06",
         ],
         "branch_configs": {
             "all": {
@@ -122,6 +154,9 @@ images = {
                     "phosh",
                 ],
                 "installer": True,
+            },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
             },
         },
     },
@@ -135,6 +170,9 @@ images = {
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
+            },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
             },
         },
     },
@@ -152,6 +190,9 @@ images = {
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
             },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
         },
     },
     "purism-librem5": {
@@ -165,6 +206,9 @@ images = {
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
             },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
         },
     },
     "samsung-a3lte": {
@@ -176,6 +220,9 @@ images = {
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
+            },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
             },
         },
     },
@@ -189,6 +236,9 @@ images = {
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
             },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
         },
     },
     "samsung-a5lte": {
@@ -200,6 +250,9 @@ images = {
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
+            },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
             },
         },
     },
@@ -213,6 +266,9 @@ images = {
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
             },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
         },
     },
     "samsung-serranovelte": {
@@ -224,6 +280,9 @@ images = {
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
+            },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
             },
         },
     },
@@ -237,16 +296,31 @@ images = {
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
             },
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
         },
     },
     "xiaomi-scorpio": {
         "branches": [
             "master",
+            "v21.06",
         ],
+        "branch_configs": {
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
+        },
     },
     "xiaomi-wt88047": {
         "branches": [
             "master",
+            "v21.06",
         ],
+        "branch_configs": {
+            "v21.06": {
+                "date-start": "2021-06-20",  # Sunday
+            },
+        },
     },
 }
