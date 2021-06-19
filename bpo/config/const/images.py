@@ -239,4 +239,9 @@ images = {
             "master",
         ],
     },
+    "xiaomi-wt88047": {
+        "branches": [
+            "master",
+        ],
+    },
 }
