@@ -50,6 +50,11 @@ branch_config_default = {
 # https://wiki.postmarketos.org/wiki/<codename>. That is what will show up in
 # the generated readme.html!
 images = {
+    "arrow-db410c": {
+        "branches": [
+            "master",
+        ],
+    },
     "asus-me176c": {
         "branch_configs": {
             "v21.03": {
