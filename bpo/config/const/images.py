@@ -142,7 +142,6 @@ images = {
     "pine64-pinebookpro": {
         "branches": [
             "master",
-            "v21.06",
         ],
         "branch_configs": {
             "all": {
@@ -154,9 +153,6 @@ images = {
                     "phosh",
                 ],
                 "installer": True,
-            },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
             },
         },
     },
