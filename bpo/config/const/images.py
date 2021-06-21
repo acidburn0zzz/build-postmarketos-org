@@ -314,6 +314,11 @@ images = {
             "v21.06",
         ],
         "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem-wt88047",
+                ],
+            },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
             },
