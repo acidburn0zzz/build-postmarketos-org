@@ -194,12 +194,11 @@ footer {
     display: grid;
     grid-template-areas: "source . copyright";
     grid-template-columns: auto 1fr auto;
-    background: #222;
-    color: white;
+    background: lightgray;
     padding: 10px;
 }
-footer a, footer a:hover {
-    color: white;
+footer, footer a {
+    color: gray;
 }
 footer .source {
     grid-area: source;
@@ -273,6 +272,9 @@ footer .copyright {
     }
     .job-log, .img-dir, .time {
         color: #a4a4a4;
+    }
+    footer {
+        background: #222;
     }
     .toc td {
         border: 1px solid #a4a4a4;
