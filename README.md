@@ -79,6 +79,18 @@ The local job is running in a different thread, so if there's nothing useful in
 the trace, open _html_out/index.html and check the latest log files (which are
 linked there).
 
+### Generating the images.postmarketos.org/bpo directory listing
+
+BPO creates directory listing files whenever publishing an image, and it also
+regenerates these files when restarting bpo (to update html files in case the
+templates changed).
+
+During development, test with:
+```
+$ test/manual/test_images_dir_gen.sh
+$ test/manual/test_images_dir_host.sh
+```
+
 ## Network Architecture
 
 ### Job service

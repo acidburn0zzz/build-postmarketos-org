@@ -35,6 +35,7 @@ def build_image(monkeypatch):
     bpo_test.assert_image(device, branch, ui, "published")
 
 
+@pytest.mark.img_dir_gen
 @pytest.mark.timeout(20)
 def test_build_image_stub(monkeypatch):
     """ Do not run 'pmbootstrap install', just create a 1 MiB file with dd.
