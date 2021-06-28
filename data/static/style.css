@@ -40,12 +40,12 @@ body {
 
 .header-bottom {
     background: lightgray;
-    padding: 10px 0px;
 }
 
 .header-bottom a {
     padding: 10px;
     text-decoration: none;
+    display: inline-block;
 }
 
 .header-bottom a:hover {
