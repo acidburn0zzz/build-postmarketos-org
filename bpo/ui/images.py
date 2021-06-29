@@ -183,7 +183,8 @@ def write_index_html():
         elif relpath.count('/') == 1:
             write_index(path, "03_userinterfaces.html")
         elif relpath.count('/') == 2:
-            write_index(path, "04_dates.html")
+            entries = get_entries(path, True)
+            write_index(path, "04_dates.html", entries=entries)
         else:
             write_index_file_list(path, "05_files.html")
 
