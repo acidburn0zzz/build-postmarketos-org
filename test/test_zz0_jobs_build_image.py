@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Testing bpo/jobs/build_image.py """
 import glob
+import json
 import os
 import pytest
 
@@ -73,6 +74,10 @@ def test_build_image_stub(monkeypatch):
     assert os.path.exists("_images/edge/qemu-amd64/index.html")
     assert os.path.exists("_images/edge/qemu-amd64/none/index.html")
     assert len(glob.glob("_images/edge/qemu-amd64/none/20*-*/index.html")) == 1
+
+    with open("_images/index.json", "r") as handle:
+        index = json.load(handle)
+        assert index["edge"]["qemu-amd64"]["none"]
 
 
 @pytest.mark.timeout(20)
