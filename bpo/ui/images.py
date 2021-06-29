@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 import glob
 import json
+import logging
 import os
 import shutil
 
@@ -113,6 +114,8 @@ def write_index_file_list(path, template):
 def write_index_json():
     """ Write an index.json file, which can be used by a desktop installer to
         list and download available images. """
+    logging.info("Writing index.json to images dir")
+
     # Structure:
     # {"edge": {                            // release
     #   "nokia-n900": {                     // device
@@ -161,6 +164,7 @@ def write_index_json():
 def write_index_html():
     """ For each directory in the images dir (recursively), write the HTML
         files. The files are always overwritten. """
+    logging.info("Writing html files to images dir")
 
     for path in glob.iglob(f"{bpo.config.args.images_path}/**/",
                            recursive=True):
