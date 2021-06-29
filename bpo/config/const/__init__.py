@@ -24,8 +24,6 @@ branches["v21.06"] = {"arches": ["x86_64", "aarch64", "armv7"],
                       "ignore_errors": False}
 branches["v21.03"] = {"arches": ["x86_64", "aarch64", "armv7"],
                       "ignore_errors": False}
-branches["v20.05"] = {"arches": ["x86_64", "aarch64", "armv7"],
-                      "ignore_errors": False}
 branches["master"] = {"arches": ["x86_64",
                                  "aarch64",
                                  "armv7",
