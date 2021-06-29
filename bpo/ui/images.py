@@ -136,7 +136,8 @@ def write_index_json():
 
     for path in glob.iglob(f"{images_path}/*/*/*/*/*", recursive=True):
         # Checksums are not listed as separate files
-        if path.endswith(".sha256") or path.endswith(".sha512"):
+        if path.endswith(".sha256") or path.endswith(".sha512") \
+                or path.endswith(".html"):
             continue
 
         relpath = os.path.relpath(path, images_path)
