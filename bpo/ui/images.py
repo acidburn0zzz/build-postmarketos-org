@@ -147,7 +147,7 @@ def write_index_json():
             index[release] = {}
         if device not in index[release]:
             index[release][device] = {}
-        if ui not in index[release]:
+        if ui not in index[release][device]:
             index[release][device][ui] = {}
         if date not in index[release][device][ui]:
             index[release][device][ui][date] = {}

@@ -1,7 +1,10 @@
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Testing bpo/ui/images.py """
+import glob
+import json
 import os
+import sys
 
 import bpo_test  # noqa
 import bpo.ui.images
@@ -33,3 +36,57 @@ def test_get_file_size_human(monkeypatch):
 
     fake_size = 1024 * 1024 * 1024 * 1000 * 1.5
     assert func(path) == "1500.0 GiB"
+
+
+def test_write_index_json(monkeypatch):
+
+    def fake_iglob(path):
+        for f in ["edge/nokia-n900/i3wm/20210101-0000/first.txt",
+                  "edge/nokia-n900/i3wm/20210101-0000/first.txt.sha256",
+                  "edge/nokia-n900/i3wm/20210101-0000/first.txt.sha512",
+                  "edge/nokia-n900/i3wm/20210101-0000/index.html",
+                  "edge/nokia-n900/i3wm/20210101-0000/second.txt",
+                  "edge/nokia-n900/i3wm/20210101-0000/third.txt",
+                  "edge/nokia-n900/i3wm/20210102-0000/first.txt",
+                  "edge/nokia-n900/xfce4/20210102-0000/first.txt",
+                  "edge/pine64-pinephone/sxmo/20210102-0000/first.txt",
+                  "v21.06/pine64-pinephone/sxmo/20210102-0000/first.txt"]:
+            yield f"{bpo.config.args.images_path}/{f}"
+    monkeypatch.setattr(glob, "iglob", fake_iglob)
+
+    def fake_getsize(path):
+        return 1337
+    monkeypatch.setattr(os.path, "getsize", fake_getsize)
+
+    monkeypatch.setattr(sys, "argv", ["bpo", "local"])
+    bpo.config.args.init()
+
+    bpo.ui.images.write_index_json()
+
+    with open("_images/index.json", "r") as handle:
+        index = json.load(handle)
+
+    assert index == {
+        "edge": {
+            "nokia-n900": {
+                "i3wm": {
+                    "20210101-0000": {
+                            "first.txt": {"size": 1337},
+                            "second.txt": {"size": 1337},
+                            "third.txt": {"size": 1337}},
+                    "20210102-0000": {
+                            "first.txt": {"size": 1337}}},
+                "xfce4": {
+                    "20210102-0000": {
+                            "first.txt": {"size": 1337}}},
+            }, "pine64-pinephone": {
+                "sxmo": {
+                    "20210102-0000": {
+                            "first.txt": {"size": 1337}}},
+            },
+        }, "v21.06": {
+            "pine64-pinephone": {
+                "sxmo": {
+                    "20210102-0000": {
+                            "first.txt": {"size": 1337}}},
+            }}}
