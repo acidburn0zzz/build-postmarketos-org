@@ -134,7 +134,7 @@ def write_index_json():
     index = {}
     images_path = bpo.config.args.images_path
 
-    for path in glob.iglob(f"{images_path}/*/*/*/*/*", recursive=True):
+    for path in glob.iglob(f"{images_path}/*/*/*/*/*"):
         # Checksums are not listed as separate files
         if path.endswith(".sha256") or path.endswith(".sha512") \
                 or path.endswith(".html"):
