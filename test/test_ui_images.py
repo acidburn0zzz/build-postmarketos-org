@@ -28,7 +28,7 @@ def test_get_file_size_human(monkeypatch):
     fake_size = 1024 * 1024 * 1.5
     assert func(path) == "1.5 MiB"
 
-    fake_size = 1024 * 1024 * 1024 * 1.5
+    fake_size = 1024 * 1024 * 1024 * 1.54321
     assert func(path) == "1.5 GiB"
 
     fake_size = 1024 * 1024 * 1024 * 1000 * 1.5

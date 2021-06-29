@@ -30,6 +30,7 @@ def get_file_size_human(path):
         if abs(size) < 1024.0 or unit == "Gi":
             break
         size /= 1024.0
+    size = round(size, 1)
     return f"{size} {unit}B"
 
 
