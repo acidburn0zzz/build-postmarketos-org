@@ -67,3 +67,14 @@ li.hash {
 li.size {
     list-style-type: '💾';
 }
+
+.label-latest {
+    display: inline-block;
+    color: white;
+    padding: 3px;
+    font-size: 8pt;
+    border-radius: 7px;
+    background-color: #090;
+    position: relative;
+    top: -3px;
+}
