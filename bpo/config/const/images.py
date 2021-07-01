@@ -297,6 +297,19 @@ images = {
             },
         },
     },
+    "xiaomi-beryllium": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "tianma",
+                    "ebbg",
+                ],
+            },
+        },
+    },
     "xiaomi-scorpio": {
         "branches": [
             "master",
