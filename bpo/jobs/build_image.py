@@ -127,7 +127,7 @@ def run(device, branch, ui):
         tasks[task_name] = f"""
             IMG_PREFIX={arg_img_prefix}
 
-            pmbootstrap config extra_space 50
+            pmbootstrap config extra_space 60
             pmbootstrap -q -y zap -p
 
             # Use less space by hardlinking rootfs.img instead of copying
