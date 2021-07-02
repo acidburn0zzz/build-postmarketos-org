@@ -126,6 +126,7 @@ def write_index_json():
     #           "size":   "12834723847",    // size in bytes
     #           "sha256": "23428937489...", // checksum sha256
     #           "sha512": "23428937489...", // checksum sha512
+    #           "url": "https://....",      // download url for image
     #          }, ...},                     // more files in same date dir
     #       ...},                           // more dates
     #     ...},                             // more user interfaces
@@ -152,7 +153,10 @@ def write_index_json():
         if date not in index[release][device][ui]:
             index[release][device][ui][date] = {}
 
-        entry = {"size": os.path.getsize(path)}
+        entry = {
+            "size": os.path.getsize(path),
+            "url": f"{bpo.config.args.url_images}/{relpath}"
+        }
         file_entry_add_checksums(entry, path)
         index[release][device][ui][date][filename] = entry
 

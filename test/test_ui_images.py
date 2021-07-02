@@ -7,6 +7,7 @@ import os
 import sys
 
 import bpo_test  # noqa
+import bpo.config.const.args
 import bpo.ui.images
 
 
@@ -66,27 +67,70 @@ def test_write_index_json(monkeypatch):
     with open("_images/index.json", "r") as handle:
         index = json.load(handle)
 
+    url_images = bpo.config.const.args.url_images
+
     assert index == {
         "edge": {
             "nokia-n900": {
                 "i3wm": {
                     "20210101-0000": {
-                            "first.txt": {"size": 1337},
-                            "second.txt": {"size": 1337},
-                            "third.txt": {"size": 1337}},
+                        "first.txt": {
+                            "size": 1337,
+                            "url": f"{url_images}/edge/nokia-n900/i3wm/"
+                                   f"20210101-0000/first.txt"
+                        },
+                        "second.txt": {
+                            "size": 1337,
+                            "url": f"{url_images}/edge/nokia-n900/i3wm/"
+                                   f"20210101-0000/second.txt"
+                        },
+                        "third.txt": {
+                            "size": 1337,
+                            "url": f"{url_images}/edge/nokia-n900/i3wm/"
+                                   f"20210101-0000/third.txt"
+                        }
+                    },
                     "20210102-0000": {
-                            "first.txt": {"size": 1337}}},
+                        "first.txt": {
+                            "size": 1337,
+                            "url": f"{url_images}/edge/nokia-n900/i3wm/"
+                                   f"20210102-0000/first.txt"
+                        }
+                    }
+                },
                 "xfce4": {
                     "20210102-0000": {
-                            "first.txt": {"size": 1337}}},
-            }, "pine64-pinephone": {
-                "sxmo": {
-                    "20210102-0000": {
-                            "first.txt": {"size": 1337}}},
+                        "first.txt": {
+                            "size": 1337,
+                            "url": f"{url_images}/edge/nokia-n900/xfce4/"
+                                   f"20210102-0000/first.txt"
+                        }
+                    }
+                },
             },
-        }, "v21.06": {
             "pine64-pinephone": {
                 "sxmo": {
                     "20210102-0000": {
-                            "first.txt": {"size": 1337}}},
-            }}}
+                        "first.txt": {
+                            "size": 1337,
+                            "url": f"{url_images}/edge/pine64-pinephone/sxmo/"
+                                   f"20210102-0000/first.txt"
+                        }
+                    }
+                },
+            },
+        },
+        "v21.06": {
+            "pine64-pinephone": {
+                "sxmo": {
+                    "20210102-0000": {
+                        "first.txt": {
+                            "size": 1337,
+                            "url": f"{url_images}/v21.06/pine64-pinephone/"
+                                   f"sxmo/20210102-0000/first.txt"
+                        }
+                    }
+                },
+            }
+        }
+    }
