@@ -146,7 +146,7 @@ images = {
         "branch_configs": {
             "all": {
                 "ui": [
-                    "none",
+                    "console",
                     "gnome",
                     "plasma-desktop",
                     "sway",
