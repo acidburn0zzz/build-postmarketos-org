@@ -29,8 +29,6 @@ def run(device, branch, ui):
     """ Start a single image build job. """
     # Put the pkgver from this package into the image name
     ui_apkbuild = f"main/postmarketos-ui-{ui}/APKBUILD"
-    if ui == "none":
-        ui_apkbuild = "main/postmarketos-base/APKBUILD"
 
     # Shell arguments
     arg_branch = shlex.quote(branch)
