@@ -26,6 +26,31 @@ def test_branch_names():
                     f"{device}: invalid branch in 'branch_configs'"
 
 
+def test_ui():
+    """ Verify that all UIs are in the allowlist, so we don't add an invalid
+        one by accident and only notice it while trying to build it. """
+    cfg_images = bpo.config.const.images.images
+    cfg_default = bpo.config.const.images.branch_config_default
+    allowlist = bpo.config.const.images.ui_allowlist
+
+    assert "none" not in allowlist, "UI 'none' is intentionally not allowed," \
+                                    " use 'console' instead"
+
+    for ui in cfg_default["ui"]:
+        assert ui in allowlist, f"branch_config_default: UI '{ui}' is not in" \
+                " ui_allowlist. Typo, or needs to be added?"
+
+    for device, image_config in cfg_images.items():
+        if "branch_configs" not in image_config:
+            continue
+        for branch, branch_config in image_config["branch_configs"].items():
+            if "ui" not in branch_config:
+                continue
+            for ui in branch_config["ui"]:
+                assert ui in allowlist, f"{device}: {branch}: UI '{ui}' is" \
+                    " not in ui_allowlist. Typo, or needs to be added?"
+
+
 def test_config_keys():
     """ Test keys of various levels of the images config. """
     cfg_images = bpo.config.const.images.images

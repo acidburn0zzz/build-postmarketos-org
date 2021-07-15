@@ -18,6 +18,32 @@ branches_default = [
         "v21.06",
     ]
 
+# Prevent errors by listing explicitly allowed UIs here. Notably "none" is
+# missing, as the UI does not follow the usual naming scheme
+# (postmarketos-ui-none/APKBUILD doesn't exist). Code in bpo.jobs.build_image
+# would try to extract the pkgver from the file and do something undefined.
+# Use "console" instead.
+ui_allowlist = [
+        "asteroid",
+        "console",
+        "fbkeyboard",
+        "glacier",
+        "gnome",
+        "i3wm",
+        "kodi",
+        "lxqt",
+        "mate",
+        "phosh",
+        "plasma-bigscreen",
+        "plasma-desktop",
+        "plasma-mobile",
+        "shelli",
+        "sway",
+        "sxmo",
+        "weston",
+        "xfce4"
+    ]
+
 # Build configuration, can be overridden per device/branch in 'images' below
 branch_config_default = {
     # Schedule a new image each {date-interval} days, start at {date-start}.
