@@ -180,6 +180,9 @@ images = {
                 ],
                 "installer": True,
             },
+            "master": {
+                "date-start": "2021-07-20",  # Tuesday
+            },
         },
     },
     "pine64-pinephone": {
@@ -188,7 +191,7 @@ images = {
                 "installer": True,
             },
             "master": {
-                "date-start": "2021-02-03",  # Wednesday
+                "date-start": "2021-07-20",  # Tuesday
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
@@ -207,7 +210,7 @@ images = {
                 ],
             },
             "master": {
-                "date-start": "2021-02-03",  # Wednesday
+                "date-start": "2021-07-20",  # Tuesday
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
@@ -223,7 +226,7 @@ images = {
                 "installer": True,
             },
             "master": {
-                "date-start": "2021-02-03",  # Wednesday
+                "date-start": "2021-07-20",  # Tuesday
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
