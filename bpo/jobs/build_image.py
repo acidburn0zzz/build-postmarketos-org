@@ -130,7 +130,7 @@ def run(device, branch, ui):
 
             # Use less space by hardlinking rootfs.img instead of copying
             sudo mkdir -p {arg_work_installer}/var/lib
-            sudo {arg_ln} "out/$IMG_PREFIX.img" \
+            sudo {arg_ln} "out/$IMG_PREFIX.img" \\
                     {arg_work_installer}/var/lib/rootfs.img
 
             {pmbootstrap_install} \\
