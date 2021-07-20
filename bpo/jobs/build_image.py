@@ -67,6 +67,9 @@ def run(device, branch, ui):
 
     # Iterate over kernels to generate the images, with zap in-between
     branch_cfg = bpo.images.config.get_branch_config(device, branch)
+    # Always include osk-sdl in the regular image if also building an installer
+    # image (pmaports#1153).
+    arg_extra_packages = "osk-sdl" if branch_cfg["installer"] else "none"
     for kernel in branch_cfg["kernels"]:
         # Task and image name, add kernel suffix if having multiple kernels
         task_name = "img"
@@ -82,6 +85,7 @@ def run(device, branch, ui):
 
             pmbootstrap config kernel {arg_kernel}
             pmbootstrap config extra_space 0
+            pmbootstrap config extra_packages {arg_extra_packages}
             pmbootstrap -q -y zap -p
 
             printf "%s\\n%s\\n" {arg_pass} {arg_pass} | {pmbootstrap_install}
@@ -126,6 +130,7 @@ def run(device, branch, ui):
             IMG_PREFIX={arg_img_prefix}
 
             pmbootstrap config extra_space 100
+            pmbootstrap config extra_packages none
             pmbootstrap -q -y zap -p
 
             # Use less space by hardlinking rootfs.img instead of copying
