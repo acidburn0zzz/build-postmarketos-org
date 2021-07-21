@@ -48,7 +48,7 @@ ui_allowlist = [
 branch_config_default = {
     # Schedule a new image each {date-interval} days, start at {date-start}.
     "date-interval": 7,
-    "date-start": "2020-12-29",  # Tuesday
+    "date-start": "2021-07-21",  # Wednesday
 
     # User interfaces to build. At least one UI must be set for each device,
     # otherwise no image for that device will be built.
@@ -180,18 +180,12 @@ images = {
                 ],
                 "installer": True,
             },
-            "master": {
-                "date-start": "2021-07-20",  # Tuesday
-            },
         },
     },
     "pine64-pinephone": {
         "branch_configs": {
             "all": {
                 "installer": True,
-            },
-            "master": {
-                "date-start": "2021-07-20",  # Tuesday
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
@@ -209,9 +203,6 @@ images = {
                     "allwinner",
                 ],
             },
-            "master": {
-                "date-start": "2021-07-20",  # Tuesday
-            },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
             },
@@ -224,9 +215,6 @@ images = {
         "branch_configs": {
             "all": {
                 "installer": True,
-            },
-            "master": {
-                "date-start": "2021-07-20",  # Tuesday
             },
             "v21.03": {
                 "date-start": "2021-05-08",  # Saturday
