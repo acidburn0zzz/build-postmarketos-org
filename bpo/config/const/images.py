@@ -14,7 +14,6 @@ password = "147147"
 # Branches to build images for, can be overridden per device in 'images' below
 branches_default = [
         "master",
-        "v21.03",
         "v21.06",
     ]
 
@@ -90,9 +89,6 @@ images = {
     },
     "asus-me176c": {
         "branch_configs": {
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
-            },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
             },
@@ -104,9 +100,6 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
-            },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
@@ -120,9 +113,6 @@ images = {
                     "mainline-modem",
                 ],
             },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
-            },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
             },
@@ -134,9 +124,6 @@ images = {
                 "ui": [
                     "i3wm",
                 ],
-            },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
@@ -187,9 +174,6 @@ images = {
             "all": {
                 "installer": True,
             },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
-            },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
             },
@@ -203,9 +187,6 @@ images = {
                     "allwinner",
                 ],
             },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
-            },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
             },
@@ -215,9 +196,6 @@ images = {
         "branch_configs": {
             "all": {
                 "installer": True,
-            },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
@@ -231,9 +209,6 @@ images = {
                     "mainline-modem",
                 ],
             },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
-            },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
             },
@@ -245,9 +220,6 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
-            },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
@@ -261,9 +233,6 @@ images = {
                     "mainline-modem",
                 ],
             },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
-            },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
             },
@@ -275,9 +244,6 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
-            },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
@@ -291,9 +257,6 @@ images = {
                     "mainline-modem",
                 ],
             },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
-            },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
             },
@@ -305,9 +268,6 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
-            },
-            "v21.03": {
-                "date-start": "2021-05-08",  # Saturday
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
