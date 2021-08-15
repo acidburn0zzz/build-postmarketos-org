@@ -6,6 +6,7 @@ import bpo_test.trigger
 import bpo.config.const
 import bpo.helpers.job
 import bpo.jobs.build_package
+import bpo.worker.queue
 
 import logging
 
@@ -52,6 +53,7 @@ def test_retry_build(monkeypatch):
         # server start building "hello-world". The actual building is prevented
         # in this test by the job_run_fake() override above.
         bpo_test.trigger.job_callback_get_depends("master")
+        bpo.worker.queue.wait_until_empty()
         bpo_test.assert_package(pkgname, status="building", retry_count=0,
                                 job_id=1234)
         assert job_run_fake_count == 1

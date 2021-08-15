@@ -19,6 +19,10 @@ def _action_images_queue_fill(*args, **kwargs):
     bpo.images.queue.fill(*args, **kwargs)
 
 
+def _action_repo_build(*args, **kwargs):
+    bpo.repo.build(*args, **kwargs)
+
+
 def _action_ui_log(*args, **kwargs):
     bpo.ui.log(*args, **kwargs)
 

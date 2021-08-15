@@ -17,6 +17,7 @@ cond = threading.Condition()
 
 class QueueAction(enum.Enum):
     IMAGES_QUEUE_FILL = enum.auto()
+    REPO_BUILD = enum.auto()
     UI_LOG = enum.auto()
     UI_UPDATE = enum.auto()
     WORKER_STOP_THREAD = enum.auto()
@@ -33,6 +34,7 @@ def get_task():
     with cond:
         if not tasks:
             logging.debug("WorkerThread's queue is empty, sleeping")
+            cond.notify()  # Wake up threads in wait_until_empty()
             cond.wait()
         ret = tasks.pop()
 
@@ -41,6 +43,24 @@ def get_task():
                       f" args={ret['args']},"
                       f" kwargs={ret['kwargs']}")
     return ret
+
+
+def wait_until_empty():
+    """ Wait until WorkThread's queue is empty (for the testsuite). """
+    global cond
+    global tasks
+
+    logging.debug("waiting until WorkThread's queue is empty")
+
+    while True:
+        with cond:
+            if not tasks:
+                break
+        logging.debug("WorkerThread's queue is not empty, sleeping")
+        with cond:
+            cond.wait()
+
+    logging.debug("WorkerThread's queue is empty, waking up")
 
 
 def _add(__queue_add_action, *args, **kwargs):
@@ -62,6 +82,10 @@ def _add(__queue_add_action, *args, **kwargs):
 
 def add_images_queue_fill(*args, **kwargs):
     _add(QueueAction.IMAGES_QUEUE_FILL, *args, **kwargs)
+
+
+def add_repo_build(*args, **kwargs):
+    _add(QueueAction.REPO_BUILD, *args, **kwargs)
 
 
 def add_ui_log(*args, **kwargs):
