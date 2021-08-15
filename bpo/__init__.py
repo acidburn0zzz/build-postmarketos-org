@@ -22,6 +22,8 @@ import bpo.repo.tools
 import bpo.repo.wip
 import bpo.ui
 import bpo.ui.images
+import bpo.worker
+import bpo.worker.queue
 
 
 def logging_init():
@@ -39,6 +41,7 @@ def init_components():
     bpo.repo.wip.do_keygen()
     bpo.helpers.job.init()
     bpo.ui.init()
+    bpo.worker.init()
 
 
 def main(return_app=False, fill_image_queue=True):
@@ -90,6 +93,7 @@ def main(return_app=False, fill_image_queue=True):
 def stop():
     """ Clean up after running the BPO Server. Used in the testsuite. """
     bpo.images.queue.timer_stop()
+    bpo.worker.queue.add_worker_stop_thread()
 
 
 if __name__ == "__main__":

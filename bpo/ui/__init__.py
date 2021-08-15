@@ -6,15 +6,14 @@ import jinja2
 import os
 import logging
 import shutil
-import threading
 from sqlalchemy import func
 
 import bpo.config.const
 import bpo.config.args
 import bpo.db
+import bpo.worker
 
 env = None
-ui_update_cond = threading.Condition()
 
 
 def update_badge(session, pkgs, imgs):
@@ -98,7 +97,8 @@ def update_index(session, pkgs, imgs):
 def update(session=None):
     """ Update everything in html_out
         :param session: set to already created session for optimization """
-    global ui_update_cond
+    if bpo.worker.is_other_thread():
+        return bpo.worker.queue.add_ui_update()
 
     if not session:
         session = bpo.db.session()
@@ -106,9 +106,8 @@ def update(session=None):
     pkgs = bpo.db.get_all_packages_by_status(session)
     imgs = bpo.db.get_all_images_by_status(session)
 
-    with ui_update_cond:
-        update_index(session, pkgs, imgs)
-        update_badge(session, pkgs, imgs)
+    update_index(session, pkgs, imgs)
+    update_badge(session, pkgs, imgs)
 
 
 def copy_static():
@@ -149,6 +148,9 @@ def log(*args, **kwargs):
         NOTE: Make sure that you have committed all changes to any open
               sessions (run session.commit() after doing changes), otherwise
               you will get a "database is locked" error. """
+    if bpo.worker.is_other_thread():
+        return bpo.worker.queue.add_ui_log(*args, **kwargs)
+
     msg = bpo.db.Log(*args, **kwargs)
     session = bpo.db.session()
     session.add(msg)
