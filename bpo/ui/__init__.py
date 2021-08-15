@@ -95,9 +95,13 @@ def update_index(session, pkgs, imgs):
     os.rename(output_temp, output)
 
 
-def update(session):
-    """ Update everything in html_out """
+def update(session=None):
+    """ Update everything in html_out
+        :param session: set to already created session for optimization """
     global ui_update_cond
+
+    if not session:
+        session = bpo.db.session()
 
     pkgs = bpo.db.get_all_packages_by_status(session)
     imgs = bpo.db.get_all_images_by_status(session)
