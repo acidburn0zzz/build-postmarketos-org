@@ -1,11 +1,11 @@
 # Copyright 2021 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 import threading
-import logging
 
 import bpo.db
 import bpo.images.config
 import bpo.repo
+import bpo.worker.queue
 
 timer = None
 timer_cond = threading.Condition()
@@ -34,7 +34,9 @@ def fill(now=None):
     """ Add new entries to the image table, based on
         bpo/config/const/images.py.
         :param now: current time, can be overwritten for tests """
-    logging.info("Running bpo.images.queue.fill()")
+    if bpo.worker.is_other_thread():
+        return bpo.worker.queue.add_images_queue_fill(now)
+
     session = bpo.db.session()
 
     for img_cfg in bpo.images.config.get_images(now):

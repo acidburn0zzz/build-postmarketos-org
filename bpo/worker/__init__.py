@@ -8,10 +8,15 @@
 import threading
 import logging
 
+import bpo.images.queue
 import bpo.ui
 import bpo.worker.queue
 
 thread = None
+
+
+def _action_images_queue_fill(*args, **kwargs):
+    bpo.images.queue.fill(*args, **kwargs)
 
 
 def _action_ui_log(*args, **kwargs):

@@ -16,6 +16,7 @@ cond = threading.Condition()
 
 
 class QueueAction(enum.Enum):
+    IMAGES_QUEUE_FILL = enum.auto()
     UI_LOG = enum.auto()
     UI_UPDATE = enum.auto()
     WORKER_STOP_THREAD = enum.auto()
@@ -57,6 +58,10 @@ def _add(__queue_add_action, *args, **kwargs):
                           "args": args,
                           "kwargs": kwargs})
         cond.notify()
+
+
+def add_images_queue_fill(*args, **kwargs):
+    _add(QueueAction.IMAGES_QUEUE_FILL, *args, **kwargs)
 
 
 def add_ui_log(*args, **kwargs):

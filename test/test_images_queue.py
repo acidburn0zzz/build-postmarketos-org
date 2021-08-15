@@ -106,8 +106,12 @@ def test_fill(monkeypatch):
     bpo_test.assert_image(device, branch, "third", count=1)
     bpo_test.assert_image(device, branch, "fourth", count=0)
 
-    # Fill queue and verify again
+    # Fill queue
+    bpo.init_components()
     bpo.images.queue.fill(date_now)
+    bpo.stop()
+
+    # Verify again
     bpo_test.assert_image(device, branch, "first", count=1)
     bpo_test.assert_image(device, branch, "second", count=1)
     bpo_test.assert_image(device, branch, "third", count=2)
