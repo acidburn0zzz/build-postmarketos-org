@@ -57,7 +57,7 @@ def test_build_thread_safety(monkeypatch):
 
     assert threads == threads_expected
 
-    bpo.images.queue.timer_stop()
+    bpo.stop()
 
 
 def test_repo_is_apk_origin_in_db(monkeypatch):

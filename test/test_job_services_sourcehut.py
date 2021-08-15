@@ -23,6 +23,8 @@ def test_sourcehut_get_secrets_by_job(monkeypatch):
     assert func("any_job_name") == "secrets:\n- f00d\n"
     assert func("sign_index") == "secrets:\n- f00d\n- c4f3\n"
 
+    bpo.stop()
+
 
 @pytest.mark.skip_ci
 def test_sourcehut_get_status(monkeypatch):
