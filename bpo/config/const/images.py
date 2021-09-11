@@ -130,6 +130,18 @@ images = {
             },
          },
     },
+    "odroid-hc2": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "ui": [
+                    "console",
+                ],
+            },
+        },
+    },
     "oneplus-enchilada": {
         "branches": [
             "master",
