@@ -214,7 +214,34 @@ images = {
             },
         },
     },
+    "samsung-a3": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
+    "samsung-a5": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
     "samsung-a3lte": {
+        "branches": [
+            "v21.06",
+        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -227,6 +254,9 @@ images = {
         },
     },
     "samsung-a3ulte": {
+        "branches": [
+            "v21.06",
+        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -239,6 +269,9 @@ images = {
         },
     },
     "samsung-a5lte": {
+        "branches": [
+            "v21.06",
+        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -251,6 +284,9 @@ images = {
         },
     },
     "samsung-a5ulte": {
+        "branches": [
+            "v21.06",
+        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -262,7 +298,22 @@ images = {
             },
         },
     },
+    "samsung-serranove": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
     "samsung-serranovelte": {
+        "branches": [
+            "v21.06",
+        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -318,11 +369,14 @@ images = {
         "branch_configs": {
             "all": {
                 "kernels": [
-                    "mainline-modem-wt88047",
+                    "mainline-modem",
                 ],
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "kernels": [
+                    "mainline-modem-wt88047",
+                ],
             },
         },
     },
