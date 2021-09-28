@@ -204,6 +204,19 @@ images = {
             },
         },
     },
+    "pine64-rockpro64": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "ui": [
+                    "console",
+                    "plasma-bigscreen",
+                ],
+            },
+        },
+    },
     "purism-librem5": {
         "branch_configs": {
             "all": {
