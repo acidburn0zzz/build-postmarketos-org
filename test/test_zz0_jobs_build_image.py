@@ -51,7 +51,7 @@ def test_build_image_stub(monkeypatch):
         # "true" is where we let the printf password pipe end
         return f"""true # pmbootstrap install stub from testsuite
                 rootfs="{arg_work_rootfs}/qemu-amd64.img"
-                bootimg="{arg_work_boot}/boot.img-qemu-amd64"
+                bootimg="{arg_work_boot}/boot.img"
 
                 mkdir -p {arg_work_rootfs} {arg_work_boot}
                 dd \\

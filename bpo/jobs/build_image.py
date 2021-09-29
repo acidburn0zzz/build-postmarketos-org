@@ -108,12 +108,13 @@ def run(device, branch, ui):
         # Task: img_bootimg
         # For Android devices, postmarketos-mkinitfs generates a boot.img
         # inside the rootfs img (above). Make it available as separate file, to
-        # make flashing easier. 'boot.img-*', because the kernel name is
-        # appended (e.g. boot.img-postmarketos-qcom-msm8916).
+        # make flashing easier. 'boot.img*', because the kernel name was
+        # appended with the pre 1.0.0 postmarketos-mkinitfs used in v21.06 and
+        # earlier (e.g. boot.img-postmarketos-qcom-msm8916).
         tasks[f"{task_name}_bootimg"] = f"""
             IMG_PREFIX={arg_img_prefix}
 
-            for i in {arg_work_boot}/boot.img-*; do
+            for i in {arg_work_boot}/boot.img*; do
                 if [ -e "$i" ]; then
                     sudo mv "$i" "out/$IMG_PREFIX-boot.img"
                 fi
