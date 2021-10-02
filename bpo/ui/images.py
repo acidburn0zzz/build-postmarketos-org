@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import shutil
+from datetime import datetime
 
 import bpo.helpers.job
 import bpo.images
@@ -112,11 +113,9 @@ def write_index_file_list(path, template):
                 codename=codename)
 
 
-def write_index_json():
-    """ Write an index.json file, which can be used by a desktop installer to
-        list and download available images. """
-    logging.info("Writing index.json to images dir")
-
+def parse_files_from_disk():
+    """ Iterate through images on disk and generate an intermediate format
+    using the path info """
     # Structure:
     # {"edge": {                            // release
     #   "nokia-n900": {                     // device
@@ -159,6 +158,78 @@ def write_index_json():
         }
         file_entry_add_checksums(entry, path)
         index[release][device][ui][date][filename] = entry
+
+    return index
+
+
+def write_index_json():
+    """ Write an index.json file, which can be used by a desktop installer to
+        list and download available images. """
+    logging.info("Writing index.json to images dir")
+
+    # The index.json written by this method is in the following format:
+    # { "releases": [                                     // list of releases
+    #   { "name": "edge",                                 // release name
+    #     "devices": [                                    // list of devices
+    #       { "name": "qemu-amd64",                       // device name
+    #         "interfaces": [                             // list of device UIs
+    #           { "name": "phosh",                        // name of UI
+    #             "images": [                             // list of UI images
+    #               {
+    #                 "name": "202...virt.img.xz",        // file name
+    #                 "timestamp": "2021-...T12:20:00",   // date in ISO 8601
+    #                 "size": 1245415,                    // size in bytes
+    #                 "url": "https://...",               // image download url
+    #                 "sha256": "d000...",                // sha256
+    #                 "sha512": "7ab1..."                 // sha512
+    #               }, {...} ]
+    #           }, {...} ]
+    #       }, {...} ]
+    #   }, {...} ]
+    # }
+    # the full schema for this JSON is at test/testdata/index.schema.json
+
+    images_path = bpo.config.args.images_path
+    fs_index = parse_files_from_disk()
+
+    releases = []
+    index = {"releases": releases}
+    for release_name, d in fs_index.items():
+        devices = []
+        release = {
+            "name": release_name,
+            "devices": devices,
+        }
+        releases.append(release)
+        for device_name, u in d.items():
+            interfaces = []
+            dev = {
+                "name": device_name,
+                "interfaces": interfaces,
+            }
+            devices.append(dev)
+            for ui_name, i in u.items():
+                images = []
+                interface = {
+                    "name": ui_name,
+                    "images": images,
+                }
+                interfaces.append(interface)
+                for date, l in i.items():
+                    date_iso = datetime.strptime(date,
+                                                 '%Y%m%d-%H%M').isoformat()
+                    for image_name, i in l.items():
+                        image = {
+                            "name": image_name,
+                            "timestamp": date_iso,
+                            "size": i["size"],
+                            "url": i["url"]
+                        }
+                        # these are optional
+                        for s in ["sha256", "sha512"]:
+                            if s in i:
+                                image[s] = i[s]
+                        images.append(image)
 
     os.makedirs(bpo.config.args.images_path, exist_ok=True)
     path_json = f"{images_path}/index.json"

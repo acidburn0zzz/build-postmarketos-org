@@ -3,6 +3,7 @@
 """ Testing bpo/jobs/build_image.py """
 import glob
 import json
+import jsonschema
 import os
 import pytest
 
@@ -77,7 +78,13 @@ def test_build_image_stub(monkeypatch):
 
     with open("_images/index.json", "r") as handle:
         index = json.load(handle)
-        assert index["edge"]["qemu-amd64"]["none"]
+    with open("test/testdata/index.schema.json", "r") as handle:
+        schema = json.load(handle)
+
+    try:
+        jsonschema.validate(index, schema)
+    except jsonschema.exceptions.ValidationError as e:
+        assert False, f"Failed to validate json against schema: {e}"
 
 
 @pytest.mark.timeout(20)

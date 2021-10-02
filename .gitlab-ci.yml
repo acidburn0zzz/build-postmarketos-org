@@ -40,6 +40,7 @@ pytest:
   # Install all python depends natively on Alpine for best performance, not with pip
   - sh ./install_pmbootstrap.sh \
         py3-flask \
+        py3-jsonschema \
         py3-pytest \
         py3-pytest-cov \
         py3-pytest-timeout \

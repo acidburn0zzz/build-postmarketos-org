@@ -1,0 +1,91 @@
+{
+    "releases": [
+        {
+            "name": "edge",
+            "devices": [
+                {
+                    "name": "nokia-n900",
+                    "interfaces": [
+                        {
+                            "name": "i3wm",
+                            "images": [
+                                {
+                                    "name": "first.txt",
+                                    "timestamp": "2021-01-01T00:00:00",
+                                    "size": 1337,
+                                    "url": "https://images.postmarketos.org/bpo/edge/nokia-n900/i3wm/20210101-0000/first.txt"
+                                },
+                                {
+                                    "name": "second.txt",
+                                    "timestamp": "2021-01-01T00:00:00",
+                                    "size": 1337,
+                                    "url": "https://images.postmarketos.org/bpo/edge/nokia-n900/i3wm/20210101-0000/second.txt"
+                                },
+                                {
+                                    "name": "third.txt",
+                                    "timestamp": "2021-01-01T00:00:00",
+                                    "size": 1337,
+                                    "url": "https://images.postmarketos.org/bpo/edge/nokia-n900/i3wm/20210101-0000/third.txt"
+                                },
+                                {
+                                    "name": "first.txt",
+                                    "timestamp": "2021-01-02T00:00:00",
+                                    "size": 1337,
+                                    "url": "https://images.postmarketos.org/bpo/edge/nokia-n900/i3wm/20210102-0000/first.txt"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "xfce4",
+                            "images": [
+                                {
+                                    "name": "first.txt",
+                                    "timestamp": "2021-01-02T00:00:00",
+                                    "size": 1337,
+                                    "url": "https://images.postmarketos.org/bpo/edge/nokia-n900/xfce4/20210102-0000/first.txt"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "pine64-pinephone",
+                    "interfaces": [
+                        {
+                            "name": "sxmo",
+                            "images": [
+                                {
+                                    "name": "first.txt",
+                                    "timestamp": "2021-01-02T00:00:00",
+                                    "size": 1337,
+                                    "url": "https://images.postmarketos.org/bpo/edge/pine64-pinephone/sxmo/20210102-0000/first.txt"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "v21.06",
+            "devices": [
+                {
+                    "name": "pine64-pinephone",
+                    "interfaces": [
+                        {
+                            "name": "sxmo",
+                            "images": [
+                                {
+                                    "name": "first.txt",
+                                    "timestamp": "2021-01-02T00:00:00",
+                                    "size": 1337,
+                                    "url": "https://images.postmarketos.org/bpo/v21.06/pine64-pinephone/sxmo/20210102-0000/first.txt"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

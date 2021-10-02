@@ -3,6 +3,7 @@
 """ Testing bpo/ui/images.py """
 import glob
 import json
+import jsonschema
 import os
 import sys
 
@@ -39,6 +40,13 @@ def test_get_file_size_human(monkeypatch):
     assert func(path) == "1500.0 GiB"
 
 
+def get_dict_by_val(dict_list, key, val):
+    for d in dict_list:
+        if key in d and d[key] == val:
+            return d
+    return None
+
+
 def test_write_index_json(monkeypatch):
 
     def fake_iglob(path):
@@ -66,71 +74,25 @@ def test_write_index_json(monkeypatch):
 
     with open("_images/index.json", "r") as handle:
         index = json.load(handle)
+    with open("test/testdata/index.schema.json", "r") as handle:
+        schema = json.load(handle)
 
-    url_images = bpo.config.const.args.url_images
+    try:
+        jsonschema.validate(index, schema)
+    except jsonschema.exceptions.ValidationError as e:
+        assert False, f"Failed to validate json against schema: {e}"
 
-    assert index == {
-        "edge": {
-            "nokia-n900": {
-                "i3wm": {
-                    "20210101-0000": {
-                        "first.txt": {
-                            "size": 1337,
-                            "url": f"{url_images}/edge/nokia-n900/i3wm/"
-                                   f"20210101-0000/first.txt"
-                        },
-                        "second.txt": {
-                            "size": 1337,
-                            "url": f"{url_images}/edge/nokia-n900/i3wm/"
-                                   f"20210101-0000/second.txt"
-                        },
-                        "third.txt": {
-                            "size": 1337,
-                            "url": f"{url_images}/edge/nokia-n900/i3wm/"
-                                   f"20210101-0000/third.txt"
-                        }
-                    },
-                    "20210102-0000": {
-                        "first.txt": {
-                            "size": 1337,
-                            "url": f"{url_images}/edge/nokia-n900/i3wm/"
-                                   f"20210102-0000/first.txt"
-                        }
-                    }
-                },
-                "xfce4": {
-                    "20210102-0000": {
-                        "first.txt": {
-                            "size": 1337,
-                            "url": f"{url_images}/edge/nokia-n900/xfce4/"
-                                   f"20210102-0000/first.txt"
-                        }
-                    }
-                },
-            },
-            "pine64-pinephone": {
-                "sxmo": {
-                    "20210102-0000": {
-                        "first.txt": {
-                            "size": 1337,
-                            "url": f"{url_images}/edge/pine64-pinephone/sxmo/"
-                                   f"20210102-0000/first.txt"
-                        }
-                    }
-                },
-            },
-        },
-        "v21.06": {
-            "pine64-pinephone": {
-                "sxmo": {
-                    "20210102-0000": {
-                        "first.txt": {
-                            "size": 1337,
-                            "url": f"{url_images}/v21.06/pine64-pinephone/"
-                                   f"sxmo/20210102-0000/first.txt"
-                        }
-                    }
-                },
-            }
-        }
-    }
+    with open("test/testdata/index.json.expected", "r") as handle:
+        expected = json.load(handle)
+
+    assert index == expected
+
+    # edge/nokia-n900/i3wm/20210101-0000/third.txt
+    version = get_dict_by_val(index["releases"], "name", "edge")
+    assert version
+    device = get_dict_by_val(version["devices"], "name", "nokia-n900")
+    assert device
+    ui = get_dict_by_val(device["interfaces"], "name", "i3wm")
+    assert ui
+    image = get_dict_by_val(ui["images"], "name", "third.txt")
+    assert image
