@@ -1,0 +1,154 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "pmOS Images Index",
+	"description": "Collection of pmOS releases, and corresponding device/images",
+	"type": "object",
+	"required": [
+		"releases"
+	],
+	"properties": {
+		"releases": {
+			"title": "Releases",
+			"type": "array",
+			"default": [],
+			"items":{
+				"title": "Items",
+				"type": "object",
+				"required": [
+					"name",
+					"devices"
+				],
+				"properties": {
+					"name": {
+						"title": "Name",
+						"type": "string",
+						"default": "",
+						"examples": [
+							"edge"
+						],
+						"pattern": "^.*$"
+					},
+					"devices": {
+						"title": "Devices",
+						"type": "array",
+						"default": [],
+						"items":{
+							"title": "Items",
+							"type": "object",
+							"required": [
+								"name",
+								"interfaces"
+							],
+							"properties": {
+								"name": {
+									"title": "Name",
+									"type": "string",
+									"default": "",
+									"examples": [
+										"motorola-harpia"
+									],
+									"pattern": "^.*$"
+								},
+								"interfaces": {
+									"title": "Interfaces",
+									"type": "array",
+									"default": [],
+									"items":{
+										"title": "Items",
+										"type": "object",
+										"required": [
+											"name",
+											"images"
+										],
+										"properties": {
+											"name": {
+												"title": "Name",
+												"type": "string",
+												"default": "",
+												"examples": [
+													"sxmo"
+												],
+												"pattern": "^.*$"
+											},
+											"images": {
+												"title": "Images",
+												"type": "array",
+												"default": [],
+												"items":{
+													"title": "Items",
+													"type": "object",
+													"required": [
+														"name",
+														"timestamp",
+														"size",
+														"url"
+													],
+													"properties": {
+														"name": {
+															"title": "Name",
+															"type": "string",
+															"default": "",
+															"examples": [
+																"20210929-0323-postmarketOS-edge-sxmo-1.5.1-motorola-harpia-mainline-modem.img.xz"
+															],
+															"pattern": "^.*$"
+														},
+														"timestamp": {
+															"title": "Timestamp",
+															"type": "string",
+															"default": "",
+															"examples": [
+																"2021-09-29T03:23:00.000Z"
+															],
+															"pattern": "^.*$"
+														},
+														"size": {
+															"title": "Size",
+															"type": "integer",
+															"examples": [
+																358629100
+															],
+															"default": 0
+														},
+														"url": {
+															"title": "Url",
+															"type": "string",
+															"default": "",
+															"examples": [
+																"https://images.postmarketos.org/bpo/edge/motorola-harpia/sxmo/20210929-0323/20210929-0323-postmarketOS-edge-sxmo-1.5.1-motorola-harpia-mainline-modem.img.xz"
+															],
+															"pattern": "^.*$"
+														},
+														"sha256": {
+															"title": "Sha256",
+															"type": "string",
+															"default": "",
+															"examples": [
+																"f88d5ea98683cd4f8beab8050fbe8f35909f03f73b4efeed9b398aa858a5b048"
+															],
+															"pattern": "^.*$"
+														},
+														"sha512": {
+															"title": "Sha512",
+															"type": "string",
+															"default": "",
+															"examples": [
+																"a2af2216fe6c42e4f7adbd06827c568269d375a84fd02039b858510e9816fa467d64bd1cdcc84cb1e75d153e53a5f419c6caaa332b12f2265ef7c03814e10b6b"
+															],
+															"pattern": "^.*$"
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
