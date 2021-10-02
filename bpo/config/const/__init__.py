@@ -29,9 +29,10 @@ branches["master"] = {"arches": ["x86_64",
                                  "x86"],
                       "ignore_errors": False}
 
-# Have a predictable Alpine mirror instead of dl-cdn to avoid caching errors.
-# https://mirrors.alpinelinux.org/
-mirror_alpine = "http://dl-4.alpinelinux.org/alpine/"
+# Alpine mirror, might need to be switched to a different one if dl-cdn has
+# caching errors again. Note that this mirror ends up in the final device
+# images. Mirror status: https://mirrors.alpinelinux.org/
+mirror_alpine = "http://dl-cdn.alpinelinux.org/alpine/"
 
 # Omit the --strict argument for pmbootstrap build for these packages (fnmatch)
 # gcc*-*: https://gitlab.alpinelinux.org/alpine/apk-tools/issues/10649
