@@ -106,6 +106,30 @@ images = {
             },
         },
     },
+    "lenovo-a6000": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
+    "lenovo-a6010": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline-modem",
+                ],
+            },
+        },
+    },
     "motorola-harpia": {
         "branch_configs": {
             "all": {
