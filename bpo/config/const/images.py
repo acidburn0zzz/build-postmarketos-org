@@ -38,7 +38,9 @@ ui_allowlist = [
         "plasma-mobile",
         "shelli",
         "sway",
-        "sxmo",
+        "sxmo",  # v21.06
+        "sxmo-de-dwm",
+        "sxmo-de-sway",
         "weston",
         "xfce4"
     ]
@@ -54,7 +56,7 @@ branch_config_default = {
     "ui": [
         "phosh",
         "plasma-mobile",
-        "sxmo",
+        "sxmo-de-sway",
     ],
 
     # Build images with the on-device installer. If set to False, build one
@@ -84,6 +86,11 @@ images = {
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -91,6 +98,11 @@ images = {
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -103,6 +115,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -139,6 +156,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -174,6 +196,11 @@ images = {
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -185,6 +212,11 @@ images = {
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -212,6 +244,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -225,6 +262,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -248,6 +290,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -287,6 +334,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -302,6 +354,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -317,6 +374,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -332,6 +394,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -359,6 +426,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -371,6 +443,11 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -395,6 +472,11 @@ images = {
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
             },
         },
     },
@@ -413,6 +495,11 @@ images = {
                 "date-start": "2021-06-20",  # Sunday
                 "kernels": [
                     "mainline-modem-wt88047",
+                ],
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
                 ],
             },
         },
