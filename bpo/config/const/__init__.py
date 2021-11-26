@@ -28,6 +28,8 @@ branches["master"] = {"arches": ["x86_64",
                                  "armhf",
                                  "x86"],
                       "ignore_errors": False}
+branches["v21.12"] = {"arches": ["x86_64"],
+                      "ignore_errors": True}
 
 # Alpine mirror, might need to be switched to a different one if dl-cdn has
 # caching errors again. Note that this mirror ends up in the final device
