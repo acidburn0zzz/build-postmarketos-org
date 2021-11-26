@@ -402,6 +402,30 @@ images = {
             },
         },
     },
+    "samsung-gt510": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline",
+                ],
+            },
+        },
+    },
+    "samsung-gt58": {
+        "branches": [
+            "master",
+        ],
+        "branch_configs": {
+            "all": {
+                "kernels": [
+                    "mainline",
+                ],
+            },
+        },
+    },
     "samsung-serranove": {
         "branches": [
             "master",
