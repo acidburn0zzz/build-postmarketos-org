@@ -104,6 +104,14 @@ images = {
                     "sxmo",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "bq-paella": {
@@ -115,6 +123,14 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
@@ -133,6 +149,14 @@ images = {
                     "mainline-modem",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "lenovo-a6010": {
@@ -143,6 +167,14 @@ images = {
             "all": {
                 "kernels": [
                     "mainline-modem",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
                 ],
             },
         },
@@ -156,6 +188,14 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
@@ -179,12 +219,16 @@ images = {
     "odroid-hc2": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
                 "ui": [
                     "console",
                 ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
             },
         },
     },
@@ -202,16 +246,33 @@ images = {
                     "sxmo",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "oneplus-fajita": {
         "branches": [
             "master",
             "v21.06",
+            "v21.12",
         ],
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
@@ -223,6 +284,7 @@ images = {
     "pine64-pinebookpro": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -235,6 +297,9 @@ images = {
                 ],
                 "installer": True,
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+            },
         },
     },
     "pine64-pinephone": {
@@ -244,6 +309,14 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
@@ -268,11 +341,20 @@ images = {
                     "sxmo",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "pine64-rockpro64": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -280,6 +362,9 @@ images = {
                     "console",
                     "plasma-bigscreen",
                 ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
             },
         },
     },
@@ -296,16 +381,33 @@ images = {
                     "sxmo",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "samsung-a3": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
                 "kernels": [
                     "mainline-modem",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
                 ],
             },
         },
@@ -313,6 +415,7 @@ images = {
     "samsung-a5": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -320,11 +423,20 @@ images = {
                     "mainline-modem",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "samsung-a3lte": {
         "branches": [
             "v21.06",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -334,6 +446,14 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
@@ -345,6 +465,7 @@ images = {
     "samsung-a3ulte": {
         "branches": [
             "v21.06",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -354,6 +475,14 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
@@ -365,6 +494,7 @@ images = {
     "samsung-a5lte": {
         "branches": [
             "v21.06",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -374,6 +504,14 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
@@ -385,6 +523,7 @@ images = {
     "samsung-a5ulte": {
         "branches": [
             "v21.06",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -400,16 +539,33 @@ images = {
                     "sxmo",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "samsung-gt510": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
                 "kernels": [
                     "mainline",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
                 ],
             },
         },
@@ -417,6 +573,7 @@ images = {
     "samsung-gt58": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -424,11 +581,20 @@ images = {
                     "mainline",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "samsung-serranove": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -436,11 +602,20 @@ images = {
                     "mainline-modem",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "samsung-serranovelte": {
         "branches": [
             "v21.06",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -450,6 +625,14 @@ images = {
             },
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
@@ -473,11 +656,20 @@ images = {
                     "sxmo",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "xiaomi-beryllium": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -486,16 +678,33 @@ images = {
                     "ebbg",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
         },
     },
     "xiaomi-scorpio": {
         "branches": [
             "master",
             "v21.06",
+            "v21.12",
         ],
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
@@ -508,6 +717,7 @@ images = {
         "branches": [
             "master",
             "v21.06",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -520,6 +730,14 @@ images = {
                 "kernels": [
                     "mainline-modem-wt88047",
                 ],
+                "ui": [
+                    "phosh",
+                    "plasma-mobile",
+                    "sxmo",
+                ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-04",  # Saturday
                 "ui": [
                     "phosh",
                     "plasma-mobile",
