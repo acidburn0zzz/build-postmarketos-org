@@ -106,11 +106,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -131,11 +126,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -151,11 +141,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -171,11 +156,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -196,11 +176,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -248,11 +223,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -273,11 +243,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -317,11 +282,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -343,11 +303,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -383,11 +338,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -404,11 +354,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -425,11 +370,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -454,11 +394,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -483,11 +418,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -512,11 +442,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -541,11 +466,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -562,11 +482,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -583,11 +498,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -604,11 +514,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -633,11 +538,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -658,11 +558,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -680,11 +575,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -705,11 +595,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
@@ -738,11 +623,6 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
             },
         },
     },
