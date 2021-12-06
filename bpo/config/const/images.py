@@ -105,7 +105,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -125,7 +125,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -140,7 +140,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -155,7 +155,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -175,7 +175,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -203,7 +203,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -222,7 +222,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -242,7 +242,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -263,7 +263,7 @@ images = {
                 "installer": True,
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -281,7 +281,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -302,7 +302,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -319,7 +319,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
                 "ui": [
                     "console",
                 ],
@@ -340,7 +340,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -356,7 +356,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -372,7 +372,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -468,7 +468,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -484,7 +484,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -500,7 +500,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -540,7 +540,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -557,7 +557,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -577,7 +577,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -605,7 +605,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
+                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
