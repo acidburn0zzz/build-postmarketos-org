@@ -15,6 +15,7 @@ password = "147147"
 branches_default = [
         "master",
         "v21.06",
+        "v21.12",
     ]
 
 # Prevent errors by listing explicitly allowed UIs here. Notably "none" is
@@ -79,10 +80,6 @@ branch_config_default = {
 # the generated readme.html!
 images = {
     "arrow-db410c": {
-        "branches": [
-            "master",
-            "v21.06",
-        ],
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
@@ -104,9 +101,6 @@ images = {
                     "sxmo",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "bq-paella": {
@@ -124,38 +118,31 @@ images = {
                     "sxmo",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "lenovo-a6000": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
                 "kernels": [
                     "mainline-modem",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
     "lenovo-a6010": {
         "branches": [
             "master",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
                 "kernels": [
                     "mainline-modem",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -174,20 +161,18 @@ images = {
                     "sxmo",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "nokia-n900": {
+        "branches": [
+            "master",
+            "v21.06",
+        ],
         "branch_configs": {
             "all": {
                 "ui": [
                     "i3wm",
                 ],
-            },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
             },
          },
     },
@@ -202,16 +187,9 @@ images = {
                     "console",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "oneplus-enchilada": {
-        "branches": [
-            "master",
-            "v21.06",
-        ],
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
@@ -220,18 +198,10 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
     "oneplus-fajita": {
-        "branches": [
-            "master",
-            "v21.06",
-            "v21.12",
-        ],
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
@@ -240,9 +210,6 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -262,9 +229,6 @@ images = {
                 ],
                 "installer": True,
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "pine64-pinephone": {
@@ -279,9 +243,6 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -300,9 +261,6 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -339,9 +297,6 @@ images = {
                     "sxmo",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "samsung-a3": {
@@ -355,9 +310,6 @@ images = {
                     "mainline-modem",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "samsung-a5": {
@@ -370,9 +322,6 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -467,9 +416,6 @@ images = {
                     "mainline",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "samsung-gt58": {
@@ -483,9 +429,6 @@ images = {
                     "mainline",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "samsung-serranove": {
@@ -498,9 +441,6 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
@@ -539,9 +479,6 @@ images = {
                     "sxmo",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "xiaomi-beryllium": {
@@ -556,17 +493,9 @@ images = {
                     "ebbg",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "xiaomi-scorpio": {
-        "branches": [
-            "master",
-            "v21.06",
-            "v21.12",
-        ],
         "branch_configs": {
             "v21.06": {
                 "date-start": "2021-06-20",  # Sunday
@@ -576,17 +505,9 @@ images = {
                     "sxmo",
                 ],
             },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-            },
         },
     },
     "xiaomi-wt88047": {
-        "branches": [
-            "master",
-            "v21.06",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -603,9 +524,6 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
             },
         },
     },
