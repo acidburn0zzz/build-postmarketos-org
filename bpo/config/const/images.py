@@ -320,6 +320,9 @@ images = {
             },
             "v21.12": {
                 "date-start": "2021-12-04",  # Saturday
+                "ui": [
+                    "console",
+                ],
             },
         },
     },
