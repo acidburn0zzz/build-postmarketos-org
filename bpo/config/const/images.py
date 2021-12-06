@@ -376,7 +376,6 @@ images = {
     "samsung-a3lte": {
         "branches": [
             "v21.06",
-            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -391,16 +390,12 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
             },
         },
     },
     "samsung-a3ulte": {
         "branches": [
             "v21.06",
-            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -415,16 +410,12 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
             },
         },
     },
     "samsung-a5lte": {
         "branches": [
             "v21.06",
-            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -439,16 +430,12 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
             },
         },
     },
     "samsung-a5ulte": {
         "branches": [
             "v21.06",
-            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -463,9 +450,6 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
             },
         },
     },
@@ -520,7 +504,6 @@ images = {
     "samsung-serranovelte": {
         "branches": [
             "v21.06",
-            "v21.12",
         ],
         "branch_configs": {
             "all": {
@@ -535,9 +518,6 @@ images = {
                     "plasma-mobile",
                     "sxmo",
                 ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-04",  # Saturday
             },
         },
     },
