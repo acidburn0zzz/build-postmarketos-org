@@ -81,12 +81,9 @@ branch_config_default = {
 images = {
     "arrow-db410c": {
         "branch_configs": {
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
+            "all": {
                 "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
+                    "console",
                 ],
             },
         },
