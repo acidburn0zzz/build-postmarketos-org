@@ -80,6 +80,10 @@ branch_config_default = {
 # the generated readme.html!
 images = {
     "arrow-db410c": {
+        "branches": [
+            "master",
+            "v21.12",
+        ],
         "branch_configs": {
             "all": {
                 "ui": [
