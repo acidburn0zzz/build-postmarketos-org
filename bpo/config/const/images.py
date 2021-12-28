@@ -90,6 +90,9 @@ images = {
                     "console",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
+            },
         },
     },
     "asus-me176c": {
@@ -132,6 +135,9 @@ images = {
                     "mainline-modem",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
+            },
         },
     },
     "lenovo-a6010": {
@@ -144,6 +150,9 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
             },
         },
     },
@@ -188,6 +197,9 @@ images = {
                     "console",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
+            },
         },
     },
     "oneplus-enchilada": {
@@ -229,6 +241,9 @@ images = {
                     "phosh",
                 ],
                 "installer": True,
+            },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
             },
         },
     },
@@ -278,7 +293,7 @@ images = {
                 ],
             },
             "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
+                "date-start": "2021-12-29",  # Wednesday
                 "ui": [
                     "console",
                 ],
@@ -311,6 +326,9 @@ images = {
                     "mainline-modem",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
+            },
         },
     },
     "samsung-a5": {
@@ -323,6 +341,9 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
             },
         },
     },
@@ -417,6 +438,9 @@ images = {
                     "mainline",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
+            },
         },
     },
     "samsung-gt58": {
@@ -430,6 +454,9 @@ images = {
                     "mainline",
                 ],
             },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
+            },
         },
     },
     "samsung-serranove": {
@@ -442,6 +469,9 @@ images = {
                 "kernels": [
                     "mainline-modem",
                 ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
             },
         },
     },
@@ -493,6 +523,9 @@ images = {
                     "tianma",
                     "ebbg",
                 ],
+            },
+            "v21.12": {
+                "date-start": "2021-12-29",  # Wednesday
             },
         },
     },
