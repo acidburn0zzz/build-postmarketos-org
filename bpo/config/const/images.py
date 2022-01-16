@@ -168,6 +168,7 @@ images = {
         "branches": [
             "master",
             "v21.06",
+            "v21.12",
         ],
         "branch_configs": {
             "all": {
