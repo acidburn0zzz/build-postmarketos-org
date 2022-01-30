@@ -89,40 +89,12 @@ images = {
     "asus-me176c": {
     },
     "bq-paella": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-        },
     },
     "lenovo-a6000": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-        },
     },
     "lenovo-a6010": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-        },
     },
     "motorola-harpia": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-        },
     },
     "nokia-n900": {
         "branch_configs": {
@@ -201,58 +173,16 @@ images = {
         },
     },
     "samsung-a3": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-        },
     },
     "samsung-a5": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-        },
     },
     "samsung-gt510": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline",
-                ],
-            },
-        },
     },
     "samsung-gt58": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline",
-                ],
-            },
-        },
     },
     "samsung-serranove": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-        },
     },
     "wileyfox-crackling": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-        },
     },
     "xiaomi-beryllium": {
         "branch_configs": {
@@ -267,12 +197,5 @@ images = {
     "xiaomi-scorpio": {
     },
     "xiaomi-wt88047": {
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-        },
     },
 }
