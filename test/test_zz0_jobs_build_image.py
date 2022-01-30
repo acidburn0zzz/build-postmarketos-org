@@ -38,7 +38,7 @@ def build_image(monkeypatch):
 
 
 @pytest.mark.img_dir_gen
-@pytest.mark.timeout(20)
+@pytest.mark.timeout(120)
 def test_build_image_stub(monkeypatch):
     """ Do not run 'pmbootstrap install', just create a 1 MiB file with dd.
         This is much faster, and doesn't cause problems when running with
@@ -87,7 +87,7 @@ def test_build_image_stub(monkeypatch):
         assert False, f"Failed to validate json against schema: {e}"
 
 
-@pytest.mark.timeout(20)
+@pytest.mark.timeout(120)
 def test_build_image_stub_split_boot_root(monkeypatch):
     """ Like test_build_image_stub_split, but emulate pmbootstrap generating
         split -boot and -root partitions, as it would do with
