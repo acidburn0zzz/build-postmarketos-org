@@ -14,7 +14,6 @@ password = "147147"
 # Branches to build images for, can be overridden per device in 'images' below
 branches_default = [
         "master",
-        "v21.06",
         "v21.12",
     ]
 
@@ -39,7 +38,6 @@ ui_allowlist = [
         "plasma-mobile",
         "shelli",
         "sway",
-        "sxmo",  # v21.06
         "sxmo-de-dwm",
         "sxmo-de-sway",
         "weston",
@@ -80,10 +78,6 @@ branch_config_default = {
 # the generated readme.html!
 images = {
     "arrow-db410c": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "ui": [
@@ -93,16 +87,6 @@ images = {
         },
     },
     "asus-me176c": {
-        "branch_configs": {
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
-        },
     },
     "bq-paella": {
         "branch_configs": {
@@ -111,21 +95,9 @@ images = {
                     "mainline-modem",
                 ],
             },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
         },
     },
     "lenovo-a6000": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -135,10 +107,6 @@ images = {
         },
     },
     "lenovo-a6010": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -154,22 +122,9 @@ images = {
                     "mainline-modem",
                 ],
             },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
         },
     },
     "nokia-n900": {
-        "branches": [
-            "master",
-            "v21.06",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "ui": [
@@ -179,10 +134,6 @@ images = {
          },
     },
     "odroid-hc2": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "ui": [
@@ -192,34 +143,10 @@ images = {
         },
     },
     "oneplus-enchilada": {
-        "branch_configs": {
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
-        },
     },
     "oneplus-fajita": {
-        "branch_configs": {
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
-        },
     },
     "pine64-pinebookpro": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "ui": [
@@ -238,14 +165,6 @@ images = {
             "all": {
                 "installer": True,
             },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
         },
     },
     "pine64-pinetab": {
@@ -256,21 +175,9 @@ images = {
                     "allwinner",
                 ],
             },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
         },
     },
     "pine64-rockpro64": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "ui": [
@@ -291,21 +198,9 @@ images = {
             "all": {
                 "installer": True,
             },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
         },
     },
     "samsung-a3": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -315,103 +210,15 @@ images = {
         },
     },
     "samsung-a5": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "kernels": [
                     "mainline-modem",
-                ],
-            },
-        },
-    },
-    "samsung-a3lte": {
-        "branches": [
-            "v21.06",
-        ],
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
-        },
-    },
-    "samsung-a3ulte": {
-        "branches": [
-            "v21.06",
-        ],
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
-        },
-    },
-    "samsung-a5lte": {
-        "branches": [
-            "v21.06",
-        ],
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
-        },
-    },
-    "samsung-a5ulte": {
-        "branches": [
-            "v21.06",
-        ],
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
                 ],
             },
         },
     },
     "samsung-gt510": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -421,10 +228,6 @@ images = {
         },
     },
     "samsung-gt58": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -434,34 +237,10 @@ images = {
         },
     },
     "samsung-serranove": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "kernels": [
                     "mainline-modem",
-                ],
-            },
-        },
-    },
-    "samsung-serranovelte": {
-        "branches": [
-            "v21.06",
-        ],
-        "branch_configs": {
-            "all": {
-                "kernels": [
-                    "mainline-modem",
-                ],
-            },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
                 ],
             },
         },
@@ -473,21 +252,9 @@ images = {
                     "mainline-modem",
                 ],
             },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
         },
     },
     "xiaomi-beryllium": {
-        "branches": [
-            "master",
-            "v21.12",
-        ],
         "branch_configs": {
             "all": {
                 "kernels": [
@@ -498,33 +265,12 @@ images = {
         },
     },
     "xiaomi-scorpio": {
-        "branch_configs": {
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
-                ],
-            },
-        },
     },
     "xiaomi-wt88047": {
         "branch_configs": {
             "all": {
                 "kernels": [
                     "mainline-modem",
-                ],
-            },
-            "v21.06": {
-                "date-start": "2021-06-20",  # Sunday
-                "kernels": [
-                    "mainline-modem-wt88047",
-                ],
-                "ui": [
-                    "phosh",
-                    "plasma-mobile",
-                    "sxmo",
                 ],
             },
         },
