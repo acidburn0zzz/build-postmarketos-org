@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2021 Martijn Braam, Oliver Smith
+# Copyright 2022 Martijn Braam, Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Submit data to the bpo api:
 # bpo runs this script in a job service (sourcehut builds, local) to return the

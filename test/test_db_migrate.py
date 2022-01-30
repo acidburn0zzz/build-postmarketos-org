@@ -1,4 +1,4 @@
-# Copyright 2021 Oliver Smith
+# Copyright 2022 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Testing bpo/db/migrate.py """
 import bpo_test  # noqa

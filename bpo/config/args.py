@@ -1,4 +1,4 @@
-# Copyright 2021 Oliver Smith
+# Copyright 2022 Oliver Smith
 # SPDX-License-Identifier: AGPL-3.0-or-later
 """ Default values are stored in bpo/config/const/args.py. After
     bpo.config.args.init() ran, all values are available in bpo.config.args
