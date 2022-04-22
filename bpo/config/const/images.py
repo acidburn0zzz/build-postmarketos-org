@@ -176,6 +176,16 @@ images = {
     },
     "samsung-a5": {
     },
+    "samsung-espresso3g": {
+        "branch_configs": {
+            "all": {
+                "ui": [
+                    "phosh",
+                    "xfce4",
+                ],
+            },
+        },
+    },
     "samsung-gt510": {
     },
     "samsung-gt58": {
