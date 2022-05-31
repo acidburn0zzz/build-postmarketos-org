@@ -203,9 +203,6 @@ images = {
     "samsung-serranove": {
     },
     "shift-axolotl": {
-        "branches": [
-            "master",
-        ],
     },
     "wileyfox-crackling": {
     },
