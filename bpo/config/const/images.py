@@ -192,9 +192,6 @@ images = {
     "samsung-gt58": {
     },
     "samsung-m0": {
-        "branches": [
-            "master",
-        ],
         "branch_configs": {
             "all": {
                 "ui": [
