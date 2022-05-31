@@ -15,6 +15,7 @@ password = "147147"
 branches_default = [
         "master",
         "v21.12",
+        "v22.06",
     ]
 
 # Prevent errors by listing explicitly allowed UIs here. Notably "none" is
