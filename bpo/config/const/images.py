@@ -177,6 +177,11 @@ images = {
     },
     "samsung-a5": {
     },
+    "samsung-e7": {
+        "branches": [
+            "master",
+        ],
+    },
     "samsung-espresso3g": {
         "branch_configs": {
             "all": {
