@@ -206,3 +206,14 @@ $ ./bpo_sourcehut.sh
 
 There's also the rather dangerous `--force-final-repo-sign`, in case one needs
 to sign an unfinished repository.
+
+### How to generate test pages from data/templates/images?
+
+Run the following, the same directory structure as on
+https://images.postmarketos.org/bpo/ will be in the `_images` dir (most
+interestingly with the generated `index.html` files):
+
+```
+$ source .venv/bin/activate
+$ pytest -xvv test/test_zz0_jobs_build_image.py -k "test_build_image_stub"
+```
