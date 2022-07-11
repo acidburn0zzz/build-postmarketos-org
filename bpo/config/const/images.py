@@ -139,6 +139,13 @@ images = {
             },
         },
     },
+    "pine64-pinephonepro": {
+        "branch_configs": {
+            "all": {
+                "installer": True,
+            },
+        },
+    },
     "pine64-pinetab": {
         "branch_configs": {
             "all": {
