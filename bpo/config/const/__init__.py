@@ -20,8 +20,6 @@ repo_wip_keys = top_dir + "/_repo_wip_keys"
 #                badge. We don't want errors from these to overshadow errors
 #                from branches that are used in production.
 branches = collections.OrderedDict()
-branches["v21.12"] = {"arches": ["x86_64", "aarch64", "armv7"],
-                      "ignore_errors": False}
 branches["v22.06"] = {"arches": ["x86_64", "aarch64", "armv7"],
                       "ignore_errors": False}
 branches["master"] = {"arches": ["x86_64",

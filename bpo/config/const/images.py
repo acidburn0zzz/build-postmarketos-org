@@ -14,7 +14,6 @@ password = "147147"
 # Branches to build images for, can be overridden per device in 'images' below
 branches_default = [
         "master",
-        "v21.12",
         "v22.06",
     ]
 
@@ -156,12 +155,6 @@ images = {
                 "ui": [
                     "console",
                     "plasma-bigscreen",
-                ],
-            },
-            "v21.12": {
-                "date-start": "2021-12-07",  # Tuesday
-                "ui": [
-                    "console",
                 ],
             },
         },
