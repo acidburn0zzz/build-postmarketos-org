@@ -202,6 +202,7 @@ images = {
             "all": {
                 "ui": [
                     "phosh",
+                    "sxmo-de-sway",
                 ],
             },
         },
