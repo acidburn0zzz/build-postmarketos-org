@@ -173,7 +173,7 @@ def assert_package(pkgname, arch="x86_64", branch="master", status=None,
 
     if status:
         status_value = bpo.db.PackageStatus[status]
-        if(package.status != status_value):
+        if package.status != status_value:
             raise RuntimeError("Expected status {}, but has {}: {}".format(
                 status, package.status.name, package))
 
