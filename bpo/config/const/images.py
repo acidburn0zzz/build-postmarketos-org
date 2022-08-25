@@ -90,6 +90,11 @@ images = {
     },
     "bq-paella": {
     },
+    "fairphone-fp4": {
+        "branches": [
+            "master",
+        ],
+    },
     "lenovo-a6000": {
     },
     "lenovo-a6010": {
